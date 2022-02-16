@@ -36,5 +36,8 @@ namespace ActionForce.Entity
         public Nullable<double> PaymentAmount { get; set; }
         public Nullable<double> BalanceAmount { get; set; }
         public string Expr1 { get; set; }
+        public Nullable<int> ParentID { get; set; }
+        public Nullable<bool> IsCostCompute { get; set; }
+        public Nullable<bool> HaveChild { get; set; }
     }
 }

@@ -366,7 +366,6 @@ namespace ActionForce.Entity
         public virtual DbSet<CardReaderActionHistory> CardReaderActionHistory { get; set; }
         public virtual DbSet<NFCCardLog> NFCCardLog { get; set; }
         public virtual DbSet<VEmployeeModel> VEmployeeModel { get; set; }
-        public virtual DbSet<HCardActions> HCardActions { get; set; }
         public virtual DbSet<VLocationPartEmployee> VLocationPartEmployee { get; set; }
         public virtual DbSet<SalaryPeriod> SalaryPeriod { get; set; }
         public virtual DbSet<SalaryPeriodComputeActions> SalaryPeriodComputeActions { get; set; }
@@ -382,6 +381,7 @@ namespace ActionForce.Entity
         public virtual DbSet<VTicketSaleRowSummaryProduct> VTicketSaleRowSummaryProduct { get; set; }
         public virtual DbSet<SalaryPaymentType> SalaryPaymentType { get; set; }
         public virtual DbSet<SalaryPeriodCompute> SalaryPeriodCompute { get; set; }
+        public virtual DbSet<HCardActions> HCardActions { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

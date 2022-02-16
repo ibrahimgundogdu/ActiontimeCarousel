@@ -18,6 +18,9 @@ namespace ActionForce.Office
         public string Currency { get; set; }
         public string MobilePhone { get; set; }
         public short SalaryPaymentTypeID { get; set; }
+        public string SGKBranch { get; set; }
+        public string LocationName { get; set; }
+
 
     }
 }

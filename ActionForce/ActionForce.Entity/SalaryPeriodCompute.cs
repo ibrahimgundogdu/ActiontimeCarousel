@@ -59,5 +59,13 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> CostDate { get; set; }
         public Nullable<short> SalaryPaymentTypeID { get; set; }
         public Nullable<double> NetCost { get; set; }
+        public string SGKBranch { get; set; }
+        public string LocationName { get; set; }
+        public Nullable<double> Kidem { get; set; }
+        public Nullable<double> Ihbar { get; set; }
+        public Nullable<double> Permit { get; set; }
+        public string TesvikNumber { get; set; }
+        public Nullable<double> TesvikDiscount { get; set; }
+        public Nullable<int> SSKDayCount { get; set; }
     }
 }

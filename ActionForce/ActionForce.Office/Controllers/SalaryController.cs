@@ -1606,7 +1606,9 @@ namespace ActionForce.Office.Controllers
                 IdentityNumber = x.IdentityNumber,
                 Currency = x.Currency,
                 MobilePhone = x.MobilePhone,
-                SalaryPaymentTypeID = x.SalaryPaymentTypeID ?? 1
+                SalaryPaymentTypeID = x.SalaryPaymentTypeID ?? 1,
+                LocationName = x.LocationName,
+                SGKBranch = x.SGKBranch
             }).Distinct().ToList();
 
             var actiontypes = model.EmployeeActionList.Select(x => new { ID = x.ActionTypeID, Name = x.Name }).ToList();
@@ -1715,26 +1717,28 @@ namespace ActionForce.Office.Controllers
                     worksheet.Cell("E1").Value = "IBAN";
                     worksheet.Cell("F1").Value = "Bank";
                     worksheet.Cell("G1").Value = "B";
-                    worksheet.Cell("H1").Value = "Maaş";
-                    worksheet.Cell("I1").Value = "İzin";
-                    worksheet.Cell("J1").Value = "F.Mesai";
-                    worksheet.Cell("K1").Value = "Prim";
-                    worksheet.Cell("L1").Value = "Resmi";
-                    worksheet.Cell("M1").Value = "Diğer";
-                    worksheet.Cell("N1").Value = "Toplam";
-                    worksheet.Cell("O1").Value = "Avans Maaş";
-                    worksheet.Cell("P1").Value = "Kesinti";
-                    worksheet.Cell("Q1").Value = "İzin";
-                    worksheet.Cell("R1").Value = "F.Mesai";
-                    worksheet.Cell("S1").Value = "Prim";
-                    worksheet.Cell("T1").Value = "Resmi";
-                    worksheet.Cell("U1").Value = "Diğer";
-                    worksheet.Cell("V1").Value = "Toplam";
-                    worksheet.Cell("W1").Value = "Bakiye";
-                    worksheet.Cell("X1").Value = "SC Hakediş";
-                    worksheet.Cell("Y1").Value = "SC Ödeme";
-                    worksheet.Cell("Z1").Value = "SC Bakiye";
-                    worksheet.Cell("AA1").Value = "Final";
+                    worksheet.Cell("H1").Value = "SGKBranch";
+                    worksheet.Cell("I1").Value = "LocationName";
+                    worksheet.Cell("J1").Value = "Maaş";
+                    worksheet.Cell("K1").Value = "İzin";
+                    worksheet.Cell("L1").Value = "F.Mesai";
+                    worksheet.Cell("M1").Value = "Prim";
+                    worksheet.Cell("N1").Value = "Resmi";
+                    worksheet.Cell("O1").Value = "Diğer";
+                    worksheet.Cell("P1").Value = "Toplam";
+                    worksheet.Cell("Q1").Value = "Avans Maaş";
+                    worksheet.Cell("R1").Value = "Kesinti";
+                    worksheet.Cell("S1").Value = "İzin";
+                    worksheet.Cell("T1").Value = "F.Mesai";
+                    worksheet.Cell("U1").Value = "Prim";
+                    worksheet.Cell("V1").Value = "Resmi";
+                    worksheet.Cell("W1").Value = "Diğer";
+                    worksheet.Cell("X1").Value = "Toplam";
+                    worksheet.Cell("Y1").Value = "Bakiye";
+                    worksheet.Cell("Z1").Value = "SC Hakediş";
+                    worksheet.Cell("AA1").Value = "SC Ödeme";
+                    worksheet.Cell("AB1").Value = "SC Bakiye";
+                    worksheet.Cell("AC1").Value = "Final";
 
                     //worksheet.Cell("A2").FormulaA1 = "=MID(A1, 7, 5)";
 
@@ -1772,26 +1776,28 @@ namespace ActionForce.Office.Controllers
                         worksheet.Cell("E" + rownum).Value = emp.IBAN;
                         worksheet.Cell("F" + rownum).Value = emp.BankName;
                         worksheet.Cell("G" + rownum).Value = emp.SalaryPaymentTypeID == 1 ? "B" : "";
-                        worksheet.Cell("H" + rownum).Value = maashakedis;
-                        worksheet.Cell("I" + rownum).Value = izinhakedis;
-                        worksheet.Cell("J" + rownum).Value = mesaihakedis;
-                        worksheet.Cell("K" + rownum).Value = primhakedis;
-                        worksheet.Cell("L" + rownum).Value = resmihakedis;
-                        worksheet.Cell("M" + rownum).Value = digerhakedis;
-                        worksheet.Cell("N" + rownum).Value = toplamhakedis;
-                        worksheet.Cell("O" + rownum).Value = maas;
-                        worksheet.Cell("P" + rownum).Value = kesintip;
-                        worksheet.Cell("Q" + rownum).Value = izinhakedisp;
-                        worksheet.Cell("R" + rownum).Value = mesaihakedisp;
-                        worksheet.Cell("S" + rownum).Value = primhakedisp;
-                        worksheet.Cell("T" + rownum).Value = resmihakedisp;
-                        worksheet.Cell("U" + rownum).Value = digerhakedisp;
-                        worksheet.Cell("V" + rownum).Value = toplamodeme;
-                        worksheet.Cell("W" + rownum).Value = (toplamhakedis + toplamodeme);
-                        worksheet.Cell("X" + rownum).Value = setcardhakedis;
-                        worksheet.Cell("Y" + rownum).Value = setcardodeme;
-                        worksheet.Cell("Z" + rownum).Value = (setcardhakedis + setcardodeme);
-                        worksheet.Cell("AA" + rownum).Value = kumule;
+                        worksheet.Cell("H" + rownum).Value = emp.SGKBranch;
+                        worksheet.Cell("I" + rownum).Value = emp.LocationName;
+                        worksheet.Cell("J" + rownum).Value = maashakedis;
+                        worksheet.Cell("K" + rownum).Value = izinhakedis;
+                        worksheet.Cell("L" + rownum).Value = mesaihakedis;
+                        worksheet.Cell("M" + rownum).Value = primhakedis;
+                        worksheet.Cell("N" + rownum).Value = resmihakedis;
+                        worksheet.Cell("O" + rownum).Value = digerhakedis;
+                        worksheet.Cell("P" + rownum).Value = toplamhakedis;
+                        worksheet.Cell("Q" + rownum).Value = maas;
+                        worksheet.Cell("R" + rownum).Value = kesintip;
+                        worksheet.Cell("S" + rownum).Value = izinhakedisp;
+                        worksheet.Cell("T" + rownum).Value = mesaihakedisp;
+                        worksheet.Cell("U" + rownum).Value = primhakedisp;
+                        worksheet.Cell("V" + rownum).Value = resmihakedisp;
+                        worksheet.Cell("W" + rownum).Value = digerhakedisp;
+                        worksheet.Cell("X" + rownum).Value = toplamodeme;
+                        worksheet.Cell("Y" + rownum).Value = (toplamhakedis + toplamodeme);
+                        worksheet.Cell("Z" + rownum).Value = setcardhakedis;
+                        worksheet.Cell("AA" + rownum).Value = setcardodeme;
+                        worksheet.Cell("AB" + rownum).Value = (setcardhakedis + setcardodeme);
+                        worksheet.Cell("AC" + rownum).Value = kumule;
 
                         rownum++;
                     }
@@ -1803,26 +1809,28 @@ namespace ActionForce.Office.Controllers
                     worksheet.Cell("E" + rownum).Value = null;
                     worksheet.Cell("F" + rownum).Value = null;
                     worksheet.Cell("G" + rownum).Value = null;
-                    worksheet.Cell("H" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 32).Sum(x => x.Amount) ?? 0;
-                    worksheet.Cell("I" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 37).Sum(x => x.Amount) ?? 0;
-                    worksheet.Cell("J" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 43).Sum(x => x.Amount) ?? 0;
-                    worksheet.Cell("K" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 44).Sum(x => x.Amount) ?? 0;
-                    worksheet.Cell("L" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 45).Sum(x => x.Amount) ?? 0;
-                    worksheet.Cell("M" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 46).Sum(x => x.Amount) ?? 0;
-                    worksheet.Cell("N" + rownum).Value = model.EmployeeActionList.Where(x => hakedisids.Contains(x.ActionTypeID.Value)).Sum(x => x.Amount) ?? 0;
-                    worksheet.Cell("O" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 31).Sum(x => x.Amount) ?? 0;
-                    worksheet.Cell("P" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 47).Sum(x => x.Amount) ?? 0;
-                    worksheet.Cell("Q" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 36).Sum(x => x.Amount) ?? 0;
-                    worksheet.Cell("R" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 48).Sum(x => x.Amount) ?? 0;
-                    worksheet.Cell("S" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 49).Sum(x => x.Amount) ?? 0;
-                    worksheet.Cell("T" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 50).Sum(x => x.Amount) ?? 0;
-                    worksheet.Cell("U" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 51).Sum(x => x.Amount) ?? 0;
-                    worksheet.Cell("V" + rownum).Value = model.EmployeeActionList.Where(x => odemeids.Contains(x.ActionTypeID.Value)).Sum(x => x.Amount) ?? 0;
-                    worksheet.Cell("W" + rownum).Value = model.EmployeeActionList.Where(x => odemeids.Contains(x.ActionTypeID.Value) || hakedisids.Contains(x.ActionTypeID.Value)).Sum(x => x.Amount) ?? 0;
-                    worksheet.Cell("X" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 39).Sum(x => x.Amount) ?? 0;
-                    worksheet.Cell("Y" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 38).Sum(x => x.Amount) ?? 0;
-                    worksheet.Cell("Z" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 38 || x.ActionTypeID == 39).Sum(x => x.Amount) ?? 0;
-                    worksheet.Cell("AA" + rownum).Value = model.EmployeeActionList.Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("H" + rownum).Value = null;
+                    worksheet.Cell("I" + rownum).Value = null;
+                    worksheet.Cell("J" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 32).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("K" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 37).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("L" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 43).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("M" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 44).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("N" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 45).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("O" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 46).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("P" + rownum).Value = model.EmployeeActionList.Where(x => hakedisids.Contains(x.ActionTypeID.Value)).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("Q" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 31).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("R" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 47).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("S" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 36).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("T" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 48).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("U" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 49).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("V" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 50).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("W" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 51).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("X" + rownum).Value = model.EmployeeActionList.Where(x => odemeids.Contains(x.ActionTypeID.Value)).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("Y" + rownum).Value = model.EmployeeActionList.Where(x => odemeids.Contains(x.ActionTypeID.Value) || hakedisids.Contains(x.ActionTypeID.Value)).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("Z" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 39).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("AA" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 38).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("AB" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 38 || x.ActionTypeID == 39).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("AC" + rownum).Value = model.EmployeeActionList.Sum(x => x.Amount) ?? 0;
 
                     workbook.SaveAs(pathToExcelFile);
                 }
@@ -2386,32 +2394,34 @@ namespace ActionForce.Office.Controllers
                         worksheet.Cell("F1").Value = "IBAN";
                         worksheet.Cell("G1").Value = "Bank";
                         worksheet.Cell("H1").Value = "B";
-                        worksheet.Cell("I1").Value = "Maaş";
-                        worksheet.Cell("J1").Value = "İzin";
-                        worksheet.Cell("K1").Value = "F.Mesai";
-                        worksheet.Cell("L1").Value = "Prim";
-                        worksheet.Cell("M1").Value = "Resmi";
-                        worksheet.Cell("N1").Value = "Diğer";
-                        worksheet.Cell("O1").Value = "Toplam";
-                        worksheet.Cell("P1").Value = "Avans Maaş";
-                        worksheet.Cell("Q1").Value = "Kesinti";
-                        worksheet.Cell("R1").Value = "İzin";
-                        worksheet.Cell("S1").Value = "F.Mesai";
-                        worksheet.Cell("T1").Value = "Prim";
-                        worksheet.Cell("U1").Value = "Resmi";
-                        worksheet.Cell("V1").Value = "Diğer";
-                        worksheet.Cell("W1").Value = "Toplam";
-                        worksheet.Cell("X1").Value = "Bakiye";
-                        worksheet.Cell("Y1").Value = "Bankadan";
-                        worksheet.Cell("Z1").Value = "Elden";
-                        worksheet.Cell("AA1").Value = "Devir";
-                        worksheet.Cell("AB1").Value = "Final";
-                        worksheet.Cell("AC1").Value = "Net Maliyet";
-                        worksheet.Cell("AD1").Value = "SSK";
-                        worksheet.Cell("AE1").Value = "GV";
-                        worksheet.Cell("AF1").Value = "DV";
-                        worksheet.Cell("AG1").Value = "Toplam Maliyet";
-                        worksheet.Cell("AH1").Value = "Güncellenme";
+                        worksheet.Cell("I1").Value = "SGKBranch";
+                        worksheet.Cell("J1").Value = "LocationName";
+                        worksheet.Cell("K1").Value = "Maaş";
+                        worksheet.Cell("L1").Value = "İzin";
+                        worksheet.Cell("M1").Value = "F.Mesai";
+                        worksheet.Cell("N1").Value = "Prim";
+                        worksheet.Cell("O1").Value = "Resmi";
+                        worksheet.Cell("P1").Value = "Diğer";
+                        worksheet.Cell("Q1").Value = "Toplam";
+                        worksheet.Cell("R1").Value = "Avans Maaş";
+                        worksheet.Cell("S1").Value = "Kesinti";
+                        worksheet.Cell("T1").Value = "İzin";
+                        worksheet.Cell("U1").Value = "F.Mesai";
+                        worksheet.Cell("V1").Value = "Prim";
+                        worksheet.Cell("W1").Value = "Resmi";
+                        worksheet.Cell("X1").Value = "Diğer";
+                        worksheet.Cell("Y1").Value = "Toplam";
+                        worksheet.Cell("Z1").Value = "Bakiye";
+                        worksheet.Cell("AA1").Value = "Bankadan";
+                        worksheet.Cell("AB1").Value = "Elden";
+                        worksheet.Cell("AC1").Value = "Devir";
+                        worksheet.Cell("AD1").Value = "Final";
+                        worksheet.Cell("AE1").Value = "Net Maliyet";
+                        worksheet.Cell("AF1").Value = "SSK";
+                        worksheet.Cell("AG1").Value = "GV";
+                        worksheet.Cell("AH1").Value = "DV";
+                        worksheet.Cell("AI1").Value = "Toplam Maliyet";
+                        worksheet.Cell("AJ1").Value = "Güncellenme";
 
                         //worksheet.Cell("A2").FormulaA1 = "=MID(A1, 7, 5)";
 
@@ -2428,36 +2438,38 @@ namespace ActionForce.Office.Controllers
                             worksheet.Cell("F" + rownum).Value = item.IBAN;
                             worksheet.Cell("G" + rownum).Value = item.BankName;
                             worksheet.Cell("H" + rownum).Value = item.SalaryPaymentTypeID == 1 ? "B" : "";
-                            worksheet.Cell("I" + rownum).Value = item.SalaryTotal;
-                            worksheet.Cell("J" + rownum).Value = item.PermitTotal;
-                            worksheet.Cell("K" + rownum).Value = item.ExtraShiftTotal;
-                            worksheet.Cell("L" + rownum).Value = item.PremiumTotal;
-                            worksheet.Cell("M" + rownum).Value = item.FormalTotal;
-                            worksheet.Cell("N" + rownum).Value = item.OtherTotal;
-                            worksheet.Cell("O" + rownum).Value = item.TotalProgress;
+                            worksheet.Cell("I" + rownum).Value = item.SGKBranch;
+                            worksheet.Cell("J" + rownum).Value = item.LocationName;
+                            worksheet.Cell("K" + rownum).Value = item.SalaryTotal;
+                            worksheet.Cell("L" + rownum).Value = item.PermitTotal;
+                            worksheet.Cell("M" + rownum).Value = item.ExtraShiftTotal;
+                            worksheet.Cell("N" + rownum).Value = item.PremiumTotal;
+                            worksheet.Cell("O" + rownum).Value = item.FormalTotal;
+                            worksheet.Cell("P" + rownum).Value = item.OtherTotal;
+                            worksheet.Cell("Q" + rownum).Value = item.TotalProgress;
 
-                            worksheet.Cell("P" + rownum).Value = item.PrePaymentAmount;
-                            worksheet.Cell("Q" + rownum).Value = item.SalaryCutAmount;
-                            worksheet.Cell("R" + rownum).Value = item.PermitPaymentAmount;
-                            worksheet.Cell("S" + rownum).Value = item.ExtraShiftPaymentAmount;
-                            worksheet.Cell("T" + rownum).Value = item.PremiumPaymentAmount;
-                            worksheet.Cell("U" + rownum).Value = item.FormalPaymentAmount;
-                            worksheet.Cell("V" + rownum).Value = item.OtherPaymentAmount;
-                            worksheet.Cell("W" + rownum).Value = item.TotalPaymentAmount;
-                            worksheet.Cell("X" + rownum).Value = item.TotalBalance;
+                            worksheet.Cell("R" + rownum).Value = item.PrePaymentAmount;
+                            worksheet.Cell("S" + rownum).Value = item.SalaryCutAmount;
+                            worksheet.Cell("T" + rownum).Value = item.PermitPaymentAmount;
+                            worksheet.Cell("U" + rownum).Value = item.ExtraShiftPaymentAmount;
+                            worksheet.Cell("V" + rownum).Value = item.PremiumPaymentAmount;
+                            worksheet.Cell("W" + rownum).Value = item.FormalPaymentAmount;
+                            worksheet.Cell("X" + rownum).Value = item.OtherPaymentAmount;
+                            worksheet.Cell("Y" + rownum).Value = item.TotalPaymentAmount;
+                            worksheet.Cell("Z" + rownum).Value = item.TotalBalance;
 
-                            worksheet.Cell("Y" + rownum).Value = item.BankPaymentAmount;
-                            worksheet.Cell("Z" + rownum).Value = item.ManuelPaymentAmount;
-                            worksheet.Cell("AA" + rownum).Value = item.TransferBalance;
-                            worksheet.Cell("AB" + rownum).Value = item.GrossBalance;
+                            worksheet.Cell("AA" + rownum).Value = item.BankPaymentAmount;
+                            worksheet.Cell("AB" + rownum).Value = item.ManuelPaymentAmount;
+                            worksheet.Cell("AC" + rownum).Value = item.TransferBalance;
+                            worksheet.Cell("AD" + rownum).Value = item.GrossBalance;
 
-                            worksheet.Cell("AC" + rownum).Value = item.NetCost;
-                            worksheet.Cell("AD" + rownum).Value = item.SSK;
-                            worksheet.Cell("AE" + rownum).Value = item.GV;
-                            worksheet.Cell("AF" + rownum).Value = item.DV;
-                            worksheet.Cell("AG" + rownum).Value = item.TotalCost;
+                            worksheet.Cell("AE" + rownum).Value = item.NetCost;
+                            worksheet.Cell("AF" + rownum).Value = item.SSK;
+                            worksheet.Cell("AG" + rownum).Value = item.GV;
+                            worksheet.Cell("AH" + rownum).Value = item.DV;
+                            worksheet.Cell("AI" + rownum).Value = item.TotalCost;
 
-                            worksheet.Cell("AH" + rownum).Value = item.UpdateDate;
+                            worksheet.Cell("AJ" + rownum).Value = item.UpdateDate;
 
                             rownum++;
                         }
@@ -2470,36 +2482,38 @@ namespace ActionForce.Office.Controllers
                         worksheet.Cell("F" + rownum).Value = null;
                         worksheet.Cell("G" + rownum).Value = "Toplam";
                         worksheet.Cell("H" + rownum).Value = null;
-                        worksheet.Cell("I" + rownum).Value = model.SalaryPeriodComputeSum.SalaryTotal;
-                        worksheet.Cell("J" + rownum).Value = model.SalaryPeriodComputeSum.PermitTotal;
-                        worksheet.Cell("K" + rownum).Value = model.SalaryPeriodComputeSum.ExtraShiftTotal;
-                        worksheet.Cell("L" + rownum).Value = model.SalaryPeriodComputeSum.PremiumTotal;
-                        worksheet.Cell("M" + rownum).Value = model.SalaryPeriodComputeSum.FormalTotal;
-                        worksheet.Cell("N" + rownum).Value = model.SalaryPeriodComputeSum.OtherTotal;
-                        worksheet.Cell("O" + rownum).Value = model.SalaryPeriodComputeSum.TotalProgress;
+                        worksheet.Cell("I" + rownum).Value = null;
+                        worksheet.Cell("J" + rownum).Value = null;
+                        worksheet.Cell("K" + rownum).Value = model.SalaryPeriodComputeSum.SalaryTotal;
+                        worksheet.Cell("L" + rownum).Value = model.SalaryPeriodComputeSum.PermitTotal;
+                        worksheet.Cell("M" + rownum).Value = model.SalaryPeriodComputeSum.ExtraShiftTotal;
+                        worksheet.Cell("N" + rownum).Value = model.SalaryPeriodComputeSum.PremiumTotal;
+                        worksheet.Cell("O" + rownum).Value = model.SalaryPeriodComputeSum.FormalTotal;
+                        worksheet.Cell("P" + rownum).Value = model.SalaryPeriodComputeSum.OtherTotal;
+                        worksheet.Cell("Q" + rownum).Value = model.SalaryPeriodComputeSum.TotalProgress;
 
-                        worksheet.Cell("P" + rownum).Value = model.SalaryPeriodComputeSum.PrePaymentAmount;
-                        worksheet.Cell("Q" + rownum).Value = model.SalaryPeriodComputeSum.SalaryCutAmount;
-                        worksheet.Cell("R" + rownum).Value = model.SalaryPeriodComputeSum.PermitPaymentAmount;
-                        worksheet.Cell("S" + rownum).Value = model.SalaryPeriodComputeSum.ExtraShiftPaymentAmount;
-                        worksheet.Cell("T" + rownum).Value = model.SalaryPeriodComputeSum.PremiumPaymentAmount;
-                        worksheet.Cell("U" + rownum).Value = model.SalaryPeriodComputeSum.FormalPaymentAmount;
-                        worksheet.Cell("V" + rownum).Value = model.SalaryPeriodComputeSum.OtherPaymentAmount;
-                        worksheet.Cell("W" + rownum).Value = model.SalaryPeriodComputeSum.TotalPaymentAmount;
-                        worksheet.Cell("X" + rownum).Value = model.SalaryPeriodComputeSum.TotalBalance;
+                        worksheet.Cell("R" + rownum).Value = model.SalaryPeriodComputeSum.PrePaymentAmount;
+                        worksheet.Cell("S" + rownum).Value = model.SalaryPeriodComputeSum.SalaryCutAmount;
+                        worksheet.Cell("T" + rownum).Value = model.SalaryPeriodComputeSum.PermitPaymentAmount;
+                        worksheet.Cell("U" + rownum).Value = model.SalaryPeriodComputeSum.ExtraShiftPaymentAmount;
+                        worksheet.Cell("V" + rownum).Value = model.SalaryPeriodComputeSum.PremiumPaymentAmount;
+                        worksheet.Cell("W" + rownum).Value = model.SalaryPeriodComputeSum.FormalPaymentAmount;
+                        worksheet.Cell("X" + rownum).Value = model.SalaryPeriodComputeSum.OtherPaymentAmount;
+                        worksheet.Cell("Y" + rownum).Value = model.SalaryPeriodComputeSum.TotalPaymentAmount;
+                        worksheet.Cell("Z" + rownum).Value = model.SalaryPeriodComputeSum.TotalBalance;
 
-                        worksheet.Cell("Y" + rownum).Value = model.SalaryPeriodComputeSum.BankPaymentAmount;
-                        worksheet.Cell("Z" + rownum).Value = model.SalaryPeriodComputeSum.ManuelPaymentAmount;
-                        worksheet.Cell("AA" + rownum).Value = model.SalaryPeriodComputeSum.TransferBalance;
-                        worksheet.Cell("AB" + rownum).Value = model.SalaryPeriodComputeSum.GrossBalance;
+                        worksheet.Cell("AA" + rownum).Value = model.SalaryPeriodComputeSum.BankPaymentAmount;
+                        worksheet.Cell("AB" + rownum).Value = model.SalaryPeriodComputeSum.ManuelPaymentAmount;
+                        worksheet.Cell("AC" + rownum).Value = model.SalaryPeriodComputeSum.TransferBalance;
+                        worksheet.Cell("AD" + rownum).Value = model.SalaryPeriodComputeSum.GrossBalance;
 
-                        worksheet.Cell("AC" + rownum).Value = model.SalaryPeriodComputeSum.NetCost;
-                        worksheet.Cell("AD" + rownum).Value = model.SalaryPeriodComputeSum.SSK;
-                        worksheet.Cell("AE" + rownum).Value = model.SalaryPeriodComputeSum.GV;
-                        worksheet.Cell("AF" + rownum).Value = model.SalaryPeriodComputeSum.DV;
-                        worksheet.Cell("AG" + rownum).Value = model.SalaryPeriodComputeSum.TotalCost;
+                        worksheet.Cell("AE" + rownum).Value = model.SalaryPeriodComputeSum.NetCost;
+                        worksheet.Cell("AF" + rownum).Value = model.SalaryPeriodComputeSum.SSK;
+                        worksheet.Cell("AG" + rownum).Value = model.SalaryPeriodComputeSum.GV;
+                        worksheet.Cell("AH" + rownum).Value = model.SalaryPeriodComputeSum.DV;
+                        worksheet.Cell("AI" + rownum).Value = model.SalaryPeriodComputeSum.TotalCost;
 
-                        worksheet.Cell("AH" + rownum).Value = null;
+                        worksheet.Cell("AJ" + rownum).Value = null;
 
 
                         workbook.SaveAs(pathToExcelFile);
@@ -2552,32 +2566,34 @@ namespace ActionForce.Office.Controllers
                         worksheet.Cell("F1").Value = "IBAN";
                         worksheet.Cell("G1").Value = "Bank";
                         worksheet.Cell("H1").Value = "B";
-                        worksheet.Cell("I1").Value = "Maaş";
-                        worksheet.Cell("J1").Value = "İzin";
-                        worksheet.Cell("K1").Value = "F.Mesai";
-                        worksheet.Cell("L1").Value = "Prim";
-                        worksheet.Cell("M1").Value = "Resmi";
-                        worksheet.Cell("N1").Value = "Diğer";
-                        worksheet.Cell("O1").Value = "Toplam";
-                        worksheet.Cell("P1").Value = "Avans Maaş";
-                        worksheet.Cell("Q1").Value = "Kesinti";
-                        worksheet.Cell("R1").Value = "İzin";
-                        worksheet.Cell("S1").Value = "F.Mesai";
-                        worksheet.Cell("T1").Value = "Prim";
-                        worksheet.Cell("U1").Value = "Resmi";
-                        worksheet.Cell("V1").Value = "Diğer";
-                        worksheet.Cell("W1").Value = "Toplam";
-                        worksheet.Cell("X1").Value = "Bakiye";
-                        worksheet.Cell("Y1").Value = "Bankadan";
-                        worksheet.Cell("Z1").Value = "Elden";
-                        worksheet.Cell("AA1").Value = "Devir";
-                        worksheet.Cell("AB1").Value = "Final";
-                        worksheet.Cell("AC1").Value = "Net Maliyet";
-                        worksheet.Cell("AD1").Value = "SSK";
-                        worksheet.Cell("AE1").Value = "GV";
-                        worksheet.Cell("AF1").Value = "DV";
-                        worksheet.Cell("AG1").Value = "Toplam Maliyet";
-                        worksheet.Cell("AH1").Value = "Güncellenme";
+                        worksheet.Cell("I1").Value = "SGKBranch";
+                        worksheet.Cell("J1").Value = "LocationName";
+                        worksheet.Cell("K1").Value = "Maaş";
+                        worksheet.Cell("L1").Value = "İzin";
+                        worksheet.Cell("M1").Value = "F.Mesai";
+                        worksheet.Cell("N1").Value = "Prim";
+                        worksheet.Cell("O1").Value = "Resmi";
+                        worksheet.Cell("P1").Value = "Diğer";
+                        worksheet.Cell("Q1").Value = "Toplam";
+                        worksheet.Cell("R1").Value = "Avans Maaş";
+                        worksheet.Cell("S1").Value = "Kesinti";
+                        worksheet.Cell("T1").Value = "İzin";
+                        worksheet.Cell("U1").Value = "F.Mesai";
+                        worksheet.Cell("V1").Value = "Prim";
+                        worksheet.Cell("W1").Value = "Resmi";
+                        worksheet.Cell("X1").Value = "Diğer";
+                        worksheet.Cell("Y1").Value = "Toplam";
+                        worksheet.Cell("Z1").Value = "Bakiye";
+                        worksheet.Cell("AA1").Value = "Bankadan";
+                        worksheet.Cell("AB1").Value = "Elden";
+                        worksheet.Cell("AC1").Value = "Devir";
+                        worksheet.Cell("AD1").Value = "Final";
+                        worksheet.Cell("AE1").Value = "Net Maliyet";
+                        worksheet.Cell("AF1").Value = "SSK";
+                        worksheet.Cell("AG1").Value = "GV";
+                        worksheet.Cell("AH1").Value = "DV";
+                        worksheet.Cell("AI1").Value = "Toplam Maliyet";
+                        worksheet.Cell("AJ1").Value = "Güncellenme";
 
                         //worksheet.Cell("A2").FormulaA1 = "=MID(A1, 7, 5)";
 
@@ -2594,36 +2610,38 @@ namespace ActionForce.Office.Controllers
                             worksheet.Cell("F" + rownum).Value = item.IBAN;
                             worksheet.Cell("G" + rownum).Value = item.BankName;
                             worksheet.Cell("H" + rownum).Value = item.SalaryPaymentTypeID == 1 ? "B" : "";
-                            worksheet.Cell("I" + rownum).Value = item.SalaryTotal;
-                            worksheet.Cell("J" + rownum).Value = item.PermitTotal;
-                            worksheet.Cell("K" + rownum).Value = item.ExtraShiftTotal;
-                            worksheet.Cell("L" + rownum).Value = item.PremiumTotal;
-                            worksheet.Cell("M" + rownum).Value = item.FormalTotal;
-                            worksheet.Cell("N" + rownum).Value = item.OtherTotal;
-                            worksheet.Cell("O" + rownum).Value = item.TotalProgress;
+                            worksheet.Cell("I" + rownum).Value = item.SGKBranch;
+                            worksheet.Cell("J" + rownum).Value = item.LocationName;
+                            worksheet.Cell("K" + rownum).Value = item.SalaryTotal;
+                            worksheet.Cell("L" + rownum).Value = item.PermitTotal;
+                            worksheet.Cell("M" + rownum).Value = item.ExtraShiftTotal;
+                            worksheet.Cell("N" + rownum).Value = item.PremiumTotal;
+                            worksheet.Cell("O" + rownum).Value = item.FormalTotal;
+                            worksheet.Cell("P" + rownum).Value = item.OtherTotal;
+                            worksheet.Cell("Q" + rownum).Value = item.TotalProgress;
 
-                            worksheet.Cell("P" + rownum).Value = item.PrePaymentAmount;
-                            worksheet.Cell("Q" + rownum).Value = item.SalaryCutAmount;
-                            worksheet.Cell("R" + rownum).Value = item.PermitPaymentAmount;
-                            worksheet.Cell("S" + rownum).Value = item.ExtraShiftPaymentAmount;
-                            worksheet.Cell("T" + rownum).Value = item.PremiumPaymentAmount;
-                            worksheet.Cell("U" + rownum).Value = item.FormalPaymentAmount;
-                            worksheet.Cell("V" + rownum).Value = item.OtherPaymentAmount;
-                            worksheet.Cell("W" + rownum).Value = item.TotalPaymentAmount;
-                            worksheet.Cell("X" + rownum).Value = item.TotalBalance;
+                            worksheet.Cell("R" + rownum).Value = item.PrePaymentAmount;
+                            worksheet.Cell("S" + rownum).Value = item.SalaryCutAmount;
+                            worksheet.Cell("T" + rownum).Value = item.PermitPaymentAmount;
+                            worksheet.Cell("U" + rownum).Value = item.ExtraShiftPaymentAmount;
+                            worksheet.Cell("V" + rownum).Value = item.PremiumPaymentAmount;
+                            worksheet.Cell("W" + rownum).Value = item.FormalPaymentAmount;
+                            worksheet.Cell("X" + rownum).Value = item.OtherPaymentAmount;
+                            worksheet.Cell("Y" + rownum).Value = item.TotalPaymentAmount;
+                            worksheet.Cell("Z" + rownum).Value = item.TotalBalance;
 
-                            worksheet.Cell("Y" + rownum).Value = item.BankPaymentAmount;
-                            worksheet.Cell("Z" + rownum).Value = item.ManuelPaymentAmount;
-                            worksheet.Cell("AA" + rownum).Value = item.TransferBalance;
-                            worksheet.Cell("AB" + rownum).Value = item.GrossBalance;
+                            worksheet.Cell("AA" + rownum).Value = item.BankPaymentAmount;
+                            worksheet.Cell("AB" + rownum).Value = item.ManuelPaymentAmount;
+                            worksheet.Cell("AC" + rownum).Value = item.TransferBalance;
+                            worksheet.Cell("AD" + rownum).Value = item.GrossBalance;
 
-                            worksheet.Cell("AC" + rownum).Value = item.NetCost;
-                            worksheet.Cell("AD" + rownum).Value = item.SSK;
-                            worksheet.Cell("AE" + rownum).Value = item.GV;
-                            worksheet.Cell("AF" + rownum).Value = item.DV;
-                            worksheet.Cell("AG" + rownum).Value = item.TotalCost;
+                            worksheet.Cell("AE" + rownum).Value = item.NetCost;
+                            worksheet.Cell("AF" + rownum).Value = item.SSK;
+                            worksheet.Cell("AG" + rownum).Value = item.GV;
+                            worksheet.Cell("AH" + rownum).Value = item.DV;
+                            worksheet.Cell("AI" + rownum).Value = item.TotalCost;
 
-                            worksheet.Cell("AH" + rownum).Value = item.UpdateDate;
+                            worksheet.Cell("AJ" + rownum).Value = item.UpdateDate;
 
                             rownum++;
                         }
@@ -2636,36 +2654,38 @@ namespace ActionForce.Office.Controllers
                         worksheet.Cell("F" + rownum).Value = null;
                         worksheet.Cell("G" + rownum).Value = "Toplam";
                         worksheet.Cell("H" + rownum).Value = null;
-                        worksheet.Cell("I" + rownum).Value = model.SalaryPeriodComputeSum.SalaryTotal;
-                        worksheet.Cell("J" + rownum).Value = model.SalaryPeriodComputeSum.PermitTotal;
-                        worksheet.Cell("K" + rownum).Value = model.SalaryPeriodComputeSum.ExtraShiftTotal;
-                        worksheet.Cell("L" + rownum).Value = model.SalaryPeriodComputeSum.PremiumTotal;
-                        worksheet.Cell("M" + rownum).Value = model.SalaryPeriodComputeSum.FormalTotal;
-                        worksheet.Cell("N" + rownum).Value = model.SalaryPeriodComputeSum.OtherTotal;
-                        worksheet.Cell("O" + rownum).Value = model.SalaryPeriodComputeSum.TotalProgress;
+                        worksheet.Cell("I" + rownum).Value = null;
+                        worksheet.Cell("J" + rownum).Value = null;
+                        worksheet.Cell("K" + rownum).Value = model.SalaryPeriodComputeSum.SalaryTotal;
+                        worksheet.Cell("L" + rownum).Value = model.SalaryPeriodComputeSum.PermitTotal;
+                        worksheet.Cell("M" + rownum).Value = model.SalaryPeriodComputeSum.ExtraShiftTotal;
+                        worksheet.Cell("N" + rownum).Value = model.SalaryPeriodComputeSum.PremiumTotal;
+                        worksheet.Cell("O" + rownum).Value = model.SalaryPeriodComputeSum.FormalTotal;
+                        worksheet.Cell("P" + rownum).Value = model.SalaryPeriodComputeSum.OtherTotal;
+                        worksheet.Cell("Q" + rownum).Value = model.SalaryPeriodComputeSum.TotalProgress;
 
-                        worksheet.Cell("P" + rownum).Value = model.SalaryPeriodComputeSum.PrePaymentAmount;
-                        worksheet.Cell("Q" + rownum).Value = model.SalaryPeriodComputeSum.SalaryCutAmount;
-                        worksheet.Cell("R" + rownum).Value = model.SalaryPeriodComputeSum.PermitPaymentAmount;
-                        worksheet.Cell("S" + rownum).Value = model.SalaryPeriodComputeSum.ExtraShiftPaymentAmount;
-                        worksheet.Cell("T" + rownum).Value = model.SalaryPeriodComputeSum.PremiumPaymentAmount;
-                        worksheet.Cell("U" + rownum).Value = model.SalaryPeriodComputeSum.FormalPaymentAmount;
-                        worksheet.Cell("V" + rownum).Value = model.SalaryPeriodComputeSum.OtherPaymentAmount;
-                        worksheet.Cell("W" + rownum).Value = model.SalaryPeriodComputeSum.TotalPaymentAmount;
-                        worksheet.Cell("X" + rownum).Value = model.SalaryPeriodComputeSum.TotalBalance;
+                        worksheet.Cell("R" + rownum).Value = model.SalaryPeriodComputeSum.PrePaymentAmount;
+                        worksheet.Cell("S" + rownum).Value = model.SalaryPeriodComputeSum.SalaryCutAmount;
+                        worksheet.Cell("T" + rownum).Value = model.SalaryPeriodComputeSum.PermitPaymentAmount;
+                        worksheet.Cell("U" + rownum).Value = model.SalaryPeriodComputeSum.ExtraShiftPaymentAmount;
+                        worksheet.Cell("V" + rownum).Value = model.SalaryPeriodComputeSum.PremiumPaymentAmount;
+                        worksheet.Cell("W" + rownum).Value = model.SalaryPeriodComputeSum.FormalPaymentAmount;
+                        worksheet.Cell("X" + rownum).Value = model.SalaryPeriodComputeSum.OtherPaymentAmount;
+                        worksheet.Cell("Y" + rownum).Value = model.SalaryPeriodComputeSum.TotalPaymentAmount;
+                        worksheet.Cell("Z" + rownum).Value = model.SalaryPeriodComputeSum.TotalBalance;
 
-                        worksheet.Cell("Y" + rownum).Value = model.SalaryPeriodComputeSum.BankPaymentAmount;
-                        worksheet.Cell("Z" + rownum).Value = model.SalaryPeriodComputeSum.ManuelPaymentAmount;
-                        worksheet.Cell("AA" + rownum).Value = model.SalaryPeriodComputeSum.TransferBalance;
-                        worksheet.Cell("AB" + rownum).Value = model.SalaryPeriodComputeSum.GrossBalance;
+                        worksheet.Cell("AA" + rownum).Value = model.SalaryPeriodComputeSum.BankPaymentAmount;
+                        worksheet.Cell("AB" + rownum).Value = model.SalaryPeriodComputeSum.ManuelPaymentAmount;
+                        worksheet.Cell("AC" + rownum).Value = model.SalaryPeriodComputeSum.TransferBalance;
+                        worksheet.Cell("AD" + rownum).Value = model.SalaryPeriodComputeSum.GrossBalance;
 
-                        worksheet.Cell("AC" + rownum).Value = model.SalaryPeriodComputeSum.NetCost;
-                        worksheet.Cell("AD" + rownum).Value = model.SalaryPeriodComputeSum.SSK;
-                        worksheet.Cell("AE" + rownum).Value = model.SalaryPeriodComputeSum.GV;
-                        worksheet.Cell("AF" + rownum).Value = model.SalaryPeriodComputeSum.DV;
-                        worksheet.Cell("AG" + rownum).Value = model.SalaryPeriodComputeSum.TotalCost;
+                        worksheet.Cell("AE" + rownum).Value = model.SalaryPeriodComputeSum.NetCost;
+                        worksheet.Cell("AF" + rownum).Value = model.SalaryPeriodComputeSum.SSK;
+                        worksheet.Cell("AG" + rownum).Value = model.SalaryPeriodComputeSum.GV;
+                        worksheet.Cell("AH" + rownum).Value = model.SalaryPeriodComputeSum.DV;
+                        worksheet.Cell("AI" + rownum).Value = model.SalaryPeriodComputeSum.TotalCost;
 
-                        worksheet.Cell("AH" + rownum).Value = null;
+                        worksheet.Cell("AJ" + rownum).Value = null;
 
 
 
@@ -3151,25 +3171,31 @@ namespace ActionForce.Office.Controllers
 
                     worksheet.Cell("A1").Value = "SalaryPeriodID";
                     worksheet.Cell("B1").Value = "EmployeeID";
-                    worksheet.Cell("C1").Value = "EmployeeName";
-                    worksheet.Cell("D1").Value = "NetCost";
-                    worksheet.Cell("E1").Value = "SSK";
-                    worksheet.Cell("F1").Value = "GV";
-                    worksheet.Cell("G1").Value = "DV";
+                    worksheet.Cell("C1").Value = "Identity";
+                    worksheet.Cell("D1").Value = "SGKBranch";
+                    worksheet.Cell("E1").Value = "LocationName";
+                    worksheet.Cell("F1").Value = "EmployeeName";
+                    worksheet.Cell("G1").Value = "NetCost";
+                    worksheet.Cell("H1").Value = "SSK";
+                    worksheet.Cell("I1").Value = "GV";
+                    worksheet.Cell("J1").Value = "DV";
 
 
                     int rownum = 2;
 
-                    foreach (var item in SalaryRows.OrderBy(x => x.FullName))
+                    foreach (var item in SalaryRows.Distinct().OrderBy(x => x.FullName))
                     {
 
                         worksheet.Cell("A" + rownum).Value = item.SalaryPeriodID;
                         worksheet.Cell("B" + rownum).Value = item.EmployeeID;
-                        worksheet.Cell("C" + rownum).Value = item.FullName;
-                        worksheet.Cell("D" + rownum).Value = item.NetCost;
-                        worksheet.Cell("E" + rownum).Value = item.SSK;
-                        worksheet.Cell("F" + rownum).Value = item.GV;
-                        worksheet.Cell("G" + rownum).Value = item.DV;
+                        worksheet.Cell("C" + rownum).Value = item.IdentityNumber;
+                        worksheet.Cell("D" + rownum).Value = item.SGKBranch;
+                        worksheet.Cell("E" + rownum).Value = item.LocationName;
+                        worksheet.Cell("F" + rownum).Value = item.FullName;
+                        worksheet.Cell("G" + rownum).Value = item.NetCost;
+                        worksheet.Cell("H" + rownum).Value = item.SSK;
+                        worksheet.Cell("I" + rownum).Value = item.GV;
+                        worksheet.Cell("J" + rownum).Value = item.DV;
 
                         rownum++;
                     }

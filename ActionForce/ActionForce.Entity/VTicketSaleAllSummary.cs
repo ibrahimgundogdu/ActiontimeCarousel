@@ -39,5 +39,6 @@ namespace ActionForce.Entity
         public string Name { get; set; }
         public long ID { get; set; }
         public string CardNumber { get; set; }
+        public Nullable<bool> IsSuccess { get; set; }
     }
 }

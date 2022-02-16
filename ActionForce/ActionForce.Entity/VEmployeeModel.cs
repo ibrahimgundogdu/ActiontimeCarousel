@@ -29,5 +29,7 @@ namespace ActionForce.Entity
         public Nullable<bool> IsActive { get; set; }
         public Nullable<int> StatusID { get; set; }
         public Nullable<short> SalaryPaymentTypeID { get; set; }
+        public string SGKBranch { get; set; }
+        public string LocationName { get; set; }
     }
 }

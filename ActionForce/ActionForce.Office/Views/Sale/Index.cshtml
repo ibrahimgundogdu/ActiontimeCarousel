@@ -53,7 +53,7 @@
                 <table class="table table-sm table-hover">
                     <thead>
                         <tr>
-                            <th colspan="15">
+                            <th colspan="16">
                                 @(Model.Filters.Date?.ToLongDateString()) &nbsp;&nbsp; - &nbsp;&nbsp; @(Model?.CurrentLocation == null ? "" : Model?.CurrentLocation?.LocationFullName)
                             </th>
                             <th colspan="2" class="text-right">
@@ -70,6 +70,7 @@
                             <th>#</th>
                             <th>Sipariş No</th>
                             <th>Kart No</th>
+                            <th>Yüklendi</th>
                             <th>Şube</th>
                             <th>Tarih</th>
                             <th>Durum</th>
@@ -96,6 +97,7 @@
                                 <td class="tx-sm-13 bold">@item.ID</td>
                                 <td class="tx-sm-13 font-weight-bold"><a href="@("/Sale/Detail/" + @item.UID)" target="_blank">@item.OrderNumber</a></td>
                                 <td class="tx-sm-13 font-weight-bold"><a href="@("/Sale/Detail/" + @item.UID)" target="_blank">@item.CardNumber</a></td>
+                                <td class="tx-sm-13 font-weight-bold">@(item.IsSuccess == true ? "OK":"")</td>
                                 <td class="tx-sm-13"><a href="@($"/Sale/Index?LocationID={item.LocationID}&Date={item.Date?.ToString("yyyy-MM-dd")}")" title="@(item.LocationFullName)" target="_blank">@(item.SortBy)</a></td>
                                 <td class="tx-sm-13"><a href="@($"/Sale/Index?LocationID={item.LocationID}&Date={item.Date?.ToString("yyyy-MM-dd")}")" title="@(item.LocationFullName)" target="_blank">@(item.Date?.ToShortDateString())</a></td>
                                 <td class="tx-sm-13 @(item.PosStatusID == 3 ? "font-weight-bold":"")">@item.PosStatusName</td>
@@ -124,6 +126,7 @@
                                         <td class="tx-sm-13 bold">@rf.ID</td>
                                         <td class="tx-sm-13 font-weight-bold"><a href="@("/Sale/Detail/" + @item.UID)" target="_blank">@(item.OrderNumber)</a></td>
                                         <td class="tx-sm-13 font-weight-bold"><a href="@("/Sale/Detail/" + @item.UID)" target="_blank">@(item.CardNumber)</a></td>
+                                        <td class="tx-sm-13 font-weight-bold">@(item.IsSuccess == true ? "OK":"")</td>
                                         <td class="tx-sm-13"><a href="@($"/Sale/Index?LocationID={item.LocationID}&Date={item.Date?.ToString("yyyy-MM-dd")}")" target="_blank">@rf.DocumentNumber</a></td>
                                         <td class="tx-sm-13"><a href="@($"/Sale/Index?LocationID={item.LocationID}&Date={item.Date?.ToString("yyyy-MM-dd")}")" title="@(item.LocationFullName)" target="_blank">@(rf.DocumentDate?.ToShortDateString())</a></td>
                                         <td class="tx-sm-13"></td>
@@ -150,6 +153,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
+                            <th></th>
                             <th></th>
                             <th></th>
                             <th></th>
