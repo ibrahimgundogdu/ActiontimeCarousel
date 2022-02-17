@@ -6995,6 +6995,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VSalaryPeriod' does not hav
           <Property Name="SalaryPeriodStatusID" Type="smallint" />
           <Property Name="PeriodCode" Type="nvarchar" MaxLength="10" />
           <Property Name="Year" Type="int" Nullable="false" />
+          <Property Name="Month" Type="int" />
           <Property Name="Number" Type="nvarchar" MaxLength="5" />
           <Property Name="DateBegin" Type="date" />
           <Property Name="DateEnd" Type="date" />
@@ -7010,7 +7011,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VSalaryPeriod' does not hav
           <Property Name="TotalAmount" Type="float" />
           <Property Name="PaymentAmount" Type="float" />
           <Property Name="BalanceAmount" Type="float" />
-          <Property Name="Expr1" Type="nvarchar" MaxLength="4" />
           <Property Name="ParentID" Type="int" />
           <Property Name="IsCostCompute" Type="bit" />
           <Property Name="HaveChild" Type="bit" />
@@ -7049,6 +7049,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VSalaryPeriodComputeSum' do
           <Property Name="SSK" Type="float" />
           <Property Name="GV" Type="float" />
           <Property Name="DV" Type="float" />
+          <Property Name="Kidem" Type="float" />
+          <Property Name="Ihbar" Type="float" />
+          <Property Name="Permit" Type="float" />
           <Property Name="TotalCost" Type="float" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
         </EntityType>
@@ -8203,6 +8206,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="SalaryPeriodID" Type="int" Mode="In" />
           <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
           <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="AddSalaryPeriodCostCompute" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Year" Type="int" Mode="In" />
+          <Parameter Name="Month" Type="int" Mode="In" />
+          <Parameter Name="DateBegin" Type="date" Mode="In" />
+          <Parameter Name="DateEnd" Type="date" Mode="In" />
+          <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
+          <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
+          <Parameter Name="UID" Type="uniqueidentifier" Mode="In" />
         </Function>
         <Function Name="AddSalaryPeriodFoodCompute" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SalaryPeriodID" Type="int" Mode="In" />
@@ -11129,6 +11141,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VSalaryPeriod].[SalaryPeriodStatusID] AS [SalaryPeriodStatusID], 
     [VSalaryPeriod].[PeriodCode] AS [PeriodCode], 
     [VSalaryPeriod].[Year] AS [Year], 
+    [VSalaryPeriod].[Month] AS [Month], 
     [VSalaryPeriod].[Number] AS [Number], 
     [VSalaryPeriod].[DateBegin] AS [DateBegin], 
     [VSalaryPeriod].[DateEnd] AS [DateEnd], 
@@ -11144,7 +11157,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VSalaryPeriod].[TotalAmount] AS [TotalAmount], 
     [VSalaryPeriod].[PaymentAmount] AS [PaymentAmount], 
     [VSalaryPeriod].[BalanceAmount] AS [BalanceAmount], 
-    [VSalaryPeriod].[Expr1] AS [Expr1], 
     [VSalaryPeriod].[ParentID] AS [ParentID], 
     [VSalaryPeriod].[IsCostCompute] AS [IsCostCompute], 
     [VSalaryPeriod].[HaveChild] AS [HaveChild]
@@ -11180,6 +11192,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VSalaryPeriodComputeSum].[SSK] AS [SSK], 
     [VSalaryPeriodComputeSum].[GV] AS [GV], 
     [VSalaryPeriodComputeSum].[DV] AS [DV], 
+    [VSalaryPeriodComputeSum].[Kidem] AS [Kidem], 
+    [VSalaryPeriodComputeSum].[Ihbar] AS [Ihbar], 
+    [VSalaryPeriodComputeSum].[Permit] AS [Permit], 
     [VSalaryPeriodComputeSum].[TotalCost] AS [TotalCost], 
     [VSalaryPeriodComputeSum].[Currency] AS [Currency]
     FROM [dbo].[VSalaryPeriodComputeSum] AS [VSalaryPeriodComputeSum]</DefiningQuery>
@@ -12894,7 +12909,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="SalaryPeriodComputeActions" EntityType="db293_ActionTimeDbModel.SalaryPeriodComputeActions" />
           <EntitySet Name="SalaryPeriodGroup" EntityType="db293_ActionTimeDbModel.SalaryPeriodGroup" />
           <EntitySet Name="SalaryPeriodStatus" EntityType="db293_ActionTimeDbModel.SalaryPeriodStatus" />
-          <EntitySet Name="VSalaryPeriod" EntityType="db293_ActionTimeDbModel.VSalaryPeriod" />
           <FunctionImport Name="AddSalaryPeriodCompute" ReturnType="Collection(Int32)">
             <Parameter Name="SalaryPeriodID" Mode="In" Type="Int32" />
             <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
@@ -12944,6 +12958,16 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="SalaryPeriodID" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="HCardActions" EntityType="db293_ActionTimeDbModel.HCardActions" />
+          <EntitySet Name="VSalaryPeriod" EntityType="db293_ActionTimeDbModel.VSalaryPeriod" />
+          <FunctionImport Name="AddSalaryPeriodCostCompute" ReturnType="Collection(Int32)">
+            <Parameter Name="Year" Mode="In" Type="Int32" />
+            <Parameter Name="Month" Mode="In" Type="Int32" />
+            <Parameter Name="DateBegin" Mode="In" Type="DateTime" />
+            <Parameter Name="DateEnd" Mode="In" Type="DateTime" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordIP" Mode="In" Type="String" />
+            <Parameter Name="UID" Mode="In" Type="Guid" />
+          </FunctionImport>
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -21123,37 +21147,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="StatusName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="VSalaryPeriod">
-          <Key>
-            <PropertyRef Name="ID" />
-            <PropertyRef Name="Year" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="OurCompanyID" Type="Int32" />
-          <Property Name="SalaryPeriodGroupID" Type="Int16" />
-          <Property Name="SalaryPeriodStatusID" Type="Int16" />
-          <Property Name="PeriodCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Year" Type="Int32" Nullable="false" />
-          <Property Name="Number" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
-          <Property Name="DateBegin" Type="DateTime" Precision="0" />
-          <Property Name="DateEnd" Type="DateTime" Precision="0" />
-          <Property Name="UID" Type="Guid" />
-          <Property Name="Currency" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="CompanyName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="StatusName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="GroupType" Type="Int16" />
-          <Property Name="GroupName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeAreaCategoryID" Type="Int32" />
-          <Property Name="DayCount" Type="Int16" />
-          <Property Name="AreaName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TotalAmount" Type="Double" />
-          <Property Name="PaymentAmount" Type="Double" />
-          <Property Name="BalanceAmount" Type="Double" />
-          <Property Name="Expr1" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
-          <Property Name="ParentID" Type="Int32" />
-          <Property Name="IsCostCompute" Type="Boolean" />
-          <Property Name="HaveChild" Type="Boolean" />
-        </EntityType>
         <EntityType Name="VCardReader">
           <Key>
             <PropertyRef Name="ID" />
@@ -21237,6 +21230,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="DV" Type="Double" />
           <Property Name="TotalCost" Type="Double" />
           <Property Name="NetCost" Type="Double" />
+          <Property Name="Kidem" Type="Double" />
+          <Property Name="Ihbar" Type="Double" />
+          <Property Name="Permit" Type="Double" />
         </EntityType>
         <EntityType Name="LocationCardReaderParameter">
           <Key>
@@ -21435,6 +21431,37 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="EmployeeID" Type="Int32" />
           <Property Name="EmployeeFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="SaleRowTotal" Type="Double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="VSalaryPeriod">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="Year" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="SalaryPeriodGroupID" Type="Int16" />
+          <Property Name="SalaryPeriodStatusID" Type="Int16" />
+          <Property Name="PeriodCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Year" Type="Int32" Nullable="false" />
+          <Property Name="Month" Type="Int32" />
+          <Property Name="Number" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="DateBegin" Type="DateTime" Precision="0" />
+          <Property Name="DateEnd" Type="DateTime" Precision="0" />
+          <Property Name="UID" Type="Guid" />
+          <Property Name="Currency" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="StatusName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="GroupType" Type="Int16" />
+          <Property Name="GroupName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeAreaCategoryID" Type="Int32" />
+          <Property Name="DayCount" Type="Int16" />
+          <Property Name="AreaName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TotalAmount" Type="Double" />
+          <Property Name="PaymentAmount" Type="Double" />
+          <Property Name="BalanceAmount" Type="Double" />
+          <Property Name="ParentID" Type="Int32" />
+          <Property Name="IsCostCompute" Type="Boolean" />
+          <Property Name="HaveChild" Type="Boolean" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -29323,37 +29350,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="VSalaryPeriod">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VSalaryPeriod">
-              <MappingFragment StoreEntitySet="VSalaryPeriod">
-                <ScalarProperty Name="HaveChild" ColumnName="HaveChild" />
-                <ScalarProperty Name="IsCostCompute" ColumnName="IsCostCompute" />
-                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
-                <ScalarProperty Name="Expr1" ColumnName="Expr1" />
-                <ScalarProperty Name="BalanceAmount" ColumnName="BalanceAmount" />
-                <ScalarProperty Name="PaymentAmount" ColumnName="PaymentAmount" />
-                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
-                <ScalarProperty Name="AreaName" ColumnName="AreaName" />
-                <ScalarProperty Name="DayCount" ColumnName="DayCount" />
-                <ScalarProperty Name="EmployeeAreaCategoryID" ColumnName="EmployeeAreaCategoryID" />
-                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
-                <ScalarProperty Name="GroupType" ColumnName="GroupType" />
-                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
-                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="UID" ColumnName="UID" />
-                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
-                <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
-                <ScalarProperty Name="Number" ColumnName="Number" />
-                <ScalarProperty Name="Year" ColumnName="Year" />
-                <ScalarProperty Name="PeriodCode" ColumnName="PeriodCode" />
-                <ScalarProperty Name="SalaryPeriodStatusID" ColumnName="SalaryPeriodStatusID" />
-                <ScalarProperty Name="SalaryPeriodGroupID" ColumnName="SalaryPeriodGroupID" />
-                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AddSalaryPeriodCompute" FunctionName="db293_ActionTimeDbModel.Store.AddSalaryPeriodCompute" />
           <EntitySetMapping Name="VCardReader">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VCardReader">
@@ -29410,6 +29406,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VSalaryPeriodComputeSum">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VSalaryPeriodComputeSum">
               <MappingFragment StoreEntitySet="VSalaryPeriodComputeSum">
+                <ScalarProperty Name="Permit" ColumnName="Permit" />
+                <ScalarProperty Name="Ihbar" ColumnName="Ihbar" />
+                <ScalarProperty Name="Kidem" ColumnName="Kidem" />
                 <ScalarProperty Name="NetCost" ColumnName="NetCost" />
                 <ScalarProperty Name="TotalCost" ColumnName="TotalCost" />
                 <ScalarProperty Name="DV" ColumnName="DV" />
@@ -29644,6 +29643,38 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="VSalaryPeriod">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VSalaryPeriod">
+              <MappingFragment StoreEntitySet="VSalaryPeriod">
+                <ScalarProperty Name="HaveChild" ColumnName="HaveChild" />
+                <ScalarProperty Name="IsCostCompute" ColumnName="IsCostCompute" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="BalanceAmount" ColumnName="BalanceAmount" />
+                <ScalarProperty Name="PaymentAmount" ColumnName="PaymentAmount" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="AreaName" ColumnName="AreaName" />
+                <ScalarProperty Name="DayCount" ColumnName="DayCount" />
+                <ScalarProperty Name="EmployeeAreaCategoryID" ColumnName="EmployeeAreaCategoryID" />
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="GroupType" ColumnName="GroupType" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="PeriodCode" ColumnName="PeriodCode" />
+                <ScalarProperty Name="SalaryPeriodStatusID" ColumnName="SalaryPeriodStatusID" />
+                <ScalarProperty Name="SalaryPeriodGroupID" ColumnName="SalaryPeriodGroupID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddSalaryPeriodCostCompute" FunctionName="db293_ActionTimeDbModel.Store.AddSalaryPeriodCostCompute" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

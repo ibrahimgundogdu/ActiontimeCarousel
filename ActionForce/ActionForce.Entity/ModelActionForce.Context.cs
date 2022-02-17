@@ -371,7 +371,6 @@ namespace ActionForce.Entity
         public virtual DbSet<SalaryPeriodComputeActions> SalaryPeriodComputeActions { get; set; }
         public virtual DbSet<SalaryPeriodGroup> SalaryPeriodGroup { get; set; }
         public virtual DbSet<SalaryPeriodStatus> SalaryPeriodStatus { get; set; }
-        public virtual DbSet<VSalaryPeriod> VSalaryPeriod { get; set; }
         public virtual DbSet<VCardReader> VCardReader { get; set; }
         public virtual DbSet<TempEmployeeActionReset> TempEmployeeActionReset { get; set; }
         public virtual DbSet<TempDocumentBankTransfer> TempDocumentBankTransfer { get; set; }
@@ -382,6 +381,7 @@ namespace ActionForce.Entity
         public virtual DbSet<SalaryPaymentType> SalaryPaymentType { get; set; }
         public virtual DbSet<SalaryPeriodCompute> SalaryPeriodCompute { get; set; }
         public virtual DbSet<HCardActions> HCardActions { get; set; }
+        public virtual DbSet<VSalaryPeriod> VSalaryPeriod { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -3076,6 +3076,39 @@ namespace ActionForce.Entity
                 new ObjectParameter("SalaryPeriodID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetSalaryPeriodComputePayed", salaryPeriodIDParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> AddSalaryPeriodCostCompute(Nullable<int> year, Nullable<int> month, Nullable<System.DateTime> dateBegin, Nullable<System.DateTime> dateEnd, Nullable<int> recordEmployeeID, string recordIP, Nullable<System.Guid> uID)
+        {
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            var monthParameter = month.HasValue ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(int));
+    
+            var dateBeginParameter = dateBegin.HasValue ?
+                new ObjectParameter("DateBegin", dateBegin) :
+                new ObjectParameter("DateBegin", typeof(System.DateTime));
+    
+            var dateEndParameter = dateEnd.HasValue ?
+                new ObjectParameter("DateEnd", dateEnd) :
+                new ObjectParameter("DateEnd", typeof(System.DateTime));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            var uIDParameter = uID.HasValue ?
+                new ObjectParameter("UID", uID) :
+                new ObjectParameter("UID", typeof(System.Guid));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("AddSalaryPeriodCostCompute", yearParameter, monthParameter, dateBeginParameter, dateEndParameter, recordEmployeeIDParameter, recordIPParameter, uIDParameter);
         }
     }
 }

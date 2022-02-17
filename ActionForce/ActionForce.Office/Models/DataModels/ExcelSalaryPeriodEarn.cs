@@ -53,9 +53,15 @@ namespace ActionForce.Office
         public double? SSK { get; set; }
         public double? GV { get; set; }
         public double? DV { get; set; }
+        public double? Kidem { get; set; }
+        public double? Ihbar { get; set; }
+        public double? Permit { get; set; }
+        public double? TotalCost { get; set; }
+        public string TesvikNumber { get; set; }
+        public double? TesvikDiscount { get; set; }
+        public int? SSKDayCount { get; set; }
 
     }
-
 
 
 

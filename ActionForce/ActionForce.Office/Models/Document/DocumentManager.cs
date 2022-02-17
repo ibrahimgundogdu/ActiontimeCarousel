@@ -3035,7 +3035,9 @@ namespace ActionForce.Office
                             BankAccountID = isPos.BankAccountID,
                             TerminalID = isPos.TerminalID,
                             EnvironmentID = isPos.EnvironmentID,
-                            Quantity = isPos.Quantity
+                            Quantity = isPos.Quantity,
+                            UID = isPos.UID,
+                            ResultID = isPos.ResultID
                         };
                         isPos.ReferenceID = collection.ReferanceID;
                         isPos.LocationID = collection.LocationID;
@@ -3069,6 +3071,10 @@ namespace ActionForce.Office
 
                             Db.SaveChanges();
 
+                        }
+                        else
+                        {
+                            Db.AddBankAction(isPos.LocationID, null, collection.BankAccountID, null, isPos.ActionTypeID, collection.DocumentDate, isPos.ActionTypeName, isPos.ID, collection.DocumentDate, isPos.DocumentNumber, collection.Description, 1, collection.Amount, 0, collection.Currency, null, null, authentication.ActionEmployee.EmployeeID, DateTime.UtcNow.AddHours(location.Timezone.Value), isPos.UID);
                         }
 
                         result.IsSuccess = true;

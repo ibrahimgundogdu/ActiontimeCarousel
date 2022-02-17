@@ -373,7 +373,6 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.SalaryPeriodComputeActions" Width="1.5" PointX="9.25" PointY="38.5" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.SalaryPeriodGroup" Width="1.5" PointX="21.25" PointY="39.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.SalaryPeriodStatus" Width="1.5" PointX="0.625" PointY="8.375" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VSalaryPeriod" Width="1.5" PointX="32.875" PointY="33.5" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VCardReader" Width="1.5" PointX="37.375" PointY="41.125" IsExpanded="true" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TempEmployeeActionReset" Width="1.5" PointX="23.625" PointY="47.375" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TempDocumentBankTransfer" Width="1.5" PointX="17.125" PointY="24.625" />
@@ -384,6 +383,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.SalaryPaymentType" Width="1.5" PointX="63.75" PointY="48.5" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.SalaryPeriodCompute" Width="1.5" PointX="10.86996966175268" PointY="17.088555627078076" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.HCardActions" Width="1.5" PointX="7.3778302051955045" PointY="13.871272033951838" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VSalaryPeriod" Width="1.5" PointX="51.25" PointY="0.625" />
         
         
         

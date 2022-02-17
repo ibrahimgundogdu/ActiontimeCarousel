@@ -20,6 +20,7 @@ namespace ActionForce.Entity
         public Nullable<short> SalaryPeriodStatusID { get; set; }
         public string PeriodCode { get; set; }
         public int Year { get; set; }
+        public Nullable<int> Month { get; set; }
         public string Number { get; set; }
         public Nullable<System.DateTime> DateBegin { get; set; }
         public Nullable<System.DateTime> DateEnd { get; set; }
@@ -35,7 +36,6 @@ namespace ActionForce.Entity
         public Nullable<double> TotalAmount { get; set; }
         public Nullable<double> PaymentAmount { get; set; }
         public Nullable<double> BalanceAmount { get; set; }
-        public string Expr1 { get; set; }
         public Nullable<int> ParentID { get; set; }
         public Nullable<bool> IsCostCompute { get; set; }
         public Nullable<bool> HaveChild { get; set; }
