@@ -18,6 +18,63 @@
 
                 <div class="form-group row mg-b-5">
                     <div class="col-sm-4 form-control-plaintext"></div>
+                    <label class="col-sm-5 col-form-label tx-16"><b>Personel Bilgisi</b></label>
+                    <div class="col-sm-3 form-control-plaintext"></div>
+                </div>
+
+                <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
+                    <label for="IdentityNumber" class="col-sm-4 col-form-label tx-14 tx-bold">Kimlik No</label>
+                    <div class="col-sm-8">
+                        <input id="IdentityNumber" name="IdentityNumber" type="text" class="form-control tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.IdentityNumber)">
+                    </div>
+                    
+                </div>
+
+                <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
+                    <label for="PhoneNumber" class="col-sm-4 col-form-label tx-14 tx-bold">Telefon No</label>
+                    <div class="col-sm-8">
+                        <input id="PhoneNumber" name="PhoneNumber" type="text" class="form-control tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.PhoneNumber)">
+                    </div>
+                </div>
+
+                <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
+                    <label for="FoodCard" class="col-sm-4 col-form-label tx-14 tx-bold">Yemek Kart No</label>
+                    <div class="col-sm-8">
+                        <input id="FoodCard" name="FoodCard" type="text" class="form-control tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.FoodCard)">
+                    </div>
+                </div>
+
+                <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
+                    <label for="IBAN" class="col-sm-4 col-form-label tx-14 tx-bold">IBAN</label>
+                    <div class="col-sm-8">
+                        <input id="IBAN" name="IBAN" type="text" class="form-control tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.IBAN)">
+                    </div>
+                </div>
+
+                <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
+                    <label for="BankName" class="col-sm-4 col-form-label tx-14 tx-bold">Banka Adı</label>
+                    <div class="col-sm-8">
+                        <input id="BankName" name="BankName" type="text" class="form-control tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.BankName)">
+                    </div>
+                </div>
+
+                <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
+                    <label for="SGKBranch" class="col-sm-4 col-form-label tx-14 tx-bold">SGK Şubesi</label>
+                    <div class="col-sm-8">
+                        <input id="SGKBranch" name="SGKBranch" type="text" class="form-control tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.SGKBranch)">
+                    </div>
+                </div>
+
+                <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
+                    <label for="LocationName" class="col-sm-4 col-form-label tx-14 tx-bold">Lokasyon Adı</label>
+                    <div class="col-sm-8">
+                        <input id="LocationName" name="LocationName" type="text" class="form-control tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.LocationName)">
+                    </div>
+                </div>
+
+
+                <div class="form-group row mg-b-5">
+                    <div class="col-sm-4 form-control-plaintext"></div>
                     <label class="col-sm-5 col-form-label tx-16"><b>Hakedişler (+)</b></label>
                     <div class="col-sm-3 form-control-plaintext"></div>
                 </div>
@@ -171,7 +228,7 @@
 
                 <div class="form-group row mg-b-5">
                     <div class="col-sm-4 form-control-plaintext"></div>
-                    <label class="col-sm-5 col-form-label tx-16"><b>Kapamalar</b></label>
+                    <label class="col-sm-5 col-form-label tx-16"><b>Ödemeler</b></label>
                     <div class="col-sm-3 form-control-plaintext"></div>
 
                 </div>
@@ -230,6 +287,15 @@
                 </div>
 
                 <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
+                    <label for="Tahakkuk" class="col-sm-4 col-form-label tx-14 tx-bold">Tahakkuk</label>
+                    <div class="col-sm-5">
+                        <input id="Tahakkuk" name="Tahakkuk" type="text" class="form-control money text-right tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.Tahakkuk?.ToString("N2"))">
+                    </div>
+                    <div class="col-sm-3 form-control-plaintext">@(Model.SalaryPeriodCompute.Currency)</div>
+                </div>
+
+
+                <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
                     <label for="SSK" class="col-sm-4 col-form-label tx-14 tx-bold">SSK</label>
                     <div class="col-sm-5">
                         <input id="SSK" name="SSK" type="text" class="form-control money text-right tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.SSK?.ToString("N2"))">
@@ -254,6 +320,30 @@
                 </div>
 
                 <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
+                    <label for="Kidem" class="col-sm-4 col-form-label tx-14 tx-bold">Kıdem</label>
+                    <div class="col-sm-5">
+                        <input id="Kidem" name="Kidem" type="text" class="form-control money text-right tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.Kidem?.ToString("N2"))">
+                    </div>
+                    <div class="col-sm-3 form-control-plaintext">@(Model.SalaryPeriodCompute.Currency)</div>
+                </div>
+
+                <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
+                    <label for="Ihbar" class="col-sm-4 col-form-label tx-14 tx-bold">İhbar</label>
+                    <div class="col-sm-5">
+                        <input id="Ihbar" name="Ihbar" type="text" class="form-control money text-right tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.Ihbar?.ToString("N2"))">
+                    </div>
+                    <div class="col-sm-3 form-control-plaintext">@(Model.SalaryPeriodCompute.Currency)</div>
+                </div>
+
+                <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
+                    <label for="Permit" class="col-sm-4 col-form-label tx-14 tx-bold">İzin</label>
+                    <div class="col-sm-5">
+                        <input id="Permit" name="Permit" type="text" class="form-control money text-right tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.Permit?.ToString("N2"))">
+                    </div>
+                    <div class="col-sm-3 form-control-plaintext">@(Model.SalaryPeriodCompute.Currency)</div>
+                </div>
+
+                <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
                     <label for="TotalCost" class="col-sm-4 col-form-label tx-14 tx-bold">Toplam Maliyet</label>
                     <div class="col-sm-5">
                         <input id="TotalCost" name="TotalCost" type="text" class="form-control money text-right tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.TotalCost.ToString("N2"))" readonly>
@@ -262,8 +352,41 @@
                 </div>
 
 
+                <div class="form-group row mg-b-5">
+                    <label class="col-sm-12 col-form-label"><b><hr /></b></label>
+                </div>
 
 
+                <div class="form-group row mg-b-5">
+                    <div class="col-sm-4 form-control-plaintext"></div>
+                    <label class="col-sm-5 col-form-label tx-16"><b>Teşvik</b></label>
+                    <div class="col-sm-3 form-control-plaintext"></div>
+
+                </div>
+
+                <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
+                    <label for="TesvikNumber" class="col-sm-4 col-form-label tx-14 tx-bold">Teşvik Numarası</label>
+                    <div class="col-sm-5">
+                        <input id="TesvikNumber" name="TesvikNumber" type="text" class="form-control text-right tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.TesvikNumber)">
+                    </div>
+                    <div class="col-sm-3 form-control-plaintext"></div>
+                </div>
+
+                <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
+                    <label for="TesvikDiscount" class="col-sm-4 col-form-label tx-14 tx-bold">Teşvik İndirimi</label>
+                    <div class="col-sm-5">
+                        <input id="TesvikDiscount" name="TesvikDiscount" type="text" class="form-control money text-right tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.TesvikDiscount?.ToString("N2"))">
+                    </div>
+                    <div class="col-sm-3 form-control-plaintext"></div>
+                </div>
+
+                <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
+                    <label for="SSKDayCount" class="col-sm-4 col-form-label tx-14 tx-bold">SSK Gün Sayısı</label>
+                    <div class="col-sm-5">
+                        <input id="SSKDayCount" name="SSKDayCount" type="text" class="form-control number text-right tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.SSKDayCount)">
+                    </div>
+                    <div class="col-sm-3 form-control-plaintext">Gün</div>
+                </div>
 
                 <div class="form-group row mg-b-0">
                     <div class="col-sm-4"></div>

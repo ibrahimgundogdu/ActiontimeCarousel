@@ -347,10 +347,14 @@ namespace ActionForce.Office.Controllers
             model.ShiftTypeList = Db.EmployeeShiftType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategoryList = Db.EmployeeSalaryCategory.Where(x => x.IsActive == true).ToList();
             model.SalaryPaymentTypes = Db.SalaryPaymentType.ToList();
-            
+
             model.SequenceList = Db.EmployeeSequence.Where(x => x.IsActive == true).ToList();
             model.PhoneCodes = Db.CountryPhoneCode.Where(x => x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.BankList = Db.Bank.Where(x => x.Individual == true && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+
+            model.SGKBranchs = Db.SGKBranch.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.SortBy).ToList();
 
 
             model.Employee = Db.VEmployeeAll.FirstOrDefault(x => x.EmployeeUID == id);
@@ -487,7 +491,8 @@ namespace ActionForce.Office.Controllers
                     isEmployee.City = employee.City;
                     isEmployee.Address = employee.Address;
                     isEmployee.PostCode = employee.PostCode;
-
+                    isEmployee.LocationID = employee.LocationID;
+                    isEmployee.SGKBranch = !string.IsNullOrEmpty(employee.SGKBranchNew) ? employee.SGKBranchNew : employee.SGKBranchName;
 
                     if (isEmployee.StatusID == 1 && isEmployee.DateStart == null)
                     {
@@ -529,6 +534,18 @@ namespace ActionForce.Office.Controllers
                     }
 
                     Db.SaveChanges();
+
+                    if (!string.IsNullOrEmpty(employee.SGKBranchNew))
+                    {
+                        SGKBranch branch = new SGKBranch()
+                        {
+                            BranchName = employee.SGKBranchNew,
+                            OurCompanyID = employee.OurCompanyID
+                        };
+
+                        Db.SGKBranch.Add(branch);
+                        Db.SaveChanges();
+                    }
 
                     result.IsSuccess = true;
                     result.Message = $"{isEmployee.EmployeeID} nolu Çalışan başarı ile güncellendi";
@@ -1510,6 +1527,10 @@ namespace ActionForce.Office.Controllers
                 model.SequenceList = Db.EmployeeSequence.Where(x => x.IsActive == true).ToList();
                 model.BankList = Db.Bank.Where(x => x.Individual == true && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
 
+                model.SGKBranchs = Db.SGKBranch.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+                model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.SortBy).ToList();
+
+
                 model.CountryList = Db.Country.Where(x => x.IsActive == true).ToList();
                 int countryid = model.CountryList.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ID;
                 model.StateList = Db.State.Where(x => x.IsActive == true && x.CountryID == countryid).ToList();
@@ -1583,6 +1604,8 @@ namespace ActionForce.Office.Controllers
                 empdoc.IBAN = employee.IBAN;
                 empdoc.BankID = employee.BankID;
                 empdoc.SalaryPaymentTypeID = 1;
+                empdoc.LocationID = employee.LocationID;
+                empdoc.SGKBranch = !string.IsNullOrEmpty(employee.SGKBranchNew) ? employee.SGKBranchNew : employee.SGKBranchName;
 
                 empdoc.RecordDate = daterecord;
                 empdoc.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
@@ -1634,6 +1657,17 @@ namespace ActionForce.Office.Controllers
 
                 var our = Db.OurCompany.FirstOrDefault(x => x.CompanyID == empdoc.OurCompanyID);
 
+                if (!string.IsNullOrEmpty(employee.SGKBranchNew))
+                {
+                    SGKBranch branch = new SGKBranch()
+                    {
+                        BranchName = employee.SGKBranchNew,
+                        OurCompanyID = empdoc.OurCompanyID
+                    };
+
+                    Db.SGKBranch.Add(branch);
+                    Db.SaveChanges();
+                }
 
                 result.IsSuccess = true;
                 result.Message = "Çalışan başarı ile eklendi";
@@ -2113,7 +2147,7 @@ namespace ActionForce.Office.Controllers
                 empdoc.PositionID = location.PositionID;
                 empdoc.IsMaster = isMaster;
                 empdoc.IsActive = isActive;
-               
+
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.AddEmployeeLocation(empdoc, model.Authentication);

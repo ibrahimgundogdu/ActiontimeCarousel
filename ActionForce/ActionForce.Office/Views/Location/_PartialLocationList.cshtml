@@ -2,7 +2,7 @@
 <table class="table table-sm table-hover">
     <thead>
         <tr>
-            <th></th>
+            <th>#</th>
             <th>No</th>
             <th>Adı</th>
             <th>Şehir</th>
@@ -18,7 +18,7 @@
         @foreach (var item in Model.LocationList.OrderBy(x => x.SortBy))
         {
             <tr style='@(item.IsActive == false ? "color: red" : "")'>
-                <td><span class="@(item.IsActive == true ? "tx-success":"tx-danger")">&#8226;</span></td>
+                <td><span class="@(item.IsActive == true ? "tx-success":"tx-danger")">@(item.LocationID)</span></td>
                 <td class="tx-sm-13 bold">@item.SortBy</td>
                 <td class="tx-sm-13"><a href="@("/Location/Detail/" + @item.LocationUID)">@($"{item.LocationName} {item.Description}")</a></td>
                 <td class="tx-sm-13">@(!String.IsNullOrEmpty(item.State) ? item.State : item.CityName)</td>

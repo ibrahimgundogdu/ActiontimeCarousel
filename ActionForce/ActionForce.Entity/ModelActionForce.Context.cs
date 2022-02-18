@@ -382,6 +382,7 @@ namespace ActionForce.Entity
         public virtual DbSet<SalaryPeriodCompute> SalaryPeriodCompute { get; set; }
         public virtual DbSet<HCardActions> HCardActions { get; set; }
         public virtual DbSet<VSalaryPeriod> VSalaryPeriod { get; set; }
+        public virtual DbSet<SGKBranch> SGKBranch { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

@@ -3544,6 +3544,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
           <Property Name="UpdateDate" Type="datetime" />
           <Property Name="NetCost" Type="float" />
+          <Property Name="Tahakkuk" Type="float" />
           <Property Name="SSK" Type="float" />
           <Property Name="GV" Type="float" />
           <Property Name="DV" Type="float" />
@@ -3689,6 +3690,14 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SGKBranch">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="BranchName" Type="nvarchar" MaxLength="40" />
         </EntityType>
         <EntityType Name="SMSNumber">
           <Key>
@@ -6031,6 +6040,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeAll' does not have
           <Property Name="IBAN" Type="nvarchar" MaxLength="30" />
           <Property Name="BankID" Type="int" />
           <Property Name="SalaryPaymentTypeID" Type="smallint" />
+          <Property Name="SGKBranch" Type="nvarchar" MaxLength="40" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="FoodCardNumber" Type="nvarchar" MaxLength="30" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeCashActions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -7046,6 +7058,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VSalaryPeriodComputeSum' do
           <Property Name="TransferBalance" Type="float" />
           <Property Name="GrossBalance" Type="float" />
           <Property Name="NetCost" Type="float" />
+          <Property Name="Tahakkuk" Type="float" />
           <Property Name="SSK" Type="float" />
           <Property Name="GV" Type="float" />
           <Property Name="DV" Type="float" />
@@ -8883,6 +8896,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="Setcards" EntityType="Self.Setcards" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SetcardSubscription" EntityType="Self.SetcardSubscription" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SetcardSubscriptionType" EntityType="Self.SetcardSubscriptionType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SGKBranch" EntityType="Self.SGKBranch" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SMSNumber" EntityType="Self.SMSNumber" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="State" EntityType="Self.State" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Stats" EntityType="Self.Stats" Schema="dbo" store:Type="Tables" />
@@ -10313,7 +10327,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VEmployeeAll].[PostCode] AS [PostCode], 
     [VEmployeeAll].[IBAN] AS [IBAN], 
     [VEmployeeAll].[BankID] AS [BankID], 
-    [VEmployeeAll].[SalaryPaymentTypeID] AS [SalaryPaymentTypeID]
+    [VEmployeeAll].[SalaryPaymentTypeID] AS [SalaryPaymentTypeID], 
+    [VEmployeeAll].[SGKBranch] AS [SGKBranch], 
+    [VEmployeeAll].[LocationID] AS [LocationID], 
+    [VEmployeeAll].[FoodCardNumber] AS [FoodCardNumber]
     FROM [dbo].[VEmployeeAll] AS [VEmployeeAll]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VEmployeeCashActions" EntityType="Self.VEmployeeCashActions" store:Type="Views" store:Schema="dbo">
@@ -11189,6 +11206,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VSalaryPeriodComputeSum].[TransferBalance] AS [TransferBalance], 
     [VSalaryPeriodComputeSum].[GrossBalance] AS [GrossBalance], 
     [VSalaryPeriodComputeSum].[NetCost] AS [NetCost], 
+    [VSalaryPeriodComputeSum].[Tahakkuk] AS [Tahakkuk], 
     [VSalaryPeriodComputeSum].[SSK] AS [SSK], 
     [VSalaryPeriodComputeSum].[GV] AS [GV], 
     [VSalaryPeriodComputeSum].[DV] AS [DV], 
@@ -12968,6 +12986,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="RecordIP" Mode="In" Type="String" />
             <Parameter Name="UID" Mode="In" Type="Guid" />
           </FunctionImport>
+          <EntitySet Name="SGKBranch" EntityType="db293_ActionTimeDbModel.SGKBranch" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -18016,6 +18035,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="IBAN" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="BankID" Type="Int32" />
           <Property Name="SalaryPaymentTypeID" Type="Int16" />
+          <Property Name="SGKBranch" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="FoodCardNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="EmployeeAddress">
           <Key>
@@ -21233,6 +21255,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Kidem" Type="Double" />
           <Property Name="Ihbar" Type="Double" />
           <Property Name="Permit" Type="Double" />
+          <Property Name="Tahakkuk" Type="Double" />
         </EntityType>
         <EntityType Name="LocationCardReaderParameter">
           <Key>
@@ -21391,6 +21414,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="TesvikNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="TesvikDiscount" Type="Double" />
           <Property Name="SSKDayCount" Type="Int32" />
+          <Property Name="Tahakkuk" Type="Double" />
         </EntityType>
         <EntityType Name="HCardActions">
           <Key>
@@ -21462,6 +21486,14 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ParentID" Type="Int32" />
           <Property Name="IsCostCompute" Type="Boolean" />
           <Property Name="HaveChild" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="SGKBranch">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BranchName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="OurCompanyID" Type="Int32" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -26222,6 +26254,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VEmployeeAll">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VEmployeeAll">
               <MappingFragment StoreEntitySet="VEmployeeAll">
+                <ScalarProperty Name="FoodCardNumber" ColumnName="FoodCardNumber" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="SGKBranch" ColumnName="SGKBranch" />
                 <ScalarProperty Name="SalaryPaymentTypeID" ColumnName="SalaryPaymentTypeID" />
                 <ScalarProperty Name="BankID" ColumnName="BankID" />
                 <ScalarProperty Name="IBAN" ColumnName="IBAN" />
@@ -29406,6 +29441,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VSalaryPeriodComputeSum">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VSalaryPeriodComputeSum">
               <MappingFragment StoreEntitySet="VSalaryPeriodComputeSum">
+                <ScalarProperty Name="Tahakkuk" ColumnName="Tahakkuk" />
                 <ScalarProperty Name="Permit" ColumnName="Permit" />
                 <ScalarProperty Name="Ihbar" ColumnName="Ihbar" />
                 <ScalarProperty Name="Kidem" ColumnName="Kidem" />
@@ -29547,6 +29583,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="SalaryPeriodCompute">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.SalaryPeriodCompute">
               <MappingFragment StoreEntitySet="SalaryPeriodCompute">
+                <ScalarProperty Name="Tahakkuk" ColumnName="Tahakkuk" />
                 <ScalarProperty Name="SSKDayCount" ColumnName="SSKDayCount" />
                 <ScalarProperty Name="TesvikDiscount" ColumnName="TesvikDiscount" />
                 <ScalarProperty Name="TesvikNumber" ColumnName="TesvikNumber" />
@@ -29675,6 +29712,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AddSalaryPeriodCostCompute" FunctionName="db293_ActionTimeDbModel.Store.AddSalaryPeriodCostCompute" />
+          <EntitySetMapping Name="SGKBranch">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.SGKBranch">
+              <MappingFragment StoreEntitySet="SGKBranch">
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

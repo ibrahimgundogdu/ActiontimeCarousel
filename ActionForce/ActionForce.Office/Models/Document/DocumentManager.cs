@@ -3300,6 +3300,11 @@ namespace ActionForce.Office
                             Db.SaveChanges();
 
                         }
+                        else
+                        {
+                            OfficeHelper.AddBankAction(isPos.LocationID, null, isPos.FromBankAccountID, null, isPos.ActionTypeID, isPos.Date, isPos.ActionTypeName, isPos.ID, isPos.Date, isPos.DocumentNumber, collection.Description, 1, isPos.Amount, 0, isPos.Currency, null, null, authentication.ActionEmployee.EmployeeID, isPos.UpdateDate, isPos.UID.Value);
+
+                        }
 
                         result.IsSuccess = true;
                         result.Message = $"{isPos.ID} ID li {isPos.Date} tarihli {isPos.Amount} {isPos.Currency} tutarındaki pos iptali başarı ile güncellendi";

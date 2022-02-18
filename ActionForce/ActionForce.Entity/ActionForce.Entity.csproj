@@ -849,6 +849,9 @@
     <Compile Include="SetcardSubscriptionType.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="SGKBranch.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="SMSNumber.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

@@ -11,6 +11,15 @@ namespace ActionForce.Office
         public int SalaryPeriodID { get; set; }
         public int EmployeeID { get; set; }
 
+        public string IdentityNumber { get; set; }
+        public string PhoneNumber { get; set; }
+        public string FoodCard { get; set; }
+        public string IBAN { get; set; }
+        public string BankName { get; set; }
+        public string SGKBranch { get; set; }
+        public string LocationName { get; set; }
+
+
         public string SalaryTotal { get; set; }
         public string PermitTotal { get; set; }
         public string ExtraShiftTotal { get; set; }
@@ -31,9 +40,18 @@ namespace ActionForce.Office
         public string TransferBalance { get; set; }
 
         public string NetCost { get; set; }
+        public string Tahakkuk { get; set; }
         public string SSK { get; set; }
         public string GV { get; set; }
         public string DV { get; set; }
+        public string Kidem { get; set; }
+        public string Ihbar { get; set; }
+        public string Permit { get; set; }
+
+        public string TesvikNumber { get; set; }
+        public string TesvikDiscount { get; set; }
+        public string SSKDayCount { get; set; }
+
 
     }
 }

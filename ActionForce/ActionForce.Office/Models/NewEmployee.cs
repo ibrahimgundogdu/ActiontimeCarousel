@@ -36,5 +36,8 @@ namespace ActionForce.Office
 
         public string IBAN { get; set; }
         public int BankID { get; set; }
+
+        public string SGKBranchName { get; set; }
+        public string SGKBranchNew { get; set; }
     }
 }

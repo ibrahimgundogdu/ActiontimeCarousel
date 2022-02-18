@@ -67,5 +67,6 @@ namespace ActionForce.Entity
         public string TesvikNumber { get; set; }
         public Nullable<double> TesvikDiscount { get; set; }
         public Nullable<int> SSKDayCount { get; set; }
+        public Nullable<double> Tahakkuk { get; set; }
     }
 }

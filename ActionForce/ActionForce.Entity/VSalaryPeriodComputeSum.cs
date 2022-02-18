@@ -47,5 +47,6 @@ namespace ActionForce.Entity
         public Nullable<double> Kidem { get; set; }
         public Nullable<double> Ihbar { get; set; }
         public Nullable<double> Permit { get; set; }
+        public Nullable<double> Tahakkuk { get; set; }
     }
 }

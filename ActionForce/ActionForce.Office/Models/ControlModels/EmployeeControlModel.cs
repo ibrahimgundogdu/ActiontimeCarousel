@@ -139,7 +139,7 @@ namespace ActionForce.Office
         public IEnumerable<EmailType> EmailTypes { get; set; }
         public IEnumerable<VEmployeeAddress> EmployeeAddress { get; set; }
         public IEnumerable<AddressType> AddressTypes { get; set; }
-
+        public IEnumerable<SGKBranch> SGKBranchs { get; set; }
 
         public VEmployeePhones EmployeePhone { get; set; }
         public VEmployeeEmails EmployeeEmail { get; set; }

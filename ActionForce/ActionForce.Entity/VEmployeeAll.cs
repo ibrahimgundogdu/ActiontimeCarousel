@@ -75,5 +75,8 @@ namespace ActionForce.Entity
         public string IBAN { get; set; }
         public Nullable<int> BankID { get; set; }
         public Nullable<short> SalaryPaymentTypeID { get; set; }
+        public string SGKBranch { get; set; }
+        public Nullable<int> LocationID { get; set; }
+        public string FoodCardNumber { get; set; }
     }
 }
