@@ -18,7 +18,7 @@ namespace ActionForce.PosLocation.Controllers
         }
 
         //CardReader
-        public ActionResult CardReader(int? id)
+        public ActionResult CardReader(int? id, string SearchKey)
         {
 
             SettingsControlModel model = new SettingsControlModel();
@@ -58,6 +58,13 @@ namespace ActionForce.PosLocation.Controllers
 
             model.CardReaders = Db.VCardReader.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID).ToList();
             model.NewCardReaders = Db.VCardReader.Where(x => x.LocationID == 0 && x.IsActive == true).ToList();
+
+            if (!string.IsNullOrEmpty(SearchKey))
+            {
+                model.SearchKey = SearchKey.Trim().ToUpper();
+
+                model.NewCardReaders = model.NewCardReaders.Where(x => x.SerialNumber.Contains(model.SearchKey)).ToList();
+            }
 
             model.CardReader = model.CardReaders.FirstOrDefault();
 

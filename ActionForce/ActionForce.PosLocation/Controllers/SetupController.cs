@@ -260,7 +260,7 @@ namespace ActionForce.PosLocation.Controllers
             if (employeecheck != null)
             {
                 string password = PosManager.makeMD5(form.Password.Trim());
-                var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == form.EmployeeID && x.Username == form.Username.Trim() && x.Password == password);
+                var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == form.EmployeeID && x.StatusID == 1 && x.Username == form.Username.Trim() && x.Password == password);
 
                 if (employee != null)
                 {

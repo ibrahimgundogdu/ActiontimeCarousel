@@ -59,7 +59,7 @@ namespace ActionForce.PosLocation.Controllers
                 if (process == 1) // Müşteri Kartı Okunma bölümü //00119D9B;CC:50:E3:11:9D:9B;1;4528C2F3;1;100
                 {
                     string cardno = cardinfolist[3];
-                    int processtype = Convert.ToInt32(cardinfolist[4]);
+                    model.ProcessType = Convert.ToInt32(cardinfolist[4]);
                     string credit = cardinfolist[5];
                     double? existscredit = (Convert.ToDouble(credit) / 100);
 

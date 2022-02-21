@@ -1,4 +1,5 @@
 ﻿using ActionForce.Entity;
+using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -78,6 +79,8 @@ namespace ActionForce.Office.Controllers
             {
                 model.TicketSaleSummary = Db.VTicketSaleAllSummary.Where(x => x.OrderNumber.Contains(model.Filters.SearchKey) || x.CardNumber.Contains(model.Filters.SearchKey)).ToList();
             }
+
+            TempData["model"] = model;
 
             return View(model);
         }
@@ -230,7 +233,7 @@ namespace ActionForce.Office.Controllers
                 model.TicketSaleSaleRows = Db.VTicketSaleSaleRowSummary.Where(x => saleIds.Contains(x.SaleID)).ToList();
                 model.DocumentsAllSummary = Db.VDocumentsAllSummaryUnion.Where(x => x.LocationID == model.Filters.LocationID && x.Date == model.Filters.Date).ToList();
                 model.SaleActionsAllSummary = Db.VSaleActionsSummaryUnion.Where(x => x.LocationID == model.Filters.LocationID && x.ProcessDate == model.Filters.Date).ToList();
-                model.DocumentExpenseSlips = Db.VDocumentExpenseSlip.Where(x=> x.LocationID == model.Filters.LocationID && x.DocumentDate == model.Filters.Date && x.IsActive == true).ToList();
+                model.DocumentExpenseSlips = Db.VDocumentExpenseSlip.Where(x => x.LocationID == model.Filters.LocationID && x.DocumentDate == model.Filters.Date && x.IsActive == true).ToList();
 
             }
             else
@@ -279,7 +282,7 @@ namespace ActionForce.Office.Controllers
 
                 saleUid = sale.UID;
 
-                if (allpayment.Sum(x=> x.PaymentAmount) > sale.Amount && payment.FromPosTerminal != true  )
+                if (allpayment.Sum(x => x.PaymentAmount) > sale.Amount && payment.FromPosTerminal != true)
                 {
                     model.Result.IsSuccess = true;
                     model.Result.Message = $"{sale.ID} ID'li satışın {payment.ID} ID'li ödemesi silindi.";
@@ -321,7 +324,7 @@ namespace ActionForce.Office.Controllers
 
             if (sale != null)
             {
-               
+
                 Db.CheckLocationPosTicketSale(sale.ID);
 
                 model.Result.IsSuccess = true;
@@ -342,7 +345,7 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult CheckLocationTicketSale(int LocationId, DateTime DocumentDate, string Source)
         {
-            
+
 
             SaleControlModel model = new SaleControlModel();
             model.Result = new Result();
@@ -940,7 +943,7 @@ namespace ActionForce.Office.Controllers
 
 
 
-        
+
 
 
 
@@ -1314,6 +1317,151 @@ namespace ActionForce.Office.Controllers
 
             return PartialView("_PartialTicketProductList", model);
         }
+
+
+
+        //ExportSales
+        [AllowAnonymous]
+        public FileResult ExportSales()
+        {
+            SaleControlModel model = new SaleControlModel();
+
+            if (TempData["model"] != null)
+            {
+                model = TempData["model"] as SaleControlModel;
+            }
+
+            TempData["model"] = model;
+
+            string FileName = $"Satis_{model.Filters.LocationID}_" + model.Filters.Date?.ToString("yyyyMMdd") + ".xlsx";
+            string targetpath = Server.MapPath("~/Document/Salary/");
+            string pathToExcelFile = targetpath + FileName;
+
+            if (model.TicketSaleSummary != null)
+            {
+
+                try
+                {
+                    using (var workbook = new XLWorkbook())
+                    {
+                        var worksheet = workbook.Worksheets.Add("Satışlar");
+
+                        worksheet.Cell("A1").Value = "#";
+                        worksheet.Cell("B1").Value = "ID";
+                        worksheet.Cell("C1").Value = "Sipariş No";
+                        worksheet.Cell("D1").Value = "Kart No";
+                        worksheet.Cell("E1").Value = "Yüklendi";
+                        worksheet.Cell("F1").Value = "Şube";
+                        worksheet.Cell("G1").Value = "Tarih";
+                        worksheet.Cell("H1").Value = "Durum";
+                        worksheet.Cell("I1").Value = "Kaynak";
+                        worksheet.Cell("J1").Value = "Adet";
+                        worksheet.Cell("K1").Value = "Satış";
+                        worksheet.Cell("L1").Value = "Tahsilat";
+                        worksheet.Cell("M1").Value = "Bakiye";
+                        worksheet.Cell("N1").Value = "Ödeme";
+                        worksheet.Cell("O1").Value = "İşlendi";
+                        worksheet.Cell("P1").Value = "Kaydeden";
+                        worksheet.Cell("Q1").Value = "Kayıt Tarihi";
+                        worksheet.Cell("R1").Value = "Aktif";
+
+                        int rownum = 2;
+                        int sortnumber = 1;
+
+                        foreach (var item in model.TicketSaleSummary.OrderBy(x => x.RecordDate))
+                        {
+                            var refunds = model.DocumentExpenseSlips.Where(x => x.SaleID == item.ID).ToList();
+
+                            worksheet.Cell("A" + rownum).Value = sortnumber;
+                            worksheet.Cell("B" + rownum).Value = item.ID;
+                            worksheet.Cell("C" + rownum).Value = item.OrderNumber;
+                            worksheet.Cell("D" + rownum).Value = item.CardNumber;
+                            worksheet.Cell("E" + rownum).Value = item.IsSuccess == true ? "OK" : "";
+                            worksheet.Cell("F" + rownum).Value = item.SortBy;
+                            worksheet.Cell("G" + rownum).Value = item.Date?.ToShortDateString();
+                            worksheet.Cell("H" + rownum).Value = item.PosStatusName;
+                            worksheet.Cell("I" + rownum).Value = item.Environment;
+                            worksheet.Cell("J" + rownum).Value = item.Quantity;
+                            worksheet.Cell("K" + rownum).Value = item.Total.ToString("N2") + " " + item.Sign;
+                            worksheet.Cell("L" + rownum).Value = item.PaymentAmount.ToString("N2") + " " + item.Sign;
+                            worksheet.Cell("M" + rownum).Value = item.BalanceAmount.ToString("N2") + " " + item.Sign;
+                            worksheet.Cell("N" + rownum).Value = item.PayMethodList;
+                            worksheet.Cell("O" + rownum).Value = item.IsSendPosTerminal == true ? "Ingenico" : "Manuel";
+                            worksheet.Cell("P" + rownum).Value = item.FullName;
+                            worksheet.Cell("Q" + rownum).Value = item.RecordDate;
+                            worksheet.Cell("R" + rownum).Value = item.IsActive;
+
+                            rownum++;
+                            sortnumber++;
+
+                            if (refunds != null && refunds.Count > 0)
+                            {
+                                foreach (var rf in refunds)
+                                {
+                                    worksheet.Cell("A" + rownum).Value = sortnumber;
+                                    worksheet.Cell("B" + rownum).Value = rf.ID;
+                                    worksheet.Cell("C" + rownum).Value = item.OrderNumber;
+                                    worksheet.Cell("D" + rownum).Value = item.CardNumber;
+                                    worksheet.Cell("E" + rownum).Value = item.IsSuccess == true ? "OK" : "";
+                                    worksheet.Cell("F" + rownum).Value = rf.DocumentNumber;
+                                    worksheet.Cell("G" + rownum).Value = rf.DocumentDate?.ToShortDateString();
+                                    worksheet.Cell("H" + rownum).Value = null;
+                                    worksheet.Cell("I" + rownum).Value = null;
+                                    worksheet.Cell("J" + rownum).Value = -1;
+                                    worksheet.Cell("K" + rownum).Value = rf.Amount?.ToString("N2") + " " + rf.Sign;
+                                    worksheet.Cell("L" + rownum).Value = "-" + rf.Amount?.ToString("N2") + " " + rf.Sign;
+                                    worksheet.Cell("M" + rownum).Value = (0).ToString("N2") + " " + rf.Sign;
+                                    worksheet.Cell("N" + rownum).Value = rf.PayMethodName;
+                                    worksheet.Cell("O" + rownum).Value = null;
+                                    worksheet.Cell("P" + rownum).Value = rf.FullName;
+                                    worksheet.Cell("Q" + rownum).Value = rf.RecordDate;
+                                    worksheet.Cell("R" + rownum).Value = rf.IsActive;
+                                }
+                            }
+                        }
+
+                        worksheet.Cell("A" + rownum).Value = null;
+                        worksheet.Cell("B" + rownum).Value = null;
+                        worksheet.Cell("C" + rownum).Value = null;
+                        worksheet.Cell("D" + rownum).Value = null;
+                        worksheet.Cell("E" + rownum).Value = null;
+                        worksheet.Cell("F" + rownum).Value = null;
+                        worksheet.Cell("G" + rownum).Value = null;
+                        worksheet.Cell("H" + rownum).Value = null;
+                        worksheet.Cell("I" + rownum).Value = null;
+                        worksheet.Cell("J" + rownum).Value = (model.TicketSaleSummary.Where(x => x.PosStatusID == 3 && x.IsActive == true).Sum(x => x.Quantity) ?? 0) - (model.TicketSaleSaleRows.Where(x => x.PosStatusID == 3 && x.StatusID == 5).Sum(x => x.Quantity));
+                        worksheet.Cell("K" + rownum).Value = ((model.TicketSaleSummary.Where(x => x.PosStatusID <= 3 && x.IsActive == true).Sum(x => x.Total)) - (model.TicketSaleSaleRows.Where(x => x.PosStatusID == 3 && x.StatusID == 5).Sum(x => x.Total) ?? 0)).ToString("N2") + " " + model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺";
+                        worksheet.Cell("L" + rownum).Value = ((model.TicketSaleSummary.Where(x => x.PosStatusID == 3 && x.IsActive == true).Sum(x => x.PaymentAmount)) - (model.TicketSaleSaleRows.Where(x => x.PosStatusID == 3 && x.StatusID == 5).Sum(x => x.Total) ?? 0)).ToString("N2") + " " + model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺";
+                        worksheet.Cell("M" + rownum).Value = (model.TicketSaleSummary.Where(x => x.PosStatusID <= 3 && x.IsActive == true).Sum(x => x.BalanceAmount)).ToString("N2") + " " + model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺";
+                        worksheet.Cell("N" + rownum).Value = null;
+                        worksheet.Cell("O" + rownum).Value = null;
+                        worksheet.Cell("P" + rownum).Value = null;
+                        worksheet.Cell("Q" + rownum).Value = null;
+                        worksheet.Cell("R" + rownum).Value = null;
+
+
+
+                        workbook.SaveAs(pathToExcelFile);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+
+            return File(pathToExcelFile, "application/vnd.ms-excel", FileName);
+        }
+
+
+
+
+
 
         #endregion
     }

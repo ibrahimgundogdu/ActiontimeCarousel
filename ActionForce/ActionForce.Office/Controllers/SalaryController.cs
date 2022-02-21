@@ -2150,12 +2150,7 @@ namespace ActionForce.Office.Controllers
                 model.Result = TempData["Result"] as Result;
             }
 
-            var allowedempids = new int[] { 1, 19, 3921, 129, 4679, 4038, 396, 4147 }.ToList();
-
-            if (!allowedempids.Contains(model.Authentication.ActionEmployee.EmployeeID))
-            {
-                return RedirectToAction("Index");
-            }
+           
 
             if (id == null)
             {
@@ -2168,6 +2163,22 @@ namespace ActionForce.Office.Controllers
             {
                 return RedirectToAction("SalaryResult");
             }
+
+
+            var allowedempids = new int[] { 1, 19, 3921, 129, 4679, 4038, 396, 4147 }.ToList();
+
+            if (model.SalaryPeriod.SalaryPeriodGroupID == 2 || model.SalaryPeriod.SalaryPeriodGroupID == 4)
+            {
+                allowedempids = new int[] { 1, 19, 3921, 129, 4679, 396, 4147 }.ToList();
+            }
+
+            if (!allowedempids.Contains(model.Authentication.ActionEmployee.EmployeeID))
+            {
+                return RedirectToAction("Index");
+            }
+
+
+
 
             model.SalaryPeriodComputes = Db.SalaryPeriodCompute.Where(x => x.SalaryPeriodID == model.SalaryPeriod.ID).ToList();
             model.SalaryPeriodComputeSum = Db.VSalaryPeriodComputeSum.FirstOrDefault(x => x.SalaryPeriodID == model.SalaryPeriod.ID);
@@ -3439,53 +3450,53 @@ namespace ActionForce.Office.Controllers
                 {
                     var worksheet = workbook.Worksheets.Add("SalaryPeriodCost");
 
-                    worksheet.Cell("A1").Value = "SalaryPeriodID";
-                    worksheet.Cell("B1").Value = "EmployeeID";
-                    worksheet.Cell("C1").Value = "FullName";
-                    worksheet.Cell("D1").Value = "IdentityNumber";
-                    worksheet.Cell("E1").Value = "PhoneNumber";
-                    worksheet.Cell("F1").Value = "FoodCard";
+                    worksheet.Cell("A1").Value = "MaasPeriodID";
+                    worksheet.Cell("B1").Value = "CalisanID";
+                    worksheet.Cell("C1").Value = "AdiSoyadi";
+                    worksheet.Cell("D1").Value = "TCKN";
+                    worksheet.Cell("E1").Value = "Telefon";
+                    worksheet.Cell("F1").Value = "YemekKarti";
                     worksheet.Cell("G1").Value = "IBAN";
-                    worksheet.Cell("H1").Value = "BankName";
-                    worksheet.Cell("I1").Value = "SalaryPaymentTypeID";
-                    worksheet.Cell("J1").Value = "SGKBranch";
-                    worksheet.Cell("K1").Value = "LocationName";
-                    worksheet.Cell("L1").Value = "SalaryTotal";
-                    worksheet.Cell("M1").Value = "PermitTotal";
-                    worksheet.Cell("N1").Value = "ExtraShiftTotal";
-                    worksheet.Cell("O1").Value = "PremiumTotal";
-                    worksheet.Cell("P1").Value = "FormalTotal";
-                    worksheet.Cell("Q1").Value = "OtherTotal";
-                    worksheet.Cell("R1").Value = "TotalProgress";
-                    worksheet.Cell("S1").Value = "PrePaymentAmount";
-                    worksheet.Cell("T1").Value = "SalaryCutAmount";
-                    worksheet.Cell("U1").Value = "PermitPaymentAmount";
-                    worksheet.Cell("V1").Value = "ExtraShiftPaymentAmount";
-                    worksheet.Cell("W1").Value = "PremiumPaymentAmount";
-                    worksheet.Cell("X1").Value = "FormalPaymentAmount";
-                    worksheet.Cell("Y1").Value = "OtherPaymentAmount";
-                    worksheet.Cell("Z1").Value = "TotalPaymentAmount";
-                    worksheet.Cell("AA1").Value = "TotalBalance";
-                    worksheet.Cell("AB1").Value = "BankPaymentAmount";
-                    worksheet.Cell("AC1").Value = "ManuelPaymentAmount";
-                    worksheet.Cell("AD1").Value = "TransferBalance";
-                    worksheet.Cell("AE1").Value = "GrossBalance";
-                    worksheet.Cell("AF1").Value = "FoodCardTotal";
-                    worksheet.Cell("AG1").Value = "FoodCardPaymentAmount";
-                    worksheet.Cell("AH1").Value = "FoodcardBalance";
-                    worksheet.Cell("AI1").Value = "NetCost";
+                    worksheet.Cell("H1").Value = "Banka";
+                    worksheet.Cell("I1").Value = "OdemeTuru";
+                    worksheet.Cell("J1").Value = "SGKSube";
+                    worksheet.Cell("K1").Value = "Lokasyon";
+                    worksheet.Cell("L1").Value = "HakedisToplam";
+                    worksheet.Cell("M1").Value = "IzinToplam";
+                    worksheet.Cell("N1").Value = "FMesaiToplam";
+                    worksheet.Cell("O1").Value = "PrimToplam";
+                    worksheet.Cell("P1").Value = "ResmiToplam";
+                    worksheet.Cell("Q1").Value = "DigerToplam";
+                    worksheet.Cell("R1").Value = "ToplamHakedis";
+                    worksheet.Cell("S1").Value = "AvansOdeme";
+                    worksheet.Cell("T1").Value = "MaasKesinti";
+                    worksheet.Cell("U1").Value = "IzinOdeme";
+                    worksheet.Cell("V1").Value = "FMesaiOdeme";
+                    worksheet.Cell("W1").Value = "PrimOdeme";
+                    worksheet.Cell("X1").Value = "ResmiOdeme";
+                    worksheet.Cell("Y1").Value = "DigerOdeme";
+                    worksheet.Cell("Z1").Value = "ToplamOdeme";
+                    worksheet.Cell("AA1").Value = "ToplamBakiye";
+                    worksheet.Cell("AB1").Value = "BankadanOdeme";
+                    worksheet.Cell("AC1").Value = "EldenOdeme";
+                    worksheet.Cell("AD1").Value = "DevirBakiye";
+                    worksheet.Cell("AE1").Value = "ToplamFinal";
+                    worksheet.Cell("AF1").Value = "YemekKartiHakedis";
+                    worksheet.Cell("AG1").Value = "YemekKartiOdeme";
+                    worksheet.Cell("AH1").Value = "ToplamYemekKartiBakiye";
+                    worksheet.Cell("AI1").Value = "NetMaliyet";
                     worksheet.Cell("AJ1").Value = "Tahakkuk";
                     worksheet.Cell("AK1").Value = "SSK";
                     worksheet.Cell("AL1").Value = "GV";
                     worksheet.Cell("AM1").Value = "DV";
                     worksheet.Cell("AN1").Value = "Kidem";
                     worksheet.Cell("AO1").Value = "Ihbar";
-                    worksheet.Cell("AP1").Value = "Permit";
-                    worksheet.Cell("AQ1").Value = "TotalCost";
-                    worksheet.Cell("AR1").Value = "TesvikNumber";
-                    worksheet.Cell("AS1").Value = "TesvikDiscount";
-                    worksheet.Cell("AT1").Value = "SSKDayCount";
-                    worksheet.Cell("AU1").Value = "Currency";
+                    worksheet.Cell("AP1").Value = "Izin";
+                    worksheet.Cell("AQ1").Value = "ToplamMaliyet";
+                    worksheet.Cell("AR1").Value = "TesvikNo";
+                    worksheet.Cell("AS1").Value = "TesvikIndirim";
+                    worksheet.Cell("AT1").Value = "SSKGunSayisi";
+                    worksheet.Cell("AU1").Value = "Birim";
 
                     int rownum = 2;
 
@@ -4318,52 +4329,52 @@ namespace ActionForce.Office.Controllers
 
                         foreach (var item in datalistforlog)
                         {
-                            var compute = salaryPeriodComputes.FirstOrDefault(x => x.EmployeeID == item.EmployeeID);
+                            var compute = salaryPeriodComputes.FirstOrDefault(x => x.EmployeeID == item.CalisanID);
 
                             try
                             {
                                 if (compute != null)
                                 {
 
-                                    compute.FullName = item.FullName;
-                                    compute.IdentityNumber = item.IdentityNumber;
-                                    compute.PhoneNumber = item.PhoneNumber;
-                                    compute.FoodCard = item.FoodCard;
-                                    compute.IBAN = item.IBAN;
-                                    compute.BankName = item.BankName;
-                                    compute.SalaryPaymentTypeID = item.SalaryPaymentTypeID;
-                                    compute.SGKBranch = item.SGKBranch;
-                                    compute.LocationName = item.LocationName;
+                                    compute.FullName = !string.IsNullOrEmpty(item.AdiSoyadi) ? item.AdiSoyadi : compute.FullName;
+                                    compute.IdentityNumber = !string.IsNullOrEmpty(item.TCKN) ? item.TCKN : compute.IdentityNumber;
+                                    compute.PhoneNumber = !string.IsNullOrEmpty(item.Telefon) ? item.Telefon : compute.PhoneNumber; 
+                                    compute.FoodCard = !string.IsNullOrEmpty(item.YemekKarti) ? item.YemekKarti : compute.FoodCard;
+                                    compute.IBAN = !string.IsNullOrEmpty(item.IBAN) ? item.IBAN : compute.IBAN;
+                                    compute.BankName = !string.IsNullOrEmpty(item.Banka) ? item.Banka : compute.BankName;
+                                    compute.SalaryPaymentTypeID = item.OdemeTuru != null ? item.OdemeTuru : compute.SalaryPaymentTypeID;
+                                    compute.SGKBranch = !string.IsNullOrEmpty(item.SGKSube) ? item.SGKSube : compute.SGKBranch;
+                                    compute.LocationName = !string.IsNullOrEmpty(item.Lokasyon) ? item.Lokasyon : compute.LocationName;
 
 
-                                    compute.SalaryTotal = item.SalaryTotal != null ? item.SalaryTotal : compute.SalaryTotal;
-                                    compute.PermitTotal = item.PermitTotal != null ? item.PermitTotal : compute.PermitTotal;
-                                    compute.ExtraShiftTotal = item.ExtraShiftTotal != null ? item.ExtraShiftTotal : compute.ExtraShiftTotal;
-                                    compute.PremiumTotal = item.PremiumTotal != null ? item.PremiumTotal : compute.PremiumTotal;
-                                    compute.FormalTotal = item.FormalTotal != null ? item.FormalTotal : compute.FormalTotal;
-                                    compute.OtherTotal = item.OtherTotal != null ? item.OtherTotal : compute.OtherTotal;
-                                    compute.TotalProgress = item.TotalProgress != null ? item.TotalProgress.Value : compute.TotalProgress;
+                                    compute.SalaryTotal = item.HakedisToplam != null ? item.HakedisToplam : compute.SalaryTotal;
+                                    compute.PermitTotal = item.IzinToplam != null ? item.IzinToplam : compute.PermitTotal;
+                                    compute.ExtraShiftTotal = item.FMesaiToplam != null ? item.FMesaiToplam : compute.ExtraShiftTotal;
+                                    compute.PremiumTotal = item.PrimToplam != null ? item.PrimToplam : compute.PremiumTotal;
+                                    compute.FormalTotal = item.ResmiToplam != null ? item.ResmiToplam : compute.FormalTotal;
+                                    compute.OtherTotal = item.DigerToplam != null ? item.DigerToplam : compute.OtherTotal;
+                                    //compute.TotalProgress = item.ToplamHakedis != null ? item.ToplamHakedis.Value : compute.TotalProgress;
 
-                                    compute.PrePaymentAmount = item.PrePaymentAmount != null ? item.PrePaymentAmount : compute.PrePaymentAmount;
-                                    compute.SalaryCutAmount = item.SalaryCutAmount != null ? item.SalaryCutAmount : compute.SalaryCutAmount;
-                                    compute.PermitPaymentAmount = item.PermitPaymentAmount != null ? item.PermitPaymentAmount : compute.PermitPaymentAmount;
-                                    compute.ExtraShiftPaymentAmount = item.ExtraShiftPaymentAmount != null ? item.ExtraShiftPaymentAmount : compute.ExtraShiftPaymentAmount;
-                                    compute.PremiumPaymentAmount = item.PremiumPaymentAmount != null ? item.PremiumPaymentAmount : compute.PremiumPaymentAmount;
-                                    compute.FormalPaymentAmount = item.FormalPaymentAmount != null ? item.FormalPaymentAmount : compute.FormalPaymentAmount;
-                                    compute.OtherPaymentAmount = item.OtherPaymentAmount != null ? item.OtherPaymentAmount : compute.OtherPaymentAmount;
-                                    compute.TotalPaymentAmount = item.TotalPaymentAmount != null ? item.TotalPaymentAmount.Value : compute.TotalPaymentAmount;
+                                    compute.PrePaymentAmount = item.AvansOdeme != null ? item.AvansOdeme : compute.PrePaymentAmount;
+                                    compute.SalaryCutAmount = item.MaasKesinti != null ? item.MaasKesinti : compute.SalaryCutAmount;
+                                    compute.PermitPaymentAmount = item.IzinOdeme != null ? item.IzinOdeme : compute.PermitPaymentAmount;
+                                    compute.ExtraShiftPaymentAmount = item.FMesaiOdeme != null ? item.FMesaiOdeme : compute.ExtraShiftPaymentAmount;
+                                    compute.PremiumPaymentAmount = item.PrimOdeme != null ? item.PrimOdeme : compute.PremiumPaymentAmount;
+                                    compute.FormalPaymentAmount = item.ResmiOdeme != null ? item.ResmiOdeme : compute.FormalPaymentAmount;
+                                    compute.OtherPaymentAmount = item.DigerOdeme != null ? item.DigerOdeme : compute.OtherPaymentAmount;
+                                    //compute.TotalPaymentAmount = item.ToplamOdeme != null ? item.ToplamOdeme.Value : compute.TotalPaymentAmount;
+                                    //compute.TotalBalance = item.ToplamBakiye != null ? item.ToplamBakiye.Value : compute.TotalBalance;
+                                    
+                                    compute.BankPaymentAmount = item.BankadanOdeme != null ? item.BankadanOdeme : compute.BankPaymentAmount;
+                                    compute.ManuelPaymentAmount = item.EldenOdeme != null ? item.EldenOdeme : compute.ManuelPaymentAmount;
+                                    compute.TransferBalance = item.DevirBakiye != null ? item.DevirBakiye : compute.TransferBalance;
+                                    //compute.GrossBalance = item.ToplamFinal != null ? item.ToplamFinal.Value : compute.GrossBalance;
 
-                                    compute.TotalBalance = item.TotalBalance != null ? item.TotalBalance.Value : compute.TotalBalance;
-                                    compute.BankPaymentAmount = item.BankPaymentAmount != null ? item.BankPaymentAmount : compute.BankPaymentAmount;
-                                    compute.ManuelPaymentAmount = item.ManuelPaymentAmount != null ? item.ManuelPaymentAmount : compute.ManuelPaymentAmount;
-                                    compute.TransferBalance = item.TransferBalance != null ? item.TransferBalance : compute.TransferBalance;
-                                    compute.GrossBalance = item.GrossBalance != null ? item.GrossBalance.Value : compute.GrossBalance;
+                                    compute.FoodCardTotal = item.YemekKartiHakedis != null ? item.YemekKartiHakedis : compute.FoodCardTotal;
+                                    compute.FoodCardPaymentAmount = item.YemekKartiOdeme != null ? item.YemekKartiOdeme : compute.FoodCardPaymentAmount;
+                                    //compute.FoodcardBalance = item.ToplamYemekKartiBakiye != null ? item.ToplamYemekKartiBakiye.Value : compute.FoodcardBalance;
 
-                                    compute.FoodCardTotal = item.FoodCardTotal != null ? item.FoodCardTotal : compute.FoodCardTotal;
-                                    compute.FoodCardPaymentAmount = item.FoodCardPaymentAmount != null ? item.FoodCardPaymentAmount : compute.FoodCardPaymentAmount;
-                                    compute.FoodcardBalance = item.FoodcardBalance != null ? item.FoodcardBalance.Value : compute.FoodcardBalance;
-
-                                    compute.NetCost = item.NetCost != null ? item.NetCost : compute.NetCost;
+                                    compute.NetCost = item.NetMaliyet != null ? item.NetMaliyet : compute.NetCost;
 
                                     compute.Tahakkuk = item.Tahakkuk != null ? item.Tahakkuk : compute.Tahakkuk;
                                     compute.SSK = item.SSK != null ? item.SSK : compute.SSK;
@@ -4371,16 +4382,15 @@ namespace ActionForce.Office.Controllers
                                     compute.DV = item.DV != null ? item.DV : compute.GV;
                                     compute.Kidem = item.Kidem != null ? item.Kidem : compute.Kidem;
                                     compute.Ihbar = item.Ihbar != null ? item.Ihbar : compute.Ihbar;
-                                    compute.Permit = item.Permit != null ? item.Permit : compute.Permit;
-                                    compute.TotalCost = item.TotalCost != null ? item.TotalCost.Value : compute.TotalCost;
+                                    compute.Permit = item.Izin != null ? item.Izin : compute.Permit;
+                                    //compute.TotalCost = item.ToplamMaliyet != null ? item.ToplamMaliyet.Value : compute.TotalCost;
 
-                                    compute.TesvikNumber = item.TesvikNumber;
-                                    compute.TesvikDiscount = item.TesvikDiscount;
-                                    compute.SSKDayCount = item.SSKDayCount;
-                                    compute.Currency = item.Currency;
+                                    compute.TesvikNumber = !string.IsNullOrEmpty(item.TesvikNo) ? item.TesvikNo : compute.TesvikNumber;
+                                    compute.TesvikDiscount = item.TesvikIndirim != null ? item.TesvikIndirim : compute.TesvikDiscount;
+                                    compute.SSKDayCount = item.SSKGunSayisi != null ? item.SSKGunSayisi : compute.SSKDayCount;
+                                    compute.Currency = !string.IsNullOrEmpty(item.Birim) ? item.Birim : compute.Currency;
 
-
-                                    model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = true, Name = $"{item.FullName}", Message = $"Güncellendi" });
+                                    model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = true, Name = $"{item.AdiSoyadi}", Message = $"Güncellendi" });
                                 }
                             }
                             catch (DbEntityValidationException ex)

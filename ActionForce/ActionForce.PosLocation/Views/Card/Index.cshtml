@@ -109,7 +109,7 @@
                                     <div class="col col-12 col-lg-12 row" style="margin:10px 0px 20px 0px;">
                                         <!--<div class="col col-6 col-lg-6">
                                             &nbsp;-->
-                                            @*<a href="javascript:;" class="btn btn-block btn-primary" style="border-radius: 10px;" onclick="MakeCashCard('@(Model.Card?.CardNumber)');">Kasa Kartı Yap</a>*@
+                                        @*<a href="javascript:;" class="btn btn-block btn-primary" style="border-radius: 10px;" onclick="MakeCashCard('@(Model.Card?.CardNumber)');">Kasa Kartı Yap</a>*@
                                         <!--</div>-->
                                         <div class="col col-12 col-lg-12" style="padding-right:0px !important;">
                                             <a href="/Card/MakePersonelCard?comment=@($"{Model.CardReader.SerialNumber};{Model.CardReader.MACAddress};2;{Model.Card.CardNumber};1;254;0;")" class="btn btn-block btn-secondary" style="border-radius: 10px;">Personel Kartı Yap</a>
@@ -121,56 +121,77 @@
                                 <div class="col col-12 col-lg-12">
                                     <div class="card-box">
                                         <div class="card-box-process" style="margin-top:10px;">
-
-                                            @if (Model.Card?.CardTypeID == 0 && Model.Card?.CardStatusID == 0 && Model.Process == 1)
+                                            @if (Model.ProcessType == 7)
                                             {
-                                                <div class="item-content item-content-1">
-                                                    <ul>
-                                                        @foreach (var item in Model.PriceList.Where(x => x.ProductID == 3).OrderByDescending(x => x.TotalCredit).ToList())  //&& x.IsBase != true
-                                                        {
-                                                            <li><a href="javascript:;" onclick="AddBasket(@(item.ID),@(cardPriceID),0)">@(item.TotalCredit) Kontör <span>@(item.Price.ToString("N2")) ₺</span></a></li>
-                                                        }
-                                                    </ul>
-                                                </div>
-                                            }
-
-                                            @if (Model.Card?.CardTypeID == 0 && Model.Card?.CardStatusID == 1 && Model.Process == 1)
-                                            {
-                                                <div class="item-content item-content-2">
-                                                    <ul>
-                                                        @foreach (var item in Model.PriceList.Where(x => x.ProductID == 3).OrderByDescending(x => x.TotalCredit).ToList())
-                                                        {
-                                                            <li><a href="javascript:;" onclick="AddBasket(@(item.ID),0,0)">@(item.TotalCredit) Kontör <span>@(item.Price.ToString("N2")) ₺</span></a></li>
-                                                        }
-                                                    </ul>
-                                                </div>
-
-
-
-                                                <div class="col col-12 col-lg-12">
-                                                    <a href="javascript:;" class="btn btn-block btn-warning" style="margin-bottom:10px; border-radius:10px;" onclick="CardReset('@(Model.CardNumber)')" ;">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><g><path d="M0,0h24v24H0V0z" fill="none" /></g><g><g><path d="M6,13c0-1.65,0.67-3.15,1.76-4.24L6.34,7.34C4.9,8.79,4,10.79,4,13c0,4.08,3.05,7.44,7,7.93v-2.02 C8.17,18.43,6,15.97,6,13z M20,13c0-4.42-3.58-8-8-8c-0.06,0-0.12,0.01-0.18,0.01l1.09-1.09L11.5,2.5L8,6l3.5,3.5l1.41-1.41 l-1.08-1.08C11.89,7.01,11.95,7,12,7c3.31,0,6,2.69,6,6c0,2.97-2.17,5.43-5,5.91v2.02C16.95,20.44,20,17.08,20,13z" /></g></g></svg>
-                                                        KARTI RESETLE
-                                                    </a>
-                                                </div>
-
-
-                                            }
-
-                                            @if (Model.Card?.CardTypeID == 1 && Model.Card?.CardStatusID == 1 && Model.Process == 1)
-                                            {
-                                                <a class="item item-2" href="javascript:;">
-                                                    <div class="big-name">KASA KARTI</div>
+                                                <a class="item item-4" href="javascript:;"  onclick="ReadCard();">
+                                                    <div class="big-name">Yeni Kart Oku </div>
                                                 </a>
-                                                <div class="item-content item-content-2">
-                                                    <ul>
-                                                        @foreach (var item in Model.PriceList.Where(x => x.ProductID == 3).OrderByDescending(x => x.TotalCredit).ToList())
-                                                        {
-                                                            <li><a href="javascript:;" onclick="AddBasket(@(item.ID),0,1)">@(item.TotalCredit) Kontör <span>@(item.Price.ToString("N2")) ₺</span></a></li>
-                                                        }
-                                                    </ul>
-                                                </div>
                                             }
+                                            else
+                                            {
+
+
+
+                                                if (Model.Card?.CardTypeID == 0 && Model.Card?.CardStatusID == 0 && Model.Process == 1)
+                                                {
+                                                    <div class="item-content item-content-1">
+                                                        <ul>
+                                                            @foreach (var item in Model.PriceList.Where(x => x.ProductID == 3).OrderByDescending(x => x.TotalCredit).ToList())  //&& x.IsBase != true
+                                                            {
+                                                                <li><a href="javascript:;" onclick="AddBasket(@(item.ID),@(cardPriceID),0)">@(item.TotalCredit) Kontör <span>@(item.Price.ToString("N2")) ₺</span></a></li>
+                                                            }
+                                                        </ul>
+                                                    </div>
+                                                }
+
+                                                if (Model.Card?.CardTypeID == 0 && Model.Card?.CardStatusID == 1 && Model.Process == 1)
+                                                {
+                                                    <div class="item-content item-content-2">
+                                                        <ul>
+                                                            @foreach (var item in Model.PriceList.Where(x => x.ProductID == 3).OrderByDescending(x => x.TotalCredit).ToList())
+                                                            {
+                                                                <li><a href="javascript:;" onclick="AddBasket(@(item.ID),0,0)">@(item.TotalCredit) Kontör <span>@(item.Price.ToString("N2")) ₺</span></a></li>
+                                                            }
+                                                        </ul>
+                                                    </div>
+
+
+
+                                                    <div class="col col-12 col-lg-12">
+                                                        <a href="javascript:;" class="btn btn-block btn-warning" style="margin-bottom:10px; border-radius:10px;" onclick="CardReset('@(Model.CardNumber)')" ;">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><g><path d="M0,0h24v24H0V0z" fill="none" /></g><g><g><path d="M6,13c0-1.65,0.67-3.15,1.76-4.24L6.34,7.34C4.9,8.79,4,10.79,4,13c0,4.08,3.05,7.44,7,7.93v-2.02 C8.17,18.43,6,15.97,6,13z M20,13c0-4.42-3.58-8-8-8c-0.06,0-0.12,0.01-0.18,0.01l1.09-1.09L11.5,2.5L8,6l3.5,3.5l1.41-1.41 l-1.08-1.08C11.89,7.01,11.95,7,12,7c3.31,0,6,2.69,6,6c0,2.97-2.17,5.43-5,5.91v2.02C16.95,20.44,20,17.08,20,13z" /></g></g></svg>
+                                                            KARTI RESETLE
+                                                        </a>
+                                                    </div>
+
+
+                                                }
+
+                                                if (Model.Card?.CardTypeID == 1 && Model.Card?.CardStatusID == 1 && Model.Process == 1)
+                                                {
+                                                    <a class="item item-2" href="javascript:;">
+                                                        <div class="big-name">KASA KARTI</div>
+                                                    </a>
+                                                    <div class="item-content item-content-2">
+                                                        <ul>
+                                                            @foreach (var item in Model.PriceList.Where(x => x.ProductID == 3).OrderByDescending(x => x.TotalCredit).ToList())
+                                                            {
+                                                                <li><a href="javascript:;" onclick="AddBasket(@(item.ID),0,1)">@(item.TotalCredit) Kontör <span>@(item.Price.ToString("N2")) ₺</span></a></li>
+                                                            }
+                                                        </ul>
+                                                    </div>
+                                                }
+
+
+                                            }
+
+
+
+
+
+
+
+
 
                                             @if (Model.Card?.CardTypeID == 2 && Model.Card?.CardStatusID == 1 && Model.Process == 2)
                                             {

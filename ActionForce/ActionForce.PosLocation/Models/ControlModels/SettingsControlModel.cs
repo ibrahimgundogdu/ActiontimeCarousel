@@ -16,6 +16,7 @@ namespace ActionForce.PosLocation
         public VCardReader CurrentCardReader { get; set; }
         public List<NFCCardLog> NFCCardLogs { get; set; }
         public List<CardType> CardTypes { get; set; }
+        public string SearchKey { get; set; }
 
     }
 }

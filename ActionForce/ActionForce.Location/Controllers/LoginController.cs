@@ -40,7 +40,7 @@ namespace ActionForce.Location.Controllers
                 Message = string.Empty
             };
 
-            var User = db.Employee.FirstOrDefault(x => x.Username == Username && x.Password.ToUpper() == passMD5);
+            var User = db.Employee.FirstOrDefault(x => x.Username == Username && x.Password.ToUpper() == passMD5 && x.StatusID == 1);
 
             if (User != null)
             {
