@@ -3111,5 +3111,18 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("AddSalaryPeriodCostCompute", yearParameter, monthParameter, dateBeginParameter, dateEndParameter, recordEmployeeIDParameter, recordIPParameter, uIDParameter);
         }
+    
+        public virtual ObjectResult<Nullable<long>> MergeTicketSale(Nullable<long> payedSaleID, Nullable<long> loadedSaleID)
+        {
+            var payedSaleIDParameter = payedSaleID.HasValue ?
+                new ObjectParameter("PayedSaleID", payedSaleID) :
+                new ObjectParameter("PayedSaleID", typeof(long));
+    
+            var loadedSaleIDParameter = loadedSaleID.HasValue ?
+                new ObjectParameter("LoadedSaleID", loadedSaleID) :
+                new ObjectParameter("LoadedSaleID", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("MergeTicketSale", payedSaleIDParameter, loadedSaleIDParameter);
+        }
     }
 }

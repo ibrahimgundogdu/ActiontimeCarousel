@@ -2489,6 +2489,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="UpdateDate" Type="datetime" />
           <Property Name="UpdateEmployeeID" Type="int" />
           <Property Name="UpdateIP" Type="nvarchar" MaxLength="15" />
+          <Property Name="ProfitCenter" Type="bit" Nullable="false" />
+          <Property Name="ExpenseCenter" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="LocationAnimals">
           <Key>
@@ -4197,6 +4199,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="SaleID" Type="bigint" Nullable="false" />
           <Property Name="StatusID" Type="int" />
           <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="DateKey" Type="date" StoreGeneratedPattern="Computed" />
+          <Property Name="TimeKey" Type="time" Precision="7" StoreGeneratedPattern="Computed" />
           <Property Name="LocationID" Type="int" />
           <Property Name="EmployeeID" Type="int" />
           <Property Name="IsSale" Type="bit" />
@@ -8529,6 +8533,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         </Function>
         <Function Name="MakeEmployeeMasterPhone" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AddressID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="MergeTicketSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PayedSaleID" Type="bigint" Mode="In" />
+          <Parameter Name="LoadedSaleID" Type="bigint" Mode="In" />
         </Function>
         <Function Name="RemoveAllAccountActions" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ProcessID" Type="bigint" Mode="In" />
@@ -12987,6 +12995,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="UID" Mode="In" Type="Guid" />
           </FunctionImport>
           <EntitySet Name="SGKBranch" EntityType="db293_ActionTimeDbModel.SGKBranch" />
+          <FunctionImport Name="MergeTicketSale" ReturnType="Collection(Int64)">
+            <Parameter Name="PayedSaleID" Mode="In" Type="Int64" />
+            <Parameter Name="LoadedSaleID" Mode="In" Type="Int64" />
+          </FunctionImport>
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -18497,6 +18509,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="TaxRate" Type="Double" />
           <Property Name="UseCardSysteme" Type="Boolean" />
           <Property Name="ProductPriceCatID" Type="Int32" />
+          <Property Name="ProfitCenter" Type="Boolean" Nullable="false" />
+          <Property Name="ExpenseCenter" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="VLocation">
           <Key>
@@ -19500,6 +19514,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="TotalCredit" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="CardNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="CardReaderID" Type="Int32" />
+          <Property Name="DateKey" Type="DateTime" annotation:StoreGeneratedPattern="Computed" Precision="0" />
+          <Property Name="TimeKey" Type="Time" annotation:StoreGeneratedPattern="Computed" Precision="7" />
         </EntityType>
         <EntityType Name="VTicketSaleRowsAll">
           <Key>
@@ -26765,6 +26781,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="Location">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Location">
               <MappingFragment StoreEntitySet="Location">
+                <ScalarProperty Name="ExpenseCenter" ColumnName="ExpenseCenter" />
+                <ScalarProperty Name="ProfitCenter" ColumnName="ProfitCenter" />
                 <ScalarProperty Name="ProductPriceCatID" ColumnName="ProductPriceCatID" />
                 <ScalarProperty Name="UseCardSysteme" ColumnName="UseCardSysteme" />
                 <ScalarProperty Name="TaxRate" ColumnName="TaxRate" />
@@ -27700,6 +27718,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="TicketSaleRows">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketSaleRows">
               <MappingFragment StoreEntitySet="TicketSaleRows">
+                <ScalarProperty Name="TimeKey" ColumnName="TimeKey" />
+                <ScalarProperty Name="DateKey" ColumnName="DateKey" />
                 <ScalarProperty Name="CardReaderID" ColumnName="CardReaderID" />
                 <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
                 <ScalarProperty Name="TotalCredit" ColumnName="TotalCredit" />
@@ -29721,6 +29741,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="MergeTicketSale" FunctionName="db293_ActionTimeDbModel.Store.MergeTicketSale" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

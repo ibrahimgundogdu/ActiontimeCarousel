@@ -62,5 +62,7 @@ namespace ActionForce.Entity
         public Nullable<int> TotalCredit { get; set; }
         public string CardNumber { get; set; }
         public Nullable<int> CardReaderID { get; set; }
+        public Nullable<System.DateTime> DateKey { get; set; }
+        public Nullable<System.TimeSpan> TimeKey { get; set; }
     }
 }

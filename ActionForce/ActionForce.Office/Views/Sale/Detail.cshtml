@@ -383,6 +383,69 @@
 
                     </div>
                 }
+
+                @if (Model.Authentication.ActionEmployee.EmployeeID == 19 || Model.Authentication.ActionEmployee.EmployeeID == 4038 && Model.CurrentTicketSaleSummary.IsSendPosTerminal != true)
+                {
+
+                    <div class="card mg-b-20 mg-lg-b-25 mt-4">
+                        <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                            <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Satış Birleştirme</h6>
+                            <nav class="nav nav-with-icon tx-13">
+                            </nav>
+                        </div>
+                        <div class="card-body pd-20 pd-lg-5">
+
+                            <div>
+
+                                @using (Html.BeginForm("MargeSale", "Sale", FormMethod.Post))
+                                {
+                                    <div class="row row-xs">
+                                        <div class="col-lg-12">
+
+                                            <div class="form-group row mg-b-3">
+                                                <label for="LoadedSaleID" class="col-sm-6 col-form-label">Manuel Yükleme Sipariş Nosu (Yüklemenin Yapıldığı Sipariş) </label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" id="LoadedSaleID" name="LoadedSaleID" class="form-control" value="@(Model.TicketSale.ID)" readonly />
+                                                </div>
+                                                <label class="col-sm-3 col-form-label">@(Model.TicketSale.OrderNumber)</label>
+                                            </div>
+
+                                            <div class="form-group row mg-b-3">
+                                                <label for="SalaryFile" class="col-sm-6 col-form-label">Ingenico Tahsilat Sipariş Nosu (Ödemenin Alındığı Sipariş)</label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" id="PaymentSaleNumber" name="PaymentSaleNumber" class="form-control" value="" />
+                                                </div>
+                                                <label class="col-sm-3 col-form-label">Ingenico</label>
+                                            </div>
+
+                                            <div class="form-group row mg-b-3">
+                                                <div class="col-sm-6">
+                                                    <input id="TicketSaleUID" name="TicketSaleUID" type="hidden" value="@(Model.TicketSale.UID)" />
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <button type="submit" class="btn btn-primary btn-block">Satış Siparişini Birleştir</button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                        </div>
+
+
+
+
+
+
+                        <div class="card-body pd-20 pd-lg-5" id="SaleMergeDetail">
+
+                        </div>
+
+                    </div>
+                }
+
             </div>
         </div>
     </div>

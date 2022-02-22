@@ -2444,6 +2444,7 @@
     <Compile Include="Models\FormModels\LocationAnimalFormModel.cs" />
     <Compile Include="Models\FormModels\LocationMallMotoFormModel.cs" />
     <Compile Include="Models\FormModels\MallMotoColorFormModel.cs" />
+    <Compile Include="Models\FormModels\MargeSaleFormModel.cs" />
     <Compile Include="Models\FormModels\PosFormModel.cs" />
     <Compile Include="Models\LocationPart.cs" />
     <Compile Include="Models\Location\LocationEmployeeModel.cs" />

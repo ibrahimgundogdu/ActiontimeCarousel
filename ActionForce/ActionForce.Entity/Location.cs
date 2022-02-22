@@ -54,5 +54,7 @@ namespace ActionForce.Entity
         public Nullable<double> TaxRate { get; set; }
         public Nullable<bool> UseCardSysteme { get; set; }
         public Nullable<int> ProductPriceCatID { get; set; }
+        public bool ProfitCenter { get; set; }
+        public bool ExpenseCenter { get; set; }
     }
 }

@@ -384,7 +384,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.SalaryPeriodCompute" Width="1.5" PointX="10.86996966175268" PointY="17.088555627078076" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.HCardActions" Width="1.5" PointX="7.3778302051955045" PointY="13.871272033951838" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VSalaryPeriod" Width="1.5" PointX="51.25" PointY="0.625" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.SGKBranch" Width="1.5" PointX="7.2264564871911228" PointY="1.5651794232265928" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.SGKBranch" Width="1.5" PointX="44.375" PointY="1" />
         
         
         
