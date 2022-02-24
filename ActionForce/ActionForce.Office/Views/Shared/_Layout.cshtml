@@ -156,6 +156,7 @@
                     <ul>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "CashRecorder" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/CashRecorder">01 Yazarkasa Fişleri</a></li>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "CashRecorder" && this.ViewContext.RouteData.Values["action"].ToString() == "Report" ? "class=active" : "")><a href="/CashRecorder/Report">02 Yazarkasa Raporu</a></li>
+
                     </ul>
                 </li>
                 <li class="nav-item with-sub  @(this.ViewContext.RouteData.Values["controller"].ToString() == "Result" ? "show" : "")">
@@ -254,14 +255,16 @@
                     </ul>
                 </li>
 
-                @if (Model.Authentication.ActionEmployee.RoleGroup.RoleLevel >= 5)
+                @if (Model.Authentication.ActionEmployee.RoleGroup.RoleLevel >= 5 || Model.Authentication.ActionEmployee.EmployeeID == 4679)
                 {
                     <li class="nav-label mg-t-10">Yönetim</li>
 
                     <li class="nav-item with-sub  @(this.ViewContext.RouteData.Values["controller"].ToString() == "Revenue" ? "show" : "")">
                         <a href="/Revenue" class="nav-link"><i data-feather="briefcase"></i> <span>R. Hasılat</span></a>
                         <ul>
+                            
                             <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Revenue" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Revenue">Hasılat Raporu</a></li>
+                            
                             <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Revenue" && this.ViewContext.RouteData.Values["action"].ToString() == "Parameters" ? "class=active" : "")><a href="/Revenue/Parameters">Parametreler</a></li>
 
                         </ul>

@@ -115,4 +115,14 @@ namespace ActionForce.Office
         public string Currency { get; set; }
 
     }
+
+    public class ExcelParameterRent
+    {
+        public int LocationID { get; set; }
+        public DateTime Baslangic { get; set; }
+        public DateTime? Bitis { get; set; }
+        public double? Tutar { get; set; }
+        public string Birim { get; set; }
+
+    }
 }

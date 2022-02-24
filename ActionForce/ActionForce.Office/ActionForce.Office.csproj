@@ -2407,6 +2407,7 @@
     <Compile Include="Models\FormModels\FormMall.cs" />
     <Compile Include="Models\FormModels\FormPrice.cs" />
     <Compile Include="Models\FormModels\FormPriceCategory.cs" />
+    <Compile Include="Models\FormModels\FormRentImport.cs" />
     <Compile Include="Models\FormModels\FormSalaryPeriod.cs" />
     <Compile Include="Models\FormModels\FormSalaryPeriodEarnImport.cs" />
     <Compile Include="Models\FormModels\FormTicketProduct.cs" />
@@ -2833,6 +2834,7 @@
     <Content Include="Views\Salary\ImportFoodcardEarn.cshtml" />
     <Content Include="Views\Salary\ImportFoodcardPayment.cshtml" />
     <Content Include="Views\Salary\ImportSalaryCost.cshtml" />
+    <Content Include="Views\Revenue\ImportParameter.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

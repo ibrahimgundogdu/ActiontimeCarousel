@@ -1,7 +1,11 @@
 ﻿using ActionForce.Entity;
+using ClosedXML.Excel;
+using LinqToExcel;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -14,6 +18,11 @@ namespace ActionForce.Office.Controllers
         public ActionResult Index(int? WeekYear, int? WeekNumber, int? LocationID, DateTime? date, int? isactive)
         {
             RevenueControlModel model = new RevenueControlModel();
+
+            if (model.Authentication.ActionEmployee.RoleGroup.RoleLevel < 5)
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
             var currentdate = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
             var selecteddate = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
@@ -530,6 +539,255 @@ namespace ActionForce.Office.Controllers
             return PartialView("_PartialPeriodParameterDetail", model);
         }
 
+        //ImportParameter
+        [AllowAnonymous]
+        public FileResult GetParameterTemplate()
+        {
+            RevenueControlModel model = new RevenueControlModel();
+
+            var locationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).ToList();
+            var locationParam = Db.LocationParam.Where(x => x.TypeID == 5).OrderByDescending(x => x.ID).Take(10).ToList();
+
+            if (locationParam != null && locationParam.Count > 0)
+            {
+                string targetpath = Server.MapPath("~/Document/Salary/");
+                string FileName = $"LocationParameter.xlsx";
+
+                try
+                {
+                    using (var workbook = new XLWorkbook())
+                    {
+                        // Kiralar Kısmı
+
+                        var worksheet = workbook.Worksheets.Add("Kiralar");
+
+                        worksheet.Cell("A1").Value = "LocationID";
+                        worksheet.Cell("B1").Value = "Baslangic";
+                        worksheet.Cell("C1").Value = "Bitis";
+                        worksheet.Cell("D1").Value = "Tutar";
+                        worksheet.Cell("E1").Value = "Birim";
+
+
+                        //worksheet.Cell("A2").FormulaA1 = "=MID(A1, 7, 5)";
+
+                        int rownum = 2;
+
+                        foreach (var item in locationParam)
+                        {
+
+                            worksheet.Cell("A" + rownum).Value = item.LocationID;
+                            worksheet.Cell("B" + rownum).Value = item.DateStart;
+                            worksheet.Cell("C" + rownum).Value = item.DateFinish;
+                            worksheet.Cell("D" + rownum).Value = item.Total;
+                            worksheet.Cell("E" + rownum).Value = item.Money;
+
+                            rownum++;
+                        }
+
+                        // Lokasyonlar
+
+                        var worksheetl = workbook.Worksheets.Add("Lokasyonlar");
+
+                        worksheetl.Cell("A1").Value = "LocationID";
+                        worksheetl.Cell("B1").Value = "Kodu";
+                        worksheetl.Cell("C1").Value = "Adı";
+                        worksheetl.Cell("D1").Value = "Türü";
+
+                        int rownuml = 2;
+
+                        foreach (var item in locationList)
+                        {
+                            worksheetl.Cell("A" + rownuml).Value = item.LocationID;
+                            worksheetl.Cell("B" + rownuml).Value = item.SortBy;
+                            worksheetl.Cell("C" + rownuml).Value = item.LocationFullName;
+                            worksheetl.Cell("D" + rownuml).Value = item.Description;
+
+                            rownuml++;
+                        }
+
+
+                        string pathToExcelFile = targetpath + FileName;
+                        workbook.SaveAs(pathToExcelFile);
+
+                        return File(pathToExcelFile, "application/vnd.ms-excel", FileName);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return null;
+                }
+
+
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
+
+        [AllowAnonymous]
+        public ActionResult ImportParameter()
+        {
+            RevenueControlModel model = new RevenueControlModel();
+            model.Result = new Result();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result;
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult ImportParameterFile(FormRentImport form)
+        {
+            RevenueControlModel model = new RevenueControlModel();
+            model.Result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                InfoKeyList = new List<InfoKey>()
+            };
+
+            if (form == null)
+            {
+                return RedirectToAction("Parameters");
+            }
+
+            var datalist = new List<ExcelParameterRent>();
+            List<LocationParam> paramList = new List<LocationParam>();
+
+            if (form.ParameterFile != null && form.ParameterFile.ContentLength > 0)
+            {
+
+                if (form.ParameterFile.ContentType == "application/vnd.ms-excel" || form.ParameterFile.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                {
+                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(form.ParameterFile.FileName);
+                    string targetpath = Server.MapPath("~/Document/Salary/");
+                    string pathToExcelFile = targetpath + filename;
+
+
+                    form.ParameterFile.SaveAs(Path.Combine(targetpath, filename));
+
+
+
+                    var connectionString = "";
+                    if (filename.EndsWith(".xls"))
+                    {
+                        connectionString = string.Format("Provider=Microsoft.Jet.OLEDB.4.0; data source={0}; Extended Properties=Excel 8.0;", pathToExcelFile);
+                    }
+                    else if (filename.EndsWith(".xlsx"))
+                    {
+                        connectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"Excel 12.0 Xml;HDR=YES;IMEX=1\";", pathToExcelFile);
+                    }
+
+
+                    //var adapter = new OleDbDataAdapter("SELECT * FROM [SalaryPeriod$]", connectionString);
+                    //var ds = new DataSet();
+                    //adapter.Fill(ds, "ExcelTable");
+                    //DataTable dtable = ds.Tables["ExcelTable"];
+
+
+                    string sheetName = "Kiralar";
+                    var excelFile = new ExcelQueryFactory(pathToExcelFile);
+                    var salaryList = from a in excelFile.Worksheet<ExcelParameterRent>(sheetName) select a;
+                    datalist = salaryList.ToList();
+
+                    if (datalist.Count > 0)
+                    {
+
+                        foreach (var item in datalist)
+                        {
+                            var lastParam = Db.LocationParam.Where(x => x.LocationID == item.LocationID && x.TypeID == 5 && x.DateStart <= item.Baslangic).OrderByDescending(x => x.DateStart).FirstOrDefault();
+                            if (lastParam != null)
+                            {
+                                lastParam.DateFinish = item.Baslangic;
+                                Db.SaveChanges();
+                            }
+
+                            try
+                            {
+                                var location = Db.Location.FirstOrDefault(x => x.LocationID == item.LocationID);
+                               
+
+                                if (location != null)
+                                {
+
+                                    LocationParam newparam = new LocationParam();
+
+                                    newparam.LocationID = item.LocationID;
+                                    newparam.DateStart = item.Baslangic;
+                                    newparam.DateFinish = item.Bitis;
+                                    newparam.TypeID = 5;
+                                    newparam.TypeName = "Rent";
+                                    newparam.Total = item.Tutar;
+                                    newparam.Rate = null;
+                                    newparam.Money = item.Birim;
+                                    newparam.Calculate = null;
+                                    newparam.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                                    newparam.RecordDate = DateTime.UtcNow.AddHours(3);
+                                    newparam.RecordIP = OfficeHelper.GetIPAddress();
+                                    newparam.UpdateDate = null;
+                                    newparam.UpdateEmployeeID = null;
+                                    newparam.UpdateIP = null;
+
+                                    paramList.Add(newparam);
+
+                                    model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = true, Name = $"{location.LocationFullName}", Message = $"Kira Bilgisi Eklendi" });
+                                }
+                            }
+                            catch (DbEntityValidationException ex)
+                            {
+                                foreach (var entityValidationErrors in ex.EntityValidationErrors)
+                                {
+                                    foreach (var validationError in entityValidationErrors.ValidationErrors)
+                                    {
+                                        model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = false, Name = validationError.PropertyName, Message = validationError.ErrorMessage });
+                                    }
+                                }
+                            }
+                        }
+
+                        Db.SaveChanges();
+
+                        Db.LocationParam.AddRange(paramList);
+                        Db.SaveChanges();
+
+                        //deleting excel file from folder
+                        if ((System.IO.File.Exists(pathToExcelFile)))
+                        {
+                            System.IO.File.Delete(pathToExcelFile);
+                        }
+
+                    }
+                    else
+                    {
+                        model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = false, Name = "Data Hatası", Message = "Excel Dosyasında veri yok." });
+                    }
+                }
+                else
+                {
+                    model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = false, Name = "Format Hatası", Message = "Sadece Excel Dosyası Geçerlidir." });
+                }
+            }
+            else
+            {
+                model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = false, Name = "Dosya Hatası", Message = "Excel Dosyası Seçin." });
+            }
+
+            model.Result.IsSuccess = false;
+            model.Result.Message = $"Maaş Periyodu bilgisi bulunamadı";
+
+            TempData["result"] = model.Result;
+            OfficeHelper.AddApplicationLog("Office", "Parameter", "Import", "", "Revenue", "ImportParameter", null, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, datalist);
+
+            return RedirectToAction("ImportParameter");
+
+        }
 
     }
 }
