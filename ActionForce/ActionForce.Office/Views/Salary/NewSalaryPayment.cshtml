@@ -65,7 +65,7 @@
                             </div>
 
                             <div class="form-group row mg-b-5 bg-gray-50">
-                                <label for="FromBankID" class="col-sm-3 col-form-label">Hangi Kasadan / Bankadan</label>
+                                <label for="FromBankID" class="col-sm-3 col-form-label">Hangi Ortamdan</label>
                                 <div class="col-sm-6">
                                     <select class="form-control" id="FromBankID" name="FromBankID" required>
                                         <optgroup label=" Kasa ">
@@ -76,6 +76,9 @@
                                             {
                                                 <option value="@item.ID">@($"{item.AccountName} {item.Currency}" )</option>
                                             }
+                                        </optgroup>
+                                        <optgroup label=" Diğer ">
+                                            <option value="-1">Diğer Ödeme Yöntemi</option>
                                         </optgroup>
                                     </select>
                                 </div>
@@ -97,7 +100,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row mg-b-5 bg-gray-100">
+                            @*<div class="form-group row mg-b-5 bg-gray-100">
                                 <label for="SalaryTypeID" class="col-sm-3 col-form-label">Maaş mı? / Avans mı?</label>
                                 <div class="col-sm-6">
                                     <select class="form-control" id="SalaryTypeID" name="SalaryTypeID" required>
@@ -109,10 +112,10 @@
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
-                            </div>
+                            </div>*@
 
                             <div class="form-group row mg-b-5 bg-gray-100">
-                                <label for="CategoryID" class="col-sm-3 col-form-label">İşlem Kategorisi</label>
+                                <label for="CategoryID" class="col-sm-3 col-form-label">Hangi İşlem Kategorisi</label>
                                 <div class="col-sm-6">
                                     <select class="form-control" id="CategoryID" name="CategoryID" required>
                                         @foreach (var item in Model.SalaryCategories.Where(x => x.IsActive == true).OrderBy(x => x.SortBy))
@@ -154,7 +157,7 @@
                             <div class="form-group row mg-b-0">
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-6">
-                                    <button type="submit" class="btn btn-primary btn-block">Maaş / Avans Ödeme Ekle</button>
+                                    <button type="submit" class="btn btn-primary btn-block">Maaş Ödeme Ekle</button>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>

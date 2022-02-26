@@ -63,7 +63,7 @@
                             <div class="form-group row">
                                 <label for="DocumentNumber" class="col-sm-3 col-form-label">Belge No</label>
                                 <div class="col-sm-6">
-                                    <input id="DocumentNumber" name="DocumentNumber" type="text" class="form-control" autocomplete="off" placeholder="Tarih" value="@(Model.SalaryDetail.DocumentNumber)" required>
+                                    <input id="DocumentNumber" name="DocumentNumber" type="text" class="form-control" autocomplete="off" placeholder="Tarih" value="@(Model.SalaryDetail.DocumentNumber)" required readonly>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
@@ -106,6 +106,9 @@
                                                 <option value="@item.ID" @(Model.SalaryDetail.FromBankAccountID > 0 && Model.SalaryDetail.FromBankAccountID == item.ID ? "selected" : "")>@($"{item.AccountName} {item.Currency}" )</option>
                                             }
                                         </optgroup>
+                                        <optgroup label=" Diğer ">
+                                            <option value="-1">Diğer Ödeme Yöntemi</option>
+                                        </optgroup>
                                     </select>
                                 </div>
                                 <div class="col-sm-3">
@@ -127,7 +130,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row bg-gray-100">
+                            @*<div class="form-group row bg-gray-100">
                                 <label for="SalaryTypeID" class="col-sm-3 col-form-label">Maaş mı? / Avans mı?</label>
                                 <div class="col-sm-6">
                                     <select class="form-control" id="SalaryTypeID" name="SalaryTypeID" required>
@@ -139,7 +142,7 @@
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
-                            </div>
+                            </div>*@
 
                             <div class="form-group row mg-b-5 bg-gray-100">
                                 <label for="CategoryID" class="col-sm-3 col-form-label">İşlem Kategorisi</label>
@@ -217,7 +220,7 @@
                             <div class="form-group row mg-b-0">
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-6">
-                                    <button type="submit" class="btn btn-primary btn-block">Nakit Ödeme Güncelle</button>
+                                    <button type="submit" class="btn btn-primary btn-block">Ödeme Güncelle</button>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>

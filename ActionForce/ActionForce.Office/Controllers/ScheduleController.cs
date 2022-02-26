@@ -396,7 +396,7 @@ namespace ActionForce.Office.Controllers
             model.EmployeeSchedule = Db.VSchedule.Where(x => x.WeekCode.Trim() == weekcode && x.LocationID == model.CurrentLocation.LocationID).ToList();
 
             List<int> employeeids = model.EmployeeSchedule.Select(x => x.EmployeeID.Value).Distinct().ToList();
-            List<int> employeeids2 = Db.EmployeeLocation.Where(x => x.LocationID == model.CurrentLocation.LocationID && x.IsActive == true && x.Employee.IsActive == true).Select(x => x.EmployeeID).Distinct().ToList();
+            List<int> employeeids2 = Db.EmployeeLocation.Where(x => x.LocationID == model.CurrentLocation.LocationID && x.IsActive == true && x.Employee.IsActive == true && x.Employee.StatusID == 1).Select(x => x.EmployeeID).Distinct().ToList();
 
             employeeids.AddRange(employeeids2);
             employeeids = employeeids.Distinct().ToList();

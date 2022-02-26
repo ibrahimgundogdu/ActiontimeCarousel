@@ -119,6 +119,9 @@ namespace ActionForce.Office
     public class ExcelParameterRent
     {
         public int LocationID { get; set; }
+        public string Kodu { get; set; }
+        public string Adi { get; set; }
+        public string Turu { get; set; }
         public DateTime Baslangic { get; set; }
         public DateTime? Bitis { get; set; }
         public double? Tutar { get; set; }
@@ -126,3 +129,4 @@ namespace ActionForce.Office
 
     }
 }
+

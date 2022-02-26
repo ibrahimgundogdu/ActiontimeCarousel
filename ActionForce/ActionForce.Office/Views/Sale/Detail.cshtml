@@ -311,6 +311,7 @@
                                 <table class="table table-dashboard table-striped table-hover">
                                     <tr>
                                         <th>#</th>
+                                        <th>SaleID</th>
                                         <th>İşlem Türü</th>
                                         <th>Kart Türü</th>
                                         <th>Zamanı</th>
@@ -330,6 +331,7 @@
                                     {
                                         <tr>
                                             <td class="font-weight-bold">@(item.ID)</td>
+                                            <td class="font-weight-bold">@(item.SaleID)</td>
                                             <td class="font-weight-bold">@(item.CardActionTypeName)</td>
                                             <td>@(item.CardTypeName)</td>
                                             <td>@(item.PaymentDate?.ToString("T"))</td>
@@ -384,7 +386,7 @@
                     </div>
                 }
 
-                @if ((Model.Authentication.ActionEmployee.EmployeeID == 19 || Model.Authentication.ActionEmployee.EmployeeID == 4038 || Model.Authentication.ActionEmployee.EmployeeID == 6955) && Model.CurrentTicketSaleSummary.IsSendPosTerminal != true)
+                @if ((Model.Authentication.ActionEmployee.EmployeeID == 19 || Model.Authentication.ActionEmployee.EmployeeID == 4038 || Model.Authentication.ActionEmployee.EmployeeID == 6955 || Model.Authentication.ActionEmployee.EmployeeID == 3764) && Model.CurrentTicketSaleSummary.IsSendPosTerminal != true)
                 {
 
                     <div class="card mg-b-20 mg-lg-b-25 mt-4">

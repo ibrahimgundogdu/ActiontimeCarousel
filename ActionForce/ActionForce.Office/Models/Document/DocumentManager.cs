@@ -2669,8 +2669,11 @@ namespace ActionForce.Office
                             EnvironmentID = isPayment.EnvironmentID,
                             ResultID = isPayment.ResultID,
                             SalaryTypeID = isPayment.SalaryTypeID,
-                            UID = isPayment.UID
+                            UID = isPayment.UID,
+                            SalaryType = isPayment.SalaryType
+                            
                         };
+
 
                         isPayment.CategoryID = payment.CategoryID;
                         isPayment.LocationID = payment.LocationID;
@@ -2689,6 +2692,8 @@ namespace ActionForce.Office
                         isPayment.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == payment.Currency ? payment.Amount : payment.Amount * isPayment.ExchangeRate;
                         isPayment.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
                         isPayment.IsActive = payment.IsActive;
+                        isPayment.ActionTypeID = payment.ActinTypeID;
+                        isPayment.ActionTypeName = payment.ActionTypeName;
 
                         Db.SaveChanges();
 

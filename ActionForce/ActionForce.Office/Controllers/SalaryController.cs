@@ -73,7 +73,7 @@ namespace ActionForce.Office.Controllers
         {
             SalaryControlModel model = new SalaryControlModel();
 
-            var actypes = new[] { 43, 44, 45, 46 };
+            var actypes = new[] { 37, 43, 44, 45, 46 };
 
             model.CashActionTypes = Db.CashActionType.Where(x => actypes.Contains(x.ID) && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
 
@@ -435,8 +435,8 @@ namespace ActionForce.Office.Controllers
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
-            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
-            model.SalaryTypes = Db.SalaryType.Where(x => x.IsActive == true).ToList();
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true && x.ActionTypeID != 35).ToList();
+            //model.SalaryTypes = Db.SalaryType.Where(x => x.IsActive == true).ToList();
 
             return View(model);
 
@@ -459,19 +459,9 @@ namespace ActionForce.Office.Controllers
 
             if (cashsalary != null)
             {
-                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == 31); // maaş avans ödemesi
+                var salaryCategory = Db.SalaryCategory.FirstOrDefault(x => x.ID == cashsalary.CategoryID);
 
-                if (cashsalary.CategoryID == 18)
-                {
-                    actType = Db.CashActionType.FirstOrDefault(x => x.ID == 38); // set card Ödemesi
-                }
-
-                else if (cashsalary.CategoryID == 11)
-                {
-                    actType = Db.CashActionType.FirstOrDefault(x => x.ID == 47); // Maaş Kesintisi
-                }
-
-
+                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == salaryCategory.ActionTypeID); // ödeme türü seçilir
 
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashsalary.LocationID);
                 var amount = Convert.ToDouble(cashsalary.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
@@ -485,20 +475,26 @@ namespace ActionForce.Office.Controllers
                 }
                 else
                 {
-                    var cash = OfficeHelper.GetCash(cashsalary.LocationID, cashsalary.Currency);
-                    fromcashID = cash.ID;
+                    if (cashsalary.FromBankID == 0)
+                    {
+                        var cash = OfficeHelper.GetCash(cashsalary.LocationID, cashsalary.Currency);
+                        fromcashID = cash.ID;
+                    }
+                    else
+                    {
+                        var cash = OfficeHelper.GetCash(80, cashsalary.Currency);
+                        fromcashID = cash.ID;
+                    }
                 }
 
-                var docDate = DateTime.Now.Date;
+                var docDate = DateTime.UtcNow.AddHours(location.Timezone ?? 3).Date;
+
                 if (DateTime.TryParse(cashsalary.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashsalary.DocumentDate).Date;
                 }
 
-
                 var exchange = OfficeHelper.GetExchange(docDate);
-
-
 
                 if (amount > 0)
                 {
@@ -519,7 +515,7 @@ namespace ActionForce.Office.Controllers
                     payment.ExchangeRate = payment.Currency == "USD" ? exchange.USDA.Value : payment.Currency == "EUR" ? exchange.EURA.Value : 1;
                     payment.FromBankID = frombankID;
                     payment.FromCashID = fromcashID;
-                    payment.SalaryTypeID = cashsalary.SalaryTypeID;
+                    payment.SalaryTypeID = 1;
                     payment.CategoryID = cashsalary.CategoryID;
 
                     DocumentManager documentManager = new DocumentManager();
@@ -538,78 +534,6 @@ namespace ActionForce.Office.Controllers
             TempData["result"] = result;
 
             return RedirectToAction("SalaryPayment", "Salary");
-
-            //Result<DocumentSalaryPayment> result = new Result<DocumentSalaryPayment>()
-            //{
-            //    IsSuccess = false,
-            //    Message = string.Empty,
-            //    Data = null
-            //};
-            //SalaryControlModel model = new SalaryControlModel();
-
-            //if (cashSalary != null)
-            //{
-            //    var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashSalary.ActinTypeID);
-            //    var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSalary.LocationID);
-            //    var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
-            //    var fromPrefix = cashSalary.FromID.Substring(0, 1);
-            //    var fromID = Convert.ToInt32(cashSalary.FromID.Substring(1, cashSalary.FromID.Length - 1));
-            //    var amount = Convert.ToDouble(cashSalary.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-            //    var currency = cashSalary.Currency;
-            //    var docDate = DateTime.Now.Date;
-            //    int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
-            //    var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
-
-            //    if (DateTime.TryParse(cashSalary.DocumentDate, out docDate))
-            //    {
-            //        docDate = Convert.ToDateTime(cashSalary.DocumentDate).Date;
-            //    }
-            //    var cash = OfficeHelper.GetCash(cashSalary.LocationID, cashSalary.Currency);
-            //    // tahsilat eklenir.
-
-            //    if (amount > 0)
-            //    {
-            //        SalaryPayment payment = new SalaryPayment();
-
-            //        payment.ActinTypeID = actType.ID;
-            //        payment.ActionTypeName = actType.Name;
-            //        payment.Currency = cashSalary.Currency;
-            //        payment.Description = cashSalary.Description;
-            //        payment.DocumentDate = docDate;
-            //        payment.EmployeeID = fromPrefix == "E" ? fromID : (int)0; ;
-            //        payment.EnvironmentID = 2;
-            //        payment.LocationID = location.LocationID;
-            //        payment.Amount = amount;
-            //        payment.UID = Guid.NewGuid();
-            //        payment.TimeZone = location.Timezone;
-            //        payment.OurCompanyID = location.OurCompanyID;
-            //        payment.ExchangeRate = payment.Currency == "USD" ? exchange.USDA.Value : payment.Currency == "EUR" ? exchange.EURA.Value : 1;
-            //        payment.FromBankID = (int?)cashSalary.BankAccountID > 0 ? cashSalary.BankAccountID : (int?)null;
-            //        payment.FromCashID = (int?)cashSalary.BankAccountID == 0 ? cash.ID : (int?)null;
-            //        payment.SalaryTypeID = cashSalary.SalaryType;
-            //        payment.TimeZone = location.Timezone;
-            //        payment.ReferanceID = cashSalary.ReferanceID;
-            //        payment.CategoryID = cashSalary.CategoryID ?? (int?)null;
-
-            //        DocumentManager documentManager = new DocumentManager();
-            //        result = documentManager.AddSalaryPayment(payment, model.Authentication);
-            //    }
-            //    else
-            //    {
-            //        result.IsSuccess = true;
-            //        result.Message = $"Tutar 0'dan büyük olmalıdır.";
-            //    }
-
-
-
-            //}
-
-            //Result<CashActions> messageresult = new Result<CashActions>();
-            //messageresult.Message = result.Message;
-
-            //TempData["result"] = messageresult;
-
-            //return RedirectToAction("SalaryPayment", "Salary");
         }
 
         [HttpPost]
@@ -626,6 +550,10 @@ namespace ActionForce.Office.Controllers
 
             if (cashSalary != null)
             {
+                var salaryCategory = Db.SalaryCategory.FirstOrDefault(x => x.ID == cashSalary.CategoryID);
+
+                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == salaryCategory.ActionTypeID); // ödeme türü seçilir
+
                 var amount = Convert.ToDouble(cashSalary.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 double? newexchanges = Convert.ToDouble(cashSalary.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSalary.LocationID);
@@ -647,8 +575,17 @@ namespace ActionForce.Office.Controllers
                 }
                 else
                 {
-                    var cash = OfficeHelper.GetCash(cashSalary.LocationID, cashSalary.Currency);
-                    fromcashID = cash.ID;
+                    if (cashSalary.FromBankID == 0)
+                    {
+                        var cash = OfficeHelper.GetCash(cashSalary.LocationID, cashSalary.Currency);
+                        fromcashID = cash.ID;
+                    }
+                    else
+                    {
+                        var cash = OfficeHelper.GetCash(80, cashSalary.Currency);
+                        fromcashID = cash.ID;
+                    }
+                   
                 }
 
 
@@ -672,7 +609,8 @@ namespace ActionForce.Office.Controllers
                     salarypay.FromCashID = fromcashID;
                     salarypay.IsActive = isactive;
                     salarypay.Controller = "Cash";
-
+                    salarypay.ActinTypeID = actType.ID;
+                    salarypay.ActionTypeName = actType.Name;
 
                     if (newexchanges > 0)
                     {
@@ -695,81 +633,6 @@ namespace ActionForce.Office.Controllers
 
             TempData["result"] = result;
             return RedirectToAction("SalaryDetail", new { id = cashSalary.UID });
-
-            //Result result = new Result()
-            //{
-            //    IsSuccess = false,
-            //    Message = string.Empty
-            //};
-
-            //SalaryControlModel model = new SalaryControlModel();
-
-            //if (cashSalary != null)
-            //{
-            //    var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashSalary.ActinTypeID);
-            //    var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSalary.LocationID);
-            //    var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
-            //    var fromPrefix = cashSalary.FromID.Substring(0, 1);
-            //    var fromID = Convert.ToInt32(cashSalary.FromID.Substring(1, cashSalary.FromID.Length - 1));
-            //    var amount = Convert.ToDouble(cashSalary.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-            //    var currency = cashSalary.Currency;
-            //    var docDate = DateTime.Now.Date;
-            //    int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
-
-            //    if (DateTime.TryParse(cashSalary.DocumentDate, out docDate))
-            //    {
-            //        docDate = Convert.ToDateTime(cashSalary.DocumentDate).Date;
-            //    }
-            //    double? newexchanges = Convert.ToDouble(cashSalary.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-            //    double? exchanges = Convert.ToDouble(cashSalary.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-
-            //    if (amount > 0)
-            //    {
-            //        SalaryPayment sale = new SalaryPayment();
-            //        sale.LocationID = cashSalary.ActinTypeID;
-            //        sale.Currency = cashSalary.Currency;
-            //        sale.DocumentDate = docDate;
-            //        sale.EmployeeID = fromPrefix == "E" ? fromID : (int)0;
-            //        sale.Amount = amount;
-            //        sale.Description = cashSalary.Description;
-            //        sale.FromBankID = cashSalary.BankAccountID;
-            //        sale.SalaryTypeID = cashSalary.SalaryType;
-            //        sale.UID = cashSalary.UID;
-            //        sale.CategoryID = cashSalary.CategoryID;
-            //        sale.ReferanceID = cashSalary.ReferanceID;
-            //        sale.TimeZone = timezone;
-            //        if (newexchanges > 0)
-            //        {
-            //            sale.ExchangeRate = newexchanges;
-            //        }
-            //        else
-            //        {
-            //            sale.ExchangeRate = exchanges;
-            //        }
-
-            //        DocumentManager documentManager = new DocumentManager();
-            //        var editresult = documentManager.EditSalaryPayment(sale, model.Authentication);
-
-            //        result.IsSuccess = editresult.IsSuccess;
-            //        result.Message = editresult.Message;
-
-            //    }
-            //    else
-            //    {
-            //        result.IsSuccess = true;
-            //        result.Message = $"Tutar 0'dan büyük olmalıdır.";
-            //    }
-
-
-
-            //}
-
-            //Result<CashActions> messageresult = new Result<CashActions>();
-            //messageresult.Message = result.Message;
-
-            //TempData["result"] = messageresult;
-            //return RedirectToAction("SalaryDetail", new { id = cashSalary.UID });
-
         }
 
         [AllowAnonymous]
@@ -807,7 +670,7 @@ namespace ActionForce.Office.Controllers
                 model.Result = TempData["result"] as Result ?? null;
             }
 
-            model.SalaryTypes = Db.SalaryType.Where(x => x.IsActive == true).ToList();
+            //model.SalaryTypes = Db.SalaryType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.AccountTypeID == 1 && x.IsActive == true).ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
@@ -4391,6 +4254,77 @@ namespace ActionForce.Office.Controllers
                                     compute.Currency = !string.IsNullOrEmpty(item.Birim) ? item.Birim : compute.Currency;
 
                                     model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = true, Name = $"{item.AdiSoyadi}", Message = $"Güncellendi" });
+                                }
+                                else
+                                {
+                                    compute = new SalaryPeriodCompute();
+
+                                    compute.SalaryPeriodID = item.MaasPeriodID;
+                                    compute.EmployeeID = item.CalisanID;
+
+                                    compute.FullName = !string.IsNullOrEmpty(item.AdiSoyadi) ? item.AdiSoyadi : compute.FullName;
+                                    compute.IdentityNumber = !string.IsNullOrEmpty(item.TCKN) ? item.TCKN : compute.IdentityNumber;
+                                    compute.PhoneNumber = !string.IsNullOrEmpty(item.Telefon) ? item.Telefon : compute.PhoneNumber;
+                                    compute.FoodCard = !string.IsNullOrEmpty(item.YemekKarti) ? item.YemekKarti : compute.FoodCard;
+                                    compute.IBAN = !string.IsNullOrEmpty(item.IBAN) ? item.IBAN : compute.IBAN;
+                                    compute.BankName = !string.IsNullOrEmpty(item.Banka) ? item.Banka : compute.BankName;
+                                    compute.SalaryPaymentTypeID = item.OdemeTuru != null ? item.OdemeTuru : compute.SalaryPaymentTypeID;
+                                    compute.SGKBranch = !string.IsNullOrEmpty(item.SGKSube) ? item.SGKSube : compute.SGKBranch;
+                                    compute.LocationName = !string.IsNullOrEmpty(item.Lokasyon) ? item.Lokasyon : compute.LocationName;
+
+
+                                    compute.SalaryTotal = item.HakedisToplam != null ? item.HakedisToplam : compute.SalaryTotal;
+                                    compute.PermitTotal = item.IzinToplam != null ? item.IzinToplam : compute.PermitTotal;
+                                    compute.ExtraShiftTotal = item.FMesaiToplam != null ? item.FMesaiToplam : compute.ExtraShiftTotal;
+                                    compute.PremiumTotal = item.PrimToplam != null ? item.PrimToplam : compute.PremiumTotal;
+                                    compute.FormalTotal = item.ResmiToplam != null ? item.ResmiToplam : compute.FormalTotal;
+                                    compute.OtherTotal = item.DigerToplam != null ? item.DigerToplam : compute.OtherTotal;
+                                    //compute.TotalProgress = item.ToplamHakedis != null ? item.ToplamHakedis.Value : compute.TotalProgress;
+
+                                    compute.PrePaymentAmount = item.AvansOdeme != null ? item.AvansOdeme : compute.PrePaymentAmount;
+                                    compute.SalaryCutAmount = item.MaasKesinti != null ? item.MaasKesinti : compute.SalaryCutAmount;
+                                    compute.PermitPaymentAmount = item.IzinOdeme != null ? item.IzinOdeme : compute.PermitPaymentAmount;
+                                    compute.ExtraShiftPaymentAmount = item.FMesaiOdeme != null ? item.FMesaiOdeme : compute.ExtraShiftPaymentAmount;
+                                    compute.PremiumPaymentAmount = item.PrimOdeme != null ? item.PrimOdeme : compute.PremiumPaymentAmount;
+                                    compute.FormalPaymentAmount = item.ResmiOdeme != null ? item.ResmiOdeme : compute.FormalPaymentAmount;
+                                    compute.OtherPaymentAmount = item.DigerOdeme != null ? item.DigerOdeme : compute.OtherPaymentAmount;
+                                    //compute.TotalPaymentAmount = item.ToplamOdeme != null ? item.ToplamOdeme.Value : compute.TotalPaymentAmount;
+                                    //compute.TotalBalance = item.ToplamBakiye != null ? item.ToplamBakiye.Value : compute.TotalBalance;
+
+                                    compute.BankPaymentAmount = item.BankadanOdeme != null ? item.BankadanOdeme : compute.BankPaymentAmount;
+                                    compute.ManuelPaymentAmount = item.EldenOdeme != null ? item.EldenOdeme : compute.ManuelPaymentAmount;
+                                    compute.TransferBalance = item.DevirBakiye != null ? item.DevirBakiye : compute.TransferBalance;
+                                    //compute.GrossBalance = item.ToplamFinal != null ? item.ToplamFinal.Value : compute.GrossBalance;
+
+                                    compute.FoodCardTotal = item.YemekKartiHakedis != null ? item.YemekKartiHakedis : compute.FoodCardTotal;
+                                    compute.FoodCardPaymentAmount = item.YemekKartiOdeme != null ? item.YemekKartiOdeme : compute.FoodCardPaymentAmount;
+                                    //compute.FoodcardBalance = item.ToplamYemekKartiBakiye != null ? item.ToplamYemekKartiBakiye.Value : compute.FoodcardBalance;
+
+                                    compute.NetCost = item.NetMaliyet != null ? item.NetMaliyet : compute.NetCost;
+
+                                    compute.Tahakkuk = item.Tahakkuk != null ? item.Tahakkuk : 0;
+                                    compute.SSK = item.SSK != null ? item.SSK : compute.SSK;
+                                    compute.GV = item.GV != null ? item.GV : compute.GV;
+                                    compute.DV = item.DV != null ? item.DV : compute.GV;
+                                    compute.Kidem = item.Kidem != null ? item.Kidem : 0;
+                                    compute.Ihbar = item.Ihbar != null ? item.Ihbar : 0;
+                                    compute.Permit = item.Izin != null ? item.Izin : 0;
+                                    //compute.TotalCost = item.ToplamMaliyet != null ? item.ToplamMaliyet.Value : compute.TotalCost;
+
+                                    compute.TesvikNumber = !string.IsNullOrEmpty(item.TesvikNo) ? item.TesvikNo : compute.TesvikNumber;
+                                    compute.TesvikDiscount = item.TesvikIndirim != null ? item.TesvikIndirim : compute.TesvikDiscount;
+                                    compute.SSKDayCount = item.SSKGunSayisi != null ? item.SSKGunSayisi : compute.SSKDayCount;
+                                    compute.Currency = !string.IsNullOrEmpty(item.Birim) ? item.Birim : compute.Currency;
+
+                                    compute.RecordDate = DateTime.UtcNow.AddHours(3);
+                                    compute.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                                    compute.RecordIP = OfficeHelper.GetIPAddress();
+                                    compute.UID = Guid.NewGuid();
+                                    compute.CostDate = DateTime.UtcNow.AddHours(3);
+
+                                    computeList.Add(compute);
+
+                                    model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = true, Name = $"{item.AdiSoyadi}", Message = $"Eklendi" });
                                 }
                             }
                             catch (DbEntityValidationException ex)

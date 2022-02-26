@@ -383,6 +383,9 @@ namespace ActionForce.Entity
         public virtual DbSet<HCardActions> HCardActions { get; set; }
         public virtual DbSet<VSalaryPeriod> VSalaryPeriod { get; set; }
         public virtual DbSet<SGKBranch> SGKBranch { get; set; }
+        public virtual DbSet<VTempCashAction> VTempCashAction { get; set; }
+        public virtual DbSet<DocumentBankOpen> DocumentBankOpen { get; set; }
+        public virtual DbSet<VTempBankAction> VTempBankAction { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

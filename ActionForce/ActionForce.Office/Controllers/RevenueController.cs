@@ -562,49 +562,33 @@ namespace ActionForce.Office.Controllers
                         var worksheet = workbook.Worksheets.Add("Kiralar");
 
                         worksheet.Cell("A1").Value = "LocationID";
-                        worksheet.Cell("B1").Value = "Baslangic";
-                        worksheet.Cell("C1").Value = "Bitis";
-                        worksheet.Cell("D1").Value = "Tutar";
-                        worksheet.Cell("E1").Value = "Birim";
+                        worksheet.Cell("B1").Value = "Kodu";
+                        worksheet.Cell("C1").Value = "Adi";
+                        worksheet.Cell("D1").Value = "Turu";
+                        worksheet.Cell("E1").Value = "Baslangic";
+                        worksheet.Cell("F1").Value = "Bitis";
+                        worksheet.Cell("G1").Value = "Tutar";
+                        worksheet.Cell("H1").Value = "Birim";
 
 
                         //worksheet.Cell("A2").FormulaA1 = "=MID(A1, 7, 5)";
 
                         int rownum = 2;
 
-                        foreach (var item in locationParam)
+                        foreach (var item in locationList)
                         {
 
                             worksheet.Cell("A" + rownum).Value = item.LocationID;
-                            worksheet.Cell("B" + rownum).Value = item.DateStart;
-                            worksheet.Cell("C" + rownum).Value = item.DateFinish;
-                            worksheet.Cell("D" + rownum).Value = item.Total;
-                            worksheet.Cell("E" + rownum).Value = item.Money;
+                            worksheet.Cell("B" + rownum).Value = item.SortBy;
+                            worksheet.Cell("C" + rownum).Value = item.LocationFullName;
+                            worksheet.Cell("D" + rownum).Value = item.Description;
+                            worksheet.Cell("E" + rownum).Value = DateTime.Now.Date;
+                            worksheet.Cell("F" + rownum).Value = null;
+                            worksheet.Cell("G" + rownum).Value = 0.0;
+                            worksheet.Cell("H" + rownum).Value = "TRL";
 
                             rownum++;
                         }
-
-                        // Lokasyonlar
-
-                        var worksheetl = workbook.Worksheets.Add("Lokasyonlar");
-
-                        worksheetl.Cell("A1").Value = "LocationID";
-                        worksheetl.Cell("B1").Value = "Kodu";
-                        worksheetl.Cell("C1").Value = "Adı";
-                        worksheetl.Cell("D1").Value = "Türü";
-
-                        int rownuml = 2;
-
-                        foreach (var item in locationList)
-                        {
-                            worksheetl.Cell("A" + rownuml).Value = item.LocationID;
-                            worksheetl.Cell("B" + rownuml).Value = item.SortBy;
-                            worksheetl.Cell("C" + rownuml).Value = item.LocationFullName;
-                            worksheetl.Cell("D" + rownuml).Value = item.Description;
-
-                            rownuml++;
-                        }
-
 
                         string pathToExcelFile = targetpath + FileName;
                         workbook.SaveAs(pathToExcelFile);

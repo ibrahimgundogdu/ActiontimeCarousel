@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.SignalR;
+﻿using ActionForce.Entity;
+using Microsoft.AspNet.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -22,10 +23,10 @@ namespace ActionForce.Office.Controllers
 
             DateTime datenow = DateTime.UtcNow.AddHours(3).Date;
             model.Locations = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
-            var WeekLists = Db.DateList.Where(x => x.WeekYear >= 2017 && x.WeekYear <= DateTime.Now.Year && x.DateKey <= datenow).Select(x=> new { WeekKey = x.WeekKey, WeekYear = x.WeekYear, WeekNumber  = x.WeekNumber} ).Distinct().ToList();
+            var WeekLists = Db.DateList.Where(x => x.WeekYear >= 2017 && x.WeekYear <= DateTime.Now.Year && x.DateKey <= datenow).Select(x => new { WeekKey = x.WeekKey, WeekYear = x.WeekYear, WeekNumber = x.WeekNumber }).Distinct().ToList();
             List<string> weeknumbers = WeekLists.Select(x => x.WeekKey).Distinct().ToList();
 
-            var dayLists = Db.DateList.Where(x => weeknumbers.Contains(x.WeekKey)).Select(x=> new { WeekKey = x.WeekKey, DateKey = x.DateKey} ).ToList();
+            var dayLists = Db.DateList.Where(x => weeknumbers.Contains(x.WeekKey)).Select(x => new { WeekKey = x.WeekKey, DateKey = x.DateKey }).ToList();
 
             model.WeekLists = WeekLists.Select(x => new WeekModel()
             {
@@ -124,7 +125,7 @@ namespace ActionForce.Office.Controllers
 
         //    }
 
-           
+
         //}
 
         public void ComputeSalaryEarns(int? locationid, string date, string weekcode)
@@ -157,7 +158,7 @@ namespace ActionForce.Office.Controllers
 
                 locationidlist = model.Locations.Select(x => x.LocationID).Distinct().ToList();
 
-               var dayResults = Db.DayResult.Where(x => locationidlist.Contains(x.LocationID) && datekeylist.Contains(x.Date) && x.IsActive == true).ToList();
+                var dayResults = Db.DayResult.Where(x => locationidlist.Contains(x.LocationID) && datekeylist.Contains(x.Date) && x.IsActive == true).ToList();
 
                 DocumentManager document = new DocumentManager();
 
@@ -183,7 +184,7 @@ namespace ActionForce.Office.Controllers
                         {
                             if (dayresult.StateID == 2 || dayresult.StateID == 3 || dayresult.StateID == 4)
                             {
-                                
+
                                 var islocal = Request.IsLocal;
 
                                 var updresult = document.CheckResultBackward(dayresult.UID.Value, model.Authentication, islocal);
@@ -217,9 +218,9 @@ namespace ActionForce.Office.Controllers
         {
             ComputeControlModel model = new ComputeControlModel();
 
-            DateTime documentDate = new DateTime(2021,12,31).Date;
+            DateTime documentDate = new DateTime(2021, 12, 31).Date;
 
-            var tempdocument = Db.TempEmployeeActionReset.Where(x=> x.IsSuccess == false).ToList();
+            var tempdocument = Db.TempEmployeeActionReset.Where(x => x.IsSuccess == false).ToList();
 
             foreach (var item in tempdocument)
             {
@@ -252,7 +253,7 @@ namespace ActionForce.Office.Controllers
                 Db.SaveChanges();
             }
 
-           
+
             return View(model);
         }
 
@@ -301,7 +302,7 @@ namespace ActionForce.Office.Controllers
                 }
 
                 var docDate = cashsalary.DocumentDate;
-               
+
 
 
                 var exchange = OfficeHelper.GetExchange(docDate);
@@ -359,7 +360,7 @@ namespace ActionForce.Office.Controllers
             foreach (var item in tempdocument)
             {
 
-                var result = ChangeTransferStatus(item.UID,item.StatusID);
+                var result = ChangeTransferStatus(item.UID, item.StatusID);
 
                 if (result.IsSuccess == true)
                 {
@@ -399,6 +400,150 @@ namespace ActionForce.Office.Controllers
 
             return result;
 
+        }
+
+        [AllowAnonymous]
+        public ActionResult CashActionReset()
+        {
+            ComputeControlModel model = new ComputeControlModel();
+            Result result = new Result();
+
+            DateTime documentDate = new DateTime(2021, 12, 31).Date;
+
+            var tempdocument = Db.VTempCashAction.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.Amount != 0).ToList();
+
+            foreach (var item in tempdocument)
+            {
+
+                var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
+
+                try
+                {
+
+                    DocumentCashOpen open = new DocumentCashOpen();
+
+                    open.ActionTypeID = 26;
+                    open.ActionTypeName = "Kasa Düzeltme Fişi";
+                    open.Amount = -1 * item.Amount.Value;
+                    open.CashID = item.CashID;
+                    open.Currency = item.Currency;
+                    open.Date = documentDate;
+                    open.Description = "Otomatik Kasa Sıfırlama";
+                    open.DocumentNumber = OfficeHelper.GetDocumentNumber(item.OurCompanyID ?? 2, "COS");
+                    open.ExchangeRate = item.Currency == "USD" ? exchange.USDA : item.Currency == "EUR" ? exchange.EURA : 1;
+                    open.IsActive = true;
+                    open.LocationID = item.LocationID;
+                    open.OurCompanyID = item.OurCompanyID;
+                    open.RecordDate = DateTime.UtcNow.AddHours(3);
+                    open.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                    open.RecordIP = OfficeHelper.GetIPAddress();
+                    open.SystemAmount = item.Currency == "TRL" ? -1 * item.Amount.Value : -1 * item.Amount.Value * open.ExchangeRate;
+                    open.SystemCurrency = model.Authentication.ActionEmployee.OurCompany.Currency;
+                    open.EnvironmentID = 2;
+                    open.ReferenceID = 0;
+                    open.UID = Guid.NewGuid();
+
+                    Db.DocumentCashOpen.Add(open);
+                    Db.SaveChanges();
+
+                    // cari hesap işlemesi
+                    if (item.Amount > 0)
+                    {
+                        OfficeHelper.AddCashAction(open.CashID, open.LocationID, null, open.ActionTypeID, open.Date, open.ActionTypeName, open.ID, open.Date, open.DocumentNumber, open.Description, 1, 0, item.Amount, item.Currency, null, null, open.RecordEmployeeID, open.RecordDate, open.UID.Value);
+                    }
+                    else
+                    {
+                        OfficeHelper.AddCashAction(open.CashID, open.LocationID, null, open.ActionTypeID, open.Date, open.ActionTypeName, open.ID, open.Date, open.DocumentNumber, open.Description, 1, -1 * item.Amount, 0, item.Currency, null, null, open.RecordEmployeeID, open.RecordDate, open.UID.Value);
+                    }
+
+                    result.IsSuccess = true;
+                    result.Message = $"{open.Date} tarihli { open.Amount } {open.Currency} tutarındaki kasa sıfırlama fişi başarı ile eklendi";
+
+                    // log atılır
+                    OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", open.ID.ToString(), "Compute", "CashActionReset", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, open);
+
+
+                }
+                catch (Exception ex)
+                {
+                    result.Message = $"{-1 * item.Amount.Value} {item.Currency} tutarındaki kasa açılış fişi eklenemedi : {ex.Message}";
+                    OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "Open", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(3)), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                }
+            }
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult BankActionReset()
+        {
+            ComputeControlModel model = new ComputeControlModel();
+            Result result = new Result();
+
+            DateTime documentDate = new DateTime(2021, 12, 31).Date;
+
+            var tempdocument = Db.VTempBankAction.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.Amount != 0).ToList();
+
+            foreach (var item in tempdocument)
+            {
+
+                var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
+
+                try
+                {
+
+                    DocumentBankOpen open = new DocumentBankOpen();
+
+                    open.ActionTypeID = 10;
+                    open.ActionTypeName = "Banka Düzeltme Fişi";
+                    open.Amount = -1 * item.Amount.Value;
+                    open.BankAccountID = 1;
+                    open.Currency = item.Currency;
+                    open.Date = documentDate;
+                    open.Description = "Otomatik Banka Sıfırlama";
+                    open.DocumentNumber = OfficeHelper.GetDocumentNumber(item.OurCompanyID ?? 2, "BFX");
+                    open.ExchangeRate = item.Currency == "USD" ? exchange.USDA : item.Currency == "EUR" ? exchange.EURA : 1;
+                    open.IsActive = true;
+                    open.LocationID = item.LocationID;
+                    open.OurCompanyID = item.OurCompanyID;
+                    open.RecordDate = DateTime.UtcNow.AddHours(3);
+                    open.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                    open.RecordIP = OfficeHelper.GetIPAddress();
+                    open.SystemAmount = item.Currency == "TRL" ? -1 * item.Amount.Value : -1 * item.Amount.Value * open.ExchangeRate;
+                    open.SystemCurrency = model.Authentication.ActionEmployee.OurCompany.Currency;
+                    open.EnvironmentID = 2;
+                    open.ReferenceID = 0;
+                    open.UID = Guid.NewGuid();
+
+                    Db.DocumentBankOpen.Add(open);
+                    Db.SaveChanges();
+
+                    // cari hesap işlemesi
+                    if (item.Amount > 0)
+                    {
+                        OfficeHelper.AddBankAction(open.LocationID, null, open.BankAccountID, null, open.ActionTypeID, open.Date, open.ActionTypeName, open.ID, open.Date, open.DocumentNumber, open.Description, 1, 0, item.Amount, item.Currency, null, null, open.RecordEmployeeID, open.RecordDate, open.UID.Value);
+                    }
+                    else
+                    {
+                        OfficeHelper.AddBankAction(open.LocationID, null, open.BankAccountID, null, open.ActionTypeID, open.Date, open.ActionTypeName, open.ID, open.Date, open.DocumentNumber, open.Description, 1, -1 * item.Amount, 0, item.Currency, null, null, open.RecordEmployeeID, open.RecordDate, open.UID.Value);
+                    }
+
+                    result.IsSuccess = true;
+                    result.Message = $"{open.Date} tarihli { open.Amount } {open.Currency} tutarındaki banka sıfırlama fişi başarı ile eklendi";
+
+                    // log atılır
+                    OfficeHelper.AddApplicationLog("Office", "Bank", "Insert", open.ID.ToString(), "Compute", "BankActionReset", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, open);
+
+
+                }
+                catch (Exception ex)
+                {
+                    result.Message = $"{-1 * item.Amount.Value} {item.Currency} tutarındaki banka sıfırlama fişi eklenemedi : {ex.Message}";
+                    OfficeHelper.AddApplicationLog("Office", "Bank", "Insert", "-1", "Bank", "Open", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(3)), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                }
+            }
+
+            return View(model);
         }
 
     }

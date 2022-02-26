@@ -1262,6 +1262,36 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.City' does not have a prima
           <Property Name="SortBy" Type="char" MaxLength="4" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
+        <EntityType Name="DocumentBankOpen">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DocumentNumber" Type="nvarchar" MaxLength="16" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="Date" Type="date" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateEmployee" Type="int" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="BankAccountID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="ReferenceID" Type="bigint" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="ActionTypeName" Type="nvarchar" MaxLength="80" />
+          <Property Name="ActionTypeID" Type="int" />
+          <Property Name="ExchangeRate" Type="float" />
+          <Property Name="SystemAmount" Type="float" />
+          <Property Name="SystemCurrency" Type="nvarchar" MaxLength="4" />
+          <Property Name="Description" Type="nvarchar" MaxLength="250" />
+          <Property Name="ResultID" Type="bigint" />
+          <Property Name="EnvironmentID" Type="int" />
+          <Property Name="UID" Type="uniqueidentifier" />
+        </EntityType>
         <EntityType Name="DocumentBankTransfer">
           <Key>
             <PropertyRef Name="ID" />
@@ -2345,6 +2375,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ExpenseName" Type="nvarchar" MaxLength="50" />
           <Property Name="IsLocation" Type="bit" />
+          <Property Name="IsOffice" Type="bit" />
+          <Property Name="IsGeneral" Type="bit" />
           <Property Name="SortBy" Type="char" MaxLength="4" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
@@ -3467,6 +3499,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ParentID" Type="int" />
           <Property Name="CategoryName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ActionTypeID" Type="int" />
           <Property Name="IsAutoCompute" Type="bit" />
           <Property Name="SortBy" Type="char" MaxLength="4" />
           <Property Name="IsActive" Type="bit" />
@@ -7192,6 +7225,32 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VSystemCheckEmployeeRows' d
           <Property Name="Code" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTempBankAction' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VTempBankAction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="OurCompanyID" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTempCashAction' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VTempCashAction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" />
+          <Property Name="CashID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
+          <Property Name="OurCompanyID" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketBasket' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VTicketBasket">
           <Key>
@@ -8765,6 +8824,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="DayResultItemList" EntityType="Self.DayResultItemList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DayResultItems" EntityType="Self.DayResultItems" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DocumentBankOpen" EntityType="Self.DocumentBankOpen" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentBankTransfer" EntityType="Self.DocumentBankTransfer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentBuyExchange" EntityType="Self.DocumentBuyExchange" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentCashCollections" EntityType="Self.DocumentCashCollections" Schema="dbo" store:Type="Tables" />
@@ -11331,6 +11391,26 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VSystemCheckEmployeeRows].[Code] AS [Code]
     FROM [dbo].[VSystemCheckEmployeeRows] AS [VSystemCheckEmployeeRows]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VTempBankAction" EntityType="Self.VTempBankAction" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VTempBankAction].[Id] AS [Id], 
+    [VTempBankAction].[LocationID] AS [LocationID], 
+    [VTempBankAction].[Amount] AS [Amount], 
+    [VTempBankAction].[Currency] AS [Currency], 
+    [VTempBankAction].[OurCompanyID] AS [OurCompanyID]
+    FROM [dbo].[VTempBankAction] AS [VTempBankAction]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VTempCashAction" EntityType="Self.VTempCashAction" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VTempCashAction].[Id] AS [Id], 
+    [VTempCashAction].[CashID] AS [CashID], 
+    [VTempCashAction].[LocationID] AS [LocationID], 
+    [VTempCashAction].[Amount] AS [Amount], 
+    [VTempCashAction].[Currency] AS [Currency], 
+    [VTempCashAction].[LocationFullName] AS [LocationFullName], 
+    [VTempCashAction].[OurCompanyID] AS [OurCompanyID]
+    FROM [dbo].[VTempCashAction] AS [VTempCashAction]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VTicketBasket" EntityType="Self.VTicketBasket" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VTicketBasket].[ID] AS [ID], 
@@ -12999,6 +13079,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="PayedSaleID" Mode="In" Type="Int64" />
             <Parameter Name="LoadedSaleID" Mode="In" Type="Int64" />
           </FunctionImport>
+          <EntitySet Name="VTempCashAction" EntityType="db293_ActionTimeDbModel.VTempCashAction" />
+          <EntitySet Name="DocumentBankOpen" EntityType="db293_ActionTimeDbModel.DocumentBankOpen" />
+          <EntitySet Name="VTempBankAction" EntityType="db293_ActionTimeDbModel.VTempBankAction" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -15601,6 +15684,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="IsLocation" Type="Boolean" />
           <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsOffice" Type="Boolean" />
+          <Property Name="IsGeneral" Type="Boolean" />
         </EntityType>
         <EntityType Name="Schedule">
           <Key>
@@ -16435,6 +16520,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="IsAutoCompute" Type="Boolean" />
+          <Property Name="ActionTypeID" Type="Int32" />
         </EntityType>
         <EntityType Name="Setcards">
           <Key>
@@ -21511,6 +21597,58 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="BranchName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="OurCompanyID" Type="Int32" />
         </EntityType>
+        <EntityType Name="VTempCashAction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="CashID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
+          <Property Name="OurCompanyID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="DocumentBankOpen">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployee" Type="Int32" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="BankAccountID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="ReferenceID" Type="Int64" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="ActionTypeName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="ActionTypeID" Type="Int32" />
+          <Property Name="ExchangeRate" Type="Double" />
+          <Property Name="SystemAmount" Type="Double" />
+          <Property Name="SystemCurrency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ResultID" Type="Int64" />
+          <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
+        </EntityType>
+        <EntityType Name="VTempBankAction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="OurCompanyID" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -24068,6 +24206,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="ExpenseType">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ExpenseType">
               <MappingFragment StoreEntitySet="ExpenseType">
+                <ScalarProperty Name="IsGeneral" ColumnName="IsGeneral" />
+                <ScalarProperty Name="IsOffice" ColumnName="IsOffice" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="SortBy" ColumnName="SortBy" />
                 <ScalarProperty Name="IsLocation" ColumnName="IsLocation" />
@@ -24881,6 +25021,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="SalaryCategory">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.SalaryCategory">
               <MappingFragment StoreEntitySet="SalaryCategory">
+                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
                 <ScalarProperty Name="IsAutoCompute" ColumnName="IsAutoCompute" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="SortBy" ColumnName="SortBy" />
@@ -29742,6 +29883,61 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="MergeTicketSale" FunctionName="db293_ActionTimeDbModel.Store.MergeTicketSale" />
+          <EntitySetMapping Name="VTempCashAction">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VTempCashAction">
+              <MappingFragment StoreEntitySet="VTempCashAction">
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="CashID" ColumnName="CashID" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DocumentBankOpen">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentBankOpen">
+              <MappingFragment StoreEntitySet="DocumentBankOpen">
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
+                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="SystemCurrency" ColumnName="SystemCurrency" />
+                <ScalarProperty Name="SystemAmount" ColumnName="SystemAmount" />
+                <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
+                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
+                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ReferenceID" ColumnName="ReferenceID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="BankAccountID" ColumnName="BankAccountID" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VTempBankAction">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VTempBankAction">
+              <MappingFragment StoreEntitySet="VTempBankAction">
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

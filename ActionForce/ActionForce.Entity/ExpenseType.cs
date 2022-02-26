@@ -19,5 +19,7 @@ namespace ActionForce.Entity
         public Nullable<bool> IsLocation { get; set; }
         public string SortBy { get; set; }
         public Nullable<bool> IsActive { get; set; }
+        public Nullable<bool> IsOffice { get; set; }
+        public Nullable<bool> IsGeneral { get; set; }
     }
 }

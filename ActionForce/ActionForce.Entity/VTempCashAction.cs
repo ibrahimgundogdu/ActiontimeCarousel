@@ -12,14 +12,14 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class SalaryCategory
+    public partial class VTempCashAction
     {
-        public int ID { get; set; }
-        public Nullable<int> ParentID { get; set; }
-        public string CategoryName { get; set; }
-        public string SortBy { get; set; }
-        public Nullable<bool> IsActive { get; set; }
-        public Nullable<bool> IsAutoCompute { get; set; }
-        public Nullable<int> ActionTypeID { get; set; }
+        public long Id { get; set; }
+        public Nullable<int> CashID { get; set; }
+        public Nullable<int> LocationID { get; set; }
+        public Nullable<double> Amount { get; set; }
+        public string Currency { get; set; }
+        public string LocationFullName { get; set; }
+        public Nullable<int> OurCompanyID { get; set; }
     }
 }
