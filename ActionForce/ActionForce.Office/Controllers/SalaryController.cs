@@ -4881,8 +4881,116 @@ namespace ActionForce.Office.Controllers
 
         }
 
+        //AddEmployeeFoodcardPayment
+        [AllowAnonymous]
+        public ActionResult AddEmployeeFoodcardPayment(Guid? id)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+            model.Result = new Result() { InfoKeyList = new List<InfoKey>() };
 
 
+            var allowedempids = new int[] { 1, 19, 3921, 129, 4679, 4038, 396, 4147 }.ToList();
+
+            if (!allowedempids.Contains(model.Authentication.ActionEmployee.EmployeeID))
+            {
+                return RedirectToAction("Index");
+            }
+
+            if (id == null)
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+            model.SalaryPeriod = Db.VSalaryPeriod.FirstOrDefault(x => x.UID == id);
+
+            if (model.SalaryPeriod == null)
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+            var dateEnd = model.SalaryPeriod.DateEnd?.Date;
+
+            var uid = Guid.NewGuid();
+            var exchange = OfficeHelper.GetExchange(dateEnd.Value);
+
+            var periodComputes = Db.SalaryPeriodCompute.Where(x => x.SalaryPeriodID == model.SalaryPeriod.ID && x.AddedEmployeeCashAction != true).ToList();
+
+
+            if (periodComputes != null && periodComputes.Count > 0)
+            {
+                foreach (var item in periodComputes)
+                {
+                    var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == item.EmployeeID);
+                    var cash = OfficeHelper.GetCash(80, item.Currency);
+
+                    if (item.FoodCardPaymentAmount < 0)
+                    {
+                        employee.LocationID = employee.LocationID ?? 131;
+                        var location = Db.Location.FirstOrDefault(x => x.LocationID == employee.LocationID);
+
+                        SalaryPayment payment = new SalaryPayment();
+
+                        payment.ActinTypeID = 38;
+                        payment.ActionTypeName = "Yemek Kartı Ödemesi";
+                        payment.Currency = item.Currency;
+                        payment.Description = string.Empty;
+                        payment.DocumentDate = dateEnd;
+                        payment.EmployeeID = item.EmployeeID.Value;
+                        payment.EnvironmentID = 2;
+                        payment.LocationID = employee.LocationID.Value;
+                        payment.Amount = -1 * item.FoodCardPaymentAmount.Value;
+                        payment.UID = item.UID.Value;
+                        payment.TimeZone = location.Timezone;
+                        payment.OurCompanyID = location.OurCompanyID;
+                        payment.ExchangeRate = payment.Currency == "USD" ? exchange.USDA.Value : payment.Currency == "EUR" ? exchange.EURA.Value : 1;
+                        payment.FromBankID = 1;
+                        payment.CategoryID = 8;
+                        payment.FromCashID = cash.ID;
+                        payment.ReferanceID = item.ID;
+
+                        DocumentManager documentManager = new DocumentManager();
+                        var addresult = new Result<DocumentSalaryPayment>();
+
+                        addresult = documentManager.AddFoodcardPayment(payment, model.Authentication);
+
+                        if (addresult.IsSuccess == true)
+                        {
+                            item.AddedEmployeeCashAction = true;
+                            Db.SaveChanges();
+                        }
+
+                        model.Result.IsSuccess = addresult.IsSuccess;
+                        model.Result.Message = addresult.Message;
+                        model.Result.InfoKeyList.Add(new InfoKey() { Name = $"{employee.FullName}", Message = model.Result.Message, IsSuccess = true });
+                    }
+                    else
+                    {
+                        model.Result.IsSuccess = false;
+                        model.Result.Message = $"Tutar 0'dan büyük olmalıdır.";
+                        model.Result.InfoKeyList.Add(new InfoKey() { Name = $"{employee.FullName}", Message = model.Result.Message, IsSuccess = false });
+
+                    }
+
+
+                }
+
+
+
+                TempData["Result"] = model.Result;
+
+                return RedirectToAction("DetailSalaryPeriod", new { id = model.SalaryPeriod.UID });
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Ödeme listesi boş";
+
+                TempData["Result"] = model.Result;
+
+                return RedirectToAction("DetailSalaryPeriod", new { id = model.SalaryPeriod.UID });
+            }
+
+        }
 
 
 

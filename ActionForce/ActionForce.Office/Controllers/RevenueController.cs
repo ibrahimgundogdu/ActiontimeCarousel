@@ -686,53 +686,60 @@ namespace ActionForce.Office.Controllers
 
                         foreach (var item in datalist)
                         {
-                            var lastParam = Db.LocationParam.Where(x => x.LocationID == item.LocationID && x.TypeID == 5 && x.DateStart <= item.Baslangic).OrderByDescending(x => x.DateStart).FirstOrDefault();
-                            if (lastParam != null)
-                            {
-                                lastParam.DateFinish = item.Baslangic;
-                                Db.SaveChanges();
-                            }
+                            var location = Db.Location.FirstOrDefault(x => x.LocationID == item.LocationID);
 
-                            try
+                            if (item.Tutar > 0)
                             {
-                                var location = Db.Location.FirstOrDefault(x => x.LocationID == item.LocationID);
-                               
-
-                                if (location != null)
+                                var lastParam = Db.LocationParam.Where(x => x.LocationID == item.LocationID && x.TypeID == 5 && x.DateStart <= item.Baslangic).OrderByDescending(x => x.DateStart).FirstOrDefault();
+                                if (lastParam != null)
                                 {
-
-                                    LocationParam newparam = new LocationParam();
-
-                                    newparam.LocationID = item.LocationID;
-                                    newparam.DateStart = item.Baslangic;
-                                    newparam.DateFinish = item.Bitis;
-                                    newparam.TypeID = 5;
-                                    newparam.TypeName = "Rent";
-                                    newparam.Total = item.Tutar;
-                                    newparam.Rate = null;
-                                    newparam.Money = item.Birim;
-                                    newparam.Calculate = null;
-                                    newparam.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
-                                    newparam.RecordDate = DateTime.UtcNow.AddHours(3);
-                                    newparam.RecordIP = OfficeHelper.GetIPAddress();
-                                    newparam.UpdateDate = null;
-                                    newparam.UpdateEmployeeID = null;
-                                    newparam.UpdateIP = null;
-
-                                    paramList.Add(newparam);
-
-                                    model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = true, Name = $"{location.LocationFullName}", Message = $"Kira Bilgisi Eklendi" });
+                                    lastParam.DateFinish = item.Baslangic;
+                                    Db.SaveChanges();
                                 }
-                            }
-                            catch (DbEntityValidationException ex)
-                            {
-                                foreach (var entityValidationErrors in ex.EntityValidationErrors)
+
+                                try
                                 {
-                                    foreach (var validationError in entityValidationErrors.ValidationErrors)
+
+                                    if (location != null)
                                     {
-                                        model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = false, Name = validationError.PropertyName, Message = validationError.ErrorMessage });
+
+                                        LocationParam newparam = new LocationParam();
+
+                                        newparam.LocationID = item.LocationID;
+                                        newparam.DateStart = item.Baslangic;
+                                        newparam.DateFinish = item.Bitis;
+                                        newparam.TypeID = 5;
+                                        newparam.TypeName = "Rent";
+                                        newparam.Total = item.Tutar;
+                                        newparam.Rate = null;
+                                        newparam.Money = item.Birim;
+                                        newparam.Calculate = null;
+                                        newparam.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                                        newparam.RecordDate = DateTime.UtcNow.AddHours(3);
+                                        newparam.RecordIP = OfficeHelper.GetIPAddress();
+                                        newparam.UpdateDate = null;
+                                        newparam.UpdateEmployeeID = null;
+                                        newparam.UpdateIP = null;
+
+                                        paramList.Add(newparam);
+
+                                        model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = true, Name = $"{location.LocationFullName}", Message = $"Kira Bilgisi Eklendi" });
                                     }
                                 }
+                                catch (DbEntityValidationException ex)
+                                {
+                                    foreach (var entityValidationErrors in ex.EntityValidationErrors)
+                                    {
+                                        foreach (var validationError in entityValidationErrors.ValidationErrors)
+                                        {
+                                            model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = false, Name = validationError.PropertyName, Message = validationError.ErrorMessage });
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = false, Name = $"{location.LocationFullName}", Message = $"Kira tutarı 0 dan büyük olmalı" });
                             }
                         }
 
