@@ -909,7 +909,7 @@ namespace ActionForce.Office.Controllers
             model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.CurrentEmployee = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.Filters.EmployeeID);
 
-            model.EmployeeActionList = Db.VEmployeeCashActions.Where(x => x.EmployeeID == model.Filters.EmployeeID && x.ProcessDate >= model.Filters.DateBegin && x.ProcessDate <= model.Filters.DateEnd).OrderBy(x => x.ProcessDate).ToList();
+            model.EmployeeActionList = Db.VEmployeeCashActions.Where(x => x.EmployeeID == model.Filters.EmployeeID && x.ProcessDate >= model.Filters.DateBegin && x.ProcessDate <= model.Filters.DateEnd).OrderBy(x => x.ProcessDate).ThenBy(x=> x.RecordDate).ToList();
 
             var balanceData = Db.VEmployeeCashActions.Where(x => x.EmployeeID == model.Filters.EmployeeID && x.ProcessDate < model.Filters.DateBegin).ToList();
             if (balanceData != null && balanceData.Count > 0)
@@ -1866,6 +1866,7 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("DetailSalaryPeriod", new { id });
         }
 
+        
         [AllowAnonymous]
         public ActionResult AddDataPeriodCost(Guid? id)
         {
@@ -1931,7 +1932,6 @@ namespace ActionForce.Office.Controllers
 
             return RedirectToAction("DetailSalaryPeriod", new { id = uid });
         }
-
 
         [AllowAnonymous]
         public ActionResult SalaryPeriods(int? GroupID, int? StatusID, int? Year)
@@ -3118,7 +3118,6 @@ namespace ActionForce.Office.Controllers
 
             return File(pathToExcelFile, "application/vnd.ms-excel", FileName);
         }
-
 
         public bool CreateExcelEarn(string FileName, List<SalaryPeriodCompute> SalaryRows, short SalaryPeriodGroupType)  // SalaryPeriodGroupType; 1 maaş, 2 setcard
         {
@@ -4764,7 +4763,123 @@ namespace ActionForce.Office.Controllers
         }
 
 
+        [AllowAnonymous]
+        public ActionResult AddEmployeeSalaryPayment(Guid? id)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+            model.Result = new Result() { InfoKeyList = new List<InfoKey>()};
 
+
+            var allowedempids = new int[] { 1, 19, 3921, 129, 4679, 4038, 396, 4147 }.ToList();
+
+            if (!allowedempids.Contains(model.Authentication.ActionEmployee.EmployeeID))
+            {
+                return RedirectToAction("Index");
+            }
+
+            if (id == null)
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+            model.SalaryPeriod = Db.VSalaryPeriod.FirstOrDefault(x => x.UID == id);
+
+            if (model.SalaryPeriod == null)
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+            var dateEnd = model.SalaryPeriod.DateEnd?.Date;
+
+            var uid = Guid.NewGuid();
+            var exchange = OfficeHelper.GetExchange(dateEnd.Value);
+
+            var periodComputes = Db.SalaryPeriodCompute.Where(x => x.SalaryPeriodID == model.SalaryPeriod.ID && x.AddedEmployeeCashAction != true).ToList();
+
+
+            if (periodComputes != null && periodComputes.Count > 0)
+            {
+                foreach (var item in periodComputes)
+                {
+                    var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == item.EmployeeID);
+                    var cash = OfficeHelper.GetCash(80, item.Currency);
+
+                    if (item.BankPaymentAmount < 0 || item.ManuelPaymentAmount < 0)
+                    {
+                        employee.LocationID = employee.LocationID ?? 131;
+                        var location = Db.Location.FirstOrDefault(x => x.LocationID == employee.LocationID);
+
+                        SalaryPayment payment = new SalaryPayment();
+
+                        payment.ActinTypeID = 31;
+                        payment.ActionTypeName = "Maaş Ödemesi";
+                        payment.Currency = item.Currency;
+                        payment.Description = string.Empty;
+                        payment.DocumentDate = dateEnd;
+                        payment.EmployeeID = item.EmployeeID.Value;
+                        payment.EnvironmentID = 2;
+                        payment.LocationID = employee.LocationID.Value;
+                        payment.Amount = -1 * (item.BankPaymentAmount.Value < 0 ? item.BankPaymentAmount.Value : item.ManuelPaymentAmount.Value);
+                        payment.UID = item.UID.Value;
+                        payment.TimeZone = location.Timezone;
+                        payment.OurCompanyID = location.OurCompanyID;
+                        payment.ExchangeRate = payment.Currency == "USD" ? exchange.USDA.Value : payment.Currency == "EUR" ? exchange.EURA.Value : 1;
+                        payment.FromBankID = 1;
+                        payment.CategoryID = 8;
+                        payment.FromCashID = cash.ID;
+                        payment.ReferanceID = item.ID;
+
+                        DocumentManager documentManager = new DocumentManager();
+                        var addresult = new Result<DocumentSalaryPayment>();
+
+                        if (item.BankPaymentAmount < 0 && item.ManuelPaymentAmount == 0)
+                        {
+                            addresult = documentManager.AddSalaryBankPayment(payment, model.Authentication);
+                        }
+                        else if (item.BankPaymentAmount == 0 && item.ManuelPaymentAmount < 0)
+                        {
+                            addresult = documentManager.AddSalaryOtherPayment(payment, model.Authentication);
+
+                        }
+
+                        if (addresult.IsSuccess == true)
+                        {
+                            item.AddedEmployeeCashAction = true;
+                            Db.SaveChanges();
+                        }
+
+                        model.Result.IsSuccess = addresult.IsSuccess;
+                        model.Result.Message = addresult.Message;
+                        model.Result.InfoKeyList.Add(new InfoKey() { Name = $"{employee.FullName}", Message = model.Result.Message, IsSuccess = true });
+                    }
+                    else
+                    {
+                        model.Result.IsSuccess = false;
+                        model.Result.Message = $"Tutar 0'dan büyük olmalıdır.";
+                        model.Result.InfoKeyList.Add(new InfoKey() { Name = $"{employee.FullName}", Message = model.Result.Message, IsSuccess = false });
+
+                    }
+
+
+                }
+
+                
+
+                TempData["Result"] = model.Result;
+
+                return RedirectToAction("DetailSalaryPeriod", new { id = model.SalaryPeriod.UID });
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Ödeme listesi boş";
+
+                TempData["Result"] = model.Result;
+
+                return RedirectToAction("DetailSalaryPeriod", new { id = model.SalaryPeriod.UID });
+            }
+
+        }
 
 
 

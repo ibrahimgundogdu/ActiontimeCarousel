@@ -301,6 +301,8 @@ namespace ActionForce.Office.Controllers
                     fromcashID = cash.ID;
                 }
 
+
+
                 var docDate = cashsalary.DocumentDate;
 
 
@@ -373,6 +375,38 @@ namespace ActionForce.Office.Controllers
                 }
 
                 Db.SaveChanges();
+            }
+
+
+            return View(model);
+        }
+
+
+        [AllowAnonymous]
+        public ActionResult BankTransferRepair()
+        {
+            ComputeControlModel model = new ComputeControlModel();
+            var statusids = new int[] { 3, 4, 5, 6 }.ToArray();
+            var startdate = new DateTime(2022, 1, 1);
+            var tempdocument = Db.TempDocumentBankTransfer.Where(x => x.IsSuccess == false).ToList();
+
+            foreach (var item in tempdocument)
+            {
+
+                var result = ChangeTransferStatus(item.UID, item.StatusID);
+
+                if (result.IsSuccess == true)
+                {
+                    item.IsSuccess = true;
+                    item.Message = result.Message;
+                }
+                else
+                {
+                    item.Message = result.Message;
+                }
+
+                Db.SaveChanges();
+
             }
 
 

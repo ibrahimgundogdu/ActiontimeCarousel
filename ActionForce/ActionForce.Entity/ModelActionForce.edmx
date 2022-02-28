@@ -3591,6 +3591,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="TesvikDiscount" Type="float" />
           <Property Name="SSKDayCount" Type="int" />
           <Property Name="CostDate" Type="datetime" />
+          <Property Name="AddedEmployeeCashAction" Type="bit" />
         </EntityType>
         <EntityType Name="SalaryPeriodComputeActions">
           <Key>
@@ -21517,6 +21518,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="TesvikDiscount" Type="Double" />
           <Property Name="SSKDayCount" Type="Int32" />
           <Property Name="Tahakkuk" Type="Double" />
+          <Property Name="AddedEmployeeCashAction" Type="Boolean" />
         </EntityType>
         <EntityType Name="HCardActions">
           <Key>
@@ -29744,6 +29746,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="SalaryPeriodCompute">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.SalaryPeriodCompute">
               <MappingFragment StoreEntitySet="SalaryPeriodCompute">
+                <ScalarProperty Name="AddedEmployeeCashAction" ColumnName="AddedEmployeeCashAction" />
                 <ScalarProperty Name="Tahakkuk" ColumnName="Tahakkuk" />
                 <ScalarProperty Name="SSKDayCount" ColumnName="SSKDayCount" />
                 <ScalarProperty Name="TesvikDiscount" ColumnName="TesvikDiscount" />
