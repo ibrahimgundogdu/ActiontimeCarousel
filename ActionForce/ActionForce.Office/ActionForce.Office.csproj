@@ -2360,6 +2360,7 @@
     <Compile Include="Controllers\DefinitionController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\ExpenseController.cs" />
     <Compile Include="Controllers\FinanceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
@@ -2387,6 +2388,7 @@
     <Compile Include="Models\AuthenticationModel.cs" />
     <Compile Include="Models\BankActionModel.cs" />
     <Compile Include="Models\ControlModels\ComputeControlModel.cs" />
+    <Compile Include="Models\ControlModels\ExpenseControlModel.cs" />
     <Compile Include="Models\ControlModels\InventoryControlModel.cs" />
     <Compile Include="Models\ControlModels\MallControlModel.cs" />
     <Compile Include="Models\ControlModels\RevenueControlModel.cs" />
@@ -2835,6 +2837,7 @@
     <Content Include="Views\Salary\ImportFoodcardPayment.cshtml" />
     <Content Include="Views\Salary\ImportSalaryCost.cshtml" />
     <Content Include="Views\Revenue\ImportParameter.cshtml" />
+    <Content Include="Views\Expense\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

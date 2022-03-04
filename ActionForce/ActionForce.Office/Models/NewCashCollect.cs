@@ -489,6 +489,7 @@ namespace ActionForce.Office
         public string Mobile { get; set; }
         public string IdentityType { get; set; }
         public string IdentityNumber { get; set; }
+        public string FoodCardNumber { get; set; }
         public string Mobile2 { get; set; }
         public string Whatsapp { get; set; }
         public string Username { get; set; }

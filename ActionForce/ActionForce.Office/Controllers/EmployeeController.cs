@@ -454,7 +454,11 @@ namespace ActionForce.Office.Controllers
                         RoleID = isEmployee.RoleID,
                         BankID = isEmployee.BankID,
                         IBAN = isEmployee.IBAN,
-                        SalaryPaymentTypeID = isEmployee.SalaryPaymentTypeID
+                        SalaryPaymentTypeID = isEmployee.SalaryPaymentTypeID,
+                        FoodCardNumber = isEmployee.FoodCardNumber,
+                        LocationID = isEmployee.LocationID,
+                        SGKBranch = isEmployee.SGKBranch
+                        
                     };
 
                     isEmployee.AreaCategoryID = employee.AreaCategoryID;
@@ -475,6 +479,7 @@ namespace ActionForce.Office.Controllers
                     isEmployee.UpdateIP = OfficeHelper.GetIPAddress();
                     isEmployee.IdentityType = employee.IdentityType;
                     isEmployee.IdentityNumber = employee.IdentityNumber;
+                    isEmployee.FoodCardNumber = employee.FoodCardNumber;
                     isEmployee.Mobile = employee.Mobile.Replace("(", "").Replace(")", "").Replace(" ", "");
                     isEmployee.FullName = employee.FullName;
                     isEmployee.IsActive = isActive;

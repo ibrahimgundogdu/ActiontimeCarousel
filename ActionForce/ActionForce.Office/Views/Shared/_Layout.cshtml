@@ -251,6 +251,7 @@
                     <a href="/Revenue" class="nav-link"><i data-feather="cpu"></i> <span>M. Hesaplamalar</span></a>
                     <ul>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Compute" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Compute/Index">Hakediş Hesaplamaları</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Compute" && this.ViewContext.RouteData.Values["action"].ToString() == "DocumentExpense" ? "class=active" : "")><a href="/Compute/DocumentExpense">Masraf Yönetimi</a></li>
 
                     </ul>
                 </li>
@@ -262,9 +263,9 @@
                     <li class="nav-item with-sub  @(this.ViewContext.RouteData.Values["controller"].ToString() == "Revenue" ? "show" : "")">
                         <a href="/Revenue" class="nav-link"><i data-feather="briefcase"></i> <span>R. Hasılat</span></a>
                         <ul>
-                            
+
                             <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Revenue" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Revenue">Hasılat Raporu</a></li>
-                            
+
                             <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Revenue" && this.ViewContext.RouteData.Values["action"].ToString() == "Parameters" ? "class=active" : "")><a href="/Revenue/Parameters">Parametreler</a></li>
 
                         </ul>

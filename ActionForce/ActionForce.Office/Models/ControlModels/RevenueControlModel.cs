@@ -10,6 +10,8 @@ namespace ActionForce.Office
     {
         public Result Result { get; set; }
         public int WeekYear { get; set; }
+        public int Year { get; set; }
+        public int Month { get; set; }
         public int WeekNumber { get; set; }
         public IEnumerable<Location> Locations { get; set; }
         public VRevenue Revenue { get; set; }
@@ -32,7 +34,11 @@ namespace ActionForce.Office
         public IEnumerable<LocationPeriods> PeriodParameters { get; set; }
         public IEnumerable<ActionType> ParameterTypes { get; set; }
 
+        public FilterModel Filters { get; set; }
         public CounterModel Counters { get; set; }
+
+       
+
 
     }
 
@@ -70,4 +76,5 @@ namespace ActionForce.Office
         public int? WeekNumberBegin { get; set; }
         public IEnumerable<VRevenue> Revenues { get; set; }
     }
+
 }
