@@ -154,8 +154,8 @@
                                         <td class="p-0"><input id="DistributedRate@(item.ID)" type="text" class="form-control font-weight-bold tx-15 text-right money4" autocomplete="off" min="0" data-itemid="@(item.ID)" onchange="ComputeRate(@(item.ID))" value="@(item.DistributedRate?.ToString("N4"))"></td>
                                         <td class="p-0"><input id="DistributedAmount@(item.ID)" type="text" class="form-control font-weight-bold tx-15 text-right money4" autocomplete="off" min="0" data-itemid="@(item.ID)" onchange="ComputeAmount(@(item.ID))" value="@(item.DistributedAmount?.ToString("N4"))"></td>
                                         <td>@(item.Currency)</td>
-                                        <td>@(item.UpdateDate != null ? item.UpdateDate : item.RecordDate)</td>
-                                        <td>@(item.UpdaterFullName != null ? item.UpdaterFullName : item.RecorderFullName)</td>
+                                        <td id="UpdateDate@(item.ID)">@(item.UpdateDate != null ? item.UpdateDate : item.RecordDate)</td>
+                                        <td id="UpdaterFullName@(item.ID)">@(item.UpdaterFullName != null ? item.UpdaterFullName : item.RecorderFullName)</td>
                                     </tr>
                                 }
                             </tbody>
@@ -172,6 +172,23 @@
                                     <td class="font-weight-bold tx-15 text-right"> % @((100 - Model.ExpenseDocumentCharts.Sum(x=> x.DistributedRate))?.ToString("N4"))</td>
                                     <td class="font-weight-bold tx-15 text-right"> @((Model.ExpenseDocument.DistributionAmount - Model.ExpenseDocumentCharts.Sum(x=> x.DistributedAmount))?.ToString("N4"))</td>
                                     <td>@(Model.ExpenseDocument.Currency)</td>
+                                    <td colspan="2"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="text-right"></td>
+                                    <td class="font-weight-bold tx-15 text-right p-1">
+                                        @if (Model.ExpenseDocument.StatusID == 0)
+                                        {
+                                            <a href="/Expense/RemoveCost/@(Model.ExpenseDocument.UID)" class="btn btn-danger btn-block font-weight-bold" onclick="return confirm('Maliyet Dağılımını Kaldırmak İstediğinize Emin misiniz?')"> <i data-feather="x"></i> &nbsp;&nbsp;&nbsp; Maliyet Dağılımını Kaldır</a>
+                                        }
+                                    </td>
+                                    <td class="font-weight-bold tx-15 text-right p-1">
+                                        @if ((Model.ExpenseDocument.DistributionAmount - Model.ExpenseDocumentCharts.Sum(x => x.DistributedAmount)) <= 0.9 && Model.ExpenseDocument.StatusID == 0)
+                                        {
+                                            <a href="/Expense/CreateCost/@(Model.ExpenseDocument.UID)" class="btn btn-brand-01 btn-block font-weight-bold" onclick="return confirm('Maliyet Dağılımını Oluşturmak İstediğinize Emin misiniz?')"> <i data-feather="anchor"></i> &nbsp;&nbsp;&nbsp; Maliyet Dağılımını Oluştur</a>
+                                        }
+                                    </td>
+                                    <td></td>
                                     <td colspan="2"></td>
                                 </tr>
                             </tfoot>
@@ -248,8 +265,23 @@
 
         function ComputeAmount(id) {
 
-             
-            console.log(id);
+            var amount = $('#DistributedAmount' + id).val().replace('.', '').replace(',', '.');
+            var totalamount = @(Model.ExpenseDocument.DistributionAmount);
+            var rate = (parseFloat(amount) / parseFloat(totalamount) * 100) || 0.0000;
+
+            $("#DistributedRate" + id).val(rate.toFixed(4).toString());
+
+            $.ajax({
+                method: "GET",
+                url: "/Expense/SetExpenseChart",
+                contentType: 'application/json',
+                data: { id, amount: parseFloat(amount) }
+            }).done(function (data) {
+
+                $("#UpdateDate" + data.ID).html(data.UpdateDate);
+                $("#UpdaterFullName" + data.ID).html(data.UpdateEmployee);
+                console.log(data);
+            });
         };
 
         function ComputeRate(id) {
@@ -257,7 +289,18 @@
         };
 
 
-
+        //function SumExchangeRate() {
+        //    var amount = $("#Amount").val().replace('.', '').replace(',', '.');
+        //    var toamount = $("#ToAmount").val().replace('.', '').replace(',', '.');
+        //    var rate = parseFloat(toamount) / parseFloat(amount) || 0.0000;
+        //    $("#SaleExchangeRate").val(rate.toFixed(4).toString());
+        //};
+        //function SumExchangeToAmount() {
+        //    var amount = $("#Amount").val().replace('.', '').replace(',', '.');
+        //    var rate = $("#SaleExchangeRate").val().replace('.', '').replace(',', '.');
+        //    var toamount = parseFloat(amount) * parseFloat(rate) || 0.00;
+        //    $("#ToAmount").val(toamount.toFixed(2).toString());
+        //};
 
 
     </script>

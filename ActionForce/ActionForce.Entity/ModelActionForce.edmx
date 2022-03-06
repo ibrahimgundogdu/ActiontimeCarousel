@@ -2374,14 +2374,18 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           </Key>
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="OurCompanyID" Type="int" />
-          <Property Name="LocationID" Type="int" />
           <Property Name="ExpenseCenterID" Type="smallint" />
-          <Property Name="ExpenseItemID" Type="int" />
+          <Property Name="LocationID" Type="int" />
           <Property Name="DocumentID" Type="int" />
+          <Property Name="DocumentNumber" Type="nvarchar" MaxLength="16" />
+          <Property Name="ExpenseGroupID" Type="smallint" />
+          <Property Name="ExpenseItemID" Type="int" />
           <Property Name="ExpenseDescription" Type="nvarchar" MaxLength="250" />
+          <Property Name="ExpensePeriodCode" Type="nvarchar" MaxLength="8" />
           <Property Name="ExpensePeriod" Type="date" />
           <Property Name="ExpenseYear" Type="int" />
           <Property Name="ExpenseMonth" Type="int" />
+          <Property Name="Total" Type="float" />
           <Property Name="Rate" Type="float" />
           <Property Name="Amount" Type="float" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
@@ -21968,6 +21972,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="RecordEmployeeID" Type="Int32" />
           <Property Name="RecordIP" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="ReferenceUID" Type="Guid" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="ExpenseGroupID" Type="Int16" />
+          <Property Name="ExpensePeriodCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="Total" Type="Double" />
         </EntityType>
         <EntityType Name="ExpenseCenterItems">
           <Key>
@@ -30434,6 +30442,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="ExpenseActions">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ExpenseActions">
               <MappingFragment StoreEntitySet="ExpenseActions">
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="ExpensePeriodCode" ColumnName="ExpensePeriodCode" />
+                <ScalarProperty Name="ExpenseGroupID" ColumnName="ExpenseGroupID" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
                 <ScalarProperty Name="ReferenceUID" ColumnName="ReferenceUID" />
                 <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
                 <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />

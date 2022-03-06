@@ -2397,6 +2397,7 @@
     <Compile Include="Models\DataModels\BankDataModel.cs" />
     <Compile Include="Models\DataModels\EmployeeModel.cs" />
     <Compile Include="Models\DataModels\ExcelSalaryPeriodEarn.cs" />
+    <Compile Include="Models\DataModels\ExpenseChartUpdateModel.cs" />
     <Compile Include="Models\DataModels\InfoKey.cs" />
     <Compile Include="Models\DataModels\LocationDataModel.cs" />
     <Compile Include="Models\DataModels\PosTerminalDataModel.cs" />

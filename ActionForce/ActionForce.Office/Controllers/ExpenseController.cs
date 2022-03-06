@@ -397,7 +397,7 @@ namespace ActionForce.Office.Controllers
             foreach (var item in charts)
             {
                 item.DistributedAmount = (item.DistributionAmount / (double)charts.Count);
-                item.DistributedRate = (1 / (double)charts.Count)*100;
+                item.DistributedRate = (1 / (double)charts.Count) * 100;
                 item.UpdateDate = DateTime.UtcNow.AddHours(3);
                 item.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
                 item.UpdateIP = OfficeHelper.GetIPAddress();
@@ -408,5 +408,42 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("Chart", "Expense", new { id });
 
         }
+
+        //SetExpenseChart
+        [AllowAnonymous]
+        public JsonResult SetExpenseChart(long id, float amount)
+        {
+            ExpenseControlModel model = new ExpenseControlModel();
+
+            ExpenseChartUpdateModel jmodel = new ExpenseChartUpdateModel();
+
+            var expenseDocumentChart = Db.ExpenseDocumentChart.FirstOrDefault(x => x.ID == id);
+
+            if (expenseDocumentChart != null && amount > 0)
+            {
+                expenseDocumentChart.DistributedAmount = amount;
+                expenseDocumentChart.DistributedRate = (expenseDocumentChart.DistributedAmount / expenseDocumentChart.DistributionAmount) * 100;
+                expenseDocumentChart.UpdateDate = DateTime.UtcNow.AddHours(3);
+                expenseDocumentChart.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                expenseDocumentChart.UpdateIP = OfficeHelper.GetIPAddress();
+                Db.SaveChanges();
+            }
+
+            var expenseDocumentCharts = Db.ExpenseDocumentChart.Where(x => x.ExpenseDocumentID == expenseDocumentChart.ExpenseDocumentID).ToList();
+
+            jmodel.ID = id;
+            jmodel.Rate = expenseDocumentChart.DistributedRate;
+            jmodel.Amount = expenseDocumentChart.DistributedAmount;
+            jmodel.UpdateDate = expenseDocumentChart.UpdateDate.ToString();
+            jmodel.UpdateEmployee = model.Authentication.ActionEmployee.FullName;
+            jmodel.DistAmount = expenseDocumentCharts.Sum(x => x.DistributedAmount);
+            jmodel.DistRate = expenseDocumentCharts.Sum(x => x.DistributedRate);
+            jmodel.BalanceAmount = (expenseDocumentChart.DistributionAmount - jmodel.DistAmount);
+            jmodel.BalanceRate = (100 - jmodel.DistRate);
+
+            return Json(jmodel, JsonRequestBehavior.AllowGet);
+
+        }
+
     }
 }

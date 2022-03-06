@@ -31,5 +31,9 @@ namespace ActionForce.Entity
         public Nullable<int> RecordEmployeeID { get; set; }
         public string RecordIP { get; set; }
         public Nullable<System.Guid> ReferenceUID { get; set; }
+        public string DocumentNumber { get; set; }
+        public Nullable<short> ExpenseGroupID { get; set; }
+        public string ExpensePeriodCode { get; set; }
+        public Nullable<double> Total { get; set; }
     }
 }
