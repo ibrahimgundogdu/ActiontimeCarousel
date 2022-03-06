@@ -1,6 +1,7 @@
 ﻿using ActionForce.Entity;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -33,7 +34,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.ExpenseItemID = EIID ?? null;
                 filterModel.ExpenseStatusID = ESID ?? null;
                 filterModel.ExpensePeriodCode = !string.IsNullOrEmpty(EPCD) ? EPCD : string.Empty;
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
+                filterModel.DateBegin = new DateTime(DateTime.Now.Year, 1, 1);
                 filterModel.DateEnd = DateTime.Now.Date;
                 filterModel.FromSearch = false;
                 model.Filters = filterModel;
@@ -77,7 +78,7 @@ namespace ActionForce.Office.Controllers
 
                 if (model.Filters.DateEnd != null)
                 {
-                    expenseDocuments = expenseDocuments.Where(x => x.DocumentDate == model.Filters.DateEnd);
+                    expenseDocuments = expenseDocuments.Where(x => x.DocumentDate <= model.Filters.DateEnd);
                 }
 
                 model.ExpenseDocuments = expenseDocuments.ToList();
@@ -85,8 +86,6 @@ namespace ActionForce.Office.Controllers
 
             return View(model);
 
-
-            return View(model);
         }
 
         [HttpPost]
@@ -99,14 +98,14 @@ namespace ActionForce.Office.Controllers
             model.ExpenseItemID = EIID ?? null;
             model.ExpenseStatusID = ESID ?? null;
             model.ExpensePeriodCode = !string.IsNullOrEmpty(EPCD) ? EPCD : string.Empty;
-            model.DateBegin = DTBG != null ? DTBG : DateTime.Now.AddMonths(-1).Date;
+            model.DateBegin = DTBG != null ? DTBG : new DateTime(DateTime.Now.Year, 1, 1);
             model.DateEnd = DTEN != null ? DTEN : DateTime.Now.Date;
             model.FromSearch = true;
 
             if (DTBG == null)
             {
-                DateTime begin = DateTime.Now.AddMonths(-1).Date;
-                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
+                DateTime begin = DateTime.Now.Date;
+                model.DateBegin = new DateTime(begin.Year, 1, 1);
             }
 
             if (DTEN == null)
@@ -120,7 +119,294 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("Index", "Expense");
         }
 
+        [AllowAnonymous]
+        public ActionResult NewDocument()
+        {
+            ExpenseControlModel model = new ExpenseControlModel();
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result ?? null;
+            }
+
+            model.ExpenseCenters = Db.ExpenseCenter.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.SortBy).ToList();
+            model.ExpenseItems = Db.ExpenseItem.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.SortBy).ToList();
+            model.ExpenseDocumentStatuses = Db.ExpenseDocumentStatus.OrderBy(x => x.SortBy).ToList();
+            model.ExpensePeriods = Db.ExpensePeriod.OrderBy(x => x.DateBegin).ToList();
+            model.ExpenseGroups = Db.ExpenseGroup.ToList();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddExpense(ExpenseFormModel form)
+        {
+            ExpenseControlModel model = new ExpenseControlModel();
+
+            model.Result = new Result();
+
+            if (form != null)
+            {
+                var totalAmount = Convert.ToDouble(form.TotalAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var distAmount = Convert.ToDouble(form.DistributionAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+
+                var document = Db.ExpenseDocument.FirstOrDefault(x => x.ExpenseCenterID == form.ExpenseCenterID && x.ExpenseItemID == form.ExpenseItemID && x.ExpenseGroupID == form.ExpenseGroupID && x.TotalAmount == totalAmount);
+
+                if (document == null)
+                {
+                    document = new ExpenseDocument();
+                    form.UID = Guid.NewGuid();
+
+                    document.UID = form.UID;
+                    document.DocumentNumber = OfficeHelper.GetDocumentNumber(model.Authentication.ActionEmployee.OurCompanyID ?? 2, "EXD");
+                    document.RecordDate = DateTime.UtcNow.AddHours(3);
+                    document.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                    document.RecordIP = OfficeHelper.GetIPAddress();
+                    document.DocumentSource = form.DocumentSource;
+                    document.ExpenseDescription = form.ExpenseDescription;
+                    document.DistributionAmount = distAmount;
+                    document.TotalAmount = totalAmount;
+                    document.ExpenseGroupID = form.ExpenseGroupID;
+                    document.Currency = form.Currency;
+                    document.DocumentDate = form.DocumentDate;
+                    document.ExpenseItemID = form.ExpenseItemID;
+                    document.ExpenseCenterID = form.ExpenseCenterID;
+                    document.ExpensePeriod = form.ExpensePeriod;
+                    document.IsActive = true;
+                    document.StatusID = 0;
+                    document.OurCompanyID = model.Authentication.ActionEmployee.OurCompanyID;
+
+                    if (form.ExpensePeriod != null)
+                    {
+                        document.ExpenseYear = document.ExpensePeriod.Value.Year;
+                        document.ExpenseMonth = document.ExpensePeriod.Value.Month;
+                        document.ExpensePeriodCode = document.ExpenseYear.ToString() + "-" + (document.ExpenseMonth <= 9 ? "0" + document.ExpenseMonth.ToString() : document.ExpenseMonth.ToString());
+                    }
+
+                    Db.ExpenseDocument.Add(document);
+                    Db.SaveChanges();
+
+                    model.Result.IsSuccess = true;
+                    model.Result.Message = "Masraf Dokümanı Eklendi";
+
+                    OfficeHelper.AddApplicationLog("Office", "ExpenseDocument", "Insert", document.ID.ToString(), "Expense", "NewDocument", null, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, document);
+                }
+                else
+                {
+                    model.Result.IsSuccess = false;
+                    model.Result.Message = "Benzer Masraf Dokümanı Bulundu";
+                }
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Form Verileri Gelmedi";
+            }
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("Detail", "Expense", new { id = form.UID });
+        }
 
 
+        [AllowAnonymous]
+        public ActionResult Detail(Guid? id)
+        {
+            ExpenseControlModel model = new ExpenseControlModel();
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result ?? null;
+            }
+
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            model.ExpenseCenters = Db.ExpenseCenter.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.SortBy).ToList();
+            model.ExpenseItems = Db.ExpenseItem.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.SortBy).ToList();
+            model.ExpenseDocumentStatuses = Db.ExpenseDocumentStatus.OrderBy(x => x.SortBy).ToList();
+            model.ExpensePeriods = Db.ExpensePeriod.OrderBy(x => x.DateBegin).ToList();
+            model.ExpenseGroups = Db.ExpenseGroup.ToList();
+            model.ExpenseDocument = Db.VExpenseDocument.FirstOrDefault(x => x.UID == id);
+
+            if (model.ExpenseDocument == null)
+            {
+                TempData["Result"] = model.Result;
+                return RedirectToAction("Index");
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult EditExpense(ExpenseFormModel form)
+        {
+            ExpenseControlModel model = new ExpenseControlModel();
+
+            model.Result = new Result();
+
+            if (form != null)
+            {
+                var document = Db.ExpenseDocument.FirstOrDefault(x => x.ID == form.ExpenseDocumentID);
+
+                if (document != null)
+                {
+                    ExpenseDocument self = new ExpenseDocument()
+                    {
+                        RecordDate = document.RecordDate,
+                        RecordEmployeeID = document.RecordEmployeeID,
+                        RecordIP = document.RecordIP,
+                        IsActive = document.IsActive,
+                        OurCompanyID = document.OurCompanyID,
+                        Currency = document.Currency,
+                        UID = document.UID,
+                        DocumentNumber = document.DocumentNumber,
+                        DistributionAmount = document.DistributionAmount,
+                        DocumentDate = document.DocumentDate,
+                        DocumentSource = document.DocumentSource,
+                        ExpenseCenterID = document.ExpenseCenterID,
+                        ExpenseDescription = document.ExpenseDescription,
+                        ExpenseGroupID = document.ExpenseGroupID,
+                        ExpenseItemID = document.ExpenseItemID,
+                        ExpenseMonth = document.ExpenseMonth,
+                        ExpensePeriod = document.ExpensePeriod,
+                        ExpensePeriodCode = document.ExpensePeriodCode,
+                        ExpenseYear = document.ExpenseYear,
+                        ID = document.ID,
+                        StatusID = document.StatusID,
+                        TotalAmount = document.TotalAmount
+                    };
+
+                    var totalAmount = Convert.ToDouble(form.TotalAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                    var distAmount = Convert.ToDouble(form.DistributionAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+
+                    document.ExpenseDescription = form.ExpenseDescription;
+
+                    if (document.StatusID == 0)
+                    {
+                        document.DistributionAmount = distAmount;
+                        document.TotalAmount = totalAmount;
+                        document.ExpenseGroupID = form.ExpenseGroupID;
+                        document.Currency = form.Currency;
+                        document.DocumentDate = form.DocumentDate;
+                        document.ExpenseItemID = form.ExpenseItemID;
+                        document.ExpenseCenterID = form.ExpenseCenterID;
+                        document.ExpensePeriod = form.ExpensePeriod;
+                        if (form.ExpensePeriod != null)
+                        {
+                            document.ExpenseYear = document.ExpensePeriod.Value.Year;
+                            document.ExpenseMonth = document.ExpensePeriod.Value.Month;
+                            document.ExpensePeriodCode = document.ExpenseYear.ToString() + "-" + (document.ExpenseMonth <= 9 ? "0" + document.ExpenseMonth.ToString() : document.ExpenseMonth.ToString());
+                        }
+                    }
+
+                    Db.SaveChanges();
+
+                    model.Result.IsSuccess = true;
+                    model.Result.Message = "Masraf Dokümanı Güncellendi";
+
+                    var isequal = OfficeHelper.PublicInstancePropertiesEqual<ExpenseDocument>(self, document, OfficeHelper.getIgnorelist());
+                    OfficeHelper.AddApplicationLog("Office", "ExpenseDocument", "Update", document.ID.ToString(), "Expense", "Detail", isequal, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+
+                }
+                else
+                {
+                    model.Result.IsSuccess = false;
+                    model.Result.Message = "Masraf Dokümanı Bulunamadı";
+                }
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Form Verileri Gelmedi";
+            }
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("Detail", "Expense", new { id = form.UID });
+        }
+
+        [AllowAnonymous]
+        public ActionResult Chart(Guid? id)
+        {
+            ExpenseControlModel model = new ExpenseControlModel();
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result ?? null;
+            }
+
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            model.ExpenseCenters = Db.ExpenseCenter.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.SortBy).ToList();
+            model.ExpenseItems = Db.ExpenseItem.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.SortBy).ToList();
+            model.ExpenseDocumentStatuses = Db.ExpenseDocumentStatus.OrderBy(x => x.SortBy).ToList();
+            model.ExpensePeriods = Db.ExpensePeriod.OrderBy(x => x.DateBegin).ToList();
+            model.ExpenseGroups = Db.ExpenseGroup.ToList();
+            model.ExpenseDocument = Db.VExpenseDocument.FirstOrDefault(x => x.UID == id);
+
+            if (model.ExpenseDocument == null)
+            {
+                TempData["Result"] = model.Result;
+                return RedirectToAction("Index");
+            }
+
+            DocumentManager manager = new DocumentManager();
+            model.ExpenseDocumentCharts = manager.GetExpenseDucumentChart(model.ExpenseDocument, model.Authentication);
+
+            return View(model);
+
+        }
+
+        [AllowAnonymous]
+        public ActionResult DistributeEQ(Guid? id)
+        {
+            ExpenseControlModel model = new ExpenseControlModel();
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result ?? null;
+            }
+
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            model.ExpenseDocument = Db.VExpenseDocument.FirstOrDefault(x => x.UID == id);
+
+            if (model.ExpenseDocument == null)
+            {
+                TempData["Result"] = model.Result;
+                return RedirectToAction("Index");
+            }
+
+            DocumentManager manager = new DocumentManager();
+            model.ExpenseDocumentCharts = manager.GetExpenseDucumentChart(model.ExpenseDocument, model.Authentication);
+            var charts = Db.ExpenseDocumentChart.Where(x => x.ExpenseDocumentID == model.ExpenseDocument.ID).ToList();
+
+            foreach (var item in charts)
+            {
+                item.DistributedAmount = (item.DistributionAmount / (double)charts.Count);
+                item.DistributedRate = (1 / (double)charts.Count)*100;
+                item.UpdateDate = DateTime.UtcNow.AddHours(3);
+                item.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                item.UpdateIP = OfficeHelper.GetIPAddress();
+            }
+
+            Db.SaveChanges();
+
+            return RedirectToAction("Chart", "Expense", new { id });
+
+        }
     }
 }

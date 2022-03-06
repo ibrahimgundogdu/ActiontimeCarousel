@@ -21,7 +21,7 @@
         @Html.AntiForgeryToken()
         <div class="form-row align-items-end">
 
-            <div class="form-group col-md-2 d-flex align-items-end">
+            <div class="form-group col-md-3 d-flex align-items-end">
                 <select class="form-control select2" id="ECID" name="ECID">
                     <option value="" label="Gelir/Gider Merkezi Seçiminiz"></option>
                     @foreach (var item in Model.ExpenseCenters.OrderBy(x => x.SortBy))
@@ -51,7 +51,7 @@
                 </select>
             </div>
 
-            <div class="form-group col-md-2 d-flex align-items-end">
+            <div class="form-group col-md-1 d-flex align-items-end">
                 <select class="form-control select2" id="EPCD" name="EPCD">
                     <option value="" label="Dönem"></option>
                     @foreach (var item in Model.ExpensePeriods.OrderBy(x => x.DateBegin))
@@ -70,7 +70,9 @@
             <div class="form-group col-md-1 d-flex align-items-end ">
                 <button class="btn btn-primary btn-block" type="submit" id="btnsearch">Ara</button>
             </div>
-
+            <div class="form-group col-md-1 d-flex align-items-end ">
+                <a href="/Expense/NewDocument" class="btn btn-success btn-block font-weight-bold"> <i data-feather="plus"></i>  Yeni</a>
+            </div>
         </div>
     }
 
@@ -89,11 +91,14 @@
                             <th>M. Kalemi</th>
                             <th>Grubu</th>
                             <th>Dönemi</th>
-                            <th>Tutarı</th>
-                            <th>Dağıtım</th>
-                            <th>₺</th>
+                            <th class="text-right">Tutarı</th>
+                            <th class="text-right">Dağıtım</th>
+                            <th></th>
+                            <th>Durum</th>
                             <th>Kayıt</th>
                             <th>Aktif</th>
+                            <th></th>
+                            <th></th>
 
                         </tr>
                     </thead>
@@ -104,17 +109,20 @@
                             <tr>
 
                                 <td class="tx-sm-13">@(exp.ID)</td>
-                                <td class="tx-sm-13 bold">@(exp.DocumentNumber)</td>
-                                <td class="tx-sm-13 bold">@(exp.DocumentDate.Value.ToString("d"))</td>
+                                <td class="tx-sm-13 font-weight-bold"><a href="/Expense/Detail/@(exp.UID)" target="_blank"> @(exp.DocumentNumber)</a></td>
+                                <td class="tx-sm-13 font-weight-bold">@(exp.DocumentDate.Value.ToString("d"))</td>
                                 <td class="tx-sm-13">@(exp.ExpenseCenterName)</td>
                                 <td class="tx-sm-13">@(exp.ExpenseItemName)</td>
                                 <td class="tx-sm-13">@(exp.ExpenseGroupName)</td>
                                 <td class="tx-sm-13">@(exp.ExpensePeriodCode)</td>
-                                <td class="tx-sm-13">@(exp.TotalAmount?.ToString("N2"))</td>
-                                <td class="tx-sm-13">@(exp.DistributionAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 font-weight-bold text-right">@(exp.TotalAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 font-weight-bold text-right">@(exp.DistributionAmount?.ToString("N2"))</td>
                                 <td class="tx-sm-13">@(exp.Currency)</td>
+                                <td class="tx-sm-13">@(exp.StatusName)</td>
                                 <td class="tx-sm-13">@(exp.RecordDate)</td>
                                 <td class="tx-sm-13">@(exp.IsActive == true ? "Aktif":"Pasif")</td>
+                                <td class="tx-sm-13"><a href="/Expense/Detail/@(exp.UID)" target="_blank"> <i data-feather="file-text"></i></a></td>
+                                <td class="tx-sm-13"><a href="/Expense/Chart/@(exp.UID)" target="_blank"> <i data-feather="list"></i></a></td>
                             </tr>
                         }
 
@@ -194,4 +202,19 @@
 
 
     </script>
+
+
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
 }

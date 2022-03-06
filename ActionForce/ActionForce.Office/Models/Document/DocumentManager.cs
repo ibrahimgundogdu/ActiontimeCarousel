@@ -5530,7 +5530,65 @@ namespace ActionForce.Office
         }
 
 
-        //Location
+        public List<VExpenseDocumentChart> GetExpenseDucumentChart(VExpenseDocument document, AuthenticationModel authentication)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            List<VExpenseDocumentChart> expenseChartList = new List<VExpenseDocumentChart>();
+            List<ExpenseCenter> expenseCenterList = new List<ExpenseCenter>();
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var expenceCenter = Db.ExpenseCenter.FirstOrDefault(x => x.ID == document.ExpenseCenterID);
+                if (expenceCenter != null)
+                {
+                    if (expenceCenter.ProfitCenter == true && document.ExpenseGroupID == 1)  // Merkez bir gelir merkezi ise  ve doküman da lokasyon türünde ise sadece kendisine dağıtım olacak değil ise tüm gelir merkezlerine
+                    {
+                        expenseCenterList = Db.ExpenseCenter.Where(x => x.OurCompanyID == document.OurCompanyID && x.IsActive == true && x.ProfitCenter == true && x.ID == expenceCenter.ID).ToList();
+                    }
+                    else
+                    {
+                        expenseCenterList = Db.ExpenseCenter.Where(x => x.OurCompanyID == document.OurCompanyID && x.IsActive == true && x.ProfitCenter == true).ToList();
+                    }
+                }
+
+                expenseChartList = Db.VExpenseDocumentChart.Where(x => x.ExpenseDocumentID == document.ID).ToList();
+
+                if (expenseChartList != null && expenseChartList.Count > 0)
+                {
+                    return expenseChartList;
+                }
+                else
+                {
+                    var _expenseChartList = expenseCenterList.Select(x => new ExpenseDocumentChart()
+                    {
+                        Currency = document.Currency,
+                        DistributionAmount = document.DistributionAmount,
+                        DistributedAmount = 0,
+                        DistributedRate = 0,
+                        ExpenseCenterID = x.ID,
+                        ExpenseDocumentID = document.ID,
+                        ExpenseItemID = document.ExpenseItemID,
+                        UID = Guid.NewGuid(),
+                        RecordDate = DateTime.UtcNow.AddHours(3),
+                        RecordEmployeeID = authentication.ActionEmployee.EmployeeID,
+                        RecordIP = OfficeHelper.GetIPAddress()
+                    }).ToList();
+
+                    Db.ExpenseDocumentChart.AddRange(_expenseChartList);
+                    Db.SaveChanges();
+
+                    expenseChartList = Db.VExpenseDocumentChart.Where(x => x.ExpenseDocumentID == document.ID).ToList();
+                }
+
+            }
+
+            return expenseChartList;
+        }
 
 
     }

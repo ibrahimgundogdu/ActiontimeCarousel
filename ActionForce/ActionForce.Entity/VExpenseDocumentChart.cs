@@ -12,15 +12,27 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class ExpenseDucumentChart
+    public partial class VExpenseDocumentChart
     {
         public long ID { get; set; }
-        public Nullable<int> ExpenseDucumentID { get; set; }
+        public Nullable<int> ExpenseCenterID { get; set; }
         public Nullable<short> ExpenseItemID { get; set; }
         public Nullable<double> DistributionAmount { get; set; }
         public Nullable<double> DistributedRate { get; set; }
         public Nullable<double> DistributedAmount { get; set; }
         public string Currency { get; set; }
         public Nullable<System.Guid> UID { get; set; }
+        public Nullable<System.DateTime> RecordDate { get; set; }
+        public Nullable<int> RecordEmployeeID { get; set; }
+        public string RecordIP { get; set; }
+        public Nullable<System.DateTime> UpdateDate { get; set; }
+        public Nullable<int> UpdateEmployeeID { get; set; }
+        public string UpdateIP { get; set; }
+        public string ExpenseCenterName { get; set; }
+        public string ExpenseItemName { get; set; }
+        public string DocumentNumber { get; set; }
+        public long ExpenseDocumentID { get; set; }
+        public string RecorderFullName { get; set; }
+        public string UpdaterFullName { get; set; }
     }
 }

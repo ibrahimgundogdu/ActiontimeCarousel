@@ -390,12 +390,13 @@ namespace ActionForce.Entity
         public virtual DbSet<ExpenseCenterItems> ExpenseCenterItems { get; set; }
         public virtual DbSet<ExpenseDocument> ExpenseDocument { get; set; }
         public virtual DbSet<ExpenseDocumentStatus> ExpenseDocumentStatus { get; set; }
-        public virtual DbSet<ExpenseDucumentChart> ExpenseDucumentChart { get; set; }
         public virtual DbSet<ExpenseItem> ExpenseItem { get; set; }
         public virtual DbSet<ExpensePeriod> ExpensePeriod { get; set; }
         public virtual DbSet<ExpenseGroup> ExpenseGroup { get; set; }
         public virtual DbSet<ExpenseCenter> ExpenseCenter { get; set; }
         public virtual DbSet<VExpenseDocument> VExpenseDocument { get; set; }
+        public virtual DbSet<ExpenseDocumentChart> ExpenseDocumentChart { get; set; }
+        public virtual DbSet<VExpenseDocumentChart> VExpenseDocumentChart { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

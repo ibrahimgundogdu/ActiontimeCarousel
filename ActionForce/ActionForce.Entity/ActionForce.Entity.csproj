@@ -449,10 +449,10 @@
     <Compile Include="ExpenseDocument.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
-    <Compile Include="ExpenseDocumentStatus.cs">
+    <Compile Include="ExpenseDocumentChart.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
-    <Compile Include="ExpenseDucumentChart.cs">
+    <Compile Include="ExpenseDocumentStatus.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="ExpenseGroup.cs">
@@ -1162,6 +1162,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VExpenseDocument.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VExpenseDocumentChart.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VLocation.cs">

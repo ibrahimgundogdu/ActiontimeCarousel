@@ -192,12 +192,9 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public PartialViewResult StartEmployeeShift(int locationid, int employeeid, int environmentid, string date)
         {
-
             EmployeeShiftModel model = new EmployeeShiftModel();
 
             UfeServiceClient service = new UfeServiceClient(model.Authentication.ActionEmployee.Token);
-
-
 
             var serviceresult = service.EmployeeShiftStart(locationid, employeeid, environmentid, 0, 0, date);
 
@@ -214,7 +211,6 @@ namespace ActionForce.Office.Controllers
             model.EmployeeShift = Db.EmployeeShift.FirstOrDefault(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.IsWorkTime == true);
             model.EmployeeBreaks = Db.EmployeeShift.Where(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.IsBreakTime == true).ToList();
             model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.StatusID == 2);
-
 
             return PartialView("_PartialEmployeeShiftBreak", model);
         }

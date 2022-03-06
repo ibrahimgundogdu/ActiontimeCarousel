@@ -25,5 +25,11 @@ namespace ActionForce.Office
 
         public ExpensePeriod ExpensePeriod { get; set; }
         public List<ExpensePeriod> ExpensePeriods { get; set; }
+
+        public ExpenseGroup ExpenseGroup { get; set; }
+        public List<ExpenseGroup> ExpenseGroups { get; set; }
+
+        public VExpenseDocumentChart ExpenseDocumentChart { get; set; }
+        public List<VExpenseDocumentChart> ExpenseDocumentCharts { get; set; }
     }
 }
