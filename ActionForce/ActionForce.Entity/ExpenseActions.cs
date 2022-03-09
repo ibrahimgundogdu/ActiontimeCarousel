@@ -16,14 +16,18 @@ namespace ActionForce.Entity
     {
         public long ID { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
-        public Nullable<int> LocationID { get; set; }
         public Nullable<short> ExpenseCenterID { get; set; }
-        public Nullable<int> ExpenseItemID { get; set; }
-        public Nullable<int> DocumentID { get; set; }
+        public Nullable<int> LocationID { get; set; }
+        public Nullable<long> DocumentID { get; set; }
+        public string DocumentNumber { get; set; }
+        public Nullable<short> ExpenseGroupID { get; set; }
+        public Nullable<short> ExpenseItemID { get; set; }
         public string ExpenseDescription { get; set; }
+        public string ExpensePeriodCode { get; set; }
         public Nullable<System.DateTime> ExpensePeriod { get; set; }
         public Nullable<int> ExpenseYear { get; set; }
         public Nullable<int> ExpenseMonth { get; set; }
+        public Nullable<double> Total { get; set; }
         public Nullable<double> Rate { get; set; }
         public Nullable<double> Amount { get; set; }
         public string Currency { get; set; }
@@ -31,9 +35,5 @@ namespace ActionForce.Entity
         public Nullable<int> RecordEmployeeID { get; set; }
         public string RecordIP { get; set; }
         public Nullable<System.Guid> ReferenceUID { get; set; }
-        public string DocumentNumber { get; set; }
-        public Nullable<short> ExpenseGroupID { get; set; }
-        public string ExpensePeriodCode { get; set; }
-        public Nullable<double> Total { get; set; }
     }
 }

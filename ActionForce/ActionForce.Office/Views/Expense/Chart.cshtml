@@ -127,69 +127,103 @@
                 <div class="row row-xs">
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover table-striped table-dashboard">
-                            <thead>
-                                <tr>
-                                    <th colspan="8">
-                                        <a href="/Expense/DistributeEQ/@(Model.ExpenseDocument.UID)" class="btn btn-brand-01 btn-xs font-weight-bold"> <i data-feather="more-vertical"></i>  Eşit Olarak Dağıt</a>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>Merkez</th>
-                                    <th>Masraf Kalemi</th>
-                                    <th class="text-right">Dağıtılan (@(Model.ExpenseDocument.Currency))</th>
-                                    <th class="text-right">Oran (%)</th>
-                                    <th class="text-right">Tutar (@(Model.ExpenseDocument.Currency))</th>
-                                    <th></th>
-                                    <th>Güncelleme</th>
-                                    <th>Güncelleyen</th>
-                                </tr>
-                            </thead>
+                            @if (Model.ExpenseDocument.StatusID == 0)
+                            {
+                                <thead>
+                                    <tr>
+                                        <th colspan="3">
+                                            @using (Html.BeginForm("AddExpenseCenter", "Expense", FormMethod.Post))
+                                            {
+                                                <div class="form-group row mb-0">
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control font-weight-bold select2" id="AddExpenseCenterID" name="ECID" required>
+                                                            <option value="">Eklemek İstediğiniz Masraf Merkezini Seçiniz</option>
+                                                            @foreach (var item in Model.ExpenseCenters.OrderBy(x => x.SortBy))
+                                                            {
+                                                                <option value="@(item.ID)" @(Model.ExpenseDocument.ExpenseCenterID == item.ID ? "selected" : "")>@($"{item.ExpenseCenterName}" )</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <input id="EUID" name="EUID" type="hidden" value="@(Model.ExpenseDocument.UID)" />
+                                                        <button type="submit" class="btn btn-danger btn-block">Ekle</button>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </th>
+                                        <th colspan="7" class="">
+                                            <a href="/Expense/DistributeEQ/@(Model.ExpenseDocument.UID)" class="btn btn-brand-01 font-weight-bold"> <i data-feather="scissors"></i> &nbsp;&nbsp;&nbsp; Eşit Olarak Dağıt</a>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <th>Merkez</th>
+                                        <th>Masraf Kalemi</th>
+                                        <th class="text-right">Dağıtılan (@(Model.ExpenseDocument.Currency))</th>
+                                        <th class="text-right">Oran (%)</th>
+                                        <th class="text-right">Tutar (@(Model.ExpenseDocument.Currency))</th>
+                                        <th></th>
+                                        <th>Güncelleme</th>
+                                        <th>Güncelleyen</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            }
                             <tbody>
+                                @{ int sortnumber = 1;}
                                 @foreach (var item in Model.ExpenseDocumentCharts)
                                 {
                                     <tr>
+                                        <td>@(sortnumber)</td>
                                         <td>@(item.ExpenseCenterName)</td>
                                         <td>@(item.ExpenseItemName)</td>
                                         <td class="text-right tx-15">@(item.DistributionAmount?.ToString("N2"))</td>
-                                        <td class="p-0"><input id="DistributedRate@(item.ID)" type="text" class="form-control font-weight-bold tx-15 text-right money4" autocomplete="off" min="0" data-itemid="@(item.ID)" onchange="ComputeRate(@(item.ID))" value="@(item.DistributedRate?.ToString("N4"))"></td>
+                                        <td class="p-0"><input id="DistributedRate@(item.ID)" type="text" class="form-control font-weight-bold tx-15 text-right money4" autocomplete="off" min="0" data-itemid="@(item.ID)" value="@(item.DistributedRate?.ToString("N4"))"></td>
                                         <td class="p-0"><input id="DistributedAmount@(item.ID)" type="text" class="form-control font-weight-bold tx-15 text-right money4" autocomplete="off" min="0" data-itemid="@(item.ID)" onchange="ComputeAmount(@(item.ID))" value="@(item.DistributedAmount?.ToString("N4"))"></td>
                                         <td>@(item.Currency)</td>
                                         <td id="UpdateDate@(item.ID)">@(item.UpdateDate != null ? item.UpdateDate : item.RecordDate)</td>
                                         <td id="UpdaterFullName@(item.ID)">@(item.UpdaterFullName != null ? item.UpdaterFullName : item.RecorderFullName)</td>
+                                        <td class="text-center">
+                                            @if (Model.ExpenseDocument.StatusID == 0)
+                                            {
+                                                <a href="/Expense/RemoveCost/@(Model.ExpenseDocument.UID)?cid=@(item.ID)" class="font-weight-bold text-danger" onclick="return confirm('Maliyet Merkezini Dağılımdan Kaldırmak İstediğinize Emin misiniz?')"> <i data-feather="x-circle"></i></a>
+                                            }
+                                        </td>
                                     </tr>
+                                    sortnumber++;
                                 }
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="3" class="text-right">Dağıtılan</td>
-                                    <td class="font-weight-bold tx-15 text-right"> % @(Model.ExpenseDocumentCharts.Sum(x=> x.DistributedRate)?.ToString("N4"))</td>
-                                    <td class="font-weight-bold tx-15 text-right"> @(Model.ExpenseDocumentCharts.Sum(x=> x.DistributedAmount)?.ToString("N4"))</td>
+                                    <td colspan="4" class="text-right">Dağıtılan</td>
+                                    <td class="font-weight-bold tx-15 text-right" id="DistributedRate"> % @(Model.ExpenseDocumentCharts.Sum(x=> x.DistributedRate)?.ToString("N4"))</td>
+                                    <td class="font-weight-bold tx-15 text-right" id="DistributedAmount"> @(Model.ExpenseDocumentCharts.Sum(x=> x.DistributedAmount)?.ToString("N4"))</td>
                                     <td>@(Model.ExpenseDocument.Currency)</td>
-                                    <td colspan="2"></td>
+                                    <td colspan="3"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="3" class="text-right">Kalan</td>
-                                    <td class="font-weight-bold tx-15 text-right"> % @((100 - Model.ExpenseDocumentCharts.Sum(x=> x.DistributedRate))?.ToString("N4"))</td>
-                                    <td class="font-weight-bold tx-15 text-right"> @((Model.ExpenseDocument.DistributionAmount - Model.ExpenseDocumentCharts.Sum(x=> x.DistributedAmount))?.ToString("N4"))</td>
+                                    <td colspan="4" class="text-right">Kalan</td>
+                                    <td class="font-weight-bold tx-15 text-right" id="BDistributedRate"> % @((100 - Model.ExpenseDocumentCharts.Sum(x=> x.DistributedRate))?.ToString("N4"))</td>
+                                    <td class="font-weight-bold tx-15 text-right" id="BDistributedAmount"> @((Model.ExpenseDocument.DistributionAmount - Model.ExpenseDocumentCharts.Sum(x=> x.DistributedAmount))?.ToString("N4"))</td>
                                     <td>@(Model.ExpenseDocument.Currency)</td>
-                                    <td colspan="2"></td>
+                                    <td colspan="3"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="3" class="text-right"></td>
+                                    <td colspan="4" class="text-right"></td>
                                     <td class="font-weight-bold tx-15 text-right p-1">
-                                        @if (Model.ExpenseDocument.StatusID == 0)
+                                        @if (Model.ExpenseDocument.StatusID == 1)
                                         {
-                                            <a href="/Expense/RemoveCost/@(Model.ExpenseDocument.UID)" class="btn btn-danger btn-block font-weight-bold" onclick="return confirm('Maliyet Dağılımını Kaldırmak İstediğinize Emin misiniz?')"> <i data-feather="x"></i> &nbsp;&nbsp;&nbsp; Maliyet Dağılımını Kaldır</a>
+                                            <a href="/Expense/ResetCost/@(Model.ExpenseDocument.UID)" class="btn btn-danger btn-block font-weight-bold" onclick="return confirm('Maliyet Dağılımını Kaldırmak İstediğinize Emin misiniz?')"> <i data-feather="x"></i> &nbsp;&nbsp;&nbsp; Maliyet Dağılımını Kaldır</a>
                                         }
                                     </td>
                                     <td class="font-weight-bold tx-15 text-right p-1">
-                                        @if ((Model.ExpenseDocument.DistributionAmount - Model.ExpenseDocumentCharts.Sum(x => x.DistributedAmount)) <= 0.9 && Model.ExpenseDocument.StatusID == 0)
+                                        @if ((Model.ExpenseDocument.DistributionAmount - Model.ExpenseDocumentCharts.Sum(x => x.DistributedAmount)) <= 0.01 && Model.ExpenseDocument.StatusID == 0)
                                         {
-                                            <a href="/Expense/CreateCost/@(Model.ExpenseDocument.UID)" class="btn btn-brand-01 btn-block font-weight-bold" onclick="return confirm('Maliyet Dağılımını Oluşturmak İstediğinize Emin misiniz?')"> <i data-feather="anchor"></i> &nbsp;&nbsp;&nbsp; Maliyet Dağılımını Oluştur</a>
+                                            <a href="/Expense/CreateCost/@(Model.ExpenseDocument.UID)" id="CreateCost" class="btn btn-brand-01 btn-block font-weight-bold" onclick="return confirm('Maliyet Dağılımını Oluşturmak İstediğinize Emin misiniz?')"> <i data-feather="anchor"></i> &nbsp;&nbsp;&nbsp; Maliyet Dağılımını Oluştur</a>
                                         }
                                     </td>
                                     <td></td>
-                                    <td colspan="2"></td>
+                                    <td colspan="3"></td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -280,27 +314,56 @@
 
                 $("#UpdateDate" + data.ID).html(data.UpdateDate);
                 $("#UpdaterFullName" + data.ID).html(data.UpdateEmployee);
-                console.log(data);
+
+                $("#DistributedRate").html('% '+data.DistRate);
+                $("#DistributedAmount").html(data.DistAmount);
+
+                $("#BDistributedRate").html('% ' + data.BalanceRate);
+                $("#BDistributedAmount").html(data.BalanceAmount);
+
+                if (data.ShowButton == 1) {
+                    $('#CreateCost').show();
+                }
+                else {
+                    $('#CreateCost').hide();
+                }
+                //console.log(data);
             });
         };
 
-        function ComputeRate(id) {
-            console.log(id);
-        };
+        @*function ComputeRate(id) {
 
 
-        //function SumExchangeRate() {
-        //    var amount = $("#Amount").val().replace('.', '').replace(',', '.');
-        //    var toamount = $("#ToAmount").val().replace('.', '').replace(',', '.');
-        //    var rate = parseFloat(toamount) / parseFloat(amount) || 0.0000;
-        //    $("#SaleExchangeRate").val(rate.toFixed(4).toString());
-        //};
-        //function SumExchangeToAmount() {
-        //    var amount = $("#Amount").val().replace('.', '').replace(',', '.');
-        //    var rate = $("#SaleExchangeRate").val().replace('.', '').replace(',', '.');
-        //    var toamount = parseFloat(amount) * parseFloat(rate) || 0.00;
-        //    $("#ToAmount").val(toamount.toFixed(2).toString());
-        //};
+
+            var rate = $('#DistributedRate' + id).val().replace('.', '').replace(',', '.');
+            var totalamount = @(Model.ExpenseDocument.DistributionAmount);
+            var amount = ((parseFloat(rate) / 100) * parseFloat(totalamount)) || 0.0000;
+
+            $("#DistributedAmount" + id).val(amount.toFixed(4).toString());
+
+            $.ajax({
+                method: "GET",
+                url: "/Expense/SetExpenseChart",
+                contentType: 'application/json',
+                data: { id, amount: parseFloat(amount) }
+            }).done(function (data) {
+
+                $("#UpdateDate" + data.ID).html(data.UpdateDate);
+                $("#UpdaterFullName" + data.ID).html(data.UpdateEmployee);
+
+                $("#DistributedRate").html('% '+data.DistRate.toFixed(4).toString());
+                $("#DistributedAmount").html(data.DistAmount.toFixed(4).toString());
+
+                $("#BDistributedRate").html('% ' + data.BalanceRate.toFixed(4).toString());
+                $("#BDistributedAmount").html(data.BalanceAmount.toFixed(4).toString());
+
+                console.log(data);
+
+                this.preventDefault();
+            });
+        };*@
+
+
 
 
     </script>

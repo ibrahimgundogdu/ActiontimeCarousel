@@ -88,7 +88,7 @@
                                     <select class="form-control font-weight-bold select2" id="ExpenseCenterID" name="ExpenseCenterID" required>
                                         @foreach (var item in Model.ExpenseCenters.OrderBy(x => x.SortBy))
                                         {
-                                            <option value="@(item.ID)" @(Model.ExpenseDocument.ExpenseCenterID == item.ID ? "selected" : "")>@($"{item.ExpenseCenterName}" )</option>
+                                            <option value="@(item.ID)" data-group="@(item.ProfitCenter)" @(Model.ExpenseDocument.ExpenseCenterID == item.ID ? "selected" : "")>@($"{item.ExpenseCenterName}" )</option>
                                         }
                                     </select>
                                 </div>
@@ -241,6 +241,30 @@
             $('.money4').mask("#.##0,0000", { reverse: true });
         });
 
+        $(document).ready(function () {
+
+            $("#ExpenseCenterID").change(function () {
+
+                //var centerID = $("#ExpenseCenterID").val();
+                var isprofit = $(this).find(':selected').data('group');
+
+                if (isprofit == 'True') {
+
+                    $("#ExpenseGroupID").find('option').remove().end();
+                    //$("#ExpenseGroupID").append("<option value=''>Masraf Grubu Seçiminiz</option>");
+                    $("#ExpenseGroupID").append("<option value='1'>Lokasyon</option>");
+
+                }
+                else {
+
+                    $("#ExpenseGroupID").find('option').remove().end();
+                    //$("#ExpenseGroupID").append("<option value=''>Masraf Grubu Seçiminiz</option>");
+                    $("#ExpenseGroupID").append("<option value='2'>Ofis</option>");
+                    $("#ExpenseGroupID").append("<option value='3'>Genel</option>");
+
+                }
+            });
+        });
 
     </script>
 

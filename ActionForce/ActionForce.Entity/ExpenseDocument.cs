@@ -36,5 +36,6 @@ namespace ActionForce.Entity
         public Nullable<System.Guid> UID { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<System.DateTime> DocumentDate { get; set; }
+        public Nullable<System.Guid> SalaryPeriodUID { get; set; }
     }
 }

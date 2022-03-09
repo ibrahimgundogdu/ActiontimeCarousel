@@ -13,11 +13,12 @@ namespace ActionForce.Office
         public string UpdateDate { get; set; }
         public string UpdateEmployee { get; set; }
 
-        public double? DistRate { get; set; }
-        public double? DistAmount { get; set; }
+        public string DistRate { get; set; }
+        public string DistAmount { get; set; }
 
-        public double? BalanceRate { get; set; }
-        public double? BalanceAmount { get; set; }
+        public string BalanceRate { get; set; }
+        public string BalanceAmount { get; set; }
+        public int ShowButton { get; set; } = 0;
 
 
     }

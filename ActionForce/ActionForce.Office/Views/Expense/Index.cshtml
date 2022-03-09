@@ -109,7 +109,7 @@
                             <tr>
 
                                 <td class="tx-sm-13">@(exp.ID)</td>
-                                <td class="tx-sm-13 font-weight-bold"><a href="/Expense/Detail/@(exp.UID)" target="_blank"> @(exp.DocumentNumber)</a></td>
+                                <td class="tx-sm-13 font-weight-bold"><a href="/Expense/Detail/@(exp.UID)" target="_blank" class="@(exp.StatusID == 1 ? "text-black-50":"")"> @(exp.DocumentNumber)</a></td>
                                 <td class="tx-sm-13 font-weight-bold">@(exp.DocumentDate.Value.ToString("d"))</td>
                                 <td class="tx-sm-13">@(exp.ExpenseCenterName)</td>
                                 <td class="tx-sm-13">@(exp.ExpenseItemName)</td>
@@ -121,8 +121,8 @@
                                 <td class="tx-sm-13">@(exp.StatusName)</td>
                                 <td class="tx-sm-13">@(exp.RecordDate)</td>
                                 <td class="tx-sm-13">@(exp.IsActive == true ? "Aktif":"Pasif")</td>
-                                <td class="tx-sm-13"><a href="/Expense/Detail/@(exp.UID)" target="_blank"> <i data-feather="file-text"></i></a></td>
-                                <td class="tx-sm-13"><a href="/Expense/Chart/@(exp.UID)" target="_blank"> <i data-feather="list"></i></a></td>
+                                <td class="tx-sm-13"><a href="/Expense/Detail/@(exp.UID)" target="_blank" class="@(exp.StatusID == 1 ? "text-black-50":"")"> <i data-feather="file-text"></i></a></td>
+                                <td class="tx-sm-13"><a href="/Expense/Chart/@(exp.UID)" target="_blank" class="@(exp.StatusID == 1 ? "text-black-50":"")"> <i data-feather="list"></i></a></td>
                             </tr>
                         }
 
