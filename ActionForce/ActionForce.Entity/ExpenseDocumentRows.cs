@@ -12,14 +12,16 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class ExpensePeriod
+    public partial class ExpenseDocumentRows
     {
-        public int ID { get; set; }
-        public Nullable<int> OurCompanyID { get; set; }
-        public string PeriodCode { get; set; }
-        public Nullable<int> DateYear { get; set; }
-        public Nullable<int> DateMonth { get; set; }
-        public Nullable<System.DateTime> DateBegin { get; set; }
-        public Nullable<System.DateTime> DateEnd { get; set; }
+        public long ID { get; set; }
+        public Nullable<long> DocumentID { get; set; }
+        public Nullable<int> LocationID { get; set; }
+        public Nullable<int> EmployeeID { get; set; }
+        public Nullable<int> ActionTypeID { get; set; }
+        public Nullable<int> Quantity { get; set; }
+        public Nullable<double> Hour { get; set; }
+        public Nullable<double> Amount { get; set; }
+        public string Currency { get; set; }
     }
 }

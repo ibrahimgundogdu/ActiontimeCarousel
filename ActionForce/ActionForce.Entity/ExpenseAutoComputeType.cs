@@ -12,14 +12,11 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class ExpensePeriod
+    public partial class ExpenseAutoComputeType
     {
-        public int ID { get; set; }
-        public Nullable<int> OurCompanyID { get; set; }
-        public string PeriodCode { get; set; }
-        public Nullable<int> DateYear { get; set; }
-        public Nullable<int> DateMonth { get; set; }
-        public Nullable<System.DateTime> DateBegin { get; set; }
-        public Nullable<System.DateTime> DateEnd { get; set; }
+        public short ID { get; set; }
+        public string ComputeType { get; set; }
+        public string SortBy { get; set; }
+        public Nullable<bool> IsActive { get; set; }
     }
 }

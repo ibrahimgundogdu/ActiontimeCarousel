@@ -645,17 +645,20 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult AddExpenseAuto(string ExpensePeriod, string Location, string Office, string Setcard, string Rent)
+        public ActionResult AddExpenseAuto(string ExpensePeriod, string Location, string Office, string Setcard, string Rent, string Vat, string Expense)
         {
             ExpenseControlModel model = new ExpenseControlModel();
 
             model.Result = new Result();
 
+            DocumentManager documentManager = new DocumentManager();
+
+ 
             if (!string.IsNullOrEmpty(ExpensePeriod))
             {
                 if (Location == "1")
                 {
-
+                    var document = documentManager.ComputeExpenseDucumentHourlySalary(ExpensePeriod, model.Authentication);
                 }
                 if (Office == "1")
                 {
@@ -669,6 +672,15 @@ namespace ActionForce.Office.Controllers
                 {
 
                 }
+                if (Vat == "1")
+                {
+
+                }
+                if (Expense == "1")
+                {
+
+                }
+
             }
             else
             {

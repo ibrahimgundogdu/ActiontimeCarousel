@@ -5591,5 +5591,74 @@ namespace ActionForce.Office
         }
 
 
+
+        public ExpenseDocument ComputeExpenseDucumentHourlySalary(string expensePeriod, AuthenticationModel authentication)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            var expenseDocument = new ExpenseDocument();
+
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                // lokasyon net maaş 
+                expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 1 && x.ExpensePeriodCode == expensePeriod);
+
+                if (expenseDocument == null)
+                {
+
+                    ExpenseDocument document = new ExpenseDocument();
+                    var ePeriod = Db.ExpensePeriod.FirstOrDefault(x => x.PeriodCode == expensePeriod);
+
+                    var UID = Guid.NewGuid();
+
+                    document.UID = UID;
+                    document.DocumentNumber = OfficeHelper.GetDocumentNumber(authentication.ActionEmployee.OurCompanyID ?? 2, "EXD");
+                    document.RecordDate = DateTime.UtcNow.AddHours(3);
+                    document.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
+                    document.RecordIP = OfficeHelper.GetIPAddress();
+                    //document.DocumentSource = form.DocumentSource;
+                    //document.ExpenseDescription = form.ExpenseDescription;
+                    //document.DistributionAmount = 0;
+                    //document.TotalAmount = 0;
+                    //document.ExpenseGroupID = form.ExpenseGroupID;
+                    //document.Currency = form.Currency;
+                    //document.DocumentDate = form.DocumentDate;
+                    //document.ExpenseItemID = form.ExpenseItemID;
+                    //document.ExpenseCenterID = form.ExpenseCenterID;
+                    document.ExpensePeriod = ePeriod.DateBegin;
+                    document.IsActive = true;
+                    document.StatusID = 0;
+                    document.OurCompanyID = authentication.ActionEmployee.OurCompanyID;
+
+
+                    document.ExpenseYear = ePeriod.DateYear;
+                    document.ExpenseMonth = ePeriod.DateMonth;
+                    document.ExpensePeriodCode = expensePeriod;
+
+
+                    Db.ExpenseDocument.Add(document);
+                    Db.SaveChanges();
+
+                   
+
+                    OfficeHelper.AddApplicationLog("Office", "ExpenseDocument", "Insert", document.ID.ToString(), "Expense", "NewDocument", null, true, "Masraf Dokümanı Otomatik Eklendi", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, document);
+
+
+
+
+                }
+
+            }
+
+            return expenseDocument;
+        }
+
+
+
     }
 }

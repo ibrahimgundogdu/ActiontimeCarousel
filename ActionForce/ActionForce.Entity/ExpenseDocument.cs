@@ -26,6 +26,7 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> ExpensePeriod { get; set; }
         public Nullable<int> ExpenseYear { get; set; }
         public Nullable<int> ExpenseMonth { get; set; }
+        public Nullable<System.DateTime> DocumentDate { get; set; }
         public Nullable<double> TotalAmount { get; set; }
         public Nullable<double> DistributionAmount { get; set; }
         public string Currency { get; set; }
@@ -35,7 +36,6 @@ namespace ActionForce.Entity
         public Nullable<short> StatusID { get; set; }
         public Nullable<System.Guid> UID { get; set; }
         public Nullable<bool> IsActive { get; set; }
-        public Nullable<System.DateTime> DocumentDate { get; set; }
-        public Nullable<System.Guid> SalaryPeriodUID { get; set; }
+        public Nullable<short> AutoComputeTypeID { get; set; }
     }
 }

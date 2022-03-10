@@ -43,5 +43,6 @@ namespace ActionForce.Entity
         public Nullable<int> DateYear { get; set; }
         public Nullable<int> DateDay { get; set; }
         public string ExpenseCenterName { get; set; }
+        public Nullable<short> AutoComputeTypeID { get; set; }
     }
 }

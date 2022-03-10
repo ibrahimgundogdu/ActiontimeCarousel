@@ -2394,6 +2394,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="RecordIP" Type="nvarchar" MaxLength="15" />
           <Property Name="ReferenceUID" Type="uniqueidentifier" />
         </EntityType>
+        <EntityType Name="ExpenseAutoComputeType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ComputeType" Type="nvarchar" MaxLength="40" />
+          <Property Name="SortBy" Type="char" MaxLength="2" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
         <EntityType Name="ExpenseCenterItems">
           <Key>
             <PropertyRef Name="ID" />
@@ -2428,7 +2437,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="StatusID" Type="smallint" />
           <Property Name="UID" Type="uniqueidentifier" />
           <Property Name="IsActive" Type="bit" />
-          <Property Name="SalaryPeriodUID" Type="uniqueidentifier" />
+          <Property Name="AutoComputeTypeID" Type="smallint" />
         </EntityType>
         <EntityType Name="ExpenseDocumentChart">
           <Key>
@@ -2449,6 +2458,20 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="UpdateDate" Type="datetime" />
           <Property Name="UpdateEmployeeID" Type="int" />
           <Property Name="UpdateIP" Type="nvarchar" MaxLength="15" />
+        </EntityType>
+        <EntityType Name="ExpenseDocumentRows">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DocumentID" Type="bigint" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="ActionTypeID" Type="int" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="Hour" Type="float" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
         </EntityType>
         <EntityType Name="ExpenseDocumentStatus">
           <Key>
@@ -2488,9 +2511,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.ExpenseGroup' does not have
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
           <Property Name="PeriodCode" Type="nvarchar" MaxLength="8" />
           <Property Name="DateYear" Type="int" />
-          <Property Name="DateDay" Type="int" />
+          <Property Name="DateMonth" Type="int" />
           <Property Name="DateBegin" Type="date" />
           <Property Name="DateEnd" Type="date" />
         </EntityType>
@@ -6603,7 +6627,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VExpenseDocument' does not 
           <Property Name="ExpensePeriodCode" Type="nvarchar" MaxLength="8" />
           <Property Name="ExpenseItemID" Type="smallint" />
           <Property Name="DocumentNumber" Type="nvarchar" MaxLength="16" />
-          <Property Name="DocumentSource" Type="nvarchar" MaxLength="8" />
+          <Property Name="DocumentSource" Type="nvarchar" MaxLength="50" />
           <Property Name="ExpenseDescription" Type="nvarchar" MaxLength="250" />
           <Property Name="ExpensePeriod" Type="date" />
           <Property Name="ExpenseYear" Type="int" />
@@ -6625,6 +6649,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VExpenseDocument' does not 
           <Property Name="DateYear" Type="int" />
           <Property Name="DateDay" Type="int" />
           <Property Name="ExpenseCenterName" Type="nvarchar" MaxLength="613" />
+          <Property Name="AutoComputeTypeID" Type="smallint" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VExpenseDocumentChart' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -9077,9 +9102,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="Environment" EntityType="Self.Environment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Exchange" EntityType="Self.Exchange" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExpenseActions" EntityType="Self.ExpenseActions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExpenseAutoComputeType" EntityType="Self.ExpenseAutoComputeType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExpenseCenterItems" EntityType="Self.ExpenseCenterItems" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExpenseDocument" EntityType="Self.ExpenseDocument" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExpenseDocumentChart" EntityType="Self.ExpenseDocumentChart" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExpenseDocumentRows" EntityType="Self.ExpenseDocumentRows" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExpenseDocumentStatus" EntityType="Self.ExpenseDocumentStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExpenseItem" EntityType="Self.ExpenseItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExpensePeriod" EntityType="Self.ExpensePeriod" Schema="dbo" store:Type="Tables" />
@@ -10972,7 +10999,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VExpenseDocument].[PeriodCode] AS [PeriodCode], 
     [VExpenseDocument].[DateYear] AS [DateYear], 
     [VExpenseDocument].[DateDay] AS [DateDay], 
-    [VExpenseDocument].[ExpenseCenterName] AS [ExpenseCenterName]
+    [VExpenseDocument].[ExpenseCenterName] AS [ExpenseCenterName], 
+    [VExpenseDocument].[AutoComputeTypeID] AS [AutoComputeTypeID]
     FROM [dbo].[VExpenseDocument] AS [VExpenseDocument]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VExpenseDocumentChart" EntityType="Self.VExpenseDocumentChart" store:Type="Views" store:Schema="dbo">
@@ -13374,16 +13402,18 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="DocumentBankOpen" EntityType="db293_ActionTimeDbModel.DocumentBankOpen" />
           <EntitySet Name="VTempBankAction" EntityType="db293_ActionTimeDbModel.VTempBankAction" />
           <EntitySet Name="ExpenseCenterItems" EntityType="db293_ActionTimeDbModel.ExpenseCenterItems" />
-          <EntitySet Name="ExpenseDocument" EntityType="db293_ActionTimeDbModel.ExpenseDocument" />
           <EntitySet Name="ExpenseDocumentStatus" EntityType="db293_ActionTimeDbModel.ExpenseDocumentStatus" />
           <EntitySet Name="ExpenseItem" EntityType="db293_ActionTimeDbModel.ExpenseItem" />
-          <EntitySet Name="ExpensePeriod" EntityType="db293_ActionTimeDbModel.ExpensePeriod" />
           <EntitySet Name="ExpenseGroup" EntityType="db293_ActionTimeDbModel.ExpenseGroup" />
           <EntitySet Name="ExpenseCenter" EntityType="db293_ActionTimeDbModel.ExpenseCenter" />
-          <EntitySet Name="VExpenseDocument" EntityType="db293_ActionTimeDbModel.VExpenseDocument" />
           <EntitySet Name="ExpenseDocumentChart" EntityType="db293_ActionTimeDbModel.ExpenseDocumentChart" />
           <EntitySet Name="VExpenseDocumentChart" EntityType="db293_ActionTimeDbModel.VExpenseDocumentChart" />
           <EntitySet Name="ExpenseActions" EntityType="db293_ActionTimeDbModel.ExpenseActions" />
+          <EntitySet Name="ExpenseDocumentRows" EntityType="db293_ActionTimeDbModel.ExpenseDocumentRows" />
+          <EntitySet Name="ExpenseAutoComputeType" EntityType="db293_ActionTimeDbModel.ExpenseAutoComputeType" />
+          <EntitySet Name="ExpenseDocument" EntityType="db293_ActionTimeDbModel.ExpenseDocument" />
+          <EntitySet Name="VExpenseDocument" EntityType="db293_ActionTimeDbModel.VExpenseDocument" />
+          <EntitySet Name="ExpensePeriod" EntityType="db293_ActionTimeDbModel.ExpensePeriod" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -21960,34 +21990,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ExpenseCenterID" Type="Int32" />
           <Property Name="ExpenseItemID" Type="Int16" />
         </EntityType>
-        <EntityType Name="ExpenseDocument">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OurCompanyID" Type="Int32" />
-          <Property Name="ExpenseCenterID" Type="Int32" />
-          <Property Name="ExpenseGroupID" Type="Int16" />
-          <Property Name="ExpensePeriodCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
-          <Property Name="ExpenseItemID" Type="Int16" />
-          <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
-          <Property Name="DocumentSource" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ExpenseDescription" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="ExpensePeriod" Type="DateTime" Precision="0" />
-          <Property Name="ExpenseYear" Type="Int32" />
-          <Property Name="ExpenseMonth" Type="Int32" />
-          <Property Name="TotalAmount" Type="Double" />
-          <Property Name="DistributionAmount" Type="Double" />
-          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="RecordEmployeeID" Type="Int32" />
-          <Property Name="RecordIP" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="StatusID" Type="Int16" />
-          <Property Name="UID" Type="Guid" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="DocumentDate" Type="DateTime" Precision="0" />
-          <Property Name="SalaryPeriodUID" Type="Guid" />
-        </EntityType>
         <EntityType Name="ExpenseDocumentStatus">
           <Key>
             <PropertyRef Name="ID" />
@@ -22009,17 +22011,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="IsGeneral" Type="Boolean" />
           <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
-        </EntityType>
-        <EntityType Name="ExpensePeriod">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PeriodCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
-          <Property Name="DateYear" Type="Int32" />
-          <Property Name="DateDay" Type="Int32" />
-          <Property Name="DateBegin" Type="DateTime" Precision="0" />
-          <Property Name="DateEnd" Type="DateTime" Precision="0" />
         </EntityType>
         <EntityType Name="ExpenseGroup">
           <Key>
@@ -22044,40 +22035,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ExpenseCenter1" Type="Boolean" Nullable="false" />
           <Property Name="SortBy" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
-        </EntityType>
-        <EntityType Name="VExpenseDocument">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" />
-          <Property Name="OurCompanyID" Type="Int32" />
-          <Property Name="ExpenseCenterID" Type="Int32" />
-          <Property Name="ExpenseGroupID" Type="Int16" />
-          <Property Name="ExpensePeriodCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
-          <Property Name="ExpenseItemID" Type="Int16" />
-          <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
-          <Property Name="DocumentSource" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
-          <Property Name="ExpenseDescription" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="ExpensePeriod" Type="DateTime" Precision="0" />
-          <Property Name="ExpenseYear" Type="Int32" />
-          <Property Name="ExpenseMonth" Type="Int32" />
-          <Property Name="DocumentDate" Type="DateTime" Precision="0" />
-          <Property Name="TotalAmount" Type="Double" />
-          <Property Name="DistributionAmount" Type="Double" />
-          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="RecordEmployeeID" Type="Int32" />
-          <Property Name="RecordIP" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="StatusID" Type="Int16" />
-          <Property Name="UID" Type="Guid" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="StatusName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="ExpenseGroupName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="ExpenseItemName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="PeriodCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
-          <Property Name="DateYear" Type="Int32" />
-          <Property Name="DateDay" Type="Int32" />
-          <Property Name="ExpenseCenterName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ExpenseDocumentChart">
           <Key>
@@ -22150,6 +22107,104 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="RecordEmployeeID" Type="Int32" />
           <Property Name="RecordIP" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="ReferenceUID" Type="Guid" />
+        </EntityType>
+        <EntityType Name="ExpenseDocumentRows">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DocumentID" Type="Int64" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="ActionTypeID" Type="Int32" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="Hour" Type="Double" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ExpenseAutoComputeType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ComputeType" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="ExpenseDocument">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="ExpenseCenterID" Type="Int32" />
+          <Property Name="ExpenseGroupID" Type="Int16" />
+          <Property Name="ExpensePeriodCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="ExpenseItemID" Type="Int16" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentSource" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ExpenseDescription" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ExpensePeriod" Type="DateTime" Precision="0" />
+          <Property Name="ExpenseYear" Type="Int32" />
+          <Property Name="ExpenseMonth" Type="Int32" />
+          <Property Name="DocumentDate" Type="DateTime" Precision="0" />
+          <Property Name="TotalAmount" Type="Double" />
+          <Property Name="DistributionAmount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="StatusID" Type="Int16" />
+          <Property Name="UID" Type="Guid" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="AutoComputeTypeID" Type="Int16" />
+        </EntityType>
+        <EntityType Name="VExpenseDocument">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="ExpenseCenterID" Type="Int32" />
+          <Property Name="ExpenseGroupID" Type="Int16" />
+          <Property Name="ExpensePeriodCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="ExpenseItemID" Type="Int16" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentSource" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ExpenseDescription" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ExpensePeriod" Type="DateTime" Precision="0" />
+          <Property Name="ExpenseYear" Type="Int32" />
+          <Property Name="ExpenseMonth" Type="Int32" />
+          <Property Name="DocumentDate" Type="DateTime" Precision="0" />
+          <Property Name="TotalAmount" Type="Double" />
+          <Property Name="DistributionAmount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="StatusID" Type="Int16" />
+          <Property Name="UID" Type="Guid" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="StatusName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ExpenseGroupName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="ExpenseItemName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="PeriodCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="DateYear" Type="Int32" />
+          <Property Name="DateDay" Type="Int32" />
+          <Property Name="ExpenseCenterName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
+          <Property Name="AutoComputeTypeID" Type="Int16" />
+        </EntityType>
+        <EntityType Name="ExpensePeriod">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="PeriodCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="DateYear" Type="Int32" />
+          <Property Name="DateMonth" Type="Int32" />
+          <Property Name="DateBegin" Type="DateTime" Precision="0" />
+          <Property Name="DateEnd" Type="DateTime" Precision="0" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -30450,35 +30505,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ExpenseDocument">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ExpenseDocument">
-              <MappingFragment StoreEntitySet="ExpenseDocument">
-                <ScalarProperty Name="SalaryPeriodUID" ColumnName="SalaryPeriodUID" />
-                <ScalarProperty Name="DocumentDate" ColumnName="DocumentDate" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="UID" ColumnName="UID" />
-                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
-                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
-                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="DistributionAmount" ColumnName="DistributionAmount" />
-                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
-                <ScalarProperty Name="ExpenseMonth" ColumnName="ExpenseMonth" />
-                <ScalarProperty Name="ExpenseYear" ColumnName="ExpenseYear" />
-                <ScalarProperty Name="ExpensePeriod" ColumnName="ExpensePeriod" />
-                <ScalarProperty Name="ExpenseDescription" ColumnName="ExpenseDescription" />
-                <ScalarProperty Name="DocumentSource" ColumnName="DocumentSource" />
-                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
-                <ScalarProperty Name="ExpenseItemID" ColumnName="ExpenseItemID" />
-                <ScalarProperty Name="ExpensePeriodCode" ColumnName="ExpensePeriodCode" />
-                <ScalarProperty Name="ExpenseGroupID" ColumnName="ExpenseGroupID" />
-                <ScalarProperty Name="ExpenseCenterID" ColumnName="ExpenseCenterID" />
-                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ExpenseDocumentStatus">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ExpenseDocumentStatus">
               <MappingFragment StoreEntitySet="ExpenseDocumentStatus">
@@ -30503,18 +30529,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ExpensePeriod">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ExpensePeriod">
-              <MappingFragment StoreEntitySet="ExpensePeriod">
-                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
-                <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
-                <ScalarProperty Name="DateDay" ColumnName="DateDay" />
-                <ScalarProperty Name="DateYear" ColumnName="DateYear" />
-                <ScalarProperty Name="PeriodCode" ColumnName="PeriodCode" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ExpenseGroup">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ExpenseGroup">
               <MappingFragment StoreEntitySet="ExpenseGroup">
@@ -30533,41 +30547,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="ExpenseCenter1" ColumnName="ExpenseCenter" />
                 <ScalarProperty Name="ProfitCenter" ColumnName="ProfitCenter" />
                 <ScalarProperty Name="ExpenseCenterName" ColumnName="ExpenseCenterName" />
-                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="VExpenseDocument">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VExpenseDocument">
-              <MappingFragment StoreEntitySet="VExpenseDocument">
-                <ScalarProperty Name="ExpenseCenterName" ColumnName="ExpenseCenterName" />
-                <ScalarProperty Name="DateDay" ColumnName="DateDay" />
-                <ScalarProperty Name="DateYear" ColumnName="DateYear" />
-                <ScalarProperty Name="PeriodCode" ColumnName="PeriodCode" />
-                <ScalarProperty Name="ExpenseItemName" ColumnName="ExpenseItemName" />
-                <ScalarProperty Name="ExpenseGroupName" ColumnName="ExpenseGroupName" />
-                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="UID" ColumnName="UID" />
-                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
-                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
-                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="DistributionAmount" ColumnName="DistributionAmount" />
-                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
-                <ScalarProperty Name="DocumentDate" ColumnName="DocumentDate" />
-                <ScalarProperty Name="ExpenseMonth" ColumnName="ExpenseMonth" />
-                <ScalarProperty Name="ExpenseYear" ColumnName="ExpenseYear" />
-                <ScalarProperty Name="ExpensePeriod" ColumnName="ExpensePeriod" />
-                <ScalarProperty Name="ExpenseDescription" ColumnName="ExpenseDescription" />
-                <ScalarProperty Name="DocumentSource" ColumnName="DocumentSource" />
-                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
-                <ScalarProperty Name="ExpenseItemID" ColumnName="ExpenseItemID" />
-                <ScalarProperty Name="ExpensePeriodCode" ColumnName="ExpensePeriodCode" />
-                <ScalarProperty Name="ExpenseGroupID" ColumnName="ExpenseGroupID" />
-                <ScalarProperty Name="ExpenseCenterID" ColumnName="ExpenseCenterID" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
@@ -30642,6 +30621,109 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="DocumentID" ColumnName="DocumentID" />
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="ExpenseCenterID" ColumnName="ExpenseCenterID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExpenseDocumentRows">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ExpenseDocumentRows">
+              <MappingFragment StoreEntitySet="ExpenseDocumentRows">
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Hour" ColumnName="Hour" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="DocumentID" ColumnName="DocumentID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExpenseAutoComputeType">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ExpenseAutoComputeType">
+              <MappingFragment StoreEntitySet="ExpenseAutoComputeType">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="ComputeType" ColumnName="ComputeType" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExpenseDocument">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ExpenseDocument">
+              <MappingFragment StoreEntitySet="ExpenseDocument">
+                <ScalarProperty Name="AutoComputeTypeID" ColumnName="AutoComputeTypeID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="DistributionAmount" ColumnName="DistributionAmount" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="DocumentDate" ColumnName="DocumentDate" />
+                <ScalarProperty Name="ExpenseMonth" ColumnName="ExpenseMonth" />
+                <ScalarProperty Name="ExpenseYear" ColumnName="ExpenseYear" />
+                <ScalarProperty Name="ExpensePeriod" ColumnName="ExpensePeriod" />
+                <ScalarProperty Name="ExpenseDescription" ColumnName="ExpenseDescription" />
+                <ScalarProperty Name="DocumentSource" ColumnName="DocumentSource" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="ExpenseItemID" ColumnName="ExpenseItemID" />
+                <ScalarProperty Name="ExpensePeriodCode" ColumnName="ExpensePeriodCode" />
+                <ScalarProperty Name="ExpenseGroupID" ColumnName="ExpenseGroupID" />
+                <ScalarProperty Name="ExpenseCenterID" ColumnName="ExpenseCenterID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VExpenseDocument">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VExpenseDocument">
+              <MappingFragment StoreEntitySet="VExpenseDocument">
+                <ScalarProperty Name="AutoComputeTypeID" ColumnName="AutoComputeTypeID" />
+                <ScalarProperty Name="ExpenseCenterName" ColumnName="ExpenseCenterName" />
+                <ScalarProperty Name="DateDay" ColumnName="DateDay" />
+                <ScalarProperty Name="DateYear" ColumnName="DateYear" />
+                <ScalarProperty Name="PeriodCode" ColumnName="PeriodCode" />
+                <ScalarProperty Name="ExpenseItemName" ColumnName="ExpenseItemName" />
+                <ScalarProperty Name="ExpenseGroupName" ColumnName="ExpenseGroupName" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="DistributionAmount" ColumnName="DistributionAmount" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="DocumentDate" ColumnName="DocumentDate" />
+                <ScalarProperty Name="ExpenseMonth" ColumnName="ExpenseMonth" />
+                <ScalarProperty Name="ExpenseYear" ColumnName="ExpenseYear" />
+                <ScalarProperty Name="ExpensePeriod" ColumnName="ExpensePeriod" />
+                <ScalarProperty Name="ExpenseDescription" ColumnName="ExpenseDescription" />
+                <ScalarProperty Name="DocumentSource" ColumnName="DocumentSource" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="ExpenseItemID" ColumnName="ExpenseItemID" />
+                <ScalarProperty Name="ExpensePeriodCode" ColumnName="ExpensePeriodCode" />
+                <ScalarProperty Name="ExpenseGroupID" ColumnName="ExpenseGroupID" />
+                <ScalarProperty Name="ExpenseCenterID" ColumnName="ExpenseCenterID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExpensePeriod">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ExpensePeriod">
+              <MappingFragment StoreEntitySet="ExpensePeriod">
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+                <ScalarProperty Name="DateMonth" ColumnName="DateMonth" />
+                <ScalarProperty Name="DateYear" ColumnName="DateYear" />
+                <ScalarProperty Name="PeriodCode" ColumnName="PeriodCode" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>

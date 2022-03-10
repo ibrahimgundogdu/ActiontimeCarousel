@@ -440,6 +440,9 @@
     <Compile Include="ExpenseActions.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="ExpenseAutoComputeType.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="ExpenseCenter.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -450,6 +453,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="ExpenseDocumentChart.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExpenseDocumentRows.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="ExpenseDocumentStatus.cs">
