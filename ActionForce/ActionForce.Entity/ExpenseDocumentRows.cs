@@ -18,10 +18,10 @@ namespace ActionForce.Entity
         public Nullable<long> DocumentID { get; set; }
         public Nullable<int> LocationID { get; set; }
         public Nullable<int> EmployeeID { get; set; }
-        public Nullable<int> ActionTypeID { get; set; }
-        public Nullable<int> Quantity { get; set; }
+        public Nullable<double> Unit { get; set; }
         public Nullable<double> Hour { get; set; }
         public Nullable<double> Amount { get; set; }
         public string Currency { get; set; }
+        public Nullable<double> CostAmount { get; set; }
     }
 }

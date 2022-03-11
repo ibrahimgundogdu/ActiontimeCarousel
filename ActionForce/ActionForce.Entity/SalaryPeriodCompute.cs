@@ -69,5 +69,6 @@ namespace ActionForce.Entity
         public Nullable<int> SSKDayCount { get; set; }
         public Nullable<double> Tahakkuk { get; set; }
         public Nullable<bool> AddedEmployeeCashAction { get; set; }
+        public Nullable<int> EmployeeSalaryCategoryID { get; set; }
     }
 }
