@@ -645,7 +645,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult AddExpenseAuto(string ExpensePeriod, string Location, string Office, string Setcard, string Rent, string Vat, string Expense)
+        public ActionResult AddExpenseAuto(string ExpensePeriod, string Location, string Office, string Rent, string Vat, string Expense)
         {
             ExpenseControlModel model = new ExpenseControlModel();
 
@@ -659,15 +659,19 @@ namespace ActionForce.Office.Controllers
                 if (Location == "1")
                 {
                     var document = documentManager.ComputeExpenseDucumentHourlySalary(ExpensePeriod, model.Authentication);
+
+                    var sgkDocument = documentManager.ComputeExpenseDucumentHourlySGK(document.ID, ExpensePeriod, model.Authentication);
+
+                    var FoodDocument = documentManager.ComputeExpenseDucumentHourlyFoodCard(document.ID, ExpensePeriod, model.Authentication);
+
+                    var PrimDocument = documentManager.ComputeExpenseDucumentHourlyPremium(document.ID, ExpensePeriod, model.Authentication);
+
                 }
                 if (Office == "1")
                 {
 
                 }
-                if (Setcard == "1")
-                {
-
-                }
+               
                 if (Rent == "1")
                 {
 
@@ -681,6 +685,8 @@ namespace ActionForce.Office.Controllers
 
                 }
 
+                model.Result.IsSuccess = true;
+                model.Result.Message = "Hesaplama Tamamlandı";
             }
             else
             {

@@ -3140,5 +3140,85 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("MergeTicketSale", payedSaleIDParameter, loadedSaleIDParameter);
         }
+    
+        public virtual ObjectResult<Nullable<long>> AddExpenseDocumentChart(Nullable<long> documentID, Nullable<int> recordEmployeeID, string recordIP)
+        {
+            var documentIDParameter = documentID.HasValue ?
+                new ObjectParameter("DocumentID", documentID) :
+                new ObjectParameter("DocumentID", typeof(long));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddExpenseDocumentChart", documentIDParameter, recordEmployeeIDParameter, recordIPParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> AddExpenseDocumentChartSGK(Nullable<long> documentID, Nullable<long> parentDocumentID, Nullable<int> recordEmployeeID, string recordIP)
+        {
+            var documentIDParameter = documentID.HasValue ?
+                new ObjectParameter("DocumentID", documentID) :
+                new ObjectParameter("DocumentID", typeof(long));
+    
+            var parentDocumentIDParameter = parentDocumentID.HasValue ?
+                new ObjectParameter("ParentDocumentID", parentDocumentID) :
+                new ObjectParameter("ParentDocumentID", typeof(long));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddExpenseDocumentChartSGK", documentIDParameter, parentDocumentIDParameter, recordEmployeeIDParameter, recordIPParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> AddExpenseDocumentChartFoodCard(Nullable<long> documentID, Nullable<long> parentDocumentID, Nullable<int> recordEmployeeID, string recordIP)
+        {
+            var documentIDParameter = documentID.HasValue ?
+                new ObjectParameter("DocumentID", documentID) :
+                new ObjectParameter("DocumentID", typeof(long));
+    
+            var parentDocumentIDParameter = parentDocumentID.HasValue ?
+                new ObjectParameter("ParentDocumentID", parentDocumentID) :
+                new ObjectParameter("ParentDocumentID", typeof(long));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddExpenseDocumentChartFoodCard", documentIDParameter, parentDocumentIDParameter, recordEmployeeIDParameter, recordIPParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> AddExpenseDocumentChartPremium(Nullable<long> documentID, Nullable<long> parentDocumentID, Nullable<int> recordEmployeeID, string recordIP)
+        {
+            var documentIDParameter = documentID.HasValue ?
+                new ObjectParameter("DocumentID", documentID) :
+                new ObjectParameter("DocumentID", typeof(long));
+    
+            var parentDocumentIDParameter = parentDocumentID.HasValue ?
+                new ObjectParameter("ParentDocumentID", parentDocumentID) :
+                new ObjectParameter("ParentDocumentID", typeof(long));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddExpenseDocumentChartPremium", documentIDParameter, parentDocumentIDParameter, recordEmployeeIDParameter, recordIPParameter);
+        }
     }
 }

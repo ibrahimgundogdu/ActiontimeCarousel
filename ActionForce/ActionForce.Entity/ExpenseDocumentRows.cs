@@ -23,5 +23,8 @@ namespace ActionForce.Entity
         public Nullable<double> Amount { get; set; }
         public string Currency { get; set; }
         public Nullable<double> CostAmount { get; set; }
+        public Nullable<double> PremiumAmount { get; set; }
+        public Nullable<double> SGKCostAmount { get; set; }
+        public Nullable<double> FoodCardCostAmount { get; set; }
     }
 }
