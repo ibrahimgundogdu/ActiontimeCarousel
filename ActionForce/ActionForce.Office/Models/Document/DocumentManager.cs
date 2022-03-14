@@ -6493,6 +6493,473 @@ namespace ActionForce.Office
         }
 
 
+        //Kıdem
+        public ExpenseDocument ComputeExpenseDucumentKidem(string expensePeriod, AuthenticationModel authentication)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            var expenseDocument = new ExpenseDocument();
+
+            List<ExpenseDocumentRows> expenseDocumentRows = new List<ExpenseDocumentRows>();
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var ePeriod = Db.ExpensePeriod.FirstOrDefault(x => x.PeriodCode == expensePeriod);
+
+                // lokasyon net maaş 
+                expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 13 && x.ExpenseItemID == 43 && x.ExpensePeriodCode == expensePeriod);
+
+                if (expenseDocument != null && expenseDocument.StatusID == 1)
+                {
+                    return expenseDocument;
+                }
+                else if (expenseDocument != null && expenseDocument.StatusID == 0)
+                {
+                    var rows = Db.ExpenseDocumentRows.Where(x => x.DocumentID == expenseDocument.ID).ToList();
+                    Db.ExpenseDocumentRows.RemoveRange(rows);
+                    Db.SaveChanges();
+
+                }
+                else if (expenseDocument == null)  // hakediş    || (expenseDocument != null  && expenseDocument.StatusID == 0)
+                {
+                    ExpenseDocument document = new ExpenseDocument();
+
+                    var UID = Guid.NewGuid();
+
+                    document.UID = UID;
+                    document.DocumentNumber = OfficeHelper.GetDocumentNumber(authentication.ActionEmployee.OurCompanyID ?? 2, "EXD");
+                    document.RecordDate = DateTime.UtcNow.AddHours(3);
+                    document.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
+                    document.RecordIP = OfficeHelper.GetIPAddress();
+                    document.DocumentSource = "General-" + expensePeriod;
+                    document.ExpenseDescription = "";
+                    document.DistributionAmount = 0;
+                    document.TotalAmount = 0;
+                    document.ExpenseGroupID = 3;
+                    document.Currency = authentication.ActionEmployee.OurCompany.Currency;
+                    document.DocumentDate = DateTime.UtcNow.AddHours(authentication.ActionEmployee.OurCompany.TimeZone ?? 3);
+                    document.ExpenseItemID = 43;
+                    document.ExpenseCenterID = 80;
+                    document.ExpensePeriod = ePeriod.DateBegin;
+                    document.IsActive = true;
+                    document.StatusID = 0;
+                    document.OurCompanyID = authentication.ActionEmployee.OurCompanyID;
+                    document.ExpenseYear = ePeriod.DateYear;
+                    document.ExpenseMonth = ePeriod.DateMonth;
+                    document.ExpensePeriodCode = expensePeriod;
+                    document.AutoComputeTypeID = 13;
+
+                    Db.ExpenseDocument.Add(document);
+                    Db.SaveChanges();
+
+                    OfficeHelper.AddApplicationLog("Office", "ExpenseDocument", "Insert", document.ID.ToString(), "Expense", "NewDocument", null, true, "İşletme Masraf Dokümanı Otomatik Eklendi", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, document);
+
+                    expenseDocument = document;
+                }
+
+                List<int> denyEmployeeIds = new List<int>() { 19, 3650, 6150, 6240, 6627 };
+                List<int> actionTypeIds = new List<int>() { 32, 44 };
+
+                // document rows
+
+                var salaryPeriod = Db.VSalaryPeriod.FirstOrDefault(x => x.OurCompanyID == authentication.ActionEmployee.OurCompany.CompanyID && x.SalaryPeriodGroupID == 4 && x.Year == expenseDocument.ExpenseYear && x.Month == expenseDocument.ExpenseMonth);
+                var salaryPeriodComputes = Db.SalaryPeriodCompute.Where(x => x.SalaryPeriodID == salaryPeriod.ID && !denyEmployeeIds.Contains(x.EmployeeID.Value)).ToList();
+
+                var CostAmountTotal = salaryPeriodComputes.Sum(x => (x.Kidem + x.Ihbar));
+                var employeeIds = salaryPeriodComputes.Select(x => x.EmployeeID.Value).Distinct().ToList();
+
+                expenseDocument.TotalAmount = CostAmountTotal;
+                expenseDocument.DistributionAmount = CostAmountTotal;
+
+                Db.SaveChanges();
+
+
+                foreach (var empId in employeeIds)
+                {
+                    var CostAmount = salaryPeriodComputes.Where(x => x.EmployeeID == empId).Sum(x => (x.Kidem + x.Ihbar));
+
+                    ExpenseDocumentRows row = new ExpenseDocumentRows();
+
+                    row.EmployeeID = empId;
+                    row.LocationID = 80;
+                    row.DocumentID = expenseDocument.ID;
+                    row.Currency = authentication.ActionEmployee.OurCompany.Currency;
+                    row.Unit = 1;
+                    row.Hour = 1;
+                    row.Amount = CostAmount;
+                    row.CostAmount = CostAmount;
+                    row.PremiumAmount = 0;
+                    row.SGKCostAmount = 0;
+                    row.FoodCardCostAmount = 0;
+
+                    Db.ExpenseDocumentRows.Add(row);
+
+                    Db.SaveChanges();
+                }
+
+            }
+
+            return expenseDocument;
+        }
+
+        public Result ComputeExpenseDucumentMontlyKidemChart(long DocumentID, string expensePeriod, AuthenticationModel authentication)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+
+                var docid = Db.AddExpenseDocumentChartKidem(DocumentID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+                result.IsSuccess = true;
+                result.Message = "Dağılım eklendi";
+
+            }
+
+            return result;
+        }
+
+        //expense  banka 25, temizlik 26
+        public ExpenseDocument ComputeExpenseDucumentLocationExpense(string expensePeriod, AuthenticationModel authentication)
+        {
+
+            var expenseDocument = new ExpenseDocument();
+
+            List<ExpenseDocumentRows> expenseDocumentRows = new List<ExpenseDocumentRows>();
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var ePeriod = Db.ExpensePeriod.FirstOrDefault(x => x.PeriodCode == expensePeriod);
+
+                // lokasyon net maaş 
+                expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 12 && x.ExpenseItemID == 26 && x.ExpensePeriodCode == expensePeriod);
+
+                if (expenseDocument != null && expenseDocument.StatusID == 1)
+                {
+                    return expenseDocument;
+                }
+                else if (expenseDocument != null && expenseDocument.StatusID == 0)
+                {
+                    var rows = Db.ExpenseDocumentRows.Where(x => x.DocumentID == expenseDocument.ID).ToList();
+                    Db.ExpenseDocumentRows.RemoveRange(rows);
+                    Db.SaveChanges();
+
+                }
+                else if (expenseDocument == null)  // hakediş    || (expenseDocument != null  && expenseDocument.StatusID == 0)
+                {
+                    ExpenseDocument document = new ExpenseDocument();
+
+                    var UID = Guid.NewGuid();
+
+                    document.UID = UID;
+                    document.DocumentNumber = OfficeHelper.GetDocumentNumber(authentication.ActionEmployee.OurCompanyID ?? 2, "EXD");
+                    document.RecordDate = DateTime.UtcNow.AddHours(3);
+                    document.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
+                    document.RecordIP = OfficeHelper.GetIPAddress();
+                    document.DocumentSource = "LocationExpense-" + expensePeriod;
+                    document.ExpenseDescription = "";
+                    document.DistributionAmount = 0;
+                    document.TotalAmount = 0;
+                    document.ExpenseGroupID = 3;
+                    document.Currency = authentication.ActionEmployee.OurCompany.Currency;
+                    document.DocumentDate = DateTime.UtcNow.AddHours(authentication.ActionEmployee.OurCompany.TimeZone ?? 3);
+                    document.ExpenseItemID = 26;
+                    document.ExpenseCenterID = 80;
+                    document.ExpensePeriod = ePeriod.DateBegin;
+                    document.IsActive = true;
+                    document.StatusID = 0;
+                    document.OurCompanyID = authentication.ActionEmployee.OurCompanyID;
+                    document.ExpenseYear = ePeriod.DateYear;
+                    document.ExpenseMonth = ePeriod.DateMonth;
+                    document.ExpensePeriodCode = expensePeriod;
+                    document.AutoComputeTypeID = 12;
+                    document.TaxRate = 18;
+
+                    Db.ExpenseDocument.Add(document);
+                    Db.SaveChanges();
+
+                    OfficeHelper.AddApplicationLog("Office", "ExpenseDocument", "Insert", document.ID.ToString(), "Expense", "NewDocument", null, true, "Lokasyon Masraf Dokümanı Otomatik Eklendi", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, document);
+
+                    expenseDocument = document;
+                }
+
+                List<int> denyLocationIds = new List<int>() { 179, 175, 212 };
+
+                // document rows
+                //Date >= '2022-01-01' and Date <= '2022-01-31' and OurCompanyID = 2 and IsActive = 1
+                var documentCashExpense = Db.DocumentCashExpense.Where(x => x.OurCompanyID == authentication.ActionEmployee.OurCompanyID && x.IsActive == true && !denyLocationIds.Contains(x.LocationID.Value) && x.Date >= ePeriod.DateBegin && x.Date <= ePeriod.DateEnd).ToList();
+
+                var CostAmountTotal = documentCashExpense.Sum(x => x.SystemAmount);
+                var LocationIds = documentCashExpense.Select(x => x.LocationID.Value).Distinct().ToList();
+
+                expenseDocument.TotalAmount = CostAmountTotal;
+                expenseDocument.DistributionAmount = CostAmountTotal;
+
+                Db.SaveChanges();
+
+
+                foreach (var locId in LocationIds)
+                {
+                    var CostAmount = documentCashExpense.Where(x => x.LocationID == locId).Sum(x => (x.SystemAmount));
+
+                    ExpenseDocumentRows row = new ExpenseDocumentRows();
+
+                    row.EmployeeID = 0;
+                    row.LocationID = locId;
+                    row.DocumentID = expenseDocument.ID;
+                    row.Currency = authentication.ActionEmployee.OurCompany.Currency;
+                    row.Unit = 1;
+                    row.Hour = 1;
+                    row.Amount = CostAmount;
+                    row.CostAmount = CostAmount;
+                    row.PremiumAmount = 0;
+                    row.SGKCostAmount = 0;
+                    row.FoodCardCostAmount = 0;
+
+                    Db.ExpenseDocumentRows.Add(row);
+
+                    Db.SaveChanges();
+                }
+
+                Db.AddExpenseDocumentChart(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+            }
+
+            return expenseDocument;
+        }
+
+        public ExpenseDocument ComputeExpenseDucumentBankExpense(string expensePeriod, AuthenticationModel authentication)
+        {
+
+            var expenseDocument = new ExpenseDocument();
+
+            List<ExpenseDocumentRows> expenseDocumentRows = new List<ExpenseDocumentRows>();
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var ePeriod = Db.ExpensePeriod.FirstOrDefault(x => x.PeriodCode == expensePeriod);
+
+                // lokasyon net maaş 
+                expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 12 && x.ExpenseItemID == 25 && x.ExpensePeriodCode == expensePeriod);
+
+                if (expenseDocument != null && expenseDocument.StatusID == 1)
+                {
+                    return expenseDocument;
+                }
+                else if (expenseDocument != null && expenseDocument.StatusID == 0)
+                {
+                    var rows = Db.ExpenseDocumentRows.Where(x => x.DocumentID == expenseDocument.ID).ToList();
+                    Db.ExpenseDocumentRows.RemoveRange(rows);
+                    Db.SaveChanges();
+
+                }
+                else if (expenseDocument == null)  // hakediş    || (expenseDocument != null  && expenseDocument.StatusID == 0)
+                {
+                    ExpenseDocument document = new ExpenseDocument();
+
+                    var UID = Guid.NewGuid();
+
+                    document.UID = UID;
+                    document.DocumentNumber = OfficeHelper.GetDocumentNumber(authentication.ActionEmployee.OurCompanyID ?? 2, "EXD");
+                    document.RecordDate = DateTime.UtcNow.AddHours(3);
+                    document.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
+                    document.RecordIP = OfficeHelper.GetIPAddress();
+                    document.DocumentSource = "LocationBankExpense-" + expensePeriod;
+                    document.ExpenseDescription = "";
+                    document.DistributionAmount = 0;
+                    document.TotalAmount = 0;
+                    document.ExpenseGroupID = 3;
+                    document.Currency = authentication.ActionEmployee.OurCompany.Currency;
+                    document.DocumentDate = DateTime.UtcNow.AddHours(authentication.ActionEmployee.OurCompany.TimeZone ?? 3);
+                    document.ExpenseItemID = 25;
+                    document.ExpenseCenterID = 80;
+                    document.ExpensePeriod = ePeriod.DateBegin;
+                    document.IsActive = true;
+                    document.StatusID = 0;
+                    document.OurCompanyID = authentication.ActionEmployee.OurCompanyID;
+                    document.ExpenseYear = ePeriod.DateYear;
+                    document.ExpenseMonth = ePeriod.DateMonth;
+                    document.ExpensePeriodCode = expensePeriod;
+                    document.AutoComputeTypeID = 12;
+                    document.TaxRate = 18;
+
+                    Db.ExpenseDocument.Add(document);
+                    Db.SaveChanges();
+
+                    OfficeHelper.AddApplicationLog("Office", "ExpenseDocument", "Insert", document.ID.ToString(), "Expense", "NewDocument", null, true, "Lokasyon Masraf Dokümanı Otomatik Eklendi", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, document);
+
+                    expenseDocument = document;
+                }
+
+                List<int> denyLocationIds = new List<int>() { 179, 175, 212 };
+
+                // document rows
+                //[dbo].[DocumentBankTransfer]   Where Date >= '2022-01-01' and Date <= '2022-01-31' and OurCompanyID = 2 and IsActive = 1
+                var documentBankExpense = Db.DocumentBankTransfer.Where(x => x.OurCompanyID == authentication.ActionEmployee.OurCompanyID && x.IsActive == true && !denyLocationIds.Contains(x.LocationID.Value) && x.Date >= ePeriod.DateBegin && x.Date <= ePeriod.DateEnd).ToList();
+
+                var CostAmountTotal = documentBankExpense.Sum(x => x.Commission);
+                var LocationIds = documentBankExpense.Select(x => x.LocationID.Value).Distinct().ToList();
+
+                expenseDocument.TotalAmount = CostAmountTotal;
+                expenseDocument.DistributionAmount = CostAmountTotal;
+
+                Db.SaveChanges();
+
+
+                foreach (var locId in LocationIds)
+                {
+                    var CostAmount = documentBankExpense.Where(x => x.LocationID == locId).Sum(x => (x.Commission));
+
+                    ExpenseDocumentRows row = new ExpenseDocumentRows();
+
+                    row.EmployeeID = 0;
+                    row.LocationID = locId;
+                    row.DocumentID = expenseDocument.ID;
+                    row.Currency = authentication.ActionEmployee.OurCompany.Currency;
+                    row.Unit = 1;
+                    row.Hour = 1;
+                    row.Amount = CostAmount;
+                    row.CostAmount = CostAmount;
+                    row.PremiumAmount = 0;
+                    row.SGKCostAmount = 0;
+                    row.FoodCardCostAmount = 0;
+
+                    Db.ExpenseDocumentRows.Add(row);
+
+                    Db.SaveChanges();
+                }
+
+                Db.AddExpenseDocumentChart(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+            }
+
+
+            return expenseDocument;
+        }
+
+        //rent
+        public ExpenseDocument ComputeExpenseDucumentLocationRent(string expensePeriod, AuthenticationModel authentication)
+        {
+
+            var expenseDocument = new ExpenseDocument();
+
+            List<ExpenseDocumentRows> expenseDocumentRows = new List<ExpenseDocumentRows>();
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var ePeriod = Db.ExpensePeriod.FirstOrDefault(x => x.PeriodCode == expensePeriod);
+
+                // lokasyon kira 9
+                expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 9 && x.ExpenseItemID == 4 && x.ExpensePeriodCode == expensePeriod);
+
+                if (expenseDocument != null && expenseDocument.StatusID == 1)
+                {
+                    return expenseDocument;
+                }
+                else if (expenseDocument != null && expenseDocument.StatusID == 0)
+                {
+                    var rows = Db.ExpenseDocumentRows.Where(x => x.DocumentID == expenseDocument.ID).ToList();
+                    Db.ExpenseDocumentRows.RemoveRange(rows);
+                    Db.SaveChanges();
+
+                }
+                else if (expenseDocument == null)
+                {
+                    ExpenseDocument document = new ExpenseDocument();
+
+                    var UID = Guid.NewGuid();
+
+                    document.UID = UID;
+                    document.DocumentNumber = OfficeHelper.GetDocumentNumber(authentication.ActionEmployee.OurCompanyID ?? 2, "EXD");
+                    document.RecordDate = DateTime.UtcNow.AddHours(3);
+                    document.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
+                    document.RecordIP = OfficeHelper.GetIPAddress();
+                    document.DocumentSource = "LocationExpense-" + expensePeriod;
+                    document.ExpenseDescription = "";
+                    document.DistributionAmount = 0;
+                    document.TotalAmount = 0;
+                    document.ExpenseGroupID = 2;
+                    document.Currency = authentication.ActionEmployee.OurCompany.Currency;
+                    document.DocumentDate = DateTime.UtcNow.AddHours(authentication.ActionEmployee.OurCompany.TimeZone ?? 3);
+                    document.ExpenseItemID = 4;
+                    document.ExpenseCenterID = 80;
+                    document.ExpensePeriod = ePeriod.DateBegin;
+                    document.IsActive = true;
+                    document.StatusID = 0;
+                    document.OurCompanyID = authentication.ActionEmployee.OurCompanyID;
+                    document.ExpenseYear = ePeriod.DateYear;
+                    document.ExpenseMonth = ePeriod.DateMonth;
+                    document.ExpensePeriodCode = expensePeriod;
+                    document.AutoComputeTypeID = 9;
+                    document.TaxRate = 18;
+
+                    Db.ExpenseDocument.Add(document);
+                    Db.SaveChanges();
+
+                    OfficeHelper.AddApplicationLog("Office", "ExpenseDocument", "Insert", document.ID.ToString(), "Expense", "NewDocument", null, true, "Lokasyon Kira Masraf Dokümanı Otomatik Eklendi", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, document);
+
+                    expenseDocument = document;
+                }
+
+                List<int> denyLocationIds = new List<int>() { 179, 175, 212 };
+
+                //SELECT distinct [LocationID]  FROM [dbo].[VLocationShift] Where [ShiftDate] >= '2022-01-01' and [ShiftDate] <= '2022-01-31'  and DurationMinute > 0 and OurCompanyID = 2
+                var LocationIds = Db.VLocationShift.Where(x => x.OurCompanyID == authentication.ActionEmployee.OurCompanyID && x.DurationMinute > 0 && x.ShiftDate >= ePeriod.DateBegin && x.ShiftDate <= ePeriod.DateEnd && !denyLocationIds.Contains(x.LocationID)).Select(x => x.LocationID).Distinct().ToList();
+
+                Db.SaveChanges();
+
+                foreach (var locId in LocationIds)
+                {
+                    var isOpen = Db.LocationPeriods.Any(x => x.LocationID == locId && (x.ContractStartDate <= ePeriod.DateBegin && x.ContractFinishDate >= ePeriod.DateBegin) || (x.ContractStartDate <= ePeriod.DateEnd && x.ContractFinishDate >= ePeriod.DateEnd));
+
+                    //SELECT TOP (1) [Total], [Money] FROM [dbo].[VLocationParam] Where TypeID = 5 and LocationID = 225  and DateStart <= '2022-03-14' and DateFinish >= '2022-03-14' Order by DateStart desc
+                    var rent = Db.LocationParam.Where(x => x.TypeID == 5 && x.LocationID == locId && x.DateStart <= ePeriod.DateBegin && x.DateFinish >= ePeriod.DateEnd).OrderByDescending(x => x.DateStart).Take(1).FirstOrDefault();
+
+                    if (rent != null && isOpen == true)
+                    {
+
+
+                        ExpenseDocumentRows row = new ExpenseDocumentRows();
+
+                        row.EmployeeID = 0;
+                        row.LocationID = locId;
+                        row.DocumentID = expenseDocument.ID;
+                        row.Currency = authentication.ActionEmployee.OurCompany.Currency;
+                        row.Unit = 1;
+                        row.Hour = 1;
+                        row.Amount = rent.Total * 1.18; // kiralar kdv hariç idi
+                        row.CostAmount = row.Amount;
+                        row.PremiumAmount = 0;
+                        row.SGKCostAmount = 0;
+                        row.FoodCardCostAmount = 0;
+                       
+                        Db.ExpenseDocumentRows.Add(row);
+
+                        Db.SaveChanges();
+                    }
+                }
+
+                Db.AddExpenseDocumentChart(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+            }
+
+            return expenseDocument;
+        }
+
+
+
+
+
+
+
+
+
+
+
 
     }
 }

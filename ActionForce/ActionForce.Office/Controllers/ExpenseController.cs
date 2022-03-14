@@ -12,7 +12,7 @@ namespace ActionForce.Office.Controllers
     {
 
         [AllowAnonymous]
-        public ActionResult Index(int? ECID, int? EIID, int? ESID, string EPCD)
+        public ActionResult Index(int? ECID, int? EIID, int? EGID, int? ESID, string EPCD)
         {
             ExpenseControlModel model = new ExpenseControlModel();
 
@@ -32,6 +32,7 @@ namespace ActionForce.Office.Controllers
 
                 filterModel.ExpenseCenterID = ECID ?? null;
                 filterModel.ExpenseItemID = EIID ?? null;
+                filterModel.ExpenseGroupID = EGID ?? null;
                 filterModel.ExpenseStatusID = ESID ?? null;
                 filterModel.ExpensePeriodCode = !string.IsNullOrEmpty(EPCD) ? EPCD : string.Empty;
                 filterModel.DateBegin = new DateTime(DateTime.Now.Year, 1, 1);
@@ -44,10 +45,11 @@ namespace ActionForce.Office.Controllers
             model.ExpenseItems = Db.ExpenseItem.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.SortBy).ToList();
             model.ExpenseDocumentStatuses = Db.ExpenseDocumentStatus.OrderBy(x => x.SortBy).ToList();
             model.ExpensePeriods = Db.ExpensePeriod.OrderBy(x => x.DateBegin).ToList();
+            model.ExpenseGroups = Db.ExpenseGroup.OrderBy(x => x.SortBy).ToList();
 
             IQueryable<VExpenseDocument> expenseDocuments;
 
-            if (model.Filters.FromSearch == true || ECID != null || EIID != null || ESID != null || !string.IsNullOrEmpty(EPCD))
+            if (model.Filters.FromSearch == true || ECID != null || EIID != null || EGID != null || ESID != null || !string.IsNullOrEmpty(EPCD))
             {
                 expenseDocuments = Db.VExpenseDocument.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID);
 
@@ -59,6 +61,11 @@ namespace ActionForce.Office.Controllers
                 if (model.Filters.ExpenseItemID != null)
                 {
                     expenseDocuments = expenseDocuments.Where(x => x.ExpenseItemID == model.Filters.ExpenseItemID);
+                }
+
+                if (model.Filters.ExpenseGroupID != null)
+                {
+                    expenseDocuments = expenseDocuments.Where(x => x.ExpenseGroupID == model.Filters.ExpenseGroupID);
                 }
 
                 if (model.Filters.ExpenseStatusID != null)
@@ -90,12 +97,13 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult ExpenseFilter(int? ECID, int? EIID, int? ESID, string EPCD, DateTime? DTBG, DateTime DTEN)
+        public ActionResult ExpenseFilter(int? ECID, int? EIID, int? EGID, int? ESID, string EPCD, DateTime? DTBG, DateTime DTEN)
         {
             ExpenseFilterModel model = new ExpenseFilterModel();
 
             model.ExpenseCenterID = ECID ?? null;
             model.ExpenseItemID = EIID ?? null;
+            model.ExpenseGroupID = EGID ?? null;
             model.ExpenseStatusID = ESID ?? null;
             model.ExpensePeriodCode = !string.IsNullOrEmpty(EPCD) ? EPCD : string.Empty;
             model.DateBegin = DTBG != null ? DTBG : new DateTime(DateTime.Now.Year, 1, 1);
@@ -150,6 +158,7 @@ namespace ActionForce.Office.Controllers
             {
                 var totalAmount = Convert.ToDouble(form.TotalAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var distAmount = Convert.ToDouble(form.DistributionAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var taxRate = Convert.ToDouble(form.TaxRate.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
 
                 var document = Db.ExpenseDocument.FirstOrDefault(x => x.ExpenseCenterID == form.ExpenseCenterID && x.ExpenseItemID == form.ExpenseItemID && x.ExpenseGroupID == form.ExpenseGroupID && x.TotalAmount == totalAmount);
 
@@ -176,6 +185,7 @@ namespace ActionForce.Office.Controllers
                     document.IsActive = true;
                     document.StatusID = 0;
                     document.OurCompanyID = model.Authentication.ActionEmployee.OurCompanyID;
+                    document.TaxRate = taxRate;
 
                     if (form.ExpensePeriod != null)
                     {
@@ -278,11 +288,15 @@ namespace ActionForce.Office.Controllers
                         ExpenseYear = document.ExpenseYear,
                         ID = document.ID,
                         StatusID = document.StatusID,
-                        TotalAmount = document.TotalAmount
+                        TotalAmount = document.TotalAmount,
+                        TaxRate = document.TaxRate,
+                        AutoComputeTypeID = document.AutoComputeTypeID,
+                        TaxAmount = document.TaxAmount
                     };
 
                     var totalAmount = Convert.ToDouble(form.TotalAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                     var distAmount = Convert.ToDouble(form.DistributionAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                    var taxRate = Convert.ToDouble(form.TaxRate.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
 
                     document.ExpenseDescription = form.ExpenseDescription;
 
@@ -290,12 +304,14 @@ namespace ActionForce.Office.Controllers
                     {
                         document.DistributionAmount = distAmount;
                         document.TotalAmount = totalAmount;
+                        document.TaxRate = taxRate;
                         document.ExpenseGroupID = form.ExpenseGroupID;
                         document.Currency = form.Currency;
                         document.DocumentDate = form.DocumentDate;
                         document.ExpenseItemID = form.ExpenseItemID;
                         document.ExpenseCenterID = form.ExpenseCenterID;
                         document.ExpensePeriod = form.ExpensePeriod;
+                        
                         if (form.ExpensePeriod != null)
                         {
                             document.ExpenseYear = document.ExpensePeriod.Value.Year;
@@ -678,11 +694,16 @@ namespace ActionForce.Office.Controllers
                         var foodDocument = documentManager.ComputeExpenseDucumentMontlyFoodCard(item.ID, item.ExpenseCenterID, ExpensePeriod, model.Authentication);
                         var premDocument = documentManager.ComputeExpenseDucumentMontlyPremium(item.ID, item.ExpenseCenterID, ExpensePeriod, model.Authentication);
                     }
+
+                    var documentg = documentManager.ComputeExpenseDucumentKidem(ExpensePeriod, model.Authentication);
+                    var gDocument = documentManager.ComputeExpenseDucumentMontlyKidemChart(documentg.ID, ExpensePeriod, model.Authentication);
                 }
                
                 if (Rent == "1")
                 {
+                    var documentL = documentManager.ComputeExpenseDucumentLocationRent(ExpensePeriod, model.Authentication);
 
+                    var documentO = documentManager.ComputeExpenseDucumentOfficeRent(ExpensePeriod, model.Authentication);
                 }
                 if (Vat == "1")
                 {
@@ -690,7 +711,9 @@ namespace ActionForce.Office.Controllers
                 }
                 if (Expense == "1")
                 {
+                    var documentL = documentManager.ComputeExpenseDucumentLocationExpense(ExpensePeriod, model.Authentication);
 
+                    var documentB = documentManager.ComputeExpenseDucumentBankExpense(ExpensePeriod, model.Authentication);
                 }
 
                 model.Result.IsSuccess = true;

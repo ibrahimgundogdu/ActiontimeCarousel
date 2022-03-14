@@ -37,6 +37,7 @@ namespace ActionForce.Office
     {
         public int? ExpenseCenterID { get; set; }
         public int? ExpenseItemID { get; set; }
+        public int? ExpenseGroupID { get; set; }
         public int? ExpenseStatusID { get; set; }
         public string ExpensePeriodCode { get; set; }
         public DateTime? DateBegin { get; set; }

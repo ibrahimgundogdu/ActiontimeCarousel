@@ -19,61 +19,71 @@
     @using (Html.BeginForm("ExpenseFilter", "Expense", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
-        <div class="form-row align-items-end">
+    <div class="form-row align-items-end">
 
-            <div class="form-group col-md-3 d-flex align-items-end">
-                <select class="form-control select2" id="ECID" name="ECID">
-                    <option value="" label="Gelir/Gider Merkezi Seçiminiz"></option>
-                    @foreach (var item in Model.ExpenseCenters.OrderBy(x => x.SortBy))
-                    {
-                        <option value="@item.ID" @(Model.Filters.ExpenseCenterID == item.ID ? "selected" : "")>@(Html.Raw($"<strong>{item.ExpenseCenterName}</strong> ({item.IsActive}) "))</option>
-                    }
-                </select>
-            </div>
-
-            <div class="form-group col-md-2 d-flex align-items-end">
-                <select class="form-control select2" id="EIID" name="EIID">
-                    <option value="" label="Masraf Kalemi Seçiminiz"></option>
-                    @foreach (var item in Model.ExpenseItems.OrderBy(x => x.SortBy))
-                    {
-                        <option value="@item.ID" @(Model.Filters.ExpenseItemID == item.ID ? "selected" : "")>@(Html.Raw($"<strong>{item.ExpenseItemName}</strong>"))</option>
-                    }
-                </select>
-            </div>
-
-            <div class="form-group col-md-2 d-flex align-items-end">
-                <select class="form-control select2" id="ESID" name="ESID">
-                    <option value="" label="Durum Seçiminiz"></option>
-                    @foreach (var item in Model.ExpenseDocumentStatuses.OrderBy(x => x.SortBy))
-                    {
-                        <option value="@item.ID" @(Model.Filters.ExpenseStatusID == item.ID ? "selected" : "")>@(Html.Raw($"<strong>{item.StatusName}</strong>"))</option>
-                    }
-                </select>
-            </div>
-
-            <div class="form-group col-md-1 d-flex align-items-end">
-                <select class="form-control select2" id="EPCD" name="EPCD">
-                    <option value="" label="Dönem"></option>
-                    @foreach (var item in Model.ExpensePeriods.OrderBy(x => x.DateBegin))
-                    {
-                        <option value="@item.PeriodCode" @(Model.Filters.ExpensePeriodCode == item.PeriodCode ? "selected" : "")>@(Html.Raw($"<strong>{item.PeriodCode}</strong>"))</option>
-                    }
-                </select>
-            </div>
-
-            <div class="form-group col-md-1 d-flex align-items-end">
-                <input type="text" id="DTBG" name="DTBG" class="form-control" autocomplete="off" placeholder="Başlangıç Tarihi" value="@(Model.Filters.DateBegin.Value.ToString("yyyy-MM-dd"))">
-            </div>
-            <div class="form-group col-md-1 d-flex align-items-end">
-                <input type="text" id="DTEN" name="DTEN" class="form-control" autocomplete="off" placeholder="Bitiş Tarihi" value="@(Model.Filters.DateEnd.Value.ToString("yyyy-MM-dd"))">
-            </div>
-            <div class="form-group col-md-1 d-flex align-items-end ">
-                <button class="btn btn-primary btn-block" type="submit" id="btnsearch">Ara</button>
-            </div>
-            <div class="form-group col-md-1 d-flex align-items-end ">
-                <a href="/Expense/NewDocument" class="btn btn-success btn-block font-weight-bold"> <i data-feather="plus"></i>  Yeni</a>
-            </div>
+        <div class="form-group col-md-3 d-flex align-items-end">
+            <select class="form-control select2" id="ECID" name="ECID">
+                <option value="" label="Gelir/Gider Merkezi Seçiminiz"></option>
+                @foreach (var item in Model.ExpenseCenters.OrderBy(x => x.SortBy))
+                {
+                    <option value="@item.ID" @(Model.Filters.ExpenseCenterID == item.ID ? "selected" : "")>@(Html.Raw($"<strong>{item.ExpenseCenterName}</strong> ({item.IsActive}) "))</option>
+                }
+            </select>
         </div>
+
+        <div class="form-group col-md-2 d-flex align-items-end">
+            <select class="form-control select2" id="EIID" name="EIID">
+                <option value="" label="Masraf Kalemi Seçiminiz"></option>
+                @foreach (var item in Model.ExpenseItems.OrderBy(x => x.SortBy))
+                {
+                    <option value="@item.ID" @(Model.Filters.ExpenseItemID == item.ID ? "selected" : "")>@(Html.Raw($"<strong>{item.ExpenseItemName}</strong>"))</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group col-md-1 d-flex align-items-end">
+            <select class="form-control select2" id="EGID" name="EGID">
+                <option value="" label="Grup Seçiminiz"></option>
+                @foreach (var item in Model.ExpenseGroups.OrderBy(x => x.SortBy))
+                {
+                    <option value="@item.ID" @(Model.Filters.ExpenseGroupID == item.ID ? "selected" : "")>@(Html.Raw($"<strong>{item.ExpenseGroupName}</strong>"))</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group col-md-1 d-flex align-items-end">
+            <select class="form-control select2" id="ESID" name="ESID">
+                <option value="" label="Durum Seçiminiz"></option>
+                @foreach (var item in Model.ExpenseDocumentStatuses.OrderBy(x => x.SortBy))
+                {
+                    <option value="@item.ID" @(Model.Filters.ExpenseStatusID == item.ID ? "selected" : "")>@(Html.Raw($"<strong>{item.StatusName}</strong>"))</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group col-md-1 d-flex align-items-end">
+            <select class="form-control select2" id="EPCD" name="EPCD">
+                <option value="" label="Dönem"></option>
+                @foreach (var item in Model.ExpensePeriods.OrderBy(x => x.DateBegin))
+                {
+                    <option value="@item.PeriodCode" @(Model.Filters.ExpensePeriodCode == item.PeriodCode ? "selected" : "")>@(Html.Raw($"<strong>{item.PeriodCode}</strong>"))</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group col-md-1 d-flex align-items-end">
+            <input type="text" id="DTBG" name="DTBG" class="form-control" autocomplete="off" placeholder="Başlangıç Tarihi" value="@(Model.Filters.DateBegin.Value.ToString("yyyy-MM-dd"))">
+        </div>
+        <div class="form-group col-md-1 d-flex align-items-end">
+            <input type="text" id="DTEN" name="DTEN" class="form-control" autocomplete="off" placeholder="Bitiş Tarihi" value="@(Model.Filters.DateEnd.Value.ToString("yyyy-MM-dd"))">
+        </div>
+        <div class="form-group col-md-1 d-flex align-items-end ">
+            <button class="btn btn-primary btn-block" type="submit" id="btnsearch">Ara</button>
+        </div>
+        <div class="form-group col-md-1 d-flex align-items-end ">
+            <a href="/Expense/NewDocument" class="btn btn-success btn-block font-weight-bold"> <i data-feather="plus"></i>  Yeni</a>
+        </div>
+    </div>
     }
 
     @if (Model.ExpenseDocuments != null && Model.ExpenseDocuments.Count > 0)
@@ -114,7 +124,7 @@
                                 <td class="tx-sm-13">@(exp.ExpenseCenterName)</td>
                                 <td class="tx-sm-13">@(exp.ExpenseItemName)</td>
                                 <td class="tx-sm-13">@(exp.ExpenseGroupName)</td>
-                                <td class="tx-sm-13">@(exp.ExpensePeriodCode)</td>
+                                <td class="tx-sm-13 font-weight-bold text-right">@(exp.ExpensePeriodCode)</td>
                                 <td class="tx-sm-13 font-weight-bold text-right">@(exp.TotalAmount?.ToString("N2"))</td>
                                 <td class="tx-sm-13 font-weight-bold text-right">@(exp.DistributionAmount?.ToString("N2"))</td>
                                 <td class="tx-sm-13">@(exp.Currency)</td>
@@ -128,6 +138,15 @@
 
 
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="7"></th>
+                            <th class="tx-sm-13 font-weight-bold text-right">@(Model.ExpenseDocuments.Sum(x=> x.TotalAmount)?.ToString("N2"))</th>
+                            <th class="tx-sm-13 font-weight-bold text-right">@(Model.ExpenseDocuments.Sum(x=> x.DistributionAmount)?.ToString("N2"))</th>
+                            <th colspan="6"></th>
+
+                        </tr>
+                    </tfoot>
 
                 </table>
             </div>

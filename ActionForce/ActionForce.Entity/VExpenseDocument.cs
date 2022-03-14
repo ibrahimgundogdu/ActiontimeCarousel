@@ -46,5 +46,7 @@ namespace ActionForce.Entity
         public Nullable<int> DateMonth { get; set; }
         public Nullable<System.DateTime> DateBegin { get; set; }
         public Nullable<System.DateTime> DateEnd { get; set; }
+        public Nullable<double> TaxRate { get; set; }
+        public Nullable<double> TaxAmount { get; set; }
     }
 }

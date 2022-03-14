@@ -37,5 +37,7 @@ namespace ActionForce.Entity
         public Nullable<System.Guid> UID { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<short> AutoComputeTypeID { get; set; }
+        public Nullable<double> TaxRate { get; set; }
+        public Nullable<double> TaxAmount { get; set; }
     }
 }

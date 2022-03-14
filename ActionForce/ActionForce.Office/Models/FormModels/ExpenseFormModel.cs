@@ -17,6 +17,7 @@ namespace ActionForce.Office
         public DateTime ExpensePeriod { get; set; }
         public string TotalAmount { get; set; }
         public string DistributionAmount { get; set; }
+        public string TaxRate { get; set; }
         public string Currency { get; set; }
         public string ExpenseDescription { get; set; }
         public Guid UID { get; set; }
