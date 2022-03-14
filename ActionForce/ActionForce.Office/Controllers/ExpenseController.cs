@@ -703,7 +703,7 @@ namespace ActionForce.Office.Controllers
                 {
                     var documentL = documentManager.ComputeExpenseDucumentLocationRent(ExpensePeriod, model.Authentication);
 
-                    var documentO = documentManager.ComputeExpenseDucumentOfficeRent(ExpensePeriod, model.Authentication);
+                    //var documentO = documentManager.ComputeExpenseDucumentOfficeRent(ExpensePeriod, model.Authentication);
                 }
                 if (Vat == "1")
                 {
