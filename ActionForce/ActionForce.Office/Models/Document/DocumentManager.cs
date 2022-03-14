@@ -5681,7 +5681,7 @@ namespace ActionForce.Office
                 var salaryEarns = Db.DocumentSalaryEarn.Where(x => x.IsActive == true && x.Date >= ePeriod.DateBegin && x.Date <= ePeriod.DateEnd && actionTypeIds.Contains(x.ActionTypeID.Value) && employeeIds.Contains(x.EmployeeID.Value)).ToList(); // buradan günlük saat ve hakedişine göre maliyet tutarını oranlamak için faydalanıyoruz.
                 var EarnAmount = salaryEarns.Sum(x => x.TotalAmountSalary);
 
-                
+
 
                 foreach (var empId in employeeIds) // 6085
                 {
@@ -5691,12 +5691,12 @@ namespace ActionForce.Office
                     var totalHour = earns.Sum(x => x.QuantityHourSalary);
                     var totalSalary = earns.Sum(x => x.TotalAmountSalary);
 
-                    var EmployeeCostAmount = salaryPeriodComputes.Where(x=> x.EmployeeID == empId).Sum(x => x.Tahakkuk);
-                    var EmployeeEarnAmount = salaryEarns.Where(x=> x.EmployeeID == empId).Sum(x => x.TotalAmountSalary);
+                    var EmployeeCostAmount = salaryPeriodComputes.Where(x => x.EmployeeID == empId).Sum(x => x.Tahakkuk);
+                    var EmployeeEarnAmount = salaryEarns.Where(x => x.EmployeeID == empId).Sum(x => x.TotalAmountSalary);
 
-                    var EmployeeCostPremiumAmount = salaryPeriodComputes.Where(x=> x.EmployeeID == empId).Sum(x => x.PremiumTotal);
-                    var EmployeeCostSGKAmount = salaryPeriodComputes.Where(x=> x.EmployeeID == empId).Sum(x => (x.TotalCost - x.Tahakkuk));
-                    var FoodCardCostAmount = salaryPeriodFoodComputes.Where(x=> x.EmployeeID == empId).Sum(x => x.FoodCardTotal);
+                    var EmployeeCostPremiumAmount = salaryPeriodComputes.Where(x => x.EmployeeID == empId).Sum(x => x.PremiumTotal);
+                    var EmployeeCostSGKAmount = salaryPeriodComputes.Where(x => x.EmployeeID == empId).Sum(x => (x.TotalCost - x.Tahakkuk));
+                    var FoodCardCostAmount = salaryPeriodFoodComputes.Where(x => x.EmployeeID == empId).Sum(x => x.FoodCardTotal);
 
                     double CostRate = (EmployeeCostAmount / EmployeeEarnAmount) ?? 0;
 
@@ -5808,7 +5808,7 @@ namespace ActionForce.Office
                 // document rows
                 var parentRows = Db.ExpenseDocumentRows.Where(x => x.DocumentID == parentDocumentID).ToList();
 
-                expenseDocument.TotalAmount = parentRows.Sum(x=> x.SGKCostAmount);
+                expenseDocument.TotalAmount = parentRows.Sum(x => x.SGKCostAmount);
                 expenseDocument.DistributionAmount = parentRows.Sum(x => x.SGKCostAmount);
 
                 Db.SaveChanges();
@@ -5992,6 +5992,268 @@ namespace ActionForce.Office
                 Message = string.Empty
             };
 
+            var expenseDocument = new ExpenseDocument();
+
+            List<ExpenseDocumentRows> expenseDocumentRows = new List<ExpenseDocumentRows>();
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var ePeriod = Db.ExpensePeriod.FirstOrDefault(x => x.PeriodCode == expensePeriod);
+
+                var branchs = Db.SGKBranch.Where(x => x.IsOffice == true).ToList();
+
+                foreach (var branch in branchs)
+                {
+
+                    int LocationID = 131;
+
+                    if (branch.BranchName == "İST MRK")
+                    {
+                        LocationID = 80;
+                    }
+
+                    if (branch.BranchName == "UMERFA ÜRT.")
+                    {
+                        LocationID = 236;
+                    }
+
+                    // lokasyon net maaş 
+                    expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 5 && x.ExpenseItemID == 5 && x.ExpenseCenterID == LocationID && x.ExpensePeriodCode == expensePeriod);
+
+                    if (expenseDocument != null && expenseDocument.StatusID == 1)
+                    {
+                        return expenseDocument;
+                    }
+                    else if (expenseDocument != null && expenseDocument.StatusID == 0)
+                    {
+                        var rows = Db.ExpenseDocumentRows.Where(x => x.DocumentID == expenseDocument.ID).ToList();
+                        Db.ExpenseDocumentRows.RemoveRange(rows);
+                        Db.SaveChanges();
+
+                    }
+                    else if (expenseDocument == null)  // hakediş    || (expenseDocument != null  && expenseDocument.StatusID == 0)
+                    {
+                        ExpenseDocument document = new ExpenseDocument();
+
+                        var UID = Guid.NewGuid();
+
+                        document.UID = UID;
+                        document.DocumentNumber = OfficeHelper.GetDocumentNumber(authentication.ActionEmployee.OurCompanyID ?? 2, "EXD");
+                        document.RecordDate = DateTime.UtcNow.AddHours(3);
+                        document.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
+                        document.RecordIP = OfficeHelper.GetIPAddress();
+                        document.DocumentSource = "Center-" + expensePeriod;
+                        document.ExpenseDescription = "";
+                        document.DistributionAmount = 0;
+                        document.TotalAmount = 0;
+                        document.ExpenseGroupID = 2;
+                        document.Currency = authentication.ActionEmployee.OurCompany.Currency;
+                        document.DocumentDate = DateTime.UtcNow.AddHours(authentication.ActionEmployee.OurCompany.TimeZone ?? 3);
+                        document.ExpenseItemID = 5;
+                        document.ExpenseCenterID = LocationID;
+                        document.ExpensePeriod = ePeriod.DateBegin;
+                        document.IsActive = true;
+                        document.StatusID = 0;
+                        document.OurCompanyID = authentication.ActionEmployee.OurCompanyID;
+                        document.ExpenseYear = ePeriod.DateYear;
+                        document.ExpenseMonth = ePeriod.DateMonth;
+                        document.ExpensePeriodCode = expensePeriod;
+                        document.AutoComputeTypeID = 5;
+
+                        Db.ExpenseDocument.Add(document);
+                        Db.SaveChanges();
+
+                        OfficeHelper.AddApplicationLog("Office", "ExpenseDocument", "Insert", document.ID.ToString(), "Expense", "NewDocument", null, true, "İşletme Masraf Dokümanı Otomatik Eklendi", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, document);
+
+                        expenseDocument = document;
+                    }
+
+                    List<int> denyEmployeeIds = new List<int>() { 19, 3650, 6150, 6240, 6627 };
+                    List<int> actionTypeIds = new List<int>() { 32, 44 };
+
+                    // document rows
+                    var salaryPeriodFood = Db.VSalaryPeriod.FirstOrDefault(x => x.OurCompanyID == authentication.ActionEmployee.OurCompany.CompanyID && x.SalaryPeriodGroupID == 3 && x.Year == expenseDocument.ExpenseYear && x.Month == expenseDocument.ExpenseMonth);
+                    var salaryPeriodFoodComputes = Db.SalaryPeriodCompute.Where(x => x.SalaryPeriodID == salaryPeriodFood.ID && !denyEmployeeIds.Contains(x.EmployeeID.Value)).ToList();
+
+                    var salaryPeriod = Db.VSalaryPeriod.FirstOrDefault(x => x.OurCompanyID == authentication.ActionEmployee.OurCompany.CompanyID && x.SalaryPeriodGroupID == 4 && x.Year == expenseDocument.ExpenseYear && x.Month == expenseDocument.ExpenseMonth);
+                    var salaryPeriodComputes = Db.SalaryPeriodCompute.Where(x => x.SalaryPeriodID == salaryPeriod.ID && x.EmployeeSalaryCategoryID == 1 && !denyEmployeeIds.Contains(x.EmployeeID.Value)).ToList();
+                    var CostAmountTotal = salaryPeriodComputes.Sum(x => x.Tahakkuk);
+
+                    var employeeIds = salaryPeriodComputes.Where(x => x.SGKBranch != "İST MRK" && x.SGKBranch != "UMERFA ÜRT.").Select(x => x.EmployeeID.Value).Distinct().ToList();
+
+                    var CostAmountBranch = salaryPeriodComputes.Where(x => x.SGKBranch != "İST MRK" && x.SGKBranch != "UMERFA ÜRT.").Sum(x => x.Tahakkuk);
+
+                    if (branch.BranchName == "İST MRK")
+                    {
+                        CostAmountBranch = salaryPeriodComputes.Where(x => x.SGKBranch == "İST MRK").Sum(x => x.Tahakkuk);
+                        employeeIds = salaryPeriodComputes.Where(x => x.SGKBranch == "İST MRK").Select(x => x.EmployeeID.Value).Distinct().ToList();
+
+                    }
+
+                    if (branch.BranchName == "UMERFA ÜRT.")
+                    {
+                        CostAmountBranch = salaryPeriodComputes.Where(x => x.SGKBranch == "UMERFA ÜRT.").Sum(x => x.Tahakkuk);
+                        employeeIds = salaryPeriodComputes.Where(x => x.SGKBranch == "UMERFA ÜRT.").Select(x => x.EmployeeID.Value).Distinct().ToList();
+                    }
+
+                    expenseDocument.TotalAmount = CostAmountBranch;
+                    expenseDocument.DistributionAmount = CostAmountBranch;
+
+                    Db.SaveChanges();
+
+                    var salaryEarns = Db.DocumentSalaryEarn.Where(x => x.IsActive == true && x.Date >= ePeriod.DateBegin && x.Date <= ePeriod.DateEnd && actionTypeIds.Contains(x.ActionTypeID.Value) && employeeIds.Contains(x.EmployeeID.Value)).ToList(); // buradan günlük saat ve hakedişine göre maliyet tutarını oranlamak için faydalanıyoruz.
+
+                    double SalaryHourCount = 195;
+
+                    foreach (var empId in employeeIds) // 6085,  4150
+                    {
+
+                        double SalaryHourBalance = 195;
+
+                        var earns = salaryEarns.Where(x => x.EmployeeID == empId).ToList();
+
+                        var esumHour = earns.Sum(x => x.QuantityHourSalary);
+
+                        if (esumHour > SalaryHourBalance)
+                        {
+                            SalaryHourBalance = esumHour ?? SalaryHourBalance;
+                            SalaryHourCount = esumHour ?? SalaryHourCount;
+                        }
+                        else
+                        {
+                            SalaryHourBalance = 195;
+                            SalaryHourCount = 195;
+                        }
+
+                        if (earns != null && earns.Count > 0)
+                        {
+                            var locationIds = earns.Select(x => x.LocationID).Distinct().ToList();
+
+                            var EmployeeCostAmount = salaryPeriodComputes.Where(x => x.EmployeeID == empId).Sum(x => x.Tahakkuk); // maaş tahakkuku  5.500 
+                            var EmployeeCostPremiumAmount = salaryPeriodComputes.Where(x => x.EmployeeID == empId).Sum(x => x.PremiumTotal);
+                            var EmployeeCostSGKAmount = salaryPeriodComputes.Where(x => x.EmployeeID == empId).Sum(x => (x.TotalCost - x.Tahakkuk));
+                            var FoodCardCostAmount = salaryPeriodFoodComputes.Where(x => x.EmployeeID == empId).Sum(x => x.FoodCardTotal);
+
+                            double unitSalary = (EmployeeCostAmount / SalaryHourCount) ?? 0;  // 195 saate düşen birim ücret  28,20512820512821
+
+                            foreach (var locationId in locationIds)
+                            {
+                                var sumHour = earns.Where(x => x.LocationID == locationId).Sum(x => x.QuantityHourSalary);  // 11 saat
+
+                                SalaryHourBalance = SalaryHourBalance - (sumHour ?? 0);
+
+                                var EmployeeEarnAmount = unitSalary * sumHour;  // 11 * 28,20512820512821 = 310,2564102564103
+
+                                var hourRate = (sumHour / SalaryHourCount) ?? 0;  // 11/195 = 0,0564102564102564
+
+                                if (EmployeeEarnAmount > 0 && sumHour > 0)
+                                {
+                                    ExpenseDocumentRows row = new ExpenseDocumentRows();
+
+                                    row.EmployeeID = empId;
+                                    row.LocationID = locationId;
+                                    row.DocumentID = expenseDocument.ID;
+                                    row.Currency = authentication.ActionEmployee.OurCompany.Currency;
+                                    row.Unit = unitSalary;
+                                    row.Hour = sumHour;
+                                    row.Amount = EmployeeEarnAmount;
+                                    row.CostAmount = EmployeeEarnAmount;
+                                    row.PremiumAmount = EmployeeCostPremiumAmount * hourRate;
+                                    row.SGKCostAmount = EmployeeCostSGKAmount * hourRate;
+                                    row.FoodCardCostAmount = FoodCardCostAmount * hourRate;
+
+                                    Db.ExpenseDocumentRows.Add(row);
+                                }
+                            }
+
+                            if (SalaryHourBalance > 0)
+                            {
+                                var EmployeeEarnAmount = unitSalary * SalaryHourBalance;
+                                double hourRate = (SalaryHourBalance / SalaryHourCount);
+
+                                ExpenseDocumentRows row = new ExpenseDocumentRows();
+
+                                row.EmployeeID = empId;
+                                row.LocationID = LocationID;
+                                row.DocumentID = expenseDocument.ID;
+                                row.Currency = authentication.ActionEmployee.OurCompany.Currency;
+                                row.Unit = unitSalary;
+                                row.Hour = SalaryHourBalance;
+                                row.Amount = EmployeeEarnAmount;
+                                row.CostAmount = EmployeeEarnAmount;
+                                row.PremiumAmount = EmployeeCostPremiumAmount * hourRate;
+                                row.SGKCostAmount = EmployeeCostSGKAmount * hourRate;
+                                row.FoodCardCostAmount = FoodCardCostAmount * hourRate;
+
+                                Db.ExpenseDocumentRows.Add(row);
+
+                            }
+                        }
+                        else
+                        {
+                            var EmployeeCostAmount = salaryPeriodComputes.Where(x => x.EmployeeID == empId).Sum(x => x.Tahakkuk);
+                            var EmployeeCostPremiumAmount = salaryPeriodComputes.Where(x => x.EmployeeID == empId).Sum(x => x.PremiumTotal);
+                            var EmployeeCostSGKAmount = salaryPeriodComputes.Where(x => x.EmployeeID == empId).Sum(x => (x.TotalCost - x.Tahakkuk));
+                            var FoodCardCostAmount = salaryPeriodFoodComputes.Where(x => x.EmployeeID == empId).Sum(x => x.FoodCardTotal);
+
+                            if (EmployeeCostAmount > 0)
+                            {
+
+                                ExpenseDocumentRows row = new ExpenseDocumentRows();
+
+                                row.EmployeeID = empId;
+                                row.LocationID = LocationID;
+                                row.DocumentID = expenseDocument.ID;
+                                row.Currency = authentication.ActionEmployee.OurCompany.Currency;
+                                row.Unit = (EmployeeCostAmount / SalaryHourCount);
+                                row.Hour = SalaryHourCount;
+                                row.Amount = EmployeeCostAmount;
+                                row.CostAmount = EmployeeCostAmount;
+                                row.PremiumAmount = EmployeeCostPremiumAmount;
+                                row.SGKCostAmount = EmployeeCostSGKAmount;
+                                row.FoodCardCostAmount = FoodCardCostAmount;
+
+                                Db.ExpenseDocumentRows.Add(row);
+                            }
+                        }
+
+                        Db.SaveChanges();
+                    }
+                }
+            }
+
+
+            return expenseDocument;
+        }
+
+        public Result ComputeExpenseDucumentMontlySalaryChart(long DocumentID, string expensePeriod, AuthenticationModel authentication)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+
+                var docid = Db.AddExpenseDocumentChartMonthlySalary(DocumentID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+                result.IsSuccess = true;
+                result.Message = "Dağılım eklendi";
+
+            }
+
+            return result;
+        }
+
+        public ExpenseDocument ComputeExpenseDucumentMontlySGK(long parentDocumentID, int? ExpenceCenterID, string expensePeriod, AuthenticationModel authentication)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
 
             var expenseDocument = new ExpenseDocument();
 
@@ -6001,8 +6263,9 @@ namespace ActionForce.Office
             {
                 var ePeriod = Db.ExpensePeriod.FirstOrDefault(x => x.PeriodCode == expensePeriod);
 
-                // lokasyon net maaş 
-                expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 5 && x.ExpenseItemID == 5 && x.ExpensePeriodCode == expensePeriod);
+                // lokasyon SGK
+
+                expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 7 && x.ExpenseItemID == 33 && x.ExpenseCenterID == ExpenceCenterID && x.ExpensePeriodCode == expensePeriod);
 
                 if (expenseDocument != null && expenseDocument.StatusID == 1)
                 {
@@ -6010,16 +6273,13 @@ namespace ActionForce.Office
                 }
                 else if (expenseDocument != null && expenseDocument.StatusID == 0)
                 {
-                    var rows = Db.ExpenseDocumentRows.Where(x => x.DocumentID == expenseDocument.ID).ToList();
-                    Db.ExpenseDocumentRows.RemoveRange(rows);
-                    Db.SaveChanges();
+
 
                 }
-                else if (expenseDocument == null)  // hakediş    || (expenseDocument != null  && expenseDocument.StatusID == 0)
+                else if (expenseDocument == null)  // sgk
                 {
 
                     ExpenseDocument document = new ExpenseDocument();
-
 
                     var UID = Guid.NewGuid();
 
@@ -6028,15 +6288,15 @@ namespace ActionForce.Office
                     document.RecordDate = DateTime.UtcNow.AddHours(3);
                     document.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
                     document.RecordIP = OfficeHelper.GetIPAddress();
-                    document.DocumentSource = "Center-" + expensePeriod;
+                    document.DocumentSource = "CenterSGK-" + expensePeriod;
                     document.ExpenseDescription = "";
                     document.DistributionAmount = 0;
                     document.TotalAmount = 0;
                     document.ExpenseGroupID = 2;
                     document.Currency = authentication.ActionEmployee.OurCompany.Currency;
                     document.DocumentDate = DateTime.UtcNow.AddHours(authentication.ActionEmployee.OurCompany.TimeZone ?? 3);
-                    document.ExpenseItemID = 5;
-                    document.ExpenseCenterID = 131;
+                    document.ExpenseItemID = 33;
+                    document.ExpenseCenterID = ExpenceCenterID;
                     document.ExpensePeriod = ePeriod.DateBegin;
                     document.IsActive = true;
                     document.StatusID = 0;
@@ -6044,85 +6304,195 @@ namespace ActionForce.Office
                     document.ExpenseYear = ePeriod.DateYear;
                     document.ExpenseMonth = ePeriod.DateMonth;
                     document.ExpensePeriodCode = expensePeriod;
-                    document.AutoComputeTypeID = 5;
+                    document.AutoComputeTypeID = 7;
 
                     Db.ExpenseDocument.Add(document);
                     Db.SaveChanges();
 
-                    OfficeHelper.AddApplicationLog("Office", "ExpenseDocument", "Insert", document.ID.ToString(), "Expense", "NewDocument", null, true, "İşletme Masraf Dokümanı Otomatik Eklendi", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, document);
+                    OfficeHelper.AddApplicationLog("Office", "ExpenseDocument", "Insert", document.ID.ToString(), "Expense", "NewDocument", null, true, "SGK Masraf Dokümanı Otomatik Eklendi", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, document);
 
                     expenseDocument = document;
                 }
 
-                List<int> denyEmployeeIds = new List<int>() { 19, 3650, 6150, 6240, 6627 };
-
                 // document rows
-                var salaryPeriodFood = Db.VSalaryPeriod.FirstOrDefault(x => x.OurCompanyID == authentication.ActionEmployee.OurCompany.CompanyID && x.SalaryPeriodGroupID == 3 && x.Year == expenseDocument.ExpenseYear && x.Month == expenseDocument.ExpenseMonth);
-                var salaryPeriodFoodComputes = Db.SalaryPeriodCompute.Where(x => x.SalaryPeriodID == salaryPeriodFood.ID && !denyEmployeeIds.Contains(x.EmployeeID.Value)).ToList();
+                var parentRows = Db.ExpenseDocumentRows.Where(x => x.DocumentID == parentDocumentID).ToList();
 
-                var salaryPeriod = Db.VSalaryPeriod.FirstOrDefault(x => x.OurCompanyID == authentication.ActionEmployee.OurCompany.CompanyID && x.SalaryPeriodGroupID == 4 && x.Year == expenseDocument.ExpenseYear && x.Month == expenseDocument.ExpenseMonth);
-                var salaryPeriodComputes = Db.SalaryPeriodCompute.Where(x => x.SalaryPeriodID == salaryPeriod.ID && x.EmployeeSalaryCategoryID == 1 && !denyEmployeeIds.Contains(x.EmployeeID.Value)).ToList();
-                var CostAmount = salaryPeriodComputes.Sum(x => x.Tahakkuk);
-                var employeeIds = salaryPeriodComputes.Select(x => x.EmployeeID.Value).Distinct().ToList();
-
-                expenseDocument.TotalAmount = CostAmount;
-                expenseDocument.DistributionAmount = CostAmount;
+                expenseDocument.TotalAmount = parentRows.Sum(x => x.SGKCostAmount);
+                expenseDocument.DistributionAmount = parentRows.Sum(x => x.SGKCostAmount);
 
                 Db.SaveChanges();
 
-                foreach (var empId in employeeIds) // 6085
-                {
-                    var earns = salaryEarns.Where(x => x.EmployeeID == empId).ToList();
-                    var locationIds = earns.Select(x => x.LocationID).Distinct().ToList();
-
-                    var totalHour = earns.Sum(x => x.QuantityHourSalary);
-                    var totalSalary = earns.Sum(x => x.TotalAmountSalary);
-
-                    var EmployeeCostAmount = salaryPeriodComputes.Where(x => x.EmployeeID == empId).Sum(x => x.Tahakkuk);
-                    var EmployeeEarnAmount = salaryEarns.Where(x => x.EmployeeID == empId).Sum(x => x.TotalAmountSalary);
-
-                    var EmployeeCostPremiumAmount = salaryPeriodComputes.Where(x => x.EmployeeID == empId).Sum(x => x.PremiumTotal);
-                    var EmployeeCostSGKAmount = salaryPeriodComputes.Where(x => x.EmployeeID == empId).Sum(x => (x.TotalCost - x.Tahakkuk));
-                    var FoodCardCostAmount = salaryPeriodFoodComputes.Where(x => x.EmployeeID == empId).Sum(x => x.FoodCardTotal);
-
-                    double CostRate = (EmployeeCostAmount / EmployeeEarnAmount) ?? 0;
-
-                    double unitSalary = (totalSalary / totalHour) ?? 0;
-
-                    foreach (var locationId in locationIds)
-                    {
-                        var sumHour = earns.Where(x => x.LocationID == locationId).Sum(x => x.QuantityHourSalary);
-
-                        if (unitSalary > 0 && sumHour > 0)
-                        {
-                            ExpenseDocumentRows row = new ExpenseDocumentRows();
-
-                            row.EmployeeID = empId;
-                            row.LocationID = locationId;
-                            row.DocumentID = expenseDocument.ID;
-                            row.Currency = authentication.ActionEmployee.OurCompany.Currency;
-                            row.Unit = unitSalary;
-                            row.Hour = sumHour;
-                            row.Amount = sumHour * unitSalary;
-                            row.CostAmount = CostRate * row.Amount;
-                            row.PremiumAmount = EmployeeCostPremiumAmount * (row.CostAmount / EmployeeCostAmount);
-                            row.SGKCostAmount = EmployeeCostSGKAmount * (row.CostAmount / EmployeeCostAmount);
-                            row.FoodCardCostAmount = FoodCardCostAmount * (row.CostAmount / EmployeeCostAmount);
-
-                            Db.ExpenseDocumentRows.Add(row);
-
-                        }
-                    }
-                }
-
-                Db.SaveChanges();
-
-                Db.AddExpenseDocumentChart(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
-
+                Db.AddExpenseDocumentChartMonthlySGK(expenseDocument.ID, parentDocumentID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
             }
 
             return expenseDocument;
         }
+
+        public ExpenseDocument ComputeExpenseDucumentMontlyFoodCard(long parentDocumentID, int? ExpenceCenterID, string expensePeriod, AuthenticationModel authentication)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+
+            var expenseDocument = new ExpenseDocument();
+
+            List<ExpenseDocumentRows> expenseDocumentRows = new List<ExpenseDocumentRows>();
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var ePeriod = Db.ExpensePeriod.FirstOrDefault(x => x.PeriodCode == expensePeriod);
+
+                // lokasyon Food
+
+                expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 8 && x.ExpenseItemID == 23 && x.ExpenseCenterID == ExpenceCenterID && x.ExpensePeriodCode == expensePeriod);
+
+                if (expenseDocument != null && expenseDocument.StatusID == 1)
+                {
+                    return expenseDocument;
+                }
+                else if (expenseDocument != null && expenseDocument.StatusID == 0)
+                {
+
+
+                }
+                else if (expenseDocument == null)  // food
+                {
+
+                    ExpenseDocument document = new ExpenseDocument();
+
+                    var UID = Guid.NewGuid();
+
+                    document.UID = UID;
+                    document.DocumentNumber = OfficeHelper.GetDocumentNumber(authentication.ActionEmployee.OurCompanyID ?? 2, "EXD");
+                    document.RecordDate = DateTime.UtcNow.AddHours(3);
+                    document.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
+                    document.RecordIP = OfficeHelper.GetIPAddress();
+                    document.DocumentSource = "CenterFood-" + expensePeriod;
+                    document.ExpenseDescription = "";
+                    document.DistributionAmount = 0;
+                    document.TotalAmount = 0;
+                    document.ExpenseGroupID = 2;
+                    document.Currency = authentication.ActionEmployee.OurCompany.Currency;
+                    document.DocumentDate = DateTime.UtcNow.AddHours(authentication.ActionEmployee.OurCompany.TimeZone ?? 3);
+                    document.ExpenseItemID = 23;
+                    document.ExpenseCenterID = ExpenceCenterID;
+                    document.ExpensePeriod = ePeriod.DateBegin;
+                    document.IsActive = true;
+                    document.StatusID = 0;
+                    document.OurCompanyID = authentication.ActionEmployee.OurCompanyID;
+                    document.ExpenseYear = ePeriod.DateYear;
+                    document.ExpenseMonth = ePeriod.DateMonth;
+                    document.ExpensePeriodCode = expensePeriod;
+                    document.AutoComputeTypeID = 8;
+
+                    Db.ExpenseDocument.Add(document);
+                    Db.SaveChanges();
+
+                    OfficeHelper.AddApplicationLog("Office", "ExpenseDocument", "Insert", document.ID.ToString(), "Expense", "NewDocument", null, true, "Yemek Kartı Dokümanı Otomatik Eklendi", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, document);
+
+                    expenseDocument = document;
+                }
+
+                // document rows
+                var parentRows = Db.ExpenseDocumentRows.Where(x => x.DocumentID == parentDocumentID).ToList();
+
+                expenseDocument.TotalAmount = parentRows.Sum(x => x.FoodCardCostAmount);
+                expenseDocument.DistributionAmount = parentRows.Sum(x => x.FoodCardCostAmount);
+
+                Db.SaveChanges();
+
+                Db.AddExpenseDocumentChartMonthlyFoodCard(expenseDocument.ID, parentDocumentID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+            }
+
+            return expenseDocument;
+        }
+
+        public ExpenseDocument ComputeExpenseDucumentMontlyPremium(long parentDocumentID, int? ExpenceCenterID, string expensePeriod, AuthenticationModel authentication)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+
+            var expenseDocument = new ExpenseDocument();
+
+            List<ExpenseDocumentRows> expenseDocumentRows = new List<ExpenseDocumentRows>();
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var ePeriod = Db.ExpensePeriod.FirstOrDefault(x => x.PeriodCode == expensePeriod);
+
+                // lokasyon Prim
+
+                expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 6 && x.ExpenseItemID == 42 && x.ExpenseCenterID == ExpenceCenterID && x.ExpensePeriodCode == expensePeriod);
+
+                if (expenseDocument != null && expenseDocument.StatusID == 1)
+                {
+                    return expenseDocument;
+                }
+                else if (expenseDocument != null && expenseDocument.StatusID == 0)
+                {
+
+
+                }
+                else if (expenseDocument == null)  // prim
+                {
+
+                    ExpenseDocument document = new ExpenseDocument();
+
+                    var UID = Guid.NewGuid();
+
+                    document.UID = UID;
+                    document.DocumentNumber = OfficeHelper.GetDocumentNumber(authentication.ActionEmployee.OurCompanyID ?? 2, "EXD");
+                    document.RecordDate = DateTime.UtcNow.AddHours(3);
+                    document.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
+                    document.RecordIP = OfficeHelper.GetIPAddress();
+                    document.DocumentSource = "CenterPrim-" + expensePeriod;
+                    document.ExpenseDescription = "";
+                    document.DistributionAmount = 0;
+                    document.TotalAmount = 0;
+                    document.ExpenseGroupID = 2;
+                    document.Currency = authentication.ActionEmployee.OurCompany.Currency;
+                    document.DocumentDate = DateTime.UtcNow.AddHours(authentication.ActionEmployee.OurCompany.TimeZone ?? 3);
+                    document.ExpenseItemID = 42;
+                    document.ExpenseCenterID = ExpenceCenterID;
+                    document.ExpensePeriod = ePeriod.DateBegin;
+                    document.IsActive = true;
+                    document.StatusID = 0;
+                    document.OurCompanyID = authentication.ActionEmployee.OurCompanyID;
+                    document.ExpenseYear = ePeriod.DateYear;
+                    document.ExpenseMonth = ePeriod.DateMonth;
+                    document.ExpensePeriodCode = expensePeriod;
+                    document.AutoComputeTypeID = 6;
+
+                    Db.ExpenseDocument.Add(document);
+                    Db.SaveChanges();
+
+                    OfficeHelper.AddApplicationLog("Office", "ExpenseDocument", "Insert", document.ID.ToString(), "Expense", "NewDocument", null, true, "Prim Dokümanı Otomatik Eklendi", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, document);
+
+                    expenseDocument = document;
+                }
+
+                // document rows
+                var parentRows = Db.ExpenseDocumentRows.Where(x => x.DocumentID == parentDocumentID).ToList();
+
+                expenseDocument.TotalAmount = parentRows.Sum(x => x.PremiumAmount);
+                expenseDocument.DistributionAmount = parentRows.Sum(x => x.PremiumAmount);
+
+                Db.SaveChanges();
+
+                Db.AddExpenseDocumentChartMonthlyPremium(expenseDocument.ID, parentDocumentID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+            }
+
+            return expenseDocument;
+        }
+
+
 
     }
 }

@@ -3220,5 +3220,85 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddExpenseDocumentChartPremium", documentIDParameter, parentDocumentIDParameter, recordEmployeeIDParameter, recordIPParameter);
         }
+    
+        public virtual ObjectResult<Nullable<long>> AddExpenseDocumentChartMonthlySalary(Nullable<long> documentID, Nullable<int> recordEmployeeID, string recordIP)
+        {
+            var documentIDParameter = documentID.HasValue ?
+                new ObjectParameter("DocumentID", documentID) :
+                new ObjectParameter("DocumentID", typeof(long));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddExpenseDocumentChartMonthlySalary", documentIDParameter, recordEmployeeIDParameter, recordIPParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> AddExpenseDocumentChartMonthlyFoodCard(Nullable<long> documentID, Nullable<long> parentDocumentID, Nullable<int> recordEmployeeID, string recordIP)
+        {
+            var documentIDParameter = documentID.HasValue ?
+                new ObjectParameter("DocumentID", documentID) :
+                new ObjectParameter("DocumentID", typeof(long));
+    
+            var parentDocumentIDParameter = parentDocumentID.HasValue ?
+                new ObjectParameter("ParentDocumentID", parentDocumentID) :
+                new ObjectParameter("ParentDocumentID", typeof(long));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddExpenseDocumentChartMonthlyFoodCard", documentIDParameter, parentDocumentIDParameter, recordEmployeeIDParameter, recordIPParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> AddExpenseDocumentChartMonthlyPremium(Nullable<long> documentID, Nullable<long> parentDocumentID, Nullable<int> recordEmployeeID, string recordIP)
+        {
+            var documentIDParameter = documentID.HasValue ?
+                new ObjectParameter("DocumentID", documentID) :
+                new ObjectParameter("DocumentID", typeof(long));
+    
+            var parentDocumentIDParameter = parentDocumentID.HasValue ?
+                new ObjectParameter("ParentDocumentID", parentDocumentID) :
+                new ObjectParameter("ParentDocumentID", typeof(long));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddExpenseDocumentChartMonthlyPremium", documentIDParameter, parentDocumentIDParameter, recordEmployeeIDParameter, recordIPParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> AddExpenseDocumentChartMonthlySGK(Nullable<long> documentID, Nullable<long> parentDocumentID, Nullable<int> recordEmployeeID, string recordIP)
+        {
+            var documentIDParameter = documentID.HasValue ?
+                new ObjectParameter("DocumentID", documentID) :
+                new ObjectParameter("DocumentID", typeof(long));
+    
+            var parentDocumentIDParameter = parentDocumentID.HasValue ?
+                new ObjectParameter("ParentDocumentID", parentDocumentID) :
+                new ObjectParameter("ParentDocumentID", typeof(long));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddExpenseDocumentChartMonthlySGK", documentIDParameter, parentDocumentIDParameter, recordEmployeeIDParameter, recordIPParameter);
+        }
     }
 }

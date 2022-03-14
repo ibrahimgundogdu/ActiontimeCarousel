@@ -3888,6 +3888,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.ExpenseGroup' does not have
           <Property Name="ID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="OurCompanyID" Type="int" />
           <Property Name="BranchName" Type="nvarchar" MaxLength="40" />
+          <Property Name="IsOffice" Type="bit" />
         </EntityType>
         <EntityType Name="SMSNumber">
           <Key>
@@ -8464,6 +8465,29 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="AddExpenseDocumentChartFoodCard" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DocumentID" Type="bigint" Mode="In" />
+          <Parameter Name="ParentDocumentID" Type="bigint" Mode="In" />
+          <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
+          <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="AddExpenseDocumentChartMonthlyFoodCard" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DocumentID" Type="bigint" Mode="In" />
+          <Parameter Name="ParentDocumentID" Type="bigint" Mode="In" />
+          <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
+          <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="AddExpenseDocumentChartMonthlyPremium" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DocumentID" Type="bigint" Mode="In" />
+          <Parameter Name="ParentDocumentID" Type="bigint" Mode="In" />
+          <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
+          <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="AddExpenseDocumentChartMonthlySalary" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DocumentID" Type="bigint" Mode="In" />
+          <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
+          <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="AddExpenseDocumentChartMonthlySGK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DocumentID" Type="bigint" Mode="In" />
           <Parameter Name="ParentDocumentID" Type="bigint" Mode="In" />
           <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
@@ -13463,6 +13487,29 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="RecordIP" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AddExpenseDocumentChartPremium" ReturnType="Collection(Int64)">
+            <Parameter Name="DocumentID" Mode="In" Type="Int64" />
+            <Parameter Name="ParentDocumentID" Mode="In" Type="Int64" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordIP" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddExpenseDocumentChartMonthlySalary" ReturnType="Collection(Int64)">
+            <Parameter Name="DocumentID" Mode="In" Type="Int64" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordIP" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddExpenseDocumentChartMonthlyFoodCard" ReturnType="Collection(Int64)">
+            <Parameter Name="DocumentID" Mode="In" Type="Int64" />
+            <Parameter Name="ParentDocumentID" Mode="In" Type="Int64" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordIP" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddExpenseDocumentChartMonthlyPremium" ReturnType="Collection(Int64)">
+            <Parameter Name="DocumentID" Mode="In" Type="Int64" />
+            <Parameter Name="ParentDocumentID" Mode="In" Type="Int64" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordIP" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddExpenseDocumentChartMonthlySGK" ReturnType="Collection(Int64)">
             <Parameter Name="DocumentID" Mode="In" Type="Int64" />
             <Parameter Name="ParentDocumentID" Mode="In" Type="Int64" />
             <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
@@ -21984,6 +22031,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="BranchName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="IsOffice" Type="Boolean" />
         </EntityType>
         <EntityType Name="VTempCashAction">
           <Key>
@@ -30495,6 +30543,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="SGKBranch">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.SGKBranch">
               <MappingFragment StoreEntitySet="SGKBranch">
+                <ScalarProperty Name="IsOffice" ColumnName="IsOffice" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="BranchName" ColumnName="BranchName" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -30799,6 +30848,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <FunctionImportMapping FunctionImportName="AddExpenseDocumentChartSGK" FunctionName="db293_ActionTimeDbModel.Store.AddExpenseDocumentChartSGK" />
           <FunctionImportMapping FunctionImportName="AddExpenseDocumentChartFoodCard" FunctionName="db293_ActionTimeDbModel.Store.AddExpenseDocumentChartFoodCard" />
           <FunctionImportMapping FunctionImportName="AddExpenseDocumentChartPremium" FunctionName="db293_ActionTimeDbModel.Store.AddExpenseDocumentChartPremium" />
+          <FunctionImportMapping FunctionImportName="AddExpenseDocumentChartMonthlySalary" FunctionName="db293_ActionTimeDbModel.Store.AddExpenseDocumentChartMonthlySalary" />
+          <FunctionImportMapping FunctionImportName="AddExpenseDocumentChartMonthlyFoodCard" FunctionName="db293_ActionTimeDbModel.Store.AddExpenseDocumentChartMonthlyFoodCard" />
+          <FunctionImportMapping FunctionImportName="AddExpenseDocumentChartMonthlyPremium" FunctionName="db293_ActionTimeDbModel.Store.AddExpenseDocumentChartMonthlyPremium" />
+          <FunctionImportMapping FunctionImportName="AddExpenseDocumentChartMonthlySGK" FunctionName="db293_ActionTimeDbModel.Store.AddExpenseDocumentChartMonthlySGK" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

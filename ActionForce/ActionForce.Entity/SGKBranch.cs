@@ -17,5 +17,6 @@ namespace ActionForce.Entity
         public short ID { get; set; }
         public string BranchName { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
+        public Nullable<bool> IsOffice { get; set; }
     }
 }

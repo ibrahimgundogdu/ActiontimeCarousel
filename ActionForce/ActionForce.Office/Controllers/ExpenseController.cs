@@ -669,7 +669,15 @@ namespace ActionForce.Office.Controllers
                 }
                 if (Office == "1")
                 {
+                    var document = documentManager.ComputeExpenseDucumentMonthlySalary(ExpensePeriod, model.Authentication);
 
+                    foreach (var item in Db.ExpenseDocument.Where(x=> x.ExpensePeriodCode == ExpensePeriod && x.ExpenseGroupID == 2 && x.ExpenseItemID == 5).ToList())
+                    {
+                        var salaryDocument = documentManager.ComputeExpenseDucumentMontlySalaryChart(item.ID, ExpensePeriod, model.Authentication);
+                        var sgkDocument = documentManager.ComputeExpenseDucumentMontlySGK(item.ID, item.ExpenseCenterID, ExpensePeriod, model.Authentication);
+                        var foodDocument = documentManager.ComputeExpenseDucumentMontlyFoodCard(item.ID, item.ExpenseCenterID, ExpensePeriod, model.Authentication);
+                        var premDocument = documentManager.ComputeExpenseDucumentMontlyPremium(item.ID, item.ExpenseCenterID, ExpensePeriod, model.Authentication);
+                    }
                 }
                
                 if (Rent == "1")
