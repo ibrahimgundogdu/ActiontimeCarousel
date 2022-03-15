@@ -12,6 +12,7 @@
         <span class="tx-20">Masraf Dökümanı Detayı</span>
     </div>
     <nav class="nav">
+        <a href="/Expense"> <i data-feather="menu"></i> </a> &nbsp;
         @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
     </nav>
 </div>
@@ -32,6 +33,7 @@
                     <div class="d-none d-md-block">
                         <a href="/Expense" class="btn btn-primary btn-uppercase"><i data-feather="menu"></i> &nbsp; Masraf Listesi</a> &nbsp;
                         <a href="/Expense/Chart/@(Model.ExpenseDocument.UID)" class="btn btn-warning btn-uppercase"><i data-feather="list"></i> &nbsp; Masraf Dağılımı</a>
+                        <a href="/Expense/Rows/@(Model.ExpenseDocument.UID)" class="btn btn-warning btn-uppercase"><i data-feather="list"></i> &nbsp; Kaynak Satırları</a>
                     </div>
                 </div>
 

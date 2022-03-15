@@ -2843,6 +2843,9 @@
     <Content Include="Views\Expense\Detail.cshtml" />
     <Content Include="Views\Expense\NewDocument.cshtml" />
     <Content Include="Views\Expense\Chart.cshtml" />
+    <Content Include="Views\Expense\Rows.cshtml" />
+    <Content Include="Views\Expense\NewItem.cshtml" />
+    <Content Include="Views\Expense\Cost.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

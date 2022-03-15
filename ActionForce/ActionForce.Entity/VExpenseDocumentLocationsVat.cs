@@ -12,16 +12,16 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class ExpenseItem
+    public partial class VExpenseDocumentLocationsVat
     {
-        public short ID { get; set; }
+        public long ID { get; set; }
+        public long ExpenseDocumentID { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
-        public string ExpenseItemName { get; set; }
-        public Nullable<bool> IsLocation { get; set; }
-        public Nullable<bool> IsOffice { get; set; }
-        public Nullable<bool> IsGeneral { get; set; }
-        public string SortBy { get; set; }
-        public Nullable<bool> IsActive { get; set; }
-        public Nullable<System.Guid> UID { get; set; }
+        public Nullable<int> LocationID { get; set; }
+        public string ExpensePeriodCode { get; set; }
+        public Nullable<double> TaxRate { get; set; }
+        public Nullable<double> DistributedAmount { get; set; }
+        public Nullable<double> TaxAmount { get; set; }
+        public string Currency { get; set; }
     }
 }

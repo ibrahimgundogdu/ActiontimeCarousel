@@ -12,6 +12,7 @@
         <span class="tx-20">Masraf Dökümanı Dağılım Detayı</span>
     </div>
     <nav class="nav">
+        <a href="/Expense"> <i data-feather="menu"></i> </a> &nbsp;
         @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
     </nav>
 </div>
@@ -31,7 +32,8 @@
                     </div>
                     <div class="d-none d-md-block">
                         <a href="/Expense" class="btn btn-primary btn-uppercase"><i data-feather="menu"></i> &nbsp; Masraf Listesi</a> &nbsp;
-                        <a href="/Expense/Detail/@(Model.ExpenseDocument.UID)" class="btn btn-warning btn-uppercase"><i data-feather="file-text"></i> &nbsp; Masraf Detayı</a>
+                        <a href="/Expense/Detail/@(Model.ExpenseDocument.UID)" class="btn btn-warning btn-uppercase"><i data-feather="file-text"></i> &nbsp; Masraf Detayı</a> &nbsp;
+                        <a href="/Expense/Rows/@(Model.ExpenseDocument.UID)" class="btn btn-warning btn-uppercase"><i data-feather="file-text"></i> &nbsp; Kaynak Satırları</a>
                     </div>
                 </div>
 
@@ -87,6 +89,17 @@
                             </div>
                         </div>
 
+                        <div class="form-group row mg-b-5 bg-gray-50">
+                            <label for="DocumentSource" class="col-sm-3 col-form-label">Referans</label>
+                            <div class="col-sm-6">
+                                <input id="DocumentSource" name="DocumentSource" type="text" class="form-control font-weight-bold" autocomplete="off" value="@(Model.ExpenseDocument.DocumentSource)" readonly>
+                            </div>
+                            <div class="col-sm-3">
+                            </div>
+                        </div>
+
+
+
                         <div class="form-group row bg-gray-50">
                             <label for="ExpenseGroupID" class="col-sm-3 col-form-label">Masraf Grubu</label>
                             <div class="col-sm-6">
@@ -97,11 +110,21 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="ExpensePeriod" class="col-sm-3 col-form-label">Belge Dönemi Başlangıcı</label>
+                            <label for="ExpensePeriod" class="col-sm-3 col-form-label">Belge Dönemi</label>
                             <div class="col-sm-6">
-                                <input id="ExpensePeriod" name="ExpensePeriod" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(Model.ExpenseDocument.ExpensePeriod?.ToString("yyyy-MM-dd"))" readonly>
+                                <input id="ExpensePeriod" name="ExpensePeriod" type="text" class="form-control shiftdate font-weight-bold" autocomplete="off" placeholder="Tarih" value="@(Model.ExpenseDocument.PeriodCode)" readonly>
                             </div>
                             <div class="col-sm-3">
+                            </div>
+                        </div>
+
+                        <div class="form-group row mg-b-5 bg-gray-50">
+                            <label for="TaxRate" class="col-sm-3 col-form-label">KDV</label>
+                            <div class="col-sm-6">
+                                <input id="TaxRate" name="TaxRate" type="text" class="form-control font-weight-bold" autocomplete="off" value="@(Model.ExpenseDocument.TaxRate)" readonly>
+                            </div>
+                            <div class="col-sm-3 form-control-plaintext font-weight-bold">
+                                %
                             </div>
                         </div>
 
@@ -131,7 +154,7 @@
                             {
                                 <thead>
                                     <tr>
-                                        <th colspan="3">
+                                        <th colspan="4">
                                             @using (Html.BeginForm("AddExpenseCenter", "Expense", FormMethod.Post))
                                             {
                                                 <div class="form-group row mb-0">
@@ -152,11 +175,12 @@
                                             }
                                         </th>
                                         <th colspan="7" class="">
-                                            <a href="/Expense/DistributeEQ/@(Model.ExpenseDocument.UID)" class="btn btn-brand-01 font-weight-bold"> <i data-feather="scissors"></i> &nbsp;&nbsp;&nbsp; Eşit Olarak Dağıt</a>
+                                            <a href="/Expense/DistributeEQ/@(Model.ExpenseDocument.UID)" class="btn btn-brand-01 font-weight-bold"> <i data-feather="scissors"></i> &nbsp;&nbsp;&nbsp; Tekrar Dağıt</a>
                                         </th>
                                     </tr>
                                     <tr>
                                         <th></th>
+                                        <th>#</th>
                                         <th>Merkez</th>
                                         <th>Masraf Kalemi</th>
                                         <th class="text-right">Dağıtılan (@(Model.ExpenseDocument.Currency))</th>
@@ -175,6 +199,7 @@
                                 {
                                     <tr>
                                         <td>@(sortnumber)</td>
+                                        <td>@(item.ExpenseCenterID)</td>
                                         <td>@(item.ExpenseCenterName)</td>
                                         <td>@(item.ExpenseItemName)</td>
                                         <td class="text-right tx-15">@(item.DistributionAmount?.ToString("N2"))</td>
@@ -195,21 +220,21 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="4" class="text-right">Dağıtılan</td>
+                                    <td colspan="5" class="text-right">Dağıtılan</td>
                                     <td class="font-weight-bold tx-15 text-right" id="DistributedRate"> % @(Model.ExpenseDocumentCharts.Sum(x=> x.DistributedRate)?.ToString("N4"))</td>
                                     <td class="font-weight-bold tx-15 text-right" id="DistributedAmount"> @(Model.ExpenseDocumentCharts.Sum(x=> x.DistributedAmount)?.ToString("N4"))</td>
                                     <td>@(Model.ExpenseDocument.Currency)</td>
                                     <td colspan="3"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4" class="text-right">Kalan</td>
+                                    <td colspan="5" class="text-right">Kalan</td>
                                     <td class="font-weight-bold tx-15 text-right" id="BDistributedRate"> % @((100 - Model.ExpenseDocumentCharts.Sum(x=> x.DistributedRate))?.ToString("N4"))</td>
                                     <td class="font-weight-bold tx-15 text-right" id="BDistributedAmount"> @((Model.ExpenseDocument.DistributionAmount - Model.ExpenseDocumentCharts.Sum(x=> x.DistributedAmount))?.ToString("N4"))</td>
                                     <td>@(Model.ExpenseDocument.Currency)</td>
                                     <td colspan="3"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4" class="text-right"></td>
+                                    <td colspan="5" class="text-right"></td>
                                     <td class="font-weight-bold tx-15 text-right p-1">
                                         @if (Model.ExpenseDocument.StatusID == 1)
                                         {
@@ -330,38 +355,6 @@
                 //console.log(data);
             });
         };
-
-        @*function ComputeRate(id) {
-
-
-
-            var rate = $('#DistributedRate' + id).val().replace('.', '').replace(',', '.');
-            var totalamount = @(Model.ExpenseDocument.DistributionAmount);
-            var amount = ((parseFloat(rate) / 100) * parseFloat(totalamount)) || 0.0000;
-
-            $("#DistributedAmount" + id).val(amount.toFixed(4).toString());
-
-            $.ajax({
-                method: "GET",
-                url: "/Expense/SetExpenseChart",
-                contentType: 'application/json',
-                data: { id, amount: parseFloat(amount) }
-            }).done(function (data) {
-
-                $("#UpdateDate" + data.ID).html(data.UpdateDate);
-                $("#UpdaterFullName" + data.ID).html(data.UpdateEmployee);
-
-                $("#DistributedRate").html('% '+data.DistRate.toFixed(4).toString());
-                $("#DistributedAmount").html(data.DistAmount.toFixed(4).toString());
-
-                $("#BDistributedRate").html('% ' + data.BalanceRate.toFixed(4).toString());
-                $("#BDistributedAmount").html(data.BalanceAmount.toFixed(4).toString());
-
-                console.log(data);
-
-                this.preventDefault();
-            });
-        };*@
 
 
 

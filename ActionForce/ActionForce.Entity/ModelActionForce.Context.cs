@@ -399,6 +399,9 @@ namespace ActionForce.Entity
         public virtual DbSet<ExpensePeriod> ExpensePeriod { get; set; }
         public virtual DbSet<ExpenseDocumentRows> ExpenseDocumentRows { get; set; }
         public virtual DbSet<VExpenseDocument> VExpenseDocument { get; set; }
+        public virtual DbSet<VExpenseDocumentLocationsVat> VExpenseDocumentLocationsVat { get; set; }
+        public virtual DbSet<VExpenseDocumentRows> VExpenseDocumentRows { get; set; }
+        public virtual DbSet<VExpenseActions> VExpenseActions { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -3333,6 +3336,23 @@ namespace ActionForce.Entity
                 new ObjectParameter("RecordIP", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddExpenseDocumentChartOfficeRent", documentIDParameter, recordEmployeeIDParameter, recordIPParameter);
+        }
+    
+        public virtual ObjectResult<GetLocationVatAmountMonthly_Result> GetLocationVatAmountMonthly(Nullable<System.DateTime> dateBegin, Nullable<System.DateTime> dateEnd, Nullable<int> ourCompanyID)
+        {
+            var dateBeginParameter = dateBegin.HasValue ?
+                new ObjectParameter("DateBegin", dateBegin) :
+                new ObjectParameter("DateBegin", typeof(System.DateTime));
+    
+            var dateEndParameter = dateEnd.HasValue ?
+                new ObjectParameter("DateEnd", dateEnd) :
+                new ObjectParameter("DateEnd", typeof(System.DateTime));
+    
+            var ourCompanyIDParameter = ourCompanyID.HasValue ?
+                new ObjectParameter("OurCompanyID", ourCompanyID) :
+                new ObjectParameter("OurCompanyID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationVatAmountMonthly_Result>("GetLocationVatAmountMonthly", dateBeginParameter, dateEndParameter, ourCompanyIDParameter);
         }
     }
 }

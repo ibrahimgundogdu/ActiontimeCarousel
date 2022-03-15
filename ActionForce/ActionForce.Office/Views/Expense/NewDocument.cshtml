@@ -12,6 +12,7 @@
         <span class="tx-20">Yeni Masraf Dökümanı</span>
     </div>
     <nav class="nav">
+        <a href="/Expense"> <i data-feather="menu"></i> </a> &nbsp;
         @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
     </nav>
 </div>

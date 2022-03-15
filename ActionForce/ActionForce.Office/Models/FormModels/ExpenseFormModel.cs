@@ -23,4 +23,17 @@ namespace ActionForce.Office
         public Guid UID { get; set; }
 
     }
+
+    public class ExpenseItemFormModel
+    {
+        public string ExpenseItemName { get; set; }
+        public int OurCompanyID { get; set; }
+        public string IsLocation { get; set; }
+        public string IsOffice { get; set; }
+        public string IsGeneral { get; set; }
+        public string SortBy { get; set; }
+        public string IsActive { get; set; }
+        public Guid UID { get; set; }
+
+    }
 }

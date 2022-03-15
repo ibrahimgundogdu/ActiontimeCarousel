@@ -11,6 +11,7 @@
         <span class="tx-20">Masraf Yönetimi - Masraf Dokümanları</span>
     </div>
     <nav class="nav">
+        <a href="/Expense"> <i data-feather="menu"></i> </a> &nbsp;
         @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
 
     </nav>
@@ -81,7 +82,7 @@
             <button class="btn btn-primary btn-block" type="submit" id="btnsearch">Ara</button>
         </div>
         <div class="form-group col-md-1 d-flex align-items-end ">
-            <a href="/Expense/NewDocument" class="btn btn-success btn-block font-weight-bold"> <i data-feather="plus"></i>  Yeni</a>
+            <a href="/Expense/NewDocument" class="btn btn-success btn-block font-weight-bold">Yeni</a>
         </div>
     </div>
     }
@@ -109,31 +110,33 @@
                             <th>Aktif</th>
                             <th></th>
                             <th></th>
-
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
 
                         @foreach (var exp in Model.ExpenseDocuments.OrderByDescending(x => x.DocumentDate).ThenByDescending(x => x.RecordDate))
                         {
-                            <tr>
+                        <tr>
 
-                                <td class="tx-sm-13">@(exp.ID)</td>
-                                <td class="tx-sm-13 font-weight-bold"><a href="/Expense/Detail/@(exp.UID)" target="_blank" class="@(exp.StatusID == 1 ? "text-black-50":"")"> @(exp.DocumentNumber)</a></td>
-                                <td class="tx-sm-13 font-weight-bold">@(exp.DocumentDate.Value.ToString("d"))</td>
-                                <td class="tx-sm-13">@(exp.ExpenseCenterName)</td>
-                                <td class="tx-sm-13">@(exp.ExpenseItemName)</td>
-                                <td class="tx-sm-13">@(exp.ExpenseGroupName)</td>
-                                <td class="tx-sm-13 font-weight-bold text-right">@(exp.ExpensePeriodCode)</td>
-                                <td class="tx-sm-13 font-weight-bold text-right">@(exp.TotalAmount?.ToString("N2"))</td>
-                                <td class="tx-sm-13 font-weight-bold text-right">@(exp.DistributionAmount?.ToString("N2"))</td>
-                                <td class="tx-sm-13">@(exp.Currency)</td>
-                                <td class="tx-sm-13">@(exp.StatusName)</td>
-                                <td class="tx-sm-13">@(exp.RecordDate)</td>
-                                <td class="tx-sm-13">@(exp.IsActive == true ? "Aktif":"Pasif")</td>
-                                <td class="tx-sm-13"><a href="/Expense/Detail/@(exp.UID)" target="_blank" class="@(exp.StatusID == 1 ? "text-black-50":"")"> <i data-feather="file-text"></i></a></td>
-                                <td class="tx-sm-13"><a href="/Expense/Chart/@(exp.UID)" target="_blank" class="@(exp.StatusID == 1 ? "text-black-50":"")"> <i data-feather="list"></i></a></td>
-                            </tr>
+                            <td class="tx-sm-13">@(exp.ID)</td>
+                            <td class="tx-sm-13 font-weight-bold"><a href="/Expense/Detail/@(exp.UID)" target="_blank" class="@(exp.StatusID == 1 ? "text-black-50":"")"> @(exp.DocumentNumber)</a></td>
+                            <td class="tx-sm-13 font-weight-bold">@(exp.DocumentDate.Value.ToString("d"))</td>
+                            <td class="tx-sm-13">@(exp.ExpenseCenterName)</td>
+                            <td class="tx-sm-13">@(exp.ExpenseItemName)</td>
+                            <td class="tx-sm-13">@(exp.ExpenseGroupName)</td>
+                            <td class="tx-sm-13 font-weight-bold text-right">@(exp.ExpensePeriodCode)</td>
+                            <td class="tx-sm-13 font-weight-bold text-right">@(exp.TotalAmount?.ToString("N2"))</td>
+                            <td class="tx-sm-13 font-weight-bold text-right">@(exp.DistributionAmount?.ToString("N2"))</td>
+                            <td class="tx-sm-13">@(exp.Currency)</td>
+                            <td class="tx-sm-13">@(exp.StatusName)</td>
+                            <td class="tx-sm-13">@(exp.RecordDate)</td>
+                            <td class="tx-sm-13">@(exp.IsActive == true ? "Aktif":"Pasif")</td>
+                            <td class="tx-sm-13"><a href="/Expense/Detail/@(exp.UID)" target="_blank" class="@(exp.StatusID == 1 ? "text-black-50":"")"> <i data-feather="file-text"></i></a></td>
+                            <td class="tx-sm-13"><a href="/Expense/Rows/@(exp.UID)" target="_blank" class="@(exp.StatusID == 1 ? "text-black-50":"")"> <i data-feather="radio"></i></a></td>
+                            <td class="tx-sm-13"><a href="/Expense/Chart/@(exp.UID)" target="_blank" class="@(exp.StatusID == 1 ? "text-black-50":"text-warning") "> <i data-feather="list"></i></a></td>
+
+                        </tr>
                         }
 
 
@@ -143,7 +146,7 @@
                             <th colspan="7"></th>
                             <th class="tx-sm-13 font-weight-bold text-right">@(Model.ExpenseDocuments.Sum(x=> x.TotalAmount)?.ToString("N2"))</th>
                             <th class="tx-sm-13 font-weight-bold text-right">@(Model.ExpenseDocuments.Sum(x=> x.DistributionAmount)?.ToString("N2"))</th>
-                            <th colspan="6"></th>
+                            <th colspan="7"></th>
 
                         </tr>
                     </tfoot>

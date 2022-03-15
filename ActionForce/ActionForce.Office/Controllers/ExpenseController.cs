@@ -127,6 +127,96 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("Index", "Expense");
         }
 
+
+
+        [AllowAnonymous]
+        public ActionResult Cost(int? ECID, int? EIID, int? EGID, int? ESID, string EPCD)
+        {
+            ExpenseControlModel model = new ExpenseControlModel();
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result ?? null;
+            }
+
+            if (TempData["filter"] != null)
+            {
+
+                model.Filters = TempData["filter"] as ExpenseFilterModel;
+                model.Filters.FromSearch = true;
+
+            }
+            else
+            {
+
+                ExpenseFilterModel filterModel = new ExpenseFilterModel();
+
+                filterModel.ExpenseCenterID = ECID ?? null;
+                filterModel.ExpenseItemID = EIID ?? null;
+                filterModel.ExpenseGroupID = EGID ?? null;
+                filterModel.ExpensePeriodCode = !string.IsNullOrEmpty(EPCD) ? EPCD : string.Empty;
+                filterModel.FromSearch = false;
+                model.Filters = filterModel;
+
+            }
+
+            model.ExpenseCenters = Db.ExpenseCenter.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.ProfitCenter == true && x.ExpenseCenter1 == true).OrderBy(x => x.SortBy).ToList();
+            model.ExpenseItems = Db.ExpenseItem.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.SortBy).ToList();
+            model.ExpensePeriods = Db.ExpensePeriod.OrderBy(x => x.DateBegin).ToList();
+            model.ExpenseGroups = Db.ExpenseGroup.OrderBy(x => x.SortBy).ToList();
+
+            IQueryable<VExpenseActions> expenseActions;
+
+            if (model.Filters.FromSearch == true || ECID != null || EIID != null || EGID != null || !string.IsNullOrEmpty(EPCD))
+            {
+                expenseActions = Db.VExpenseActions.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+
+                if (model.Filters.ExpenseCenterID != null)
+                {
+                    expenseActions = expenseActions.Where(x => x.LocationID == model.Filters.ExpenseCenterID);
+                }
+
+                if (model.Filters.ExpenseItemID != null)
+                {
+                    expenseActions = expenseActions.Where(x => x.ExpenseItemID == model.Filters.ExpenseItemID);
+                }
+
+                if (model.Filters.ExpenseGroupID != null)
+                {
+                    expenseActions = expenseActions.Where(x => x.ExpenseGroupID == model.Filters.ExpenseGroupID);
+                }
+
+                if (!string.IsNullOrEmpty(model.Filters.ExpensePeriodCode))
+                {
+                    expenseActions = expenseActions.Where(x => x.ExpensePeriodCode == model.Filters.ExpensePeriodCode);
+                }
+
+                model.ExpenseActions = expenseActions.ToList();
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult CostFilter(int? ECID, int? EIID, int? EGID, string EPCD)
+        {
+            ExpenseFilterModel model = new ExpenseFilterModel();
+
+            model.ExpenseCenterID = ECID ?? null;
+            model.ExpenseItemID = EIID ?? null;
+            model.ExpenseGroupID = EGID ?? null;
+            model.ExpensePeriodCode = !string.IsNullOrEmpty(EPCD) ? EPCD : string.Empty;
+            model.FromSearch = true;
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("Cost", "Expense");
+        }
+
+
+
         [AllowAnonymous]
         public ActionResult NewDocument()
         {
@@ -220,6 +310,169 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
+        public ActionResult NewItem(Guid? id)
+        {
+            ExpenseControlModel model = new ExpenseControlModel();
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result ?? null;
+            }
+
+            if (id != null)
+            {
+                model.ExpenseItem = Db.ExpenseItem.FirstOrDefault(x => x.UID == id);
+                model.ItemEditable = !Db.ExpenseDocument.Any(x => x.ExpenseItemID == model.ExpenseItem.ID);
+
+            }
+            else
+            {
+                model.ExpenseItem = null;
+            }
+
+            model.ExpenseItems = Db.ExpenseItem.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.SortBy).ToList();
+            model.ExpenseGroups = Db.ExpenseGroup.ToList();
+            model.OurCompanies = Db.OurCompany.ToList();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddExpenseItem(ExpenseItemFormModel form)
+        {
+            ExpenseControlModel model = new ExpenseControlModel();
+
+            model.Result = new Result();
+
+            if (form != null)
+            {
+
+
+                var document = Db.ExpenseItem.FirstOrDefault(x => x.ExpenseItemName == form.ExpenseItemName);
+
+                if (document == null)
+                {
+                    document = new ExpenseItem();
+                    form.UID = Guid.NewGuid();
+
+                    document.UID = form.UID;
+                    document.ExpenseItemName = form.ExpenseItemName.Trim();
+                    document.SortBy = form.SortBy;
+                    document.IsLocation = form.IsLocation == "1" ? true : false;
+                    document.IsGeneral = form.IsGeneral == "1" ? true : false;
+                    document.IsOffice = form.IsOffice == "1" ? true : false;
+                    document.IsActive = true;
+                    document.OurCompanyID = model.Authentication.ActionEmployee.OurCompanyID;
+
+
+                    Db.ExpenseItem.Add(document);
+                    Db.SaveChanges();
+
+                    model.Result.IsSuccess = true;
+                    model.Result.Message = "Masraf Kalemi Eklendi";
+
+                    OfficeHelper.AddApplicationLog("Office", "ExpenseItem", "Insert", document.ID.ToString(), "Expense", "AddExpenseItem", null, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, document);
+                }
+                else
+                {
+                    model.Result.IsSuccess = false;
+                    model.Result.Message = "Benzer Masraf Kalemi Bulundu";
+                }
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Form Verileri Gelmedi";
+            }
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("NewItem", "Expense", new { id = form.UID });
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult EditExpenseItem(ExpenseItemFormModel form)
+        {
+            ExpenseControlModel model = new ExpenseControlModel();
+
+            model.Result = new Result();
+
+            if (form != null)
+            {
+                var document = Db.ExpenseItem.FirstOrDefault(x => x.UID == form.UID);
+
+                if (document != null)
+                {
+                    ExpenseItem self = new ExpenseItem()
+                    {
+
+                        IsActive = document.IsActive,
+                        OurCompanyID = document.OurCompanyID,
+                        UID = document.UID,
+                        ID = document.ID,
+                        ExpenseItemName = document.ExpenseItemName,
+                        SortBy = document.SortBy,
+                        IsLocation = document.IsLocation,
+                        IsGeneral = document.IsGeneral,
+                        IsOffice = document.IsOffice
+
+                    };
+
+                    document.OurCompanyID = form.OurCompanyID;
+                    document.ExpenseItemName = form.ExpenseItemName;
+                    document.SortBy = form.SortBy;
+                    document.IsLocation = form.IsLocation == "1" ? true : false;
+                    document.IsGeneral = form.IsGeneral == "1" ? true : false;
+                    document.IsOffice = form.IsOffice == "1" ? true : false;
+                    document.IsActive = form.IsActive == "1" ? true : false;
+
+                    Db.SaveChanges();
+
+                    model.Result.IsSuccess = true;
+                    model.Result.Message = "Masraf Kalemi Güncellendi";
+
+                    var isequal = OfficeHelper.PublicInstancePropertiesEqual<ExpenseItem>(self, document, OfficeHelper.getIgnorelist());
+                    OfficeHelper.AddApplicationLog("Office", "ExpenseItem", "Update", document.ID.ToString(), "Expense", "EditExpenseItem", isequal, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+
+                }
+                else
+                {
+                    model.Result.IsSuccess = false;
+                    model.Result.Message = "Masraf Kalemi Bulunamadı";
+                }
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Form Verileri Gelmedi";
+            }
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("NewItem", "Expense", new { id = form.UID });
+        }
+
+        [AllowAnonymous]
+        public ActionResult ItemCheck(Guid? id)
+        {
+            ExpenseControlModel model = new ExpenseControlModel();
+
+            var document = Db.ExpenseItem.FirstOrDefault(x => x.UID == id);
+
+            if (document != null)
+            {
+                document.IsActive = !document.IsActive;
+                Db.SaveChanges();
+            }
+
+            return RedirectToAction("NewItem", "Expense", new { id });
+        }
+
+
+        [AllowAnonymous]
         public ActionResult Detail(Guid? id)
         {
             ExpenseControlModel model = new ExpenseControlModel();
@@ -311,7 +564,7 @@ namespace ActionForce.Office.Controllers
                         document.ExpenseItemID = form.ExpenseItemID;
                         document.ExpenseCenterID = form.ExpenseCenterID;
                         document.ExpensePeriod = form.ExpensePeriod;
-                        
+
                         if (form.ExpensePeriod != null)
                         {
                             document.ExpenseYear = document.ExpensePeriod.Value.Year;
@@ -385,6 +638,44 @@ namespace ActionForce.Office.Controllers
 
         }
 
+
+        [AllowAnonymous]
+        public ActionResult Rows(Guid? id)
+        {
+            ExpenseControlModel model = new ExpenseControlModel();
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result ?? null;
+            }
+
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            model.ExpenseCenters = Db.ExpenseCenter.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true && x.ProfitCenter == true).OrderBy(x => x.SortBy).ToList();
+            model.ExpenseItems = Db.ExpenseItem.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.SortBy).ToList();
+            model.ExpenseDocumentStatuses = Db.ExpenseDocumentStatus.OrderBy(x => x.SortBy).ToList();
+            model.ExpensePeriods = Db.ExpensePeriod.OrderBy(x => x.DateBegin).ToList();
+            model.ExpenseGroups = Db.ExpenseGroup.ToList();
+            model.ExpenseDocument = Db.VExpenseDocument.FirstOrDefault(x => x.UID == id);
+
+            if (model.ExpenseDocument == null)
+            {
+                TempData["Result"] = model.Result;
+                return RedirectToAction("Index");
+            }
+
+            DocumentManager manager = new DocumentManager();
+            model.ExpenseDocumentRows = Db.VExpenseDocumentRows.Where(x => x.DocumentID == model.ExpenseDocument.ID).ToList();
+
+            return View(model);
+
+        }
+
+
+
         [AllowAnonymous]
         public ActionResult DistributeEQ(Guid? id)
         {
@@ -401,6 +692,7 @@ namespace ActionForce.Office.Controllers
             }
 
             model.ExpenseDocument = Db.VExpenseDocument.FirstOrDefault(x => x.UID == id);
+            var parentDocument = Db.ExpenseDocument.FirstOrDefault(x => x.ExpenseCenterID == model.ExpenseDocument.ExpenseCenterID && x.ExpenseGroupID == model.ExpenseDocument.ExpenseGroupID && x.ExpensePeriodCode == model.ExpenseDocument.ExpensePeriodCode && x.ExpenseItemID == 5);
 
             if (model.ExpenseDocument == null)
             {
@@ -408,21 +700,97 @@ namespace ActionForce.Office.Controllers
                 return RedirectToAction("Index");
             }
 
-            DocumentManager manager = new DocumentManager();
-            model.ExpenseDocumentCharts = manager.GetExpenseDucumentChart(model.ExpenseDocument, model.Authentication);
-            var charts = Db.ExpenseDocumentChart.Where(x => x.ExpenseDocumentID == model.ExpenseDocument.ID).ToList();
 
-            foreach (var item in charts)
+            if (model.ExpenseDocument.AutoComputeTypeID > 0)
             {
-                item.DistributionAmount = model.ExpenseDocument.DistributionAmount;
-                item.DistributedAmount = (item.DistributionAmount / (double)charts.Count);
-                item.DistributedRate = (1 / (double)charts.Count) * 100;
-                item.UpdateDate = DateTime.UtcNow.AddHours(3);
-                item.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
-                item.UpdateIP = OfficeHelper.GetIPAddress();
+                if (model.ExpenseDocument.AutoComputeTypeID == 1)
+                {
+                    Db.AddExpenseDocumentChart(model.ExpenseDocument.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+                }
+
+                if (model.ExpenseDocument.AutoComputeTypeID == 2)
+                {
+                    Db.AddExpenseDocumentChartPremium(model.ExpenseDocument.ID, parentDocument.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+                }
+
+                if (model.ExpenseDocument.AutoComputeTypeID == 3)
+                {
+                    Db.AddExpenseDocumentChartSGK(model.ExpenseDocument.ID, parentDocument.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+                }
+
+                if (model.ExpenseDocument.AutoComputeTypeID == 4)
+                {
+                    Db.AddExpenseDocumentChartFoodCard(model.ExpenseDocument.ID, parentDocument.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+                }
+
+
+                if (model.ExpenseDocument.AutoComputeTypeID == 5)
+                {
+                    Db.AddExpenseDocumentChartMonthlySalary(model.ExpenseDocument.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+                }
+
+                if (model.ExpenseDocument.AutoComputeTypeID == 6)
+                {
+                    Db.AddExpenseDocumentChartMonthlyPremium(model.ExpenseDocument.ID, parentDocument.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+                }
+
+                if (model.ExpenseDocument.AutoComputeTypeID == 7)
+                {
+                    Db.AddExpenseDocumentChartMonthlySGK(model.ExpenseDocument.ID, parentDocument.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+                }
+
+                if (model.ExpenseDocument.AutoComputeTypeID == 8)
+                {
+                    Db.AddExpenseDocumentChartMonthlyFoodCard(model.ExpenseDocument.ID, parentDocument.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+                }
+
+                if (model.ExpenseDocument.AutoComputeTypeID == 9)
+                {
+                    Db.AddExpenseDocumentChart(model.ExpenseDocument.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+                }
+
+                if (model.ExpenseDocument.AutoComputeTypeID == 10)
+                {
+                    Db.AddExpenseDocumentChartOfficeRent(model.ExpenseDocument.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+                }
+
+                if (model.ExpenseDocument.AutoComputeTypeID == 11)
+                {
+                    Db.AddExpenseDocumentChart(model.ExpenseDocument.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+                }
+
+                if (model.ExpenseDocument.AutoComputeTypeID == 12)
+                {
+                    Db.AddExpenseDocumentChart(model.ExpenseDocument.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+                }
+
+                if (model.ExpenseDocument.AutoComputeTypeID == 13)
+                {
+                    Db.AddExpenseDocumentChartKidem(model.ExpenseDocument.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+                }
+
+            }
+            else
+            {
+                DocumentManager manager = new DocumentManager();
+                model.ExpenseDocumentCharts = manager.GetExpenseDucumentChart(model.ExpenseDocument, model.Authentication);
+                var charts = Db.ExpenseDocumentChart.Where(x => x.ExpenseDocumentID == model.ExpenseDocument.ID).ToList();
+
+                foreach (var item in charts)
+                {
+                    item.DistributionAmount = model.ExpenseDocument.DistributionAmount;
+                    item.DistributedAmount = (item.DistributionAmount / (double)charts.Count);
+                    item.DistributedRate = (1 / (double)charts.Count) * 100;
+                    item.UpdateDate = DateTime.UtcNow.AddHours(3);
+                    item.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                    item.UpdateIP = OfficeHelper.GetIPAddress();
+                }
+
+                Db.SaveChanges();
             }
 
-            Db.SaveChanges();
+
+
 
             return RedirectToAction("Chart", "Expense", new { id });
 
@@ -669,7 +1037,7 @@ namespace ActionForce.Office.Controllers
 
             DocumentManager documentManager = new DocumentManager();
 
- 
+
             if (!string.IsNullOrEmpty(ExpensePeriod))
             {
                 if (Location == "1")
@@ -687,7 +1055,7 @@ namespace ActionForce.Office.Controllers
                 {
                     var document = documentManager.ComputeExpenseDucumentMonthlySalary(ExpensePeriod, model.Authentication);
 
-                    foreach (var item in Db.ExpenseDocument.Where(x=> x.ExpensePeriodCode == ExpensePeriod && x.ExpenseGroupID == 2 && x.ExpenseItemID == 5).ToList())
+                    foreach (var item in Db.ExpenseDocument.Where(x => x.ExpensePeriodCode == ExpensePeriod && x.ExpenseGroupID == 2 && x.ExpenseItemID == 5).ToList())
                     {
                         var salaryDocument = documentManager.ComputeExpenseDucumentMontlySalaryChart(item.ID, ExpensePeriod, model.Authentication);
                         var sgkDocument = documentManager.ComputeExpenseDucumentMontlySGK(item.ID, item.ExpenseCenterID, ExpensePeriod, model.Authentication);
@@ -698,7 +1066,7 @@ namespace ActionForce.Office.Controllers
                     var documentg = documentManager.ComputeExpenseDucumentKidem(ExpensePeriod, model.Authentication);
                     var gDocument = documentManager.ComputeExpenseDucumentMontlyKidemChart(documentg.ID, ExpensePeriod, model.Authentication);
                 }
-               
+
                 if (Rent == "1")
                 {
                     var documentL = documentManager.ComputeExpenseDucumentLocationRent(ExpensePeriod, model.Authentication);
@@ -707,7 +1075,7 @@ namespace ActionForce.Office.Controllers
                 }
                 if (Vat == "1")
                 {
-
+                    var document = documentManager.ComputeExpenseDucumentVat(ExpensePeriod, model.Authentication);
                 }
                 if (Expense == "1")
                 {

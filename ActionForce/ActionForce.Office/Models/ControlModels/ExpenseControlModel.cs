@@ -31,5 +31,15 @@ namespace ActionForce.Office
 
         public VExpenseDocumentChart ExpenseDocumentChart { get; set; }
         public List<VExpenseDocumentChart> ExpenseDocumentCharts { get; set; }
+
+        public VExpenseDocumentRows ExpenseDocumentRow { get; set; }
+        public List<VExpenseDocumentRows> ExpenseDocumentRows { get; set; }
+
+        public List<OurCompany> OurCompanies { get; set; }
+
+        public bool ItemEditable { get; set; } = true;
+
+        public VExpenseActions ExpenseAction { get; set; }
+        public List<VExpenseActions> ExpenseActions { get; set; }
     }
 }

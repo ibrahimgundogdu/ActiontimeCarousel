@@ -7057,7 +7057,144 @@ namespace ActionForce.Office
         }
 
 
+        //vat
+        public ExpenseDocument ComputeExpenseDucumentVat(string expensePeriod, AuthenticationModel authentication)
+        {
 
+            var expenseDocument = new ExpenseDocument();
+
+            List<ExpenseDocumentRows> expenseDocumentRows = new List<ExpenseDocumentRows>();
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var ePeriod = Db.ExpensePeriod.FirstOrDefault(x => x.PeriodCode == expensePeriod);
+
+                // lokasyon kira 9
+                expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 11 && x.ExpenseItemID == 44 && x.ExpensePeriodCode == expensePeriod);
+
+                if (expenseDocument != null && expenseDocument.StatusID == 1)
+                {
+                    return expenseDocument;
+                }
+                else if (expenseDocument != null && expenseDocument.StatusID == 0)
+                {
+                    var rows = Db.ExpenseDocumentRows.Where(x => x.DocumentID == expenseDocument.ID).ToList();
+                    Db.ExpenseDocumentRows.RemoveRange(rows);
+                    Db.SaveChanges();
+
+                }
+                else if (expenseDocument == null)
+                {
+                    ExpenseDocument document = new ExpenseDocument();
+
+                    var UID = Guid.NewGuid();
+
+                    document.UID = UID;
+                    document.DocumentNumber = OfficeHelper.GetDocumentNumber(authentication.ActionEmployee.OurCompanyID ?? 2, "EXD");
+                    document.RecordDate = DateTime.UtcNow.AddHours(3);
+                    document.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
+                    document.RecordIP = OfficeHelper.GetIPAddress();
+                    document.DocumentSource = "KDV-" + expensePeriod;
+                    document.ExpenseDescription = "";
+                    document.DistributionAmount = 0;
+                    document.TotalAmount = 0;
+                    document.ExpenseGroupID = 3;
+                    document.Currency = authentication.ActionEmployee.OurCompany.Currency;
+                    document.DocumentDate = DateTime.UtcNow.AddHours(authentication.ActionEmployee.OurCompany.TimeZone ?? 3);
+                    document.ExpenseItemID = 44;
+                    document.ExpenseCenterID = 80;
+                    document.ExpensePeriod = ePeriod.DateBegin;
+                    document.IsActive = true;
+                    document.StatusID = 0;
+                    document.OurCompanyID = authentication.ActionEmployee.OurCompanyID;
+                    document.ExpenseYear = ePeriod.DateYear;
+                    document.ExpenseMonth = ePeriod.DateMonth;
+                    document.ExpensePeriodCode = expensePeriod;
+                    document.AutoComputeTypeID = 11;
+                    document.TaxRate = 0;
+
+                    Db.ExpenseDocument.Add(document);
+                    Db.SaveChanges();
+
+                    OfficeHelper.AddApplicationLog("Office", "ExpenseDocument", "Insert", document.ID.ToString(), "Expense", "NewDocument", null, true, "KDV Masraf Dokümanı Otomatik Eklendi", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, document);
+
+                    expenseDocument = document;
+                }
+
+                List<int> denyLocationIds = new List<int>() { 179, 175, 212 };
+
+                var LocationIds = Db.VLocationShift.Where(x => x.OurCompanyID == authentication.ActionEmployee.OurCompanyID && x.DurationMinute > 0 && x.ShiftDate >= ePeriod.DateBegin && x.ShiftDate <= ePeriod.DateEnd && !denyLocationIds.Contains(x.LocationID)).Select(x => x.LocationID).Distinct().ToList();
+
+                // kdv borç satırları eklenir
+
+                var locationTaxTotals = Db.GetLocationVatAmountMonthly(ePeriod.DateBegin, ePeriod.DateEnd, authentication.ActionEmployee.OurCompanyID).ToList();
+
+                foreach (var locId in LocationIds)
+                {
+
+                    var vat = locationTaxTotals.FirstOrDefault(x => x.LocationID == locId);
+
+                    var locationVatAmount = 0.0;
+
+                    if (vat != null)
+                    {
+                        locationVatAmount = vat.Total ?? 0;
+                    }
+
+                    ExpenseDocumentRows row = new ExpenseDocumentRows();
+
+                    row.EmployeeID = 0;
+                    row.LocationID = locId;
+                    row.DocumentID = expenseDocument.ID;
+                    row.Currency = authentication.ActionEmployee.OurCompany.Currency;
+                    row.Unit = 1;
+                    row.Hour = 1;
+                    row.Amount = locationVatAmount; // ödenecek kdv
+                    row.CostAmount = locationVatAmount;
+                    row.PremiumAmount = 0;
+                    row.SGKCostAmount = 0;
+                    row.FoodCardCostAmount = 0;
+
+                    Db.ExpenseDocumentRows.Add(row);
+                    Db.SaveChanges();
+                }
+
+                // kdv alacak satırları eklenir
+
+                
+
+                foreach (var locId in LocationIds)
+                {
+                    var locationDebtTaxTotal = Db.VExpenseDocumentLocationsVat.Where(x => x.OurCompanyID == authentication.ActionEmployee.OurCompanyID && x.LocationID == locId && x.ExpensePeriodCode == ePeriod.PeriodCode).Sum(x=> x.TaxAmount) ?? 0;
+
+                    ExpenseDocumentRows row = new ExpenseDocumentRows();
+
+                    row.EmployeeID = 0;
+                    row.LocationID = locId;
+                    row.DocumentID = expenseDocument.ID;
+                    row.Currency = authentication.ActionEmployee.OurCompany.Currency;
+                    row.Unit = 1;
+                    row.Hour = 1;
+                    row.Amount = -1 * locationDebtTaxTotal; // düşülecek kdv
+                    row.CostAmount = -1 * locationDebtTaxTotal;
+                    row.PremiumAmount = 0;
+                    row.SGKCostAmount = 0;
+                    row.FoodCardCostAmount = 0;
+
+                    Db.ExpenseDocumentRows.Add(row);
+                    Db.SaveChanges();
+                }
+
+                var costAmount = Db.ExpenseDocumentRows.Where(x => x.DocumentID == expenseDocument.ID).Sum(x => x.CostAmount) ?? 0;
+                expenseDocument.TotalAmount = costAmount;
+                expenseDocument.DistributionAmount = costAmount;
+                Db.SaveChanges();
+
+                Db.AddExpenseDocumentChart(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+            }
+
+            return expenseDocument;
+        }
 
 
 
