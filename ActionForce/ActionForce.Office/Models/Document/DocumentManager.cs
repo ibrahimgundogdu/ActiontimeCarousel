@@ -6883,7 +6883,7 @@ namespace ActionForce.Office
                     document.ExpenseDescription = "";
                     document.DistributionAmount = 0;
                     document.TotalAmount = 0;
-                    document.ExpenseGroupID = 2;
+                    document.ExpenseGroupID = 1;
                     document.Currency = authentication.ActionEmployee.OurCompany.Currency;
                     document.DocumentDate = DateTime.UtcNow.AddHours(authentication.ActionEmployee.OurCompany.TimeZone ?? 3);
                     document.ExpenseItemID = 4;
@@ -6908,21 +6908,17 @@ namespace ActionForce.Office
 
                 List<int> denyLocationIds = new List<int>() { 179, 175, 212 };
 
-                //SELECT distinct [LocationID]  FROM [dbo].[VLocationShift] Where [ShiftDate] >= '2022-01-01' and [ShiftDate] <= '2022-01-31'  and DurationMinute > 0 and OurCompanyID = 2
                 var LocationIds = Db.VLocationShift.Where(x => x.OurCompanyID == authentication.ActionEmployee.OurCompanyID && x.DurationMinute > 0 && x.ShiftDate >= ePeriod.DateBegin && x.ShiftDate <= ePeriod.DateEnd && !denyLocationIds.Contains(x.LocationID)).Select(x => x.LocationID).Distinct().ToList();
 
-                Db.SaveChanges();
 
                 foreach (var locId in LocationIds)
                 {
-                    var isOpen = Db.LocationPeriods.Any(x => x.LocationID == locId && (x.ContractStartDate <= ePeriod.DateBegin && x.ContractFinishDate >= ePeriod.DateBegin) || (x.ContractStartDate <= ePeriod.DateEnd && x.ContractFinishDate >= ePeriod.DateEnd));
+                    var isOpen = Db.LocationPeriods.Any(x => x.LocationID == locId && (x.ContractStartDate <= ePeriod.DateBegin  ||  x.FinalFinishDate >= ePeriod.DateEnd));
 
-                    //SELECT TOP (1) [Total], [Money] FROM [dbo].[VLocationParam] Where TypeID = 5 and LocationID = 225  and DateStart <= '2022-03-14' and DateFinish >= '2022-03-14' Order by DateStart desc
-                    var rent = Db.LocationParam.Where(x => x.TypeID == 5 && x.LocationID == locId && x.DateStart <= ePeriod.DateBegin && x.DateFinish >= ePeriod.DateEnd).OrderByDescending(x => x.DateStart).Take(1).FirstOrDefault();
+                    var rent = Db.LocationParam.Where(x => x.TypeID == 5 && x.LocationID == locId && (x.DateStart <= ePeriod.DateBegin || x.DateFinish >= ePeriod.DateEnd)).OrderByDescending(x => x.DateStart).Take(1).FirstOrDefault();
 
                     if (rent != null && isOpen == true)
                     {
-
 
                         ExpenseDocumentRows row = new ExpenseDocumentRows();
 
@@ -6933,7 +6929,7 @@ namespace ActionForce.Office
                         row.Unit = 1;
                         row.Hour = 1;
                         row.Amount = rent.Total * 1.18; // kiralar kdv hariç idi
-                        row.CostAmount = row.Amount;
+                        row.CostAmount = rent.Total * 1.18;
                         row.PremiumAmount = 0;
                         row.SGKCostAmount = 0;
                         row.FoodCardCostAmount = 0;
@@ -6943,6 +6939,11 @@ namespace ActionForce.Office
                         Db.SaveChanges();
                     }
                 }
+
+                var costAmount = Db.ExpenseDocumentRows.Where(x => x.DocumentID == expenseDocument.ID).Sum(x => x.CostAmount) ?? 0;
+                expenseDocument.TotalAmount = costAmount;
+                expenseDocument.DistributionAmount = costAmount;
+                Db.SaveChanges();
 
                 Db.AddExpenseDocumentChart(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
             }
@@ -6962,7 +6963,7 @@ namespace ActionForce.Office
                 var ePeriod = Db.ExpensePeriod.FirstOrDefault(x => x.PeriodCode == expensePeriod);
 
                 // lokasyon kira 9
-                expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 9 && x.ExpenseItemID == 4 && x.ExpensePeriodCode == expensePeriod);
+                expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 10 && x.ExpenseItemID == 4 && x.ExpensePeriodCode == expensePeriod);
 
                 if (expenseDocument != null && expenseDocument.StatusID == 1)
                 {
@@ -7002,7 +7003,7 @@ namespace ActionForce.Office
                     document.ExpenseYear = ePeriod.DateYear;
                     document.ExpenseMonth = ePeriod.DateMonth;
                     document.ExpensePeriodCode = expensePeriod;
-                    document.AutoComputeTypeID = 9;
+                    document.AutoComputeTypeID = 10;
                     document.TaxRate = 18;
 
                     Db.ExpenseDocument.Add(document);
@@ -7013,24 +7014,17 @@ namespace ActionForce.Office
                     expenseDocument = document;
                 }
 
-                List<int> denyLocationIds = new List<int>() { 179, 175, 212 };
-
-                //SELECT distinct [LocationID]  FROM [dbo].[VLocationShift] Where [ShiftDate] >= '2022-01-01' and [ShiftDate] <= '2022-01-31'  and DurationMinute > 0 and OurCompanyID = 2
-                var LocationIds = Db.VLocationShift.Where(x => x.OurCompanyID == authentication.ActionEmployee.OurCompanyID && x.DurationMinute > 0 && x.ShiftDate >= ePeriod.DateBegin && x.ShiftDate <= ePeriod.DateEnd && !denyLocationIds.Contains(x.LocationID)).Select(x => x.LocationID).Distinct().ToList();
-
-                Db.SaveChanges();
+                List<int> locationTypes = new List<int>() { 5,6 };
+                var LocationIds = Db.Location.Where(x => x.OurCompanyID == authentication.ActionEmployee.OurCompanyID && locationTypes.Contains(x.LocationTypeID.Value)).Select(x => x.LocationID).Distinct().ToList();
 
                 foreach (var locId in LocationIds)
                 {
-                    var isOpen = Db.LocationPeriods.Any(x => x.LocationID == locId && (x.ContractStartDate <= ePeriod.DateBegin && x.ContractFinishDate >= ePeriod.DateBegin) || (x.ContractStartDate <= ePeriod.DateEnd && x.ContractFinishDate >= ePeriod.DateEnd));
+                    var isOpen = Db.LocationPeriods.Any(x => x.LocationID == locId && (x.ContractStartDate <= ePeriod.DateBegin || x.FinalFinishDate >= ePeriod.DateEnd));
 
-                    //SELECT TOP (1) [Total], [Money] FROM [dbo].[VLocationParam] Where TypeID = 5 and LocationID = 225  and DateStart <= '2022-03-14' and DateFinish >= '2022-03-14' Order by DateStart desc
-                    var rent = Db.LocationParam.Where(x => x.TypeID == 5 && x.LocationID == locId && x.DateStart <= ePeriod.DateBegin && x.DateFinish >= ePeriod.DateEnd).OrderByDescending(x => x.DateStart).Take(1).FirstOrDefault();
+                    var rent = Db.LocationParam.Where(x => x.TypeID == 5 && x.LocationID == locId && (x.DateStart <= ePeriod.DateBegin || x.DateFinish >= ePeriod.DateEnd)).OrderByDescending(x => x.DateStart).Take(1).FirstOrDefault();
 
                     if (rent != null && isOpen == true)
                     {
-
-
                         ExpenseDocumentRows row = new ExpenseDocumentRows();
 
                         row.EmployeeID = 0;
@@ -7040,7 +7034,7 @@ namespace ActionForce.Office
                         row.Unit = 1;
                         row.Hour = 1;
                         row.Amount = rent.Total * 1.18; // kiralar kdv hariç idi
-                        row.CostAmount = row.Amount;
+                        row.CostAmount = rent.Total * 1.18;
                         row.PremiumAmount = 0;
                         row.SGKCostAmount = 0;
                         row.FoodCardCostAmount = 0;
@@ -7051,7 +7045,12 @@ namespace ActionForce.Office
                     }
                 }
 
-                Db.AddExpenseDocumentChart(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+                var costAmount = Db.ExpenseDocumentRows.Where(x => x.DocumentID == expenseDocument.ID).Sum(x => x.CostAmount) ?? 0;
+                expenseDocument.TotalAmount = costAmount;
+                expenseDocument.DistributionAmount = costAmount;
+                Db.SaveChanges();
+
+                Db.AddExpenseDocumentChartOfficeRent(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
             }
 
             return expenseDocument;
