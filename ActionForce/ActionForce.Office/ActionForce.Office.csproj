@@ -386,27 +386,6 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
-    <Content Include="Document\Bank\0ecd878a-c741-457f-bd94-7f355f8171d0.jpg" />
-    <Content Include="Document\Bank\0f4dca42-8052-4b27-9561-3000df710c0b.jpg" />
-    <Content Include="Document\Bank\1ec47086-186e-4a9e-9e20-b8717df360ce.jpg" />
-    <Content Include="Document\CashRecorder\088c905f-fb05-4d2f-9720-4cc3fb92eb2e.jpeg" />
-    <Content Include="Document\CashRecorder\1008599d-82c5-4255-931f-07655ccc0f66.png" />
-    <Content Include="Document\CashRecorder\7417a563-f763-437a-8853-bf1048d84ce0.png" />
-    <Content Include="Document\CashRecorder\8b5ed55b-ee01-401d-a1f7-8e00ac20dd2b.jpeg" />
-    <Content Include="Document\CashRecorder\9bad91d5-a507-424a-870c-11c315485c1d.jpeg" />
-    <Content Include="Document\CashRecorder\9fe48052-aa1f-4f03-a185-ea22de1e8e67.png" />
-    <Content Include="Document\CashRecorder\b78eb891-e121-4c21-b0cc-88013e20e9c0.jpeg" />
-    <Content Include="Document\CashRecorder\d11179a7-ea9e-49cf-9819-508a22e3ec45.jpg" />
-    <Content Include="Document\CashRecorder\eb22940d-1641-430f-bc33-d755e5ed2d8b.png" />
-    <Content Include="Document\CashRecorder\f88410b3-74cf-4d29-b875-da7aec98818f.jpeg" />
-    <Content Include="Document\CashRecorder\fc02d5c0-931e-4eaa-ad77-c3c1c0d2c2ea.jpg" />
-    <Content Include="Document\Envelope\957d2d26-6080-494f-9e2f-ee8b6ec206ee.jpg" />
-    <Content Include="Document\Exchange\03276718-8b27-4f6e-91db-14a34e5e946b.jpg" />
-    <Content Include="Document\Exchange\87a03806-5491-4cf7-bc2a-fe17df463b77.jpg" />
-    <Content Include="Document\Exchange\917526f0-0959-4679-bfd1-b9cce47b0d76.jpg" />
-    <Content Include="Document\Expense\080affc7-8edd-4cc1-8ecf-4222cb4d0125.png" />
-    <Content Include="Document\Expense\4418fe55-7e76-477e-ba09-48f04ae1cee6.jpg" />
-    <Content Include="Document\Expense\a78d9ebd-9590-4ca6-8ddd-d32ea8065573.jpg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="images\excel.png" />
@@ -2334,8 +2313,6 @@
     <Content Include="lib\typicons.font\typicons.eot" />
     <Content Include="lib\typicons.font\typicons.ttf" />
     <Content Include="lib\typicons.font\typicons.woff" />
-    <Content Include="Document\CashRecorder\60a3ef22-b203-4953-aba7-22fc8ae0070d.pdf" />
-    <Content Include="Document\Contract\f370076d-4800-409c-8fd0-ec3bd73416c4.pdf" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -2855,7 +2832,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Document\Bank\" />
+    <Folder Include="Document\CashRecorder\" />
+    <Folder Include="Document\Contract\" />
     <Folder Include="Document\Employee\Document\" />
+    <Folder Include="Document\Envelope\" />
+    <Folder Include="Document\Exchange\" />
+    <Folder Include="Document\Expense\" />
     <Folder Include="Document\Salary\" />
     <Folder Include="icons\" />
     <Folder Include="Views\Actions\" />
