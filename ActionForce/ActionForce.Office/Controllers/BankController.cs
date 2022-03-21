@@ -251,6 +251,8 @@ namespace ActionForce.Office.Controllers
                     payment.Quantity = quantity;
                     payment.ReferanceID = posCollect.ReferanceID;
                     payment.TimeZone = timezone;
+                    payment.IsActive = posCollect.IsActive == "1" ? true : false;
+
                     if (newexchanges > 0)
                     {
                         payment.ExchangeRate = newexchanges;

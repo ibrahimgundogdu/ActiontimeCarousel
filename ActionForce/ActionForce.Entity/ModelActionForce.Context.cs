@@ -3338,7 +3338,7 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddExpenseDocumentChartOfficeRent", documentIDParameter, recordEmployeeIDParameter, recordIPParameter);
         }
     
-        public virtual ObjectResult<GetLocationVatAmountMonthly_Result> GetLocationVatAmountMonthly(Nullable<System.DateTime> dateBegin, Nullable<System.DateTime> dateEnd, Nullable<int> ourCompanyID)
+        public virtual ObjectResult<GetLocationVatAmountMonthly_Result> GetLocationVatAmountMonthly(Nullable<System.DateTime> dateBegin, Nullable<System.DateTime> dateEnd, Nullable<int> ourCompanyID, Nullable<int> locationID)
         {
             var dateBeginParameter = dateBegin.HasValue ?
                 new ObjectParameter("DateBegin", dateBegin) :
@@ -3352,7 +3352,11 @@ namespace ActionForce.Entity
                 new ObjectParameter("OurCompanyID", ourCompanyID) :
                 new ObjectParameter("OurCompanyID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationVatAmountMonthly_Result>("GetLocationVatAmountMonthly", dateBeginParameter, dateEndParameter, ourCompanyIDParameter);
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationVatAmountMonthly_Result>("GetLocationVatAmountMonthly", dateBeginParameter, dateEndParameter, ourCompanyIDParameter, locationIDParameter);
         }
     }
 }

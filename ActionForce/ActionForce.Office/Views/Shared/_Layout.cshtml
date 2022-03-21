@@ -277,9 +277,10 @@
 
                             <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Expense" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Expense">01 Masraf Listesi</a></li>
 
-                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Expense" && this.ViewContext.RouteData.Values["action"].ToString() == "NewDocument" ? "class=active" : "")><a href="/Expense/NewDocument">02 Yeni Masraf Ekle</a></li>
+                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Expense" && this.ViewContext.RouteData.Values["action"].ToString() == "NewItem" ? "class=active" : "")><a href="/Expense/NewItem">02 Masraf Kalemi Ekle</a></li>
+                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Expense" && this.ViewContext.RouteData.Values["action"].ToString() == "NewDocument" ? "class=active" : "")><a href="/Expense/NewDocument">03 Yeni Masraf Ekle</a></li>
 
-                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Expense" && this.ViewContext.RouteData.Values["action"].ToString() == "Cost" ? "class=active" : "")><a href="/Expense/Cost">03 Maliyet</a></li>
+                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Expense" && this.ViewContext.RouteData.Values["action"].ToString() == "Cost" ? "class=active" : "")><a href="/Expense/Cost">04 Maliyet</a></li>
 
                         </ul>
                     </li>
@@ -349,6 +350,8 @@
             $('.money').mask("#.##0,00", { reverse: true });
             $('.money4').mask("#.##0,0000", { reverse: true });
         });
+
+       
     </script>
 
 

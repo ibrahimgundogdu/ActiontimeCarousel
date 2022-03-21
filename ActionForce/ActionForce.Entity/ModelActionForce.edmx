@@ -3173,6 +3173,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.ExpenseGroup' does not have
           <Property Name="TimeZone" Type="int" />
           <Property Name="TimeZoneTo" Type="int" />
           <Property Name="Currency" Type="nvarchar" MaxLength="20" />
+          <Property Name="CurrencySign" Type="nvarchar" MaxLength="1" />
           <Property Name="Weight" Type="nvarchar" MaxLength="20" />
           <Property Name="Distance" Type="nvarchar" MaxLength="20" />
           <Property Name="Culture" Type="nvarchar" MaxLength="10" />
@@ -4812,6 +4813,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.HCardActions' does not have
           <Property Name="EmployeeID" Type="int" />
           <Property Name="EmployeeFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="SaleRowTotal" Type="float" Nullable="false" />
+          <Property Name="TaxRate" Type="float" />
+          <Property Name="TaxTotal" Type="float" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.LocationEmployeeCheck' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -8922,6 +8925,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="DateBegin" Type="date" Mode="In" />
           <Parameter Name="DateEnd" Type="date" Mode="In" />
           <Parameter Name="OurCompanyID" Type="int" Mode="In" />
+          <Parameter Name="LocationID" Type="int" Mode="In" />
         </Function>
         <Function Name="GetMonthList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="GetPersonList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -9516,7 +9520,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [HCardActions].[ActionDateUpdate] AS [ActionDateUpdate], 
     [HCardActions].[EmployeeID] AS [EmployeeID], 
     [HCardActions].[EmployeeFullName] AS [EmployeeFullName], 
-    [HCardActions].[SaleRowTotal] AS [SaleRowTotal]
+    [HCardActions].[SaleRowTotal] AS [SaleRowTotal], 
+    [HCardActions].[TaxRate] AS [TaxRate], 
+    [HCardActions].[TaxTotal] AS [TaxTotal]
     FROM [dbo].[HCardActions] AS [HCardActions]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="LocationEmployeeCheck" EntityType="Self.LocationEmployeeCheck" store:Type="Views" store:Schema="dbo">
@@ -13687,6 +13693,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="DateBegin" Mode="In" Type="DateTime" />
             <Parameter Name="DateEnd" Mode="In" Type="DateTime" />
             <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="VExpenseDocumentLocationsVat" EntityType="db293_ActionTimeDbModel.VExpenseDocumentLocationsVat" />
           <EntitySet Name="VExpenseDocumentRows" EntityType="db293_ActionTimeDbModel.VExpenseDocumentRows" />
@@ -18359,6 +18366,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Distance" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Culture" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Employee" Relationship="db293_ActionTimeDbModel.FK_Employee_OurCompany" FromRole="OurCompany" ToRole="Employee" />
+          <Property Name="CurrencySign" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="SystemCheckEmployeeRows">
           <Key>
@@ -22169,6 +22177,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="EmployeeID" Type="Int32" />
           <Property Name="EmployeeFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="SaleRowTotal" Type="Double" Nullable="false" />
+          <Property Name="TaxRate" Type="Double" />
+          <Property Name="TaxTotal" Type="Double" />
         </EntityType>
         <EntityType Name="VSalaryPeriod">
           <Key>
@@ -27050,6 +27060,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="OurCompany">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.OurCompany">
               <MappingFragment StoreEntitySet="OurCompany">
+                <ScalarProperty Name="CurrencySign" ColumnName="CurrencySign" />
                 <ScalarProperty Name="Culture" ColumnName="Culture" />
                 <ScalarProperty Name="Distance" ColumnName="Distance" />
                 <ScalarProperty Name="Weight" ColumnName="Weight" />
@@ -30726,6 +30737,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="HCardActions">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.HCardActions">
               <MappingFragment StoreEntitySet="HCardActions">
+                <ScalarProperty Name="TaxTotal" ColumnName="TaxTotal" />
+                <ScalarProperty Name="TaxRate" ColumnName="TaxRate" />
                 <ScalarProperty Name="SaleRowTotal" ColumnName="SaleRowTotal" />
                 <ScalarProperty Name="EmployeeFullName" ColumnName="EmployeeFullName" />
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />

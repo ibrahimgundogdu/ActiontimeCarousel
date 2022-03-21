@@ -286,6 +286,7 @@ namespace ActionForce.Office
         public string Exchange { get; set; }
         public long? ReferanceID { get; set; }
         public Guid UID { get; set; }
+        public string IsActive { get; set; }
     }
     public class NewPosCancel
     {

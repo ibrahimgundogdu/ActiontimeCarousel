@@ -3335,6 +3335,7 @@ namespace ActionForce.Office
                             UID = isPos.UID,
                             ResultID = isPos.ResultID
                         };
+
                         isPos.ReferenceID = collection.ReferanceID;
                         isPos.LocationID = collection.LocationID;
                         isPos.Date = collection.DocumentDate;
@@ -3350,29 +3351,38 @@ namespace ActionForce.Office
                         isPos.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == collection.Currency ? collection.Amount : collection.Amount * collection.ExchangeRate;
                         isPos.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
                         isPos.Quantity = collection.Quantity;
+                        isPos.IsActive = collection.IsActive;
+
                         Db.SaveChanges();
 
                         var cashaction = Db.BankActions.FirstOrDefault(x => x.LocationID == locId && x.BankActionTypeID == isPos.ActionTypeID && x.ProcessID == isPos.ID);
 
-                        if (cashaction != null)
+                        if (isPos.IsActive == false)
                         {
-                            cashaction.LocationID = isPos.LocationID;
-                            cashaction.Collection = isPos.Amount;
-                            cashaction.Currency = isPos.Currency;
-                            cashaction.BankAccountID = isPos.BankAccountID;
-                            cashaction.ActionDate = isPos.Date;
-                            cashaction.ProcessDate = isPos.Date;
-                            cashaction.UpdateDate = isPos.UpdateDate;
-                            cashaction.UpdateEmployeeID = isPos.UpdateEmployee;
-
+                            Db.BankActions.Remove(cashaction);
                             Db.SaveChanges();
-
                         }
                         else
                         {
-                            Db.AddBankAction(isPos.LocationID, null, collection.BankAccountID, null, isPos.ActionTypeID, collection.DocumentDate, isPos.ActionTypeName, isPos.ID, collection.DocumentDate, isPos.DocumentNumber, collection.Description, 1, collection.Amount, 0, collection.Currency, null, null, authentication.ActionEmployee.EmployeeID, DateTime.UtcNow.AddHours(location.Timezone.Value), isPos.UID);
-                        }
+                            if (cashaction != null)
+                            {
+                                cashaction.LocationID = isPos.LocationID;
+                                cashaction.Collection = isPos.Amount;
+                                cashaction.Currency = isPos.Currency;
+                                cashaction.BankAccountID = isPos.BankAccountID;
+                                cashaction.ActionDate = isPos.Date;
+                                cashaction.ProcessDate = isPos.Date;
+                                cashaction.UpdateDate = isPos.UpdateDate;
+                                cashaction.UpdateEmployeeID = isPos.UpdateEmployee;
 
+                                Db.SaveChanges();
+
+                            }
+                            else
+                            {
+                                Db.AddBankAction(isPos.LocationID, null, collection.BankAccountID, null, isPos.ActionTypeID, collection.DocumentDate, isPos.ActionTypeName, isPos.ID, collection.DocumentDate, isPos.DocumentNumber, collection.Description, 1, collection.Amount, 0, collection.Currency, null, null, authentication.ActionEmployee.EmployeeID, DateTime.UtcNow.AddHours(location.Timezone.Value), isPos.UID);
+                            }
+                        }
                         result.IsSuccess = true;
                         result.Message = $"{isPos.ID} ID li {isPos.Date} tarihli {isPos.Amount} {isPos.Currency} tutarındaki pos tahsilatı başarı ile güncellendi";
 
@@ -3420,7 +3430,11 @@ namespace ActionForce.Office
 
                             Db.SaveChanges();
 
-                            OfficeHelper.AddBankAction(isCash.LocationID, null, isCash.BankAccountID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, 1, -1 * isCash.Amount, 0, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate, isCash.UID.Value);
+                            //OfficeHelper.AddBankAction(isCash.LocationID, null, isCash.BankAccountID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, 1, -1 * isCash.Amount, 0, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate, isCash.UID.Value);
+
+                            var bankaction = Db.BankActions.FirstOrDefault(x => x.DocumentNumber == isCash.DocumentNumber && x.ProcessUID == isCash.UID);
+                            Db.BankActions.Remove(bankaction);
+                            Db.SaveChanges();
 
                             result.IsSuccess = true;
                             result.Message = "Pos tahsilatı başarı ile iptal edildi";
@@ -6000,22 +6014,11 @@ namespace ActionForce.Office
             {
                 var ePeriod = Db.ExpensePeriod.FirstOrDefault(x => x.PeriodCode == expensePeriod);
 
-                var branchs = Db.SGKBranch.Where(x => x.IsOffice == true).ToList();
+                var officeLocations = new List<int>() { 131, 80, 236 }.ToList();
 
-                foreach (var branch in branchs)
+                foreach (int LocationID in officeLocations)
                 {
 
-                    int LocationID = 131;
-
-                    if (branch.BranchName == "İST MRK")
-                    {
-                        LocationID = 80;
-                    }
-
-                    if (branch.BranchName == "UMERFA ÜRT.")
-                    {
-                        LocationID = 236;
-                    }
 
                     // lokasyon net maaş 
                     expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 5 && x.ExpenseItemID == 5 && x.ExpenseCenterID == LocationID && x.ExpensePeriodCode == expensePeriod);
@@ -6069,6 +6072,7 @@ namespace ActionForce.Office
                     }
 
                     List<int> denyEmployeeIds = new List<int>() { 19, 3650, 6150, 6240, 6627 };
+                    var employeeIds = Db.Employee.Where(x => x.LocationID == LocationID).Select(x => x.EmployeeID).Distinct().ToList();
                     List<int> actionTypeIds = new List<int>() { 32, 44 };
 
                     // document rows
@@ -6076,25 +6080,10 @@ namespace ActionForce.Office
                     var salaryPeriodFoodComputes = Db.SalaryPeriodCompute.Where(x => x.SalaryPeriodID == salaryPeriodFood.ID && !denyEmployeeIds.Contains(x.EmployeeID.Value)).ToList();
 
                     var salaryPeriod = Db.VSalaryPeriod.FirstOrDefault(x => x.OurCompanyID == authentication.ActionEmployee.OurCompany.CompanyID && x.SalaryPeriodGroupID == 4 && x.Year == expenseDocument.ExpenseYear && x.Month == expenseDocument.ExpenseMonth);
-                    var salaryPeriodComputes = Db.SalaryPeriodCompute.Where(x => x.SalaryPeriodID == salaryPeriod.ID && x.EmployeeSalaryCategoryID == 1 && !denyEmployeeIds.Contains(x.EmployeeID.Value)).ToList();
-                    var CostAmountTotal = salaryPeriodComputes.Sum(x => x.Tahakkuk);
+                    var salaryPeriodComputes = Db.SalaryPeriodCompute.Where(x => x.SalaryPeriodID == salaryPeriod.ID && employeeIds.Contains(x.EmployeeID.Value) && !denyEmployeeIds.Contains(x.EmployeeID.Value)).ToList();
+                    //var CostAmountTotal = salaryPeriodComputes.Sum(x => x.Tahakkuk);
 
-                    var employeeIds = salaryPeriodComputes.Where(x => x.SGKBranch != "İST MRK" && x.SGKBranch != "UMERFA ÜRT.").Select(x => x.EmployeeID.Value).Distinct().ToList();
-
-                    var CostAmountBranch = salaryPeriodComputes.Where(x => x.SGKBranch != "İST MRK" && x.SGKBranch != "UMERFA ÜRT.").Sum(x => x.Tahakkuk);
-
-                    if (branch.BranchName == "İST MRK")
-                    {
-                        CostAmountBranch = salaryPeriodComputes.Where(x => x.SGKBranch == "İST MRK").Sum(x => x.Tahakkuk);
-                        employeeIds = salaryPeriodComputes.Where(x => x.SGKBranch == "İST MRK").Select(x => x.EmployeeID.Value).Distinct().ToList();
-
-                    }
-
-                    if (branch.BranchName == "UMERFA ÜRT.")
-                    {
-                        CostAmountBranch = salaryPeriodComputes.Where(x => x.SGKBranch == "UMERFA ÜRT.").Sum(x => x.Tahakkuk);
-                        employeeIds = salaryPeriodComputes.Where(x => x.SGKBranch == "UMERFA ÜRT.").Select(x => x.EmployeeID.Value).Distinct().ToList();
-                    }
+                    var CostAmountBranch = salaryPeriodComputes.Where(x => employeeIds.Contains(x.EmployeeID.Value)).Sum(x => x.Tahakkuk);
 
                     expenseDocument.TotalAmount = CostAmountBranch;
                     expenseDocument.DistributionAmount = CostAmountBranch;
@@ -6105,7 +6094,7 @@ namespace ActionForce.Office
 
                     double SalaryHourCount = 195;
 
-                    foreach (var empId in employeeIds) // 6085,  4150
+                    foreach (var empId in employeeIds) // 4525
                     {
 
                         double SalaryHourBalance = 195;
@@ -6539,7 +6528,7 @@ namespace ActionForce.Office
                     document.ExpenseDescription = "";
                     document.DistributionAmount = 0;
                     document.TotalAmount = 0;
-                    document.ExpenseGroupID = 3;
+                    document.ExpenseGroupID = 2;
                     document.Currency = authentication.ActionEmployee.OurCompany.Currency;
                     document.DocumentDate = DateTime.UtcNow.AddHours(authentication.ActionEmployee.OurCompany.TimeZone ?? 3);
                     document.ExpenseItemID = 43;
@@ -6667,7 +6656,7 @@ namespace ActionForce.Office
                     document.ExpenseDescription = "";
                     document.DistributionAmount = 0;
                     document.TotalAmount = 0;
-                    document.ExpenseGroupID = 3;
+                    document.ExpenseGroupID = 1;
                     document.Currency = authentication.ActionEmployee.OurCompany.Currency;
                     document.DocumentDate = DateTime.UtcNow.AddHours(authentication.ActionEmployee.OurCompany.TimeZone ?? 3);
                     document.ExpenseItemID = 26;
@@ -6774,7 +6763,7 @@ namespace ActionForce.Office
                     document.ExpenseDescription = "";
                     document.DistributionAmount = 0;
                     document.TotalAmount = 0;
-                    document.ExpenseGroupID = 3;
+                    document.ExpenseGroupID = 1;
                     document.Currency = authentication.ActionEmployee.OurCompany.Currency;
                     document.DocumentDate = DateTime.UtcNow.AddHours(authentication.ActionEmployee.OurCompany.TimeZone ?? 3);
                     document.ExpenseItemID = 25;
@@ -6913,7 +6902,7 @@ namespace ActionForce.Office
 
                 foreach (var locId in LocationIds)
                 {
-                    var isOpen = Db.LocationPeriods.Any(x => x.LocationID == locId && (x.ContractStartDate <= ePeriod.DateBegin  ||  x.FinalFinishDate >= ePeriod.DateEnd));
+                    var isOpen = Db.LocationPeriods.Any(x => x.LocationID == locId && (x.ContractStartDate <= ePeriod.DateBegin || x.FinalFinishDate >= ePeriod.DateEnd));
 
                     var rent = Db.LocationParam.Where(x => x.TypeID == 5 && x.LocationID == locId && (x.DateStart <= ePeriod.DateBegin || x.DateFinish >= ePeriod.DateEnd)).OrderByDescending(x => x.DateStart).Take(1).FirstOrDefault();
 
@@ -6933,7 +6922,7 @@ namespace ActionForce.Office
                         row.PremiumAmount = 0;
                         row.SGKCostAmount = 0;
                         row.FoodCardCostAmount = 0;
-                       
+
                         Db.ExpenseDocumentRows.Add(row);
 
                         Db.SaveChanges();
@@ -7014,7 +7003,7 @@ namespace ActionForce.Office
                     expenseDocument = document;
                 }
 
-                List<int> locationTypes = new List<int>() { 5,6 };
+                List<int> locationTypes = new List<int>() { 5, 6 };
                 var LocationIds = Db.Location.Where(x => x.OurCompanyID == authentication.ActionEmployee.OurCompanyID && locationTypes.Contains(x.LocationTypeID.Value)).Select(x => x.LocationID).Distinct().ToList();
 
                 foreach (var locId in LocationIds)
@@ -7098,7 +7087,7 @@ namespace ActionForce.Office
                     document.ExpenseDescription = "";
                     document.DistributionAmount = 0;
                     document.TotalAmount = 0;
-                    document.ExpenseGroupID = 3;
+                    document.ExpenseGroupID = 1;
                     document.Currency = authentication.ActionEmployee.OurCompany.Currency;
                     document.DocumentDate = DateTime.UtcNow.AddHours(authentication.ActionEmployee.OurCompany.TimeZone ?? 3);
                     document.ExpenseItemID = 44;
@@ -7127,12 +7116,11 @@ namespace ActionForce.Office
 
                 // kdv borç satırları eklenir
 
-                var locationTaxTotals = Db.GetLocationVatAmountMonthly(ePeriod.DateBegin, ePeriod.DateEnd, authentication.ActionEmployee.OurCompanyID).ToList();
+
 
                 foreach (var locId in LocationIds)
                 {
-
-                    var vat = locationTaxTotals.FirstOrDefault(x => x.LocationID == locId);
+                    var vat = Db.GetLocationVatAmountMonthly(ePeriod.DateBegin, ePeriod.DateEnd, authentication.ActionEmployee.OurCompanyID, locId).FirstOrDefault();
 
                     var locationVatAmount = 0.0;
 
@@ -7161,11 +7149,11 @@ namespace ActionForce.Office
 
                 // kdv alacak satırları eklenir
 
-                
+
 
                 foreach (var locId in LocationIds)
                 {
-                    var locationDebtTaxTotal = Db.VExpenseDocumentLocationsVat.Where(x => x.OurCompanyID == authentication.ActionEmployee.OurCompanyID && x.LocationID == locId && x.ExpensePeriodCode == ePeriod.PeriodCode).Sum(x=> x.TaxAmount) ?? 0;
+                    var locationDebtTaxTotal = Db.VExpenseDocumentLocationsVat.Where(x => x.OurCompanyID == authentication.ActionEmployee.OurCompanyID && x.LocationID == locId && x.ExpensePeriodCode == ePeriod.PeriodCode).Sum(x => x.TaxAmount) ?? 0;
 
                     ExpenseDocumentRows row = new ExpenseDocumentRows();
 

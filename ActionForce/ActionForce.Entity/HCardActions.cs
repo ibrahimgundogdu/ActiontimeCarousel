@@ -47,5 +47,7 @@ namespace ActionForce.Entity
         public Nullable<int> EmployeeID { get; set; }
         public string EmployeeFullName { get; set; }
         public double SaleRowTotal { get; set; }
+        public Nullable<double> TaxRate { get; set; }
+        public Nullable<double> TaxTotal { get; set; }
     }
 }

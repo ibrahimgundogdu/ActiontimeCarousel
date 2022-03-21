@@ -976,6 +976,8 @@ namespace ActionForce.Office.Controllers
             expenseDocument.StatusID = 1;
             Db.SaveChanges();
 
+
+
             model.Result.IsSuccess = true;
             model.Result.Message = "Maliyet Satırları Oluşturuldu";
 
