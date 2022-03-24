@@ -2345,6 +2345,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\LogoutController.cs" />
     <Compile Include="Controllers\MallController.cs" />
+    <Compile Include="Controllers\PartnerController.cs" />
     <Compile Include="Controllers\ResultController.cs" />
     <Compile Include="Controllers\RevenueController.cs" />
     <Compile Include="Controllers\SalaryController.cs" />
@@ -2368,11 +2369,13 @@
     <Compile Include="Models\ControlModels\ExpenseControlModel.cs" />
     <Compile Include="Models\ControlModels\InventoryControlModel.cs" />
     <Compile Include="Models\ControlModels\MallControlModel.cs" />
+    <Compile Include="Models\ControlModels\PartnerControlModel.cs" />
     <Compile Include="Models\ControlModels\RevenueControlModel.cs" />
     <Compile Include="Models\ControlModels\SaleControlModel.cs" />
     <Compile Include="Models\CounterModel.cs" />
     <Compile Include="Models\DataModels\BankDataModel.cs" />
     <Compile Include="Models\DataModels\EmployeeModel.cs" />
+    <Compile Include="Models\DataModels\ExcelExpenseDocument.cs" />
     <Compile Include="Models\DataModels\ExcelSalaryPeriodEarn.cs" />
     <Compile Include="Models\DataModels\ExpenseChartUpdateModel.cs" />
     <Compile Include="Models\DataModels\InfoKey.cs" />
@@ -2381,9 +2384,11 @@
     <Compile Include="Models\FilterModel\AnimalFilterModel.cs" />
     <Compile Include="Models\FilterModel\MallMotoFilterModel.cs" />
     <Compile Include="Models\FilterModel\PosFilterModel.cs" />
+    <Compile Include="Models\FormModels\ArrangeFormModel.cs" />
     <Compile Include="Models\FormModels\CostumeTypeFormModel.cs" />
     <Compile Include="Models\FormModels\ExpenseFormModel.cs" />
     <Compile Include="Models\FormModels\FormCardReplace.cs" />
+    <Compile Include="Models\FormModels\FormExpenseDocumentImport.cs" />
     <Compile Include="Models\FormModels\FormLocation.cs" />
     <Compile Include="Models\FormModels\FormMall.cs" />
     <Compile Include="Models\FormModels\FormPrice.cs" />
@@ -2823,6 +2828,7 @@
     <Content Include="Views\Expense\Rows.cshtml" />
     <Content Include="Views\Expense\NewItem.cshtml" />
     <Content Include="Views\Expense\Cost.cshtml" />
+    <Content Include="Views\Partner\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

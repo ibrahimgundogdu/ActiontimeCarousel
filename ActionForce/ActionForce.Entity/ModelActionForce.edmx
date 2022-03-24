@@ -2411,6 +2411,26 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="ExpenseCenterID" Type="int" />
           <Property Name="ExpenseItemID" Type="smallint" />
         </EntityType>
+        <EntityType Name="ExpenseChartGroup">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" Nullable="false" />
+          <Property Name="GroupCode" Type="nvarchar" MaxLength="4" />
+          <Property Name="GroupName" Type="nvarchar" MaxLength="40" />
+          <Property Name="SortBy" Type="char" MaxLength="3" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="ExpenseChartGroupItems">
+          <Key>
+            <PropertyRef Name="ChartGroupID" />
+            <PropertyRef Name="LocationID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ChartGroupID" Type="smallint" Nullable="false" />
+          <Property Name="LocationID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="ExpenseDocument">
           <Key>
             <PropertyRef Name="ID" />
@@ -2440,6 +2460,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="UID" Type="uniqueidentifier" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="AutoComputeTypeID" Type="smallint" />
+          <Property Name="DistributeGroupID" Type="smallint" />
         </EntityType>
         <EntityType Name="ExpenseDocumentChart">
           <Key>
@@ -3177,6 +3198,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.ExpenseGroup' does not have
           <Property Name="Weight" Type="nvarchar" MaxLength="20" />
           <Property Name="Distance" Type="nvarchar" MaxLength="20" />
           <Property Name="Culture" Type="nvarchar" MaxLength="10" />
+          <Property Name="Capacity" Type="smallint" />
         </EntityType>
         <EntityType Name="OurCompanyPartner">
           <Key>
@@ -3191,6 +3213,84 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.ExpenseGroup' does not have
           <Property Name="Phone" Type="nvarchar" MaxLength="50" />
           <Property Name="Web" Type="nvarchar" MaxLength="150" />
           <Property Name="Eposta" Type="nvarchar" MaxLength="150" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="Partner">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" Nullable="false" />
+          <Property Name="AccountCode" Type="nvarchar" MaxLength="20" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="TaxOffice" Type="nvarchar" MaxLength="50" />
+          <Property Name="TaxNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="EMail" Type="nvarchar" MaxLength="110" />
+          <Property Name="PhoneCode" Type="nvarchar" MaxLength="5" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="Address" Type="nvarchar" MaxLength="350" />
+          <Property Name="Country" Type="int" />
+          <Property Name="State" Type="int" />
+          <Property Name="City" Type="int" />
+          <Property Name="PostCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="UID" Type="uniqueidentifier" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="PartnerActions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="PartnerID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="ExpenseActionID" Type="bigint" />
+          <Property Name="ExpenseGroupID" Type="smallint" />
+          <Property Name="ExpenseItemID" Type="smallint" />
+          <Property Name="ActionDate" Type="date" />
+          <Property Name="ProcessName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProcessID" Type="bigint" />
+          <Property Name="ProcessDate" Type="date" />
+          <Property Name="PeriodCode" Type="nvarchar" MaxLength="8" />
+          <Property Name="ExpenseYear" Type="int" />
+          <Property Name="ExpenseMonth" Type="int" />
+          <Property Name="DocumentNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="TotalAmount" Type="float" />
+          <Property Name="PartnershipRate" Type="float" />
+          <Property Name="Collection" Type="float" />
+          <Property Name="Payment" Type="float" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="UpdateEmployeeID" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="ProcessUID" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="Partnership">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PartnerID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="PartnershipRate" Type="float" />
+          <Property Name="DateStart" Type="date" />
+          <Property Name="DateEnd" Type="date" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="PartnerUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PartnerID" Type="int" />
+          <Property Name="UserFullname" Type="nvarchar" MaxLength="150" />
+          <Property Name="Username" Type="nvarchar" MaxLength="40" />
+          <Property Name="Password" Type="nvarchar" MaxLength="40" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" />
+          <Property Name="UID" Type="uniqueidentifier" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityType Name="PayMethod">
@@ -6699,6 +6799,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VExpenseDocument' does not 
           <Property Name="DateEnd" Type="date" />
           <Property Name="TaxRate" Type="float" />
           <Property Name="TaxAmount" Type="float" />
+          <Property Name="DistributeGroupID" Type="smallint" />
+          <Property Name="GroupCode" Type="nvarchar" MaxLength="4" />
+          <Property Name="GroupName" Type="nvarchar" MaxLength="40" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VExpenseDocumentChart' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -8596,6 +8699,19 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
           <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="AddExpenseDocumentGroupRowsChart" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DocumentID" Type="bigint" Mode="In" />
+          <Parameter Name="GroupID" Type="smallint" Mode="In" />
+          <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
+          <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="AddExpenseDocumentGroupRowsChartLoc" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DocumentID" Type="bigint" Mode="In" />
+          <Parameter Name="GroupID" Type="smallint" Mode="In" />
+          <Parameter Name="LocationID" Type="int" Mode="In" />
+          <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
+          <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="AddLocationTicketSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ParentID" Type="bigint" Mode="In" />
           <Parameter Name="CurrentLocationID" Type="int" Mode="In" />
@@ -9254,6 +9370,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="ExpenseActions" EntityType="Self.ExpenseActions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExpenseAutoComputeType" EntityType="Self.ExpenseAutoComputeType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExpenseCenterItems" EntityType="Self.ExpenseCenterItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExpenseChartGroup" EntityType="Self.ExpenseChartGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExpenseChartGroupItems" EntityType="Self.ExpenseChartGroupItems" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExpenseDocument" EntityType="Self.ExpenseDocument" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExpenseDocumentChart" EntityType="Self.ExpenseDocumentChart" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExpenseDocumentRows" EntityType="Self.ExpenseDocumentRows" Schema="dbo" store:Type="Tables" />
@@ -9304,6 +9422,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="NFCCardLog" EntityType="Self.NFCCardLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OurCompany" EntityType="Self.OurCompany" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OurCompanyPartner" EntityType="Self.OurCompanyPartner" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Partner" EntityType="Self.Partner" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PartnerActions" EntityType="Self.PartnerActions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Partnership" EntityType="Self.Partnership" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PartnerUser" EntityType="Self.PartnerUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PayMethod" EntityType="Self.PayMethod" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PerformanceCategory" EntityType="Self.PerformanceCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PerformanceCriteria" EntityType="Self.PerformanceCriteria" Schema="dbo" store:Type="Tables" />
@@ -11187,7 +11309,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VExpenseDocument].[DateBegin] AS [DateBegin], 
     [VExpenseDocument].[DateEnd] AS [DateEnd], 
     [VExpenseDocument].[TaxRate] AS [TaxRate], 
-    [VExpenseDocument].[TaxAmount] AS [TaxAmount]
+    [VExpenseDocument].[TaxAmount] AS [TaxAmount], 
+    [VExpenseDocument].[DistributeGroupID] AS [DistributeGroupID], 
+    [VExpenseDocument].[GroupCode] AS [GroupCode], 
+    [VExpenseDocument].[GroupName] AS [GroupName]
     FROM [dbo].[VExpenseDocument] AS [VExpenseDocument]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VExpenseDocumentChart" EntityType="Self.VExpenseDocumentChart" store:Type="Views" store:Schema="dbo">
@@ -13698,6 +13823,25 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VExpenseDocumentLocationsVat" EntityType="db293_ActionTimeDbModel.VExpenseDocumentLocationsVat" />
           <EntitySet Name="VExpenseDocumentRows" EntityType="db293_ActionTimeDbModel.VExpenseDocumentRows" />
           <EntitySet Name="VExpenseActions" EntityType="db293_ActionTimeDbModel.VExpenseActions" />
+          <EntitySet Name="Partner" EntityType="db293_ActionTimeDbModel.Partner" />
+          <EntitySet Name="PartnerActions" EntityType="db293_ActionTimeDbModel.PartnerActions" />
+          <EntitySet Name="Partnership" EntityType="db293_ActionTimeDbModel.Partnership" />
+          <EntitySet Name="PartnerUser" EntityType="db293_ActionTimeDbModel.PartnerUser" />
+          <EntitySet Name="ExpenseChartGroup" EntityType="db293_ActionTimeDbModel.ExpenseChartGroup" />
+          <EntitySet Name="ExpenseChartGroupItems" EntityType="db293_ActionTimeDbModel.ExpenseChartGroupItems" />
+          <FunctionImport Name="AddExpenseDocumentGroupRowsChart" ReturnType="Collection(Int64)">
+            <Parameter Name="DocumentID" Mode="In" Type="Int64" />
+            <Parameter Name="GroupID" Mode="In" Type="Int16" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordIP" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddExpenseDocumentGroupRowsChartLoc" ReturnType="Collection(Int64)">
+            <Parameter Name="DocumentID" Mode="In" Type="Int64" />
+            <Parameter Name="GroupID" Mode="In" Type="Int16" />
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordIP" Mode="In" Type="String" />
+          </FunctionImport>
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -18367,6 +18511,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Culture" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Employee" Relationship="db293_ActionTimeDbModel.FK_Employee_OurCompany" FromRole="OurCompany" ToRole="Employee" />
           <Property Name="CurrencySign" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="Capacity" Type="Int16" />
         </EntityType>
         <EntityType Name="SystemCheckEmployeeRows">
           <Key>
@@ -22437,6 +22582,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="AutoComputeTypeID" Type="Int16" />
           <Property Name="TaxRate" Type="Double" />
           <Property Name="TaxAmount" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="DistributeGroupID" Type="Int16" />
         </EntityType>
         <EntityType Name="ExpensePeriod">
           <Key>
@@ -22505,6 +22651,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="DateEnd" Type="DateTime" Precision="0" />
           <Property Name="TaxRate" Type="Double" />
           <Property Name="TaxAmount" Type="Double" />
+          <Property Name="DistributeGroupID" Type="Int16" />
+          <Property Name="GroupCode" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="GroupName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
         </EntityType>
         <ComplexType Name="GetLocationVatAmountMonthly_Result">
           <Property Type="Int32" Name="LocationID" Nullable="true" />
@@ -22576,6 +22725,104 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="RecordEmployeeName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
           <Property Name="ExpenseCenterName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Partner">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
+          <Property Name="AccountCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="TaxOffice" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TaxNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="EMail" Type="String" MaxLength="110" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneCode" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="Int32" />
+          <Property Name="State" Type="Int32" />
+          <Property Name="City" Type="Int32" />
+          <Property Name="PostCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="UID" Type="Guid" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="PartnerActions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="PartnerID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="ExpenseActionID" Type="Int64" />
+          <Property Name="ExpenseGroupID" Type="Int16" />
+          <Property Name="ExpenseItemID" Type="Int16" />
+          <Property Name="ActionDate" Type="DateTime" Precision="0" />
+          <Property Name="ProcessName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessID" Type="Int64" />
+          <Property Name="ProcessDate" Type="DateTime" Precision="0" />
+          <Property Name="PeriodCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="ExpenseYear" Type="Int32" />
+          <Property Name="ExpenseMonth" Type="Int32" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="TotalAmount" Type="Double" />
+          <Property Name="PartnershipRate" Type="Double" />
+          <Property Name="Collection" Type="Double" />
+          <Property Name="Payment" Type="Double" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="ProcessUID" Type="Guid" />
+        </EntityType>
+        <EntityType Name="Partnership">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PartnerID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="PartnershipRate" Type="Double" />
+          <Property Name="DateStart" Type="DateTime" Precision="0" />
+          <Property Name="DateEnd" Type="DateTime" Precision="0" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="PartnerUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PartnerID" Type="Int32" />
+          <Property Name="UserFullname" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Username" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UID" Type="Guid" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="ExpenseChartGroup">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GroupName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
+          <Property Name="GroupCode" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ExpenseChartGroupItems">
+          <Key>
+            <PropertyRef Name="ChartGroupID" />
+            <PropertyRef Name="LocationID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ChartGroupID" Type="Int16" Nullable="false" />
+          <Property Name="LocationID" Type="Int32" Nullable="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -27060,6 +27307,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="OurCompany">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.OurCompany">
               <MappingFragment StoreEntitySet="OurCompany">
+                <ScalarProperty Name="Capacity" ColumnName="Capacity" />
                 <ScalarProperty Name="CurrencySign" ColumnName="CurrencySign" />
                 <ScalarProperty Name="Culture" ColumnName="Culture" />
                 <ScalarProperty Name="Distance" ColumnName="Distance" />
@@ -31017,6 +31265,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="ExpenseDocument">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ExpenseDocument">
               <MappingFragment StoreEntitySet="ExpenseDocument">
+                <ScalarProperty Name="DistributeGroupID" ColumnName="DistributeGroupID" />
                 <ScalarProperty Name="TaxAmount" ColumnName="TaxAmount" />
                 <ScalarProperty Name="TaxRate" ColumnName="TaxRate" />
                 <ScalarProperty Name="AutoComputeTypeID" ColumnName="AutoComputeTypeID" />
@@ -31079,6 +31328,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VExpenseDocument">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VExpenseDocument">
               <MappingFragment StoreEntitySet="VExpenseDocument">
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="GroupCode" ColumnName="GroupCode" />
+                <ScalarProperty Name="DistributeGroupID" ColumnName="DistributeGroupID" />
                 <ScalarProperty Name="TaxAmount" ColumnName="TaxAmount" />
                 <ScalarProperty Name="TaxRate" ColumnName="TaxRate" />
                 <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
@@ -31203,6 +31455,111 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Partner">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Partner">
+              <MappingFragment StoreEntitySet="Partner">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="PostCode" ColumnName="PostCode" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="PhoneCode" ColumnName="PhoneCode" />
+                <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="TaxNumber" ColumnName="TaxNumber" />
+                <ScalarProperty Name="TaxOffice" ColumnName="TaxOffice" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="AccountCode" ColumnName="AccountCode" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PartnerActions">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.PartnerActions">
+              <MappingFragment StoreEntitySet="PartnerActions">
+                <ScalarProperty Name="ProcessUID" ColumnName="ProcessUID" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Payment" ColumnName="Payment" />
+                <ScalarProperty Name="Collection" ColumnName="Collection" />
+                <ScalarProperty Name="PartnershipRate" ColumnName="PartnershipRate" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="ExpenseMonth" ColumnName="ExpenseMonth" />
+                <ScalarProperty Name="ExpenseYear" ColumnName="ExpenseYear" />
+                <ScalarProperty Name="PeriodCode" ColumnName="PeriodCode" />
+                <ScalarProperty Name="ProcessDate" ColumnName="ProcessDate" />
+                <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+                <ScalarProperty Name="ProcessName" ColumnName="ProcessName" />
+                <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+                <ScalarProperty Name="ExpenseItemID" ColumnName="ExpenseItemID" />
+                <ScalarProperty Name="ExpenseGroupID" ColumnName="ExpenseGroupID" />
+                <ScalarProperty Name="ExpenseActionID" ColumnName="ExpenseActionID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="PartnerID" ColumnName="PartnerID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Partnership">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Partnership">
+              <MappingFragment StoreEntitySet="Partnership">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+                <ScalarProperty Name="PartnershipRate" ColumnName="PartnershipRate" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="PartnerID" ColumnName="PartnerID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PartnerUser">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.PartnerUser">
+              <MappingFragment StoreEntitySet="PartnerUser">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="UserFullname" ColumnName="UserFullname" />
+                <ScalarProperty Name="PartnerID" ColumnName="PartnerID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExpenseChartGroup">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ExpenseChartGroup">
+              <MappingFragment StoreEntitySet="ExpenseChartGroup">
+                <ScalarProperty Name="GroupCode" ColumnName="GroupCode" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExpenseChartGroupItems">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ExpenseChartGroupItems">
+              <MappingFragment StoreEntitySet="ExpenseChartGroupItems">
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="ChartGroupID" ColumnName="ChartGroupID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddExpenseDocumentGroupRowsChart" FunctionName="db293_ActionTimeDbModel.Store.AddExpenseDocumentGroupRowsChart" />
+          <FunctionImportMapping FunctionImportName="AddExpenseDocumentGroupRowsChartLoc" FunctionName="db293_ActionTimeDbModel.Store.AddExpenseDocumentGroupRowsChartLoc" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

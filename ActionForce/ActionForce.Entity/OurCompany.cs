@@ -32,6 +32,7 @@ namespace ActionForce.Entity
         public string Distance { get; set; }
         public string Culture { get; set; }
         public string CurrencySign { get; set; }
+        public Nullable<short> Capacity { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Employee> Employee { get; set; }

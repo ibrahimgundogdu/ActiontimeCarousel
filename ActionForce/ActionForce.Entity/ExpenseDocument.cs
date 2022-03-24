@@ -39,5 +39,6 @@ namespace ActionForce.Entity
         public Nullable<short> AutoComputeTypeID { get; set; }
         public Nullable<double> TaxRate { get; set; }
         public Nullable<double> TaxAmount { get; set; }
+        public Nullable<short> DistributeGroupID { get; set; }
     }
 }

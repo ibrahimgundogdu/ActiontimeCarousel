@@ -33,7 +33,9 @@
                     <div class="d-none d-md-block">
                         <a href="/Expense" class="btn btn-primary btn-uppercase"><i data-feather="menu"></i> &nbsp; Masraf Listesi</a> &nbsp;
                         <a href="/Expense/Detail/@(Model.ExpenseDocument.UID)" class="btn btn-warning btn-uppercase"><i data-feather="file-text"></i> &nbsp; Masraf Detayı</a> &nbsp;
-                        <a href="/Expense/Rows/@(Model.ExpenseDocument.UID)" class="btn btn-warning btn-uppercase"><i data-feather="file-text"></i> &nbsp; Kaynak Satırları</a>
+                        <a href="/Expense/Rows/@(Model.ExpenseDocument.UID)" class="btn btn-warning btn-uppercase"><i data-feather="file-text"></i> &nbsp; Kaynak Satırları</a> &nbsp;
+                        
+
                     </div>
                 </div>
 
@@ -109,6 +111,15 @@
                             </div>
                         </div>
 
+                        <div class="form-group row bg-gray-50">
+                            <label for="ExpenseChartGroupID" class="col-sm-3 col-form-label">Dağıtım Grubu</label>
+                            <div class="col-sm-6">
+                                <input id="ExpenseChartGroupID" name="ExpenseChartGroupID" type="text" class="form-control font-weight-bold" autocomplete="off" value="@($"{Model.ExpenseDocument.GroupCode} {Model.ExpenseDocument.GroupName}")" readonly>
+                            </div>
+                            <div class="col-sm-3">
+                            </div>
+                        </div>
+
                         <div class="form-group row">
                             <label for="ExpensePeriod" class="col-sm-3 col-form-label">Belge Dönemi</label>
                             <div class="col-sm-6">
@@ -174,8 +185,31 @@
                                                 </div>
                                             }
                                         </th>
-                                        <th colspan="7" class="">
+                                        <th colspan="1" class="">
                                             <a href="/Expense/DistributeEQ/@(Model.ExpenseDocument.UID)" class="btn btn-brand-01 font-weight-bold"> <i data-feather="scissors"></i> &nbsp;&nbsp;&nbsp; Tekrar Dağıt</a>
+                                        </th>
+                                        <th colspan="6">
+                                            @if ((Model.ExpenseDocument.AutoComputeTypeID <= 0 || Model.ExpenseDocument.AutoComputeTypeID == null) && (Model.ExpenseDocument.ExpenseGroupID == 2 || Model.ExpenseDocument.ExpenseGroupID == 3))
+                                            {
+                                                using (Html.BeginForm("ArrangeByGroup", "Expense", FormMethod.Post))
+                                                {
+                                                    <div class="form-group row mb-0">
+                                                        <div class="col-sm-9">
+                                                            <select class="form-control font-weight-bold select2" id="ECGID" name="ECGID" required>
+                                                                <option value="">Dağılım Grubunu Seçiniz</option>
+                                                                @foreach (var item in Model.ExpenseChartGroups.OrderBy(x => x.SortBy))
+                                                                {
+                                                                    <option value="@(item.ID)" @(item.ID == Model.ExpenseDocument.DistributeGroupID ? "selected":"")>@($"{item.GroupCode} {item.GroupName}" )</option>
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <input id="EUID" name="EUID" type="hidden" value="@(Model.ExpenseDocument.UID)" />
+                                                            <button type="submit" class="btn btn-warning btn-block">Dağıt</button>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
                                         </th>
                                     </tr>
                                     <tr>

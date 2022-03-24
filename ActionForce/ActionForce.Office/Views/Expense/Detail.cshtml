@@ -126,6 +126,21 @@
                                 </div>
                             </div>
 
+                            <div class="form-group row bg-gray-50">
+                                <label for="ExpenseChartGroupID" class="col-sm-3 col-form-label">Dağıtım Grubu</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control" id="ExpenseChartGroupID" name="ExpenseChartGroupID" readonly>
+                                        @foreach (var item in Model.ExpenseChartGroups.OrderBy(x => x.SortBy))
+                                        {
+                                            <option value="@(item.ID)" @(Model.ExpenseDocument.DistributeGroupID == item.ID ? "selected" : "")>@($"{item.GroupCode} {item.GroupName}" )</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+
                             <div class="form-group row">
                                 <label for="ExpensePeriod" class="col-sm-3 col-form-label">Belge Dönemi Başlangıcı</label>
                                 <div class="col-sm-6">
@@ -177,6 +192,11 @@
                                     <button type="submit" class="btn btn-primary btn-block">Masraf Dokümanı Güncelle</button>
                                 </div>
                                 <div class="col-sm-3">
+                                    @if (Model.ExpenseDocument.StatusID == 0 && Model.ExpenseDocument.AutoComputeTypeID == null)
+                                    {
+                                        <a href="/Expense/Remove/@(Model.ExpenseDocument.UID)" class="btn btn-danger btn-uppercase" onclick="return confirm('Maliyet Dokümanını Silmek İstediğinize Emin misiniz?')"><i data-feather="trash-2"></i> &nbsp; Masraf Dokümanını Sil</a>
+                                    }
+
                                 </div>
                             </div>
 

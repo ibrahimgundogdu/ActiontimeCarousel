@@ -5667,6 +5667,7 @@ namespace ActionForce.Office
                     document.ExpenseMonth = ePeriod.DateMonth;
                     document.ExpensePeriodCode = expensePeriod;
                     document.AutoComputeTypeID = 1;
+                    document.DistributeGroupID = 0;
 
                     Db.ExpenseDocument.Add(document);
                     Db.SaveChanges();
@@ -5810,6 +5811,7 @@ namespace ActionForce.Office
                     document.ExpenseMonth = ePeriod.DateMonth;
                     document.ExpensePeriodCode = expensePeriod;
                     document.AutoComputeTypeID = 3;
+                    document.DistributeGroupID = 0;
 
                     Db.ExpenseDocument.Add(document);
                     Db.SaveChanges();
@@ -5892,6 +5894,7 @@ namespace ActionForce.Office
                     document.ExpenseMonth = ePeriod.DateMonth;
                     document.ExpensePeriodCode = expensePeriod;
                     document.AutoComputeTypeID = 4;
+                    document.DistributeGroupID = 0;
 
                     Db.ExpenseDocument.Add(document);
                     Db.SaveChanges();
@@ -5974,6 +5977,7 @@ namespace ActionForce.Office
                     document.ExpenseMonth = ePeriod.DateMonth;
                     document.ExpensePeriodCode = expensePeriod;
                     document.AutoComputeTypeID = 2;
+                    document.DistributeGroupID = 0;
 
                     Db.ExpenseDocument.Add(document);
                     Db.SaveChanges();
@@ -6014,7 +6018,7 @@ namespace ActionForce.Office
             {
                 var ePeriod = Db.ExpensePeriod.FirstOrDefault(x => x.PeriodCode == expensePeriod);
 
-                var officeLocations = new List<int>() { 131, 80, 236 }.ToList();
+                var officeLocations = new List<int>() { 236, 131, 80 }.ToList();
 
                 foreach (int LocationID in officeLocations)
                 {
@@ -6062,6 +6066,7 @@ namespace ActionForce.Office
                         document.ExpenseMonth = ePeriod.DateMonth;
                         document.ExpensePeriodCode = expensePeriod;
                         document.AutoComputeTypeID = 5;
+                        document.DistributeGroupID = 0;
 
                         Db.ExpenseDocument.Add(document);
                         Db.SaveChanges();
@@ -6094,7 +6099,7 @@ namespace ActionForce.Office
 
                     double SalaryHourCount = 195;
 
-                    foreach (var empId in employeeIds) // 4525
+                    foreach (var empId in employeeIds) // 4525, 6991
                     {
 
                         double SalaryHourBalance = 195;
@@ -6294,6 +6299,7 @@ namespace ActionForce.Office
                     document.ExpenseMonth = ePeriod.DateMonth;
                     document.ExpensePeriodCode = expensePeriod;
                     document.AutoComputeTypeID = 7;
+                    document.DistributeGroupID = 0;
 
                     Db.ExpenseDocument.Add(document);
                     Db.SaveChanges();
@@ -6376,6 +6382,7 @@ namespace ActionForce.Office
                     document.ExpenseMonth = ePeriod.DateMonth;
                     document.ExpensePeriodCode = expensePeriod;
                     document.AutoComputeTypeID = 8;
+                    document.DistributeGroupID = 0;
 
                     Db.ExpenseDocument.Add(document);
                     Db.SaveChanges();
@@ -6458,6 +6465,7 @@ namespace ActionForce.Office
                     document.ExpenseMonth = ePeriod.DateMonth;
                     document.ExpensePeriodCode = expensePeriod;
                     document.AutoComputeTypeID = 6;
+                    document.DistributeGroupID = 0;
 
                     Db.ExpenseDocument.Add(document);
                     Db.SaveChanges();
@@ -6541,6 +6549,7 @@ namespace ActionForce.Office
                     document.ExpenseMonth = ePeriod.DateMonth;
                     document.ExpensePeriodCode = expensePeriod;
                     document.AutoComputeTypeID = 13;
+                    document.DistributeGroupID = 0;
 
                     Db.ExpenseDocument.Add(document);
                     Db.SaveChanges();
@@ -6669,6 +6678,7 @@ namespace ActionForce.Office
                     document.ExpenseMonth = ePeriod.DateMonth;
                     document.ExpensePeriodCode = expensePeriod;
                     document.AutoComputeTypeID = 12;
+                    document.DistributeGroupID = 0;
                     document.TaxRate = 18;
 
                     Db.ExpenseDocument.Add(document);
@@ -6776,6 +6786,7 @@ namespace ActionForce.Office
                     document.ExpenseMonth = ePeriod.DateMonth;
                     document.ExpensePeriodCode = expensePeriod;
                     document.AutoComputeTypeID = 12;
+                    document.DistributeGroupID = 0;
                     document.TaxRate = 18;
 
                     Db.ExpenseDocument.Add(document);
@@ -6885,6 +6896,7 @@ namespace ActionForce.Office
                     document.ExpenseMonth = ePeriod.DateMonth;
                     document.ExpensePeriodCode = expensePeriod;
                     document.AutoComputeTypeID = 9;
+                    document.DistributeGroupID = 0;
                     document.TaxRate = 18;
 
                     Db.ExpenseDocument.Add(document);
@@ -6950,64 +6962,70 @@ namespace ActionForce.Office
             using (ActionTimeEntities Db = new ActionTimeEntities())
             {
                 var ePeriod = Db.ExpensePeriod.FirstOrDefault(x => x.PeriodCode == expensePeriod);
+                List<long> docIds = new List<long>();
 
-                // lokasyon kira 9
-                expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 10 && x.ExpenseItemID == 4 && x.ExpensePeriodCode == expensePeriod);
-
-                if (expenseDocument != null && expenseDocument.StatusID == 1)
-                {
-                    return expenseDocument;
-                }
-                else if (expenseDocument != null && expenseDocument.StatusID == 0)
-                {
-                    var rows = Db.ExpenseDocumentRows.Where(x => x.DocumentID == expenseDocument.ID).ToList();
-                    Db.ExpenseDocumentRows.RemoveRange(rows);
-                    Db.SaveChanges();
-
-                }
-                else if (expenseDocument == null)
-                {
-                    ExpenseDocument document = new ExpenseDocument();
-
-                    var UID = Guid.NewGuid();
-
-                    document.UID = UID;
-                    document.DocumentNumber = OfficeHelper.GetDocumentNumber(authentication.ActionEmployee.OurCompanyID ?? 2, "EXD");
-                    document.RecordDate = DateTime.UtcNow.AddHours(3);
-                    document.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
-                    document.RecordIP = OfficeHelper.GetIPAddress();
-                    document.DocumentSource = "OfficeRent-" + expensePeriod;
-                    document.ExpenseDescription = "";
-                    document.DistributionAmount = 0;
-                    document.TotalAmount = 0;
-                    document.ExpenseGroupID = 2;
-                    document.Currency = authentication.ActionEmployee.OurCompany.Currency;
-                    document.DocumentDate = DateTime.UtcNow.AddHours(authentication.ActionEmployee.OurCompany.TimeZone ?? 3);
-                    document.ExpenseItemID = 4;
-                    document.ExpenseCenterID = 80;
-                    document.ExpensePeriod = ePeriod.DateBegin;
-                    document.IsActive = true;
-                    document.StatusID = 0;
-                    document.OurCompanyID = authentication.ActionEmployee.OurCompanyID;
-                    document.ExpenseYear = ePeriod.DateYear;
-                    document.ExpenseMonth = ePeriod.DateMonth;
-                    document.ExpensePeriodCode = expensePeriod;
-                    document.AutoComputeTypeID = 10;
-                    document.TaxRate = 18;
-
-                    Db.ExpenseDocument.Add(document);
-                    Db.SaveChanges();
-
-                    OfficeHelper.AddApplicationLog("Office", "ExpenseDocument", "Insert", document.ID.ToString(), "Expense", "NewDocument", null, true, "Lokasyon Kira Masraf Dokümanı Otomatik Eklendi", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, document);
-
-                    expenseDocument = document;
-                }
 
                 List<int> locationTypes = new List<int>() { 5, 6 };
                 var LocationIds = Db.Location.Where(x => x.OurCompanyID == authentication.ActionEmployee.OurCompanyID && locationTypes.Contains(x.LocationTypeID.Value)).Select(x => x.LocationID).Distinct().ToList();
 
                 foreach (var locId in LocationIds)
                 {
+
+                    // lokasyon kira 9
+                    expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 10 && x.ExpenseItemID == 4 && x.ExpensePeriodCode == expensePeriod && x.ExpenseCenterID == locId);
+
+                    if (expenseDocument != null && expenseDocument.StatusID == 1)
+                    {
+                        return expenseDocument;
+                    }
+                    else if (expenseDocument != null && expenseDocument.StatusID == 0)
+                    {
+                        var rows = Db.ExpenseDocumentRows.Where(x => x.DocumentID == expenseDocument.ID).ToList();
+                        Db.ExpenseDocumentRows.RemoveRange(rows);
+                        Db.SaveChanges();
+
+                    }
+                    else if (expenseDocument == null)
+                    {
+                        ExpenseDocument document = new ExpenseDocument();
+
+                        var UID = Guid.NewGuid();
+
+                        document.UID = UID;
+                        document.DocumentNumber = OfficeHelper.GetDocumentNumber(authentication.ActionEmployee.OurCompanyID ?? 2, "EXD");
+                        document.RecordDate = DateTime.UtcNow.AddHours(3);
+                        document.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
+                        document.RecordIP = OfficeHelper.GetIPAddress();
+                        document.DocumentSource = "OfficeRent-" + expensePeriod;
+                        document.ExpenseDescription = "";
+                        document.DistributionAmount = 0;
+                        document.TotalAmount = 0;
+                        document.ExpenseGroupID = 2;
+                        document.Currency = authentication.ActionEmployee.OurCompany.Currency;
+                        document.DocumentDate = DateTime.UtcNow.AddHours(authentication.ActionEmployee.OurCompany.TimeZone ?? 3);
+                        document.ExpenseItemID = 4;
+                        document.ExpenseCenterID = locId;
+                        document.ExpensePeriod = ePeriod.DateBegin;
+                        document.IsActive = true;
+                        document.StatusID = 0;
+                        document.OurCompanyID = authentication.ActionEmployee.OurCompanyID;
+                        document.ExpenseYear = ePeriod.DateYear;
+                        document.ExpenseMonth = ePeriod.DateMonth;
+                        document.ExpensePeriodCode = expensePeriod;
+                        document.AutoComputeTypeID = 10;
+                        document.DistributeGroupID = 0;
+                        document.TaxRate = 18;
+
+                        Db.ExpenseDocument.Add(document);
+                        Db.SaveChanges();
+
+                        OfficeHelper.AddApplicationLog("Office", "ExpenseDocument", "Insert", document.ID.ToString(), "Expense", "NewDocument", null, true, "Lokasyon Kira Masraf Dokümanı Otomatik Eklendi", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, document);
+
+                        expenseDocument = document;
+                    }
+
+                    docIds.Add(expenseDocument.ID);
+
                     var isOpen = Db.LocationPeriods.Any(x => x.LocationID == locId && (x.ContractStartDate <= ePeriod.DateBegin || x.FinalFinishDate >= ePeriod.DateEnd));
 
                     var rent = Db.LocationParam.Where(x => x.TypeID == 5 && x.LocationID == locId && (x.DateStart <= ePeriod.DateBegin || x.DateFinish >= ePeriod.DateEnd)).OrderByDescending(x => x.DateStart).Take(1).FirstOrDefault();
@@ -7032,14 +7050,21 @@ namespace ActionForce.Office
 
                         Db.SaveChanges();
                     }
+
+
+                    var costAmount = Db.ExpenseDocumentRows.Where(x => x.DocumentID == expenseDocument.ID).Sum(x => x.CostAmount) ?? 0;
+                    expenseDocument.TotalAmount = costAmount;
+                    expenseDocument.DistributionAmount = costAmount;
+                    Db.SaveChanges();
+
+                   
+
                 }
 
-                var costAmount = Db.ExpenseDocumentRows.Where(x => x.DocumentID == expenseDocument.ID).Sum(x => x.CostAmount) ?? 0;
-                expenseDocument.TotalAmount = costAmount;
-                expenseDocument.DistributionAmount = costAmount;
-                Db.SaveChanges();
-
-                Db.AddExpenseDocumentChartOfficeRent(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+                foreach (var docId in docIds)
+                {
+                    Db.AddExpenseDocumentChartOfficeRent(docId, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+                }
             }
 
             return expenseDocument;
@@ -7100,6 +7125,7 @@ namespace ActionForce.Office
                     document.ExpenseMonth = ePeriod.DateMonth;
                     document.ExpensePeriodCode = expensePeriod;
                     document.AutoComputeTypeID = 11;
+                    document.DistributeGroupID = 0;
                     document.TaxRate = 0;
 
                     Db.ExpenseDocument.Add(document);

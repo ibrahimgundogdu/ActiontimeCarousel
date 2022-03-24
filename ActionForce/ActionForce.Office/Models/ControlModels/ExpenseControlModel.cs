@@ -29,6 +29,7 @@ namespace ActionForce.Office
         public ExpenseGroup ExpenseGroup { get; set; }
         public List<ExpenseGroup> ExpenseGroups { get; set; }
 
+
         public VExpenseDocumentChart ExpenseDocumentChart { get; set; }
         public List<VExpenseDocumentChart> ExpenseDocumentCharts { get; set; }
 
@@ -41,5 +42,9 @@ namespace ActionForce.Office
 
         public VExpenseActions ExpenseAction { get; set; }
         public List<VExpenseActions> ExpenseActions { get; set; }
+
+        public ExpenseChartGroup ExpenseChartGroup { get; set; }
+        public List<ExpenseChartGroup> ExpenseChartGroups { get; set; }
+        public List<ExpenseChartGroupItems> ExpenseChartGroupItems { get; set; }
     }
 }

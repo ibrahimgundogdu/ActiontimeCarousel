@@ -48,5 +48,8 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> DateEnd { get; set; }
         public Nullable<double> TaxRate { get; set; }
         public Nullable<double> TaxAmount { get; set; }
+        public Nullable<short> DistributeGroupID { get; set; }
+        public string GroupCode { get; set; }
+        public string GroupName { get; set; }
     }
 }

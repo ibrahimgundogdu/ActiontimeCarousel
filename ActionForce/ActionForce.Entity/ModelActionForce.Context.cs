@@ -402,6 +402,12 @@ namespace ActionForce.Entity
         public virtual DbSet<VExpenseDocumentLocationsVat> VExpenseDocumentLocationsVat { get; set; }
         public virtual DbSet<VExpenseDocumentRows> VExpenseDocumentRows { get; set; }
         public virtual DbSet<VExpenseActions> VExpenseActions { get; set; }
+        public virtual DbSet<Partner> Partner { get; set; }
+        public virtual DbSet<PartnerActions> PartnerActions { get; set; }
+        public virtual DbSet<Partnership> Partnership { get; set; }
+        public virtual DbSet<PartnerUser> PartnerUser { get; set; }
+        public virtual DbSet<ExpenseChartGroup> ExpenseChartGroup { get; set; }
+        public virtual DbSet<ExpenseChartGroupItems> ExpenseChartGroupItems { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -3357,6 +3363,52 @@ namespace ActionForce.Entity
                 new ObjectParameter("LocationID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationVatAmountMonthly_Result>("GetLocationVatAmountMonthly", dateBeginParameter, dateEndParameter, ourCompanyIDParameter, locationIDParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> AddExpenseDocumentGroupRowsChart(Nullable<long> documentID, Nullable<short> groupID, Nullable<int> recordEmployeeID, string recordIP)
+        {
+            var documentIDParameter = documentID.HasValue ?
+                new ObjectParameter("DocumentID", documentID) :
+                new ObjectParameter("DocumentID", typeof(long));
+    
+            var groupIDParameter = groupID.HasValue ?
+                new ObjectParameter("GroupID", groupID) :
+                new ObjectParameter("GroupID", typeof(short));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddExpenseDocumentGroupRowsChart", documentIDParameter, groupIDParameter, recordEmployeeIDParameter, recordIPParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> AddExpenseDocumentGroupRowsChartLoc(Nullable<long> documentID, Nullable<short> groupID, Nullable<int> locationID, Nullable<int> recordEmployeeID, string recordIP)
+        {
+            var documentIDParameter = documentID.HasValue ?
+                new ObjectParameter("DocumentID", documentID) :
+                new ObjectParameter("DocumentID", typeof(long));
+    
+            var groupIDParameter = groupID.HasValue ?
+                new ObjectParameter("GroupID", groupID) :
+                new ObjectParameter("GroupID", typeof(short));
+    
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddExpenseDocumentGroupRowsChartLoc", documentIDParameter, groupIDParameter, locationIDParameter, recordEmployeeIDParameter, recordIPParameter);
         }
     }
 }
