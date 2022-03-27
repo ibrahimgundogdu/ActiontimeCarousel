@@ -958,43 +958,43 @@ namespace ActionForce.Office.Controllers
                 return RedirectToAction("Index");
             }
 
-            var charts = Db.ExpenseDocumentChart.Where(x => x.ExpenseDocumentID == expenseDocument.ID).ToList();
+            //var charts = Db.ExpenseDocumentChart.Where(x => x.ExpenseDocumentID == expenseDocument.ID).ToList();
 
-            foreach (var item in charts)
-            {
-                ExpenseActions exa = new ExpenseActions();
+            //foreach (var item in charts)
+            //{
+            //    ExpenseActions exa = new ExpenseActions();
 
-                exa.Amount = item.DistributedAmount;
-                exa.Currency = item.Currency;
-                exa.DocumentID = item.ExpenseDocumentID;
-                exa.DocumentNumber = expenseDocument.DocumentNumber;
-                exa.ExpenseCenterID = (short)expenseDocument.ExpenseCenterID;
-                exa.ExpenseDescription = expenseDocument.ExpenseDescription;
-                exa.ExpenseGroupID = expenseDocument.ExpenseGroupID;
-                exa.ExpenseItemID = item.ExpenseItemID;
-                exa.ExpenseMonth = expenseDocument.ExpenseMonth;
-                exa.ExpensePeriod = expenseDocument.ExpensePeriod;
-                exa.ExpensePeriodCode = expenseDocument.ExpensePeriodCode;
-                exa.ExpenseYear = expenseDocument.ExpenseYear;
-                exa.LocationID = (short)item.ExpenseCenterID;
-                exa.OurCompanyID = expenseDocument.OurCompanyID;
-                exa.Rate = item.DistributedRate;
-                exa.RecordDate = DateTime.UtcNow.AddHours(3);
-                exa.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
-                exa.RecordIP = OfficeHelper.GetIPAddress();
-                exa.ReferenceUID = expenseDocument.UID;
-                exa.Total = item.DistributionAmount;
+            //    exa.Amount = item.DistributedAmount;
+            //    exa.Currency = item.Currency;
+            //    exa.DocumentID = item.ExpenseDocumentID;
+            //    exa.DocumentNumber = expenseDocument.DocumentNumber;
+            //    exa.ExpenseCenterID = (short)expenseDocument.ExpenseCenterID;
+            //    exa.ExpenseDescription = expenseDocument.ExpenseDescription;
+            //    exa.ExpenseGroupID = expenseDocument.ExpenseGroupID;
+            //    exa.ExpenseItemID = item.ExpenseItemID;
+            //    exa.ExpenseMonth = expenseDocument.ExpenseMonth;
+            //    exa.ExpensePeriod = expenseDocument.ExpensePeriod;
+            //    exa.ExpensePeriodCode = expenseDocument.ExpensePeriodCode;
+            //    exa.ExpenseYear = expenseDocument.ExpenseYear;
+            //    exa.LocationID = (short)item.ExpenseCenterID;
+            //    exa.OurCompanyID = expenseDocument.OurCompanyID;
+            //    exa.Rate = item.DistributedRate;
+            //    exa.RecordDate = DateTime.UtcNow.AddHours(3);
+            //    exa.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+            //    exa.RecordIP = OfficeHelper.GetIPAddress();
+            //    exa.ReferenceUID = expenseDocument.UID;
+            //    exa.Total = item.DistributionAmount;
 
-                expenseActionsList.Add(exa);
-            }
+            //    expenseActionsList.Add(exa);
+            //}
 
-            Db.ExpenseActions.AddRange(expenseActionsList);
-            Db.SaveChanges();
+            //Db.ExpenseActions.AddRange(expenseActionsList);
+            //Db.SaveChanges();
 
-            expenseDocument.StatusID = 1;
-            Db.SaveChanges();
+            //expenseDocument.StatusID = 1;
+            //Db.SaveChanges();
 
-
+            var sresult = Db.AddExpenseDocumentToActions(expenseDocument.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress()).FirstOrDefault();
 
             model.Result.IsSuccess = true;
             model.Result.Message = "Maliyet Satırları Oluşturuldu";
@@ -1049,7 +1049,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult AddExpenseAuto(string ExpensePeriod, string Location, string Office, string Rent, string Vat, string Expense)
+        public ActionResult AddExpenseAuto(string ExpensePeriod, string Location, string Office, string Rent, string Vat, string Expense, string Reset)
         {
             ExpenseControlModel model = new ExpenseControlModel();
 
@@ -1106,6 +1106,14 @@ namespace ActionForce.Office.Controllers
 
                 model.Result.IsSuccess = true;
                 model.Result.Message = "Hesaplama Tamamlandı";
+
+                if (Reset == "1")
+                {
+                    var documentr = documentManager.ResetExpenseDucument(ExpensePeriod, model.Authentication);
+
+                    model.Result.IsSuccess = documentr.IsSuccess;
+                    model.Result.Message = documentr.Message;
+                }
             }
             else
             {
@@ -1187,6 +1195,7 @@ namespace ActionForce.Office.Controllers
 
             if (model.ExpenseDocument.AutoComputeTypeID <= 0 || model.ExpenseDocument.AutoComputeTypeID == null)
             {
+
                 var sresult = Db.AddExpenseDocumentGroupRowsChart(model.ExpenseDocument.ID, form.ECGID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress()).FirstOrDefault().Value;
 
                 if (sresult > 0)
@@ -1194,6 +1203,7 @@ namespace ActionForce.Office.Controllers
                     model.Result.IsSuccess = true;
                     model.Result.Message = "Masraf Dokümanında Dağılım Cetveli Oluşturuldu";
                 }
+
             }
             else
             {
@@ -1206,7 +1216,6 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("Chart", "Expense", new { id = model.ExpenseDocument.UID });
 
         }
-
 
         [AllowAnonymous]
         public FileResult GetExpenseTemplate()

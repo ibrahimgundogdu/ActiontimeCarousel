@@ -408,6 +408,8 @@ namespace ActionForce.Entity
         public virtual DbSet<PartnerUser> PartnerUser { get; set; }
         public virtual DbSet<ExpenseChartGroup> ExpenseChartGroup { get; set; }
         public virtual DbSet<ExpenseChartGroupItems> ExpenseChartGroupItems { get; set; }
+        public virtual DbSet<VExpenseSalePartnerless> VExpenseSalePartnerless { get; set; }
+        public virtual DbSet<VExpenseSalePartnerly> VExpenseSalePartnerly { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -3409,6 +3411,32 @@ namespace ActionForce.Entity
                 new ObjectParameter("RecordIP", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddExpenseDocumentGroupRowsChartLoc", documentIDParameter, groupIDParameter, locationIDParameter, recordEmployeeIDParameter, recordIPParameter);
+        }
+    
+        public virtual int ResetExpenseDocument(string periodCode)
+        {
+            var periodCodeParameter = periodCode != null ?
+                new ObjectParameter("PeriodCode", periodCode) :
+                new ObjectParameter("PeriodCode", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ResetExpenseDocument", periodCodeParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> AddExpenseDocumentToActions(Nullable<long> documentID, Nullable<int> recordEmployeeID, string recordIP)
+        {
+            var documentIDParameter = documentID.HasValue ?
+                new ObjectParameter("DocumentID", documentID) :
+                new ObjectParameter("DocumentID", typeof(long));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddExpenseDocumentToActions", documentIDParameter, recordEmployeeIDParameter, recordIPParameter);
         }
     }
 }

@@ -410,6 +410,8 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.PartnerUser" Width="1.5" PointX="43.25" PointY="43.625" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ExpenseChartGroup" Width="1.5" PointX="2.625" PointY="30.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ExpenseChartGroupItems" Width="1.5" PointX="63.625" PointY="24.5" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VExpenseSalePartnerless" Width="1.5" PointX="65.5" PointY="23.875" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VExpenseSalePartnerly" Width="1.5" PointX="65.875" PointY="37.25" />
         
         
         

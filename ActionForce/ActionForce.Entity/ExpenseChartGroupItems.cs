@@ -17,5 +17,6 @@ namespace ActionForce.Entity
         public int ID { get; set; }
         public short ChartGroupID { get; set; }
         public int LocationID { get; set; }
+        public string PeriodCode { get; set; }
     }
 }

@@ -5626,11 +5626,7 @@ namespace ActionForce.Office
                 // lokasyon net maaş 
                 expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 1 && x.ExpenseItemID == 5 && x.ExpensePeriodCode == expensePeriod);
 
-                if (expenseDocument != null && expenseDocument.StatusID == 1)
-                {
-                    return expenseDocument;
-                }
-                else if (expenseDocument != null && expenseDocument.StatusID == 0)
+                if (expenseDocument != null)
                 {
                     var rows = Db.ExpenseDocumentRows.Where(x => x.DocumentID == expenseDocument.ID).ToList();
                     Db.ExpenseDocumentRows.RemoveRange(rows);
@@ -5747,6 +5743,13 @@ namespace ActionForce.Office
 
                 Db.AddExpenseDocumentChart(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
 
+
+                if (expenseDocument.StatusID == 1)
+                {
+                    // malileştir
+                    var sresult = Db.AddExpenseDocumentToActions(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress()).FirstOrDefault();
+                }
+
             }
 
             return expenseDocument;
@@ -5773,16 +5776,7 @@ namespace ActionForce.Office
 
                 expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 3 && x.ExpenseItemID == 33 && x.ExpensePeriodCode == expensePeriod);
 
-                if (expenseDocument != null && expenseDocument.StatusID == 1)
-                {
-                    return expenseDocument;
-                }
-                else if (expenseDocument != null && expenseDocument.StatusID == 0)
-                {
-
-
-                }
-                else if (expenseDocument == null)  // sgk
+                if (expenseDocument == null)  // sgk
                 {
 
                     ExpenseDocument document = new ExpenseDocument();
@@ -5830,6 +5824,12 @@ namespace ActionForce.Office
                 Db.SaveChanges();
 
                 Db.AddExpenseDocumentChartSGK(expenseDocument.ID, parentDocumentID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+
+                if (expenseDocument.StatusID == 1)
+                {
+                    // malileştir
+                    var sresult = Db.AddExpenseDocumentToActions(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress()).FirstOrDefault();
+                }
             }
 
             return expenseDocument;
@@ -5856,16 +5856,7 @@ namespace ActionForce.Office
 
                 expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 4 && x.ExpenseItemID == 23 && x.ExpensePeriodCode == expensePeriod);
 
-                if (expenseDocument != null && expenseDocument.StatusID == 1)
-                {
-                    return expenseDocument;
-                }
-                else if (expenseDocument != null && expenseDocument.StatusID == 0)
-                {
-
-
-                }
-                else if (expenseDocument == null)  // sgk
+                if (expenseDocument == null)  // sgk
                 {
 
                     ExpenseDocument document = new ExpenseDocument();
@@ -5913,6 +5904,12 @@ namespace ActionForce.Office
                 Db.SaveChanges();
 
                 Db.AddExpenseDocumentChartFoodCard(expenseDocument.ID, parentDocumentID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+
+                if (expenseDocument.StatusID == 1)
+                {
+                    // malileştir
+                    var sresult = Db.AddExpenseDocumentToActions(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress()).FirstOrDefault();
+                }
             }
 
             return expenseDocument;
@@ -5939,16 +5936,7 @@ namespace ActionForce.Office
 
                 expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 2 && x.ExpenseItemID == 42 && x.ExpensePeriodCode == expensePeriod);
 
-                if (expenseDocument != null && expenseDocument.StatusID == 1)
-                {
-                    return expenseDocument;
-                }
-                else if (expenseDocument != null && expenseDocument.StatusID == 0)
-                {
-
-
-                }
-                else if (expenseDocument == null)  // prim
+                if (expenseDocument == null)  // prim
                 {
 
                     ExpenseDocument document = new ExpenseDocument();
@@ -5996,6 +5984,12 @@ namespace ActionForce.Office
                 Db.SaveChanges();
 
                 Db.AddExpenseDocumentChartPremium(expenseDocument.ID, parentDocumentID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+
+                if (expenseDocument.StatusID == 1)
+                {
+                    // malileştir
+                    var sresult = Db.AddExpenseDocumentToActions(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress()).FirstOrDefault();
+                }
             }
 
             return expenseDocument;
@@ -6027,11 +6021,7 @@ namespace ActionForce.Office
                     // lokasyon net maaş 
                     expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 5 && x.ExpenseItemID == 5 && x.ExpenseCenterID == LocationID && x.ExpensePeriodCode == expensePeriod);
 
-                    if (expenseDocument != null && expenseDocument.StatusID == 1)
-                    {
-                        return expenseDocument;
-                    }
-                    else if (expenseDocument != null && expenseDocument.StatusID == 0)
+                    if (expenseDocument != null)
                     {
                         var rows = Db.ExpenseDocumentRows.Where(x => x.DocumentID == expenseDocument.ID).ToList();
                         Db.ExpenseDocumentRows.RemoveRange(rows);
@@ -6235,6 +6225,13 @@ namespace ActionForce.Office
                 result.IsSuccess = true;
                 result.Message = "Dağılım eklendi";
 
+                var expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.ID == DocumentID);
+
+                if (expenseDocument.StatusID == 1)
+                {
+                    // malileştir
+                    var sresult = Db.AddExpenseDocumentToActions(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress()).FirstOrDefault();
+                }
             }
 
             return result;
@@ -6257,20 +6254,11 @@ namespace ActionForce.Office
             {
                 var ePeriod = Db.ExpensePeriod.FirstOrDefault(x => x.PeriodCode == expensePeriod);
 
-                // lokasyon SGK
+                // ofis SGK
 
                 expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 7 && x.ExpenseItemID == 33 && x.ExpenseCenterID == ExpenceCenterID && x.ExpensePeriodCode == expensePeriod);
 
-                if (expenseDocument != null && expenseDocument.StatusID == 1)
-                {
-                    return expenseDocument;
-                }
-                else if (expenseDocument != null && expenseDocument.StatusID == 0)
-                {
-
-
-                }
-                else if (expenseDocument == null)  // sgk
+                if (expenseDocument == null)  // sgk
                 {
 
                     ExpenseDocument document = new ExpenseDocument();
@@ -6318,6 +6306,12 @@ namespace ActionForce.Office
                 Db.SaveChanges();
 
                 Db.AddExpenseDocumentChartMonthlySGK(expenseDocument.ID, parentDocumentID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+
+                if (expenseDocument.StatusID == 1)
+                {
+                    // malileştir
+                    var sresult = Db.AddExpenseDocumentToActions(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress()).FirstOrDefault();
+                }
             }
 
             return expenseDocument;
@@ -6344,16 +6338,7 @@ namespace ActionForce.Office
 
                 expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 8 && x.ExpenseItemID == 23 && x.ExpenseCenterID == ExpenceCenterID && x.ExpensePeriodCode == expensePeriod);
 
-                if (expenseDocument != null && expenseDocument.StatusID == 1)
-                {
-                    return expenseDocument;
-                }
-                else if (expenseDocument != null && expenseDocument.StatusID == 0)
-                {
-
-
-                }
-                else if (expenseDocument == null)  // food
+                if (expenseDocument == null)  // food
                 {
 
                     ExpenseDocument document = new ExpenseDocument();
@@ -6401,6 +6386,12 @@ namespace ActionForce.Office
                 Db.SaveChanges();
 
                 Db.AddExpenseDocumentChartMonthlyFoodCard(expenseDocument.ID, parentDocumentID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+
+                if (expenseDocument.StatusID == 1)
+                {
+                    // malileştir
+                    var sresult = Db.AddExpenseDocumentToActions(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress()).FirstOrDefault();
+                }
             }
 
             return expenseDocument;
@@ -6427,16 +6418,7 @@ namespace ActionForce.Office
 
                 expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 6 && x.ExpenseItemID == 42 && x.ExpenseCenterID == ExpenceCenterID && x.ExpensePeriodCode == expensePeriod);
 
-                if (expenseDocument != null && expenseDocument.StatusID == 1)
-                {
-                    return expenseDocument;
-                }
-                else if (expenseDocument != null && expenseDocument.StatusID == 0)
-                {
-
-
-                }
-                else if (expenseDocument == null)  // prim
+                if (expenseDocument == null)  // prim
                 {
 
                     ExpenseDocument document = new ExpenseDocument();
@@ -6484,6 +6466,12 @@ namespace ActionForce.Office
                 Db.SaveChanges();
 
                 Db.AddExpenseDocumentChartMonthlyPremium(expenseDocument.ID, parentDocumentID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+
+                if (expenseDocument.StatusID == 1)
+                {
+                    // malileştir
+                    var sresult = Db.AddExpenseDocumentToActions(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress()).FirstOrDefault();
+                }
             }
 
             return expenseDocument;
@@ -6510,11 +6498,7 @@ namespace ActionForce.Office
                 // lokasyon net maaş 
                 expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 13 && x.ExpenseItemID == 43 && x.ExpensePeriodCode == expensePeriod);
 
-                if (expenseDocument != null && expenseDocument.StatusID == 1)
-                {
-                    return expenseDocument;
-                }
-                else if (expenseDocument != null && expenseDocument.StatusID == 0)
+                if (expenseDocument != null)
                 {
                     var rows = Db.ExpenseDocumentRows.Where(x => x.DocumentID == expenseDocument.ID).ToList();
                     Db.ExpenseDocumentRows.RemoveRange(rows);
@@ -6619,6 +6603,13 @@ namespace ActionForce.Office
                 result.IsSuccess = true;
                 result.Message = "Dağılım eklendi";
 
+                var expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.ID == DocumentID);
+
+                if (expenseDocument?.StatusID == 1)
+                {
+                    // malileştir
+                    var sresult = Db.AddExpenseDocumentToActions(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress()).FirstOrDefault();
+                }
             }
 
             return result;
@@ -6639,11 +6630,7 @@ namespace ActionForce.Office
                 // lokasyon net maaş 
                 expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 12 && x.ExpenseItemID == 26 && x.ExpensePeriodCode == expensePeriod);
 
-                if (expenseDocument != null && expenseDocument.StatusID == 1)
-                {
-                    return expenseDocument;
-                }
-                else if (expenseDocument != null && expenseDocument.StatusID == 0)
+                if (expenseDocument != null)
                 {
                     var rows = Db.ExpenseDocumentRows.Where(x => x.DocumentID == expenseDocument.ID).ToList();
                     Db.ExpenseDocumentRows.RemoveRange(rows);
@@ -6728,6 +6715,12 @@ namespace ActionForce.Office
                 }
 
                 Db.AddExpenseDocumentChart(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+
+                if (expenseDocument?.StatusID == 1)
+                {
+                    // malileştir
+                    var sresult = Db.AddExpenseDocumentToActions(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress()).FirstOrDefault();
+                }
             }
 
             return expenseDocument;
@@ -6747,11 +6740,7 @@ namespace ActionForce.Office
                 // lokasyon net maaş 
                 expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 12 && x.ExpenseItemID == 25 && x.ExpensePeriodCode == expensePeriod);
 
-                if (expenseDocument != null && expenseDocument.StatusID == 1)
-                {
-                    return expenseDocument;
-                }
-                else if (expenseDocument != null && expenseDocument.StatusID == 0)
+                if (expenseDocument != null)
                 {
                     var rows = Db.ExpenseDocumentRows.Where(x => x.DocumentID == expenseDocument.ID).ToList();
                     Db.ExpenseDocumentRows.RemoveRange(rows);
@@ -6836,6 +6825,12 @@ namespace ActionForce.Office
                 }
 
                 Db.AddExpenseDocumentChart(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+
+                if (expenseDocument?.StatusID == 1)
+                {
+                    // malileştir
+                    var sresult = Db.AddExpenseDocumentToActions(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress()).FirstOrDefault();
+                }
             }
 
 
@@ -6857,16 +6852,18 @@ namespace ActionForce.Office
                 // lokasyon kira 9
                 expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 9 && x.ExpenseItemID == 4 && x.ExpensePeriodCode == expensePeriod);
 
-                if (expenseDocument != null && expenseDocument.StatusID == 1)
-                {
-                    return expenseDocument;
-                }
-                else if (expenseDocument != null && expenseDocument.StatusID == 0)
+                if (expenseDocument != null)
                 {
                     var rows = Db.ExpenseDocumentRows.Where(x => x.DocumentID == expenseDocument.ID).ToList();
                     Db.ExpenseDocumentRows.RemoveRange(rows);
+
                     Db.SaveChanges();
 
+                    //chart
+                    var charts = Db.ExpenseDocumentChart.Where(x => x.ExpenseDocumentID == expenseDocument.ID).ToList();
+                    Db.ExpenseDocumentChart.RemoveRange(charts);
+
+                    Db.SaveChanges();
                 }
                 else if (expenseDocument == null)
                 {
@@ -6912,7 +6909,7 @@ namespace ActionForce.Office
                 var LocationIds = Db.VLocationShift.Where(x => x.OurCompanyID == authentication.ActionEmployee.OurCompanyID && x.DurationMinute > 0 && x.ShiftDate >= ePeriod.DateBegin && x.ShiftDate <= ePeriod.DateEnd && !denyLocationIds.Contains(x.LocationID)).Select(x => x.LocationID).Distinct().ToList();
 
 
-                foreach (var locId in LocationIds)
+                foreach (var locId in LocationIds) // 126, 146
                 {
                     var isOpen = Db.LocationPeriods.Any(x => x.LocationID == locId && (x.ContractStartDate <= ePeriod.DateBegin || x.FinalFinishDate >= ePeriod.DateEnd));
 
@@ -6920,6 +6917,23 @@ namespace ActionForce.Office
 
                     if (rent != null && isOpen == true)
                     {
+                        double rentTotal = 0;
+
+                        if (rent.Rate != null && rent.Rate > 0 && rent.Total == null)
+                        {
+                            var locationSalestotal = Db.VExpenseSalePartnerless.Where(x => x.LocationID == locId && x.Date >= ePeriod.DateBegin && x.Date <= ePeriod.DateEnd).Sum(x => x.Total) ?? 0;
+
+                            rentTotal = locationSalestotal * rent.Rate.Value;
+
+                        }
+                        else
+                        {
+                            var vatRate = Db.LocationParam.Where(x => x.TypeID == 13 && x.LocationID == locId && (x.DateStart <= ePeriod.DateBegin || x.DateFinish >= ePeriod.DateEnd)).OrderByDescending(x => x.DateStart).Take(1).FirstOrDefault()?.Rate ?? 0.18;
+                            vatRate = 1 + vatRate;
+
+                            rentTotal = rent.Total.Value * vatRate; // kiralar kdv hariç idi kdv dahile çekiyoruz
+                        }
+
 
                         ExpenseDocumentRows row = new ExpenseDocumentRows();
 
@@ -6929,15 +6943,16 @@ namespace ActionForce.Office
                         row.Currency = authentication.ActionEmployee.OurCompany.Currency;
                         row.Unit = 1;
                         row.Hour = 1;
-                        row.Amount = rent.Total * 1.18; // kiralar kdv hariç idi
-                        row.CostAmount = rent.Total * 1.18;
+                        row.Amount = rentTotal;
+                        row.CostAmount = rentTotal;
                         row.PremiumAmount = 0;
                         row.SGKCostAmount = 0;
                         row.FoodCardCostAmount = 0;
 
                         Db.ExpenseDocumentRows.Add(row);
-
                         Db.SaveChanges();
+
+
                     }
                 }
 
@@ -6947,6 +6962,12 @@ namespace ActionForce.Office
                 Db.SaveChanges();
 
                 Db.AddExpenseDocumentChart(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+
+                if (expenseDocument?.StatusID == 1)
+                {
+                    // malileştir
+                    var sresult = Db.AddExpenseDocumentToActions(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress()).FirstOrDefault();
+                }
             }
 
             return expenseDocument;
@@ -6974,14 +6995,16 @@ namespace ActionForce.Office
                     // lokasyon kira 9
                     expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 10 && x.ExpenseItemID == 4 && x.ExpensePeriodCode == expensePeriod && x.ExpenseCenterID == locId);
 
-                    if (expenseDocument != null && expenseDocument.StatusID == 1)
-                    {
-                        return expenseDocument;
-                    }
-                    else if (expenseDocument != null && expenseDocument.StatusID == 0)
+                    if (expenseDocument != null)
                     {
                         var rows = Db.ExpenseDocumentRows.Where(x => x.DocumentID == expenseDocument.ID).ToList();
                         Db.ExpenseDocumentRows.RemoveRange(rows);
+                        Db.SaveChanges();
+
+                        //chart
+                        var charts = Db.ExpenseDocumentChart.Where(x => x.ExpenseDocumentID == expenseDocument.ID).ToList();
+                        Db.ExpenseDocumentChart.RemoveRange(charts);
+
                         Db.SaveChanges();
 
                     }
@@ -7057,13 +7080,21 @@ namespace ActionForce.Office
                     expenseDocument.DistributionAmount = costAmount;
                     Db.SaveChanges();
 
-                   
+
 
                 }
 
                 foreach (var docId in docIds)
                 {
                     Db.AddExpenseDocumentChartOfficeRent(docId, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+
+                    expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.ID == docId);
+
+                    if (expenseDocument?.StatusID == 1)
+                    {
+                        // malileştir
+                        var sresult = Db.AddExpenseDocumentToActions(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress()).FirstOrDefault();
+                    }
                 }
             }
 
@@ -7086,11 +7117,7 @@ namespace ActionForce.Office
                 // lokasyon kira 9
                 expenseDocument = Db.ExpenseDocument.FirstOrDefault(x => x.AutoComputeTypeID == 11 && x.ExpenseItemID == 44 && x.ExpensePeriodCode == expensePeriod);
 
-                if (expenseDocument != null && expenseDocument.StatusID == 1)
-                {
-                    return expenseDocument;
-                }
-                else if (expenseDocument != null && expenseDocument.StatusID == 0)
+                if (expenseDocument != null)
                 {
                     var rows = Db.ExpenseDocumentRows.Where(x => x.DocumentID == expenseDocument.ID).ToList();
                     Db.ExpenseDocumentRows.RemoveRange(rows);
@@ -7179,7 +7206,7 @@ namespace ActionForce.Office
 
                 foreach (var locId in LocationIds)
                 {
-                    var locationDebtTaxTotal = Db.VExpenseDocumentLocationsVat.Where(x => x.OurCompanyID == authentication.ActionEmployee.OurCompanyID && x.LocationID == locId && x.ExpensePeriodCode == ePeriod.PeriodCode).Sum(x => x.TaxAmount) ?? 0;
+                    var locationDebtTaxTotal = Db.VExpenseDocumentLocationsVat.Where(x => x.OurCompanyID == authentication.ActionEmployee.OurCompanyID && x.LocationID == locId && x.ExpensePeriodCode == ePeriod.PeriodCode && x.StatusID == 1).Sum(x => x.TaxAmount) ?? 0;
 
                     ExpenseDocumentRows row = new ExpenseDocumentRows();
 
@@ -7205,13 +7232,38 @@ namespace ActionForce.Office
                 Db.SaveChanges();
 
                 Db.AddExpenseDocumentChart(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+
+                if (expenseDocument?.StatusID == 1)
+                {
+                    // malileştir
+                    var sresult = Db.AddExpenseDocumentToActions(expenseDocument.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress()).FirstOrDefault();
+                }
             }
 
             return expenseDocument;
         }
 
 
+        //reset
+        public Result ResetExpenseDucument(string expensePeriod, AuthenticationModel authentication)
+        {
 
+            var result = new Result();
+
+            List<ExpenseDocumentRows> expenseDocumentRows = new List<ExpenseDocumentRows>();
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var ePeriod = Db.ExpensePeriod.FirstOrDefault(x => x.PeriodCode == expensePeriod);
+
+                Db.ResetExpenseDocument(expensePeriod);
+
+                result.IsSuccess = true;
+                result.Message = "Sıfırlama Tmamlandı";
+            }
+
+            return result;
+        }
 
 
 

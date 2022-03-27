@@ -1203,6 +1203,12 @@
     <Compile Include="VExpenseDocumentRows.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VExpenseSalePartnerless.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VExpenseSalePartnerly.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VLocation.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

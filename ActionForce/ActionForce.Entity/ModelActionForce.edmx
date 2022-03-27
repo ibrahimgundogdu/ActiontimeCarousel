@@ -2424,10 +2424,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
         </EntityType>
         <EntityType Name="ExpenseChartGroupItems">
           <Key>
+            <PropertyRef Name="PeriodCode" />
             <PropertyRef Name="ChartGroupID" />
             <PropertyRef Name="LocationID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PeriodCode" Type="nvarchar" MaxLength="8" Nullable="false" />
           <Property Name="ChartGroupID" Type="smallint" Nullable="false" />
           <Property Name="LocationID" Type="int" Nullable="false" />
         </EntityType>
@@ -6847,6 +6849,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VExpenseDocumentLocationsVa
           <Property Name="DistributedAmount" Type="float" />
           <Property Name="TaxAmount" Type="float" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="ExpenseGroupID" Type="smallint" />
+          <Property Name="StatusID" Type="smallint" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VExpenseDocumentRows' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -6868,6 +6872,35 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VExpenseDocumentRows' does 
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
           <Property Name="FullName" Type="nvarchar" MaxLength="150" />
           <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VExpenseSalePartnerless' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VExpenseSalePartnerless">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Currency" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" />
+          <Property Name="Date" Type="date" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="Total" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" Nullable="false" />
+          <Property Name="TaxTotal" Type="float" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VExpenseSalePartnerly' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VExpenseSalePartnerly">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" />
+          <Property Name="Date" Type="date" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="Total" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="TaxTotal" Type="float" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -8712,6 +8745,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
           <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="AddExpenseDocumentToActions" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DocumentID" Type="bigint" Mode="In" />
+          <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
+          <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="AddLocationTicketSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ParentID" Type="bigint" Mode="In" />
           <Parameter Name="CurrentLocationID" Type="int" Mode="In" />
@@ -9139,6 +9177,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         </Function>
         <Function Name="ResetCard" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CardNumber" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="ResetExpenseDocument" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PeriodCode" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="SalaryPeriodComputeSetTotal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SalaryPeriodID" Type="int" Mode="In" />
@@ -11349,7 +11390,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VExpenseDocumentLocationsVat].[TaxRate] AS [TaxRate], 
     [VExpenseDocumentLocationsVat].[DistributedAmount] AS [DistributedAmount], 
     [VExpenseDocumentLocationsVat].[TaxAmount] AS [TaxAmount], 
-    [VExpenseDocumentLocationsVat].[Currency] AS [Currency]
+    [VExpenseDocumentLocationsVat].[Currency] AS [Currency], 
+    [VExpenseDocumentLocationsVat].[ExpenseGroupID] AS [ExpenseGroupID], 
+    [VExpenseDocumentLocationsVat].[StatusID] AS [StatusID]
     FROM [dbo].[VExpenseDocumentLocationsVat] AS [VExpenseDocumentLocationsVat]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VExpenseDocumentRows" EntityType="Self.VExpenseDocumentRows" store:Type="Views" store:Schema="dbo">
@@ -11369,6 +11412,28 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VExpenseDocumentRows].[FullName] AS [FullName], 
     [VExpenseDocumentRows].[LocationFullName] AS [LocationFullName]
     FROM [dbo].[VExpenseDocumentRows] AS [VExpenseDocumentRows]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VExpenseSalePartnerless" EntityType="Self.VExpenseSalePartnerless" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VExpenseSalePartnerless].[Id] AS [Id], 
+    [VExpenseSalePartnerless].[Date] AS [Date], 
+    [VExpenseSalePartnerless].[OurCompanyID] AS [OurCompanyID], 
+    [VExpenseSalePartnerless].[LocationID] AS [LocationID], 
+    [VExpenseSalePartnerless].[Total] AS [Total], 
+    [VExpenseSalePartnerless].[Currency] AS [Currency], 
+    [VExpenseSalePartnerless].[TaxTotal] AS [TaxTotal]
+    FROM [dbo].[VExpenseSalePartnerless] AS [VExpenseSalePartnerless]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VExpenseSalePartnerly" EntityType="Self.VExpenseSalePartnerly" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VExpenseSalePartnerly].[Id] AS [Id], 
+    [VExpenseSalePartnerly].[Date] AS [Date], 
+    [VExpenseSalePartnerly].[OurCompanyID] AS [OurCompanyID], 
+    [VExpenseSalePartnerly].[LocationID] AS [LocationID], 
+    [VExpenseSalePartnerly].[Total] AS [Total], 
+    [VExpenseSalePartnerly].[Currency] AS [Currency], 
+    [VExpenseSalePartnerly].[TaxTotal] AS [TaxTotal]
+    FROM [dbo].[VExpenseSalePartnerly] AS [VExpenseSalePartnerly]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VLocation" EntityType="Self.VLocation" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -13839,6 +13904,16 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="DocumentID" Mode="In" Type="Int64" />
             <Parameter Name="GroupID" Mode="In" Type="Int16" />
             <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordIP" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="VExpenseSalePartnerless" EntityType="db293_ActionTimeDbModel.VExpenseSalePartnerless" />
+          <EntitySet Name="VExpenseSalePartnerly" EntityType="db293_ActionTimeDbModel.VExpenseSalePartnerly" />
+          <FunctionImport Name="ResetExpenseDocument">
+          <Parameter Name="PeriodCode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddExpenseDocumentToActions" ReturnType="Collection(Int64)">
+            <Parameter Name="DocumentID" Mode="In" Type="Int64" />
             <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
             <Parameter Name="RecordIP" Mode="In" Type="String" />
           </FunctionImport>
@@ -22674,6 +22749,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="DistributedAmount" Type="Double" />
           <Property Name="TaxAmount" Type="Double" />
           <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="ExpenseGroupID" Type="Int16" />
+          <Property Name="StatusID" Type="Int16" />
         </EntityType>
         <EntityType Name="VExpenseDocumentRows">
           <Key>
@@ -22819,10 +22896,37 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Key>
             <PropertyRef Name="ChartGroupID" />
             <PropertyRef Name="LocationID" />
+            <PropertyRef Name="PeriodCode" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ChartGroupID" Type="Int16" Nullable="false" />
           <Property Name="LocationID" Type="Int32" Nullable="false" />
+          <Property Name="PeriodCode" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VExpenseSalePartnerless">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Currency" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="Total" Type="Double" />
+          <Property Name="Currency" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="TaxTotal" Type="Double" />
+        </EntityType>
+        <EntityType Name="VExpenseSalePartnerly">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="Total" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="TaxTotal" Type="Double" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -31390,6 +31494,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VExpenseDocumentLocationsVat">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VExpenseDocumentLocationsVat">
               <MappingFragment StoreEntitySet="VExpenseDocumentLocationsVat">
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="ExpenseGroupID" ColumnName="ExpenseGroupID" />
                 <ScalarProperty Name="Currency" ColumnName="Currency" />
                 <ScalarProperty Name="TaxAmount" ColumnName="TaxAmount" />
                 <ScalarProperty Name="DistributedAmount" ColumnName="DistributedAmount" />
@@ -31552,6 +31658,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="ExpenseChartGroupItems">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ExpenseChartGroupItems">
               <MappingFragment StoreEntitySet="ExpenseChartGroupItems">
+                <ScalarProperty Name="PeriodCode" ColumnName="PeriodCode" />
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="ChartGroupID" ColumnName="ChartGroupID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -31560,6 +31667,34 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AddExpenseDocumentGroupRowsChart" FunctionName="db293_ActionTimeDbModel.Store.AddExpenseDocumentGroupRowsChart" />
           <FunctionImportMapping FunctionImportName="AddExpenseDocumentGroupRowsChartLoc" FunctionName="db293_ActionTimeDbModel.Store.AddExpenseDocumentGroupRowsChartLoc" />
+          <EntitySetMapping Name="VExpenseSalePartnerless">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VExpenseSalePartnerless">
+              <MappingFragment StoreEntitySet="VExpenseSalePartnerless">
+                <ScalarProperty Name="TaxTotal" ColumnName="TaxTotal" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VExpenseSalePartnerly">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VExpenseSalePartnerly">
+              <MappingFragment StoreEntitySet="VExpenseSalePartnerly">
+                <ScalarProperty Name="TaxTotal" ColumnName="TaxTotal" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ResetExpenseDocument" FunctionName="db293_ActionTimeDbModel.Store.ResetExpenseDocument" />
+          <FunctionImportMapping FunctionImportName="AddExpenseDocumentToActions" FunctionName="db293_ActionTimeDbModel.Store.AddExpenseDocumentToActions" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

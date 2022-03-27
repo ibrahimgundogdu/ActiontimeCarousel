@@ -77,7 +77,7 @@
                 <option value="" label="Dağılım Seçiminiz"></option>
                 @foreach (var item in Model.ExpenseChartGroups.OrderBy(x => x.SortBy))
                 {
-                    <option value="@item.ID" @(Model.Filters.DistributeGroupID == item.ID ? "selected" : "")>@(Html.Raw($"<strong>{item.GroupCode} {item.GroupName}</strong>"))</option>
+                    <option value="@item.ID" @(Model.Filters?.DistributeGroupID == item.ID ? "selected" : "")>@(Html.Raw($"<strong>{item.GroupCode} {item.GroupName}</strong>"))</option>
                 }
             </select>
         </div>
