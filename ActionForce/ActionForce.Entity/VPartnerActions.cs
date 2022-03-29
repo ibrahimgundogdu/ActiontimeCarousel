@@ -12,7 +12,7 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class PartnerActions
+    public partial class VPartnerActions
     {
         public long ID { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
@@ -39,5 +39,7 @@ namespace ActionForce.Entity
         public Nullable<int> UpdateEmployeeID { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public Nullable<System.Guid> ProcessUID { get; set; }
+        public string FullName { get; set; }
+        public string LocationFullName { get; set; }
     }
 }

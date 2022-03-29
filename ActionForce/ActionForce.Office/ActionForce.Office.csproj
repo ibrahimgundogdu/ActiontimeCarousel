@@ -2383,6 +2383,7 @@
     <Compile Include="Models\DataModels\PosTerminalDataModel.cs" />
     <Compile Include="Models\FilterModel\AnimalFilterModel.cs" />
     <Compile Include="Models\FilterModel\MallMotoFilterModel.cs" />
+    <Compile Include="Models\FilterModel\PartnerFilterModel.cs" />
     <Compile Include="Models\FilterModel\PosFilterModel.cs" />
     <Compile Include="Models\FormModels\ArrangeFormModel.cs" />
     <Compile Include="Models\FormModels\CostumeTypeFormModel.cs" />
@@ -2432,6 +2433,8 @@
     <Compile Include="Models\FormModels\LocationMallMotoFormModel.cs" />
     <Compile Include="Models\FormModels\MallMotoColorFormModel.cs" />
     <Compile Include="Models\FormModels\MargeSaleFormModel.cs" />
+    <Compile Include="Models\FormModels\PartnerEarnFormModel.cs" />
+    <Compile Include="Models\FormModels\PartnerPaymentFormModel.cs" />
     <Compile Include="Models\FormModels\PosFormModel.cs" />
     <Compile Include="Models\LocationPart.cs" />
     <Compile Include="Models\Location\LocationEmployeeModel.cs" />
@@ -2829,6 +2832,12 @@
     <Content Include="Views\Expense\NewItem.cshtml" />
     <Content Include="Views\Expense\Cost.cshtml" />
     <Content Include="Views\Partner\Index.cshtml" />
+    <Content Include="Views\Partner\Payments.cshtml" />
+    <Content Include="Views\Partner\NewPaymentDocument.cshtml" />
+    <Content Include="Views\Partner\PaymentDetail.cshtml" />
+    <Content Include="Views\Partner\Earns.cshtml" />
+    <Content Include="Views\Partner\EarnDetail.cshtml" />
+    <Content Include="Views\Partner\NewEarnDocument.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

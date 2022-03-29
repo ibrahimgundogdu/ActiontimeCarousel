@@ -403,13 +403,22 @@ namespace ActionForce.Entity
         public virtual DbSet<VExpenseDocumentRows> VExpenseDocumentRows { get; set; }
         public virtual DbSet<VExpenseActions> VExpenseActions { get; set; }
         public virtual DbSet<Partner> Partner { get; set; }
-        public virtual DbSet<PartnerActions> PartnerActions { get; set; }
         public virtual DbSet<Partnership> Partnership { get; set; }
         public virtual DbSet<PartnerUser> PartnerUser { get; set; }
         public virtual DbSet<ExpenseChartGroup> ExpenseChartGroup { get; set; }
         public virtual DbSet<ExpenseChartGroupItems> ExpenseChartGroupItems { get; set; }
         public virtual DbSet<VExpenseSalePartnerless> VExpenseSalePartnerless { get; set; }
         public virtual DbSet<VExpenseSalePartnerly> VExpenseSalePartnerly { get; set; }
+        public virtual DbSet<PartnerActions> PartnerActions { get; set; }
+        public virtual DbSet<PartnerActionType> PartnerActionType { get; set; }
+        public virtual DbSet<DocumentPartnerEarn> DocumentPartnerEarn { get; set; }
+        public virtual DbSet<DocumentPartnerEarnRow> DocumentPartnerEarnRow { get; set; }
+        public virtual DbSet<DocumentPartnerPayment> DocumentPartnerPayment { get; set; }
+        public virtual DbSet<VDocumentPartnerPayment> VDocumentPartnerPayment { get; set; }
+        public virtual DbSet<VPartnership> VPartnership { get; set; }
+        public virtual DbSet<VDocumentPartnerEarn> VDocumentPartnerEarn { get; set; }
+        public virtual DbSet<VDocumentPartnerEarnRow> VDocumentPartnerEarnRow { get; set; }
+        public virtual DbSet<VPartnerActions> VPartnerActions { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -3367,27 +3376,6 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationVatAmountMonthly_Result>("GetLocationVatAmountMonthly", dateBeginParameter, dateEndParameter, ourCompanyIDParameter, locationIDParameter);
         }
     
-        public virtual ObjectResult<Nullable<long>> AddExpenseDocumentGroupRowsChart(Nullable<long> documentID, Nullable<short> groupID, Nullable<int> recordEmployeeID, string recordIP)
-        {
-            var documentIDParameter = documentID.HasValue ?
-                new ObjectParameter("DocumentID", documentID) :
-                new ObjectParameter("DocumentID", typeof(long));
-    
-            var groupIDParameter = groupID.HasValue ?
-                new ObjectParameter("GroupID", groupID) :
-                new ObjectParameter("GroupID", typeof(short));
-    
-            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
-                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
-                new ObjectParameter("RecordEmployeeID", typeof(int));
-    
-            var recordIPParameter = recordIP != null ?
-                new ObjectParameter("RecordIP", recordIP) :
-                new ObjectParameter("RecordIP", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddExpenseDocumentGroupRowsChart", documentIDParameter, groupIDParameter, recordEmployeeIDParameter, recordIPParameter);
-        }
-    
         public virtual ObjectResult<Nullable<long>> AddExpenseDocumentGroupRowsChartLoc(Nullable<long> documentID, Nullable<short> groupID, Nullable<int> locationID, Nullable<int> recordEmployeeID, string recordIP)
         {
             var documentIDParameter = documentID.HasValue ?
@@ -3437,6 +3425,86 @@ namespace ActionForce.Entity
                 new ObjectParameter("RecordIP", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddExpenseDocumentToActions", documentIDParameter, recordEmployeeIDParameter, recordIPParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> AddExpenseDocumentGroupRowsChart(Nullable<long> documentID, Nullable<short> groupID, Nullable<int> recordEmployeeID, string recordIP)
+        {
+            var documentIDParameter = documentID.HasValue ?
+                new ObjectParameter("DocumentID", documentID) :
+                new ObjectParameter("DocumentID", typeof(long));
+    
+            var groupIDParameter = groupID.HasValue ?
+                new ObjectParameter("GroupID", groupID) :
+                new ObjectParameter("GroupID", typeof(short));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddExpenseDocumentGroupRowsChart", documentIDParameter, groupIDParameter, recordEmployeeIDParameter, recordIPParameter);
+        }
+    
+        public virtual ObjectResult<string> AddPartnerEarnDocument(Nullable<int> partnerID, string periodCode, Nullable<int> recordEmployeeID, string recordIP)
+        {
+            var partnerIDParameter = partnerID.HasValue ?
+                new ObjectParameter("PartnerID", partnerID) :
+                new ObjectParameter("PartnerID", typeof(int));
+    
+            var periodCodeParameter = periodCode != null ?
+                new ObjectParameter("PeriodCode", periodCode) :
+                new ObjectParameter("PeriodCode", typeof(string));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("AddPartnerEarnDocument", partnerIDParameter, periodCodeParameter, recordEmployeeIDParameter, recordIPParameter);
+        }
+    
+        public virtual int AddPartnerPaymentToAction(Nullable<long> documentID, Nullable<int> recordEmployeeID)
+        {
+            var documentIDParameter = documentID.HasValue ?
+                new ObjectParameter("DocumentID", documentID) :
+                new ObjectParameter("DocumentID", typeof(long));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddPartnerPaymentToAction", documentIDParameter, recordEmployeeIDParameter);
+        }
+    
+        public virtual int AddPartnerShipEarnDocument(Nullable<int> partnerID, Nullable<int> locationID, Nullable<long> documentID, string periodCode, Nullable<int> recordEmployeeID)
+        {
+            var partnerIDParameter = partnerID.HasValue ?
+                new ObjectParameter("PartnerID", partnerID) :
+                new ObjectParameter("PartnerID", typeof(int));
+    
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var documentIDParameter = documentID.HasValue ?
+                new ObjectParameter("DocumentID", documentID) :
+                new ObjectParameter("DocumentID", typeof(long));
+    
+            var periodCodeParameter = periodCode != null ?
+                new ObjectParameter("PeriodCode", periodCode) :
+                new ObjectParameter("PeriodCode", typeof(string));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddPartnerShipEarnDocument", partnerIDParameter, locationIDParameter, documentIDParameter, periodCodeParameter, recordEmployeeIDParameter);
         }
     }
 }

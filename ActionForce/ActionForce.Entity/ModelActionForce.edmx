@@ -1616,6 +1616,88 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.City' does not have a prima
           <Property Name="Counter" Type="bigint" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
+        <EntityType Name="DocumentPartnerEarn">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="PeriodCode" Type="nvarchar" MaxLength="8" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="DocumentNumber" Type="nvarchar" MaxLength="16" />
+          <Property Name="FromBankAccountID" Type="int" />
+          <Property Name="PartnerID" Type="int" />
+          <Property Name="PartnerRate" Type="float" />
+          <Property Name="CapacityRate" Type="float" />
+          <Property Name="GrossAmount" Type="float" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="AmountEarned" Type="float" StoreGeneratedPattern="Computed" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="DocumentDate" Type="date" />
+          <Property Name="Description" Type="nvarchar" MaxLength="250" />
+          <Property Name="PartnerActionTypeID" Type="int" />
+          <Property Name="ActionTypeName" Type="nvarchar" MaxLength="80" />
+          <Property Name="ExchangeRate" Type="float" />
+          <Property Name="SystemAmount" Type="float" />
+          <Property Name="SystemCurrency" Type="nvarchar" MaxLength="4" />
+          <Property Name="ReferenceNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateEmployee" Type="int" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UID" Type="uniqueidentifier" />
+          <Property Name="IsAutoCompute" Type="bit" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="DocumentPartnerEarnRow">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DocumentID" Type="bigint" />
+          <Property Name="ExpenseGroupID" Type="smallint" />
+          <Property Name="BaseAmount" Type="float" />
+          <Property Name="PartnerRate" Type="float" />
+          <Property Name="CapacityRate" Type="float" />
+          <Property Name="EarnedAmount" Type="float" />
+          <Property Name="PayedAmount" Type="float" />
+          <Property Name="BalanceAmount" Type="float" StoreGeneratedPattern="Computed" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="CreatedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="DocumentPartnerPayment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="PeriodCode" Type="nvarchar" MaxLength="8" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="DocumentNumber" Type="nvarchar" MaxLength="16" />
+          <Property Name="FromBankAccountID" Type="int" />
+          <Property Name="PayMethodID" Type="smallint" />
+          <Property Name="PartnerID" Type="int" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="DocumentDate" Type="date" />
+          <Property Name="Description" Type="nvarchar" MaxLength="250" />
+          <Property Name="PartnerActionTypeID" Type="int" />
+          <Property Name="ActionTypeName" Type="nvarchar" MaxLength="80" />
+          <Property Name="ExchangeRate" Type="float" />
+          <Property Name="SystemAmount" Type="float" />
+          <Property Name="SystemCurrency" Type="nvarchar" MaxLength="4" />
+          <Property Name="ReferenceNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateEmployee" Type="int" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UID" Type="uniqueidentifier" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
         <EntityType Name="DocumentPosCancel">
           <Key>
             <PropertyRef Name="ID" />
@@ -3246,9 +3328,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.ExpenseGroup' does not have
           <Property Name="OurCompanyID" Type="int" />
           <Property Name="PartnerID" Type="int" />
           <Property Name="LocationID" Type="int" />
-          <Property Name="ExpenseActionID" Type="bigint" />
-          <Property Name="ExpenseGroupID" Type="smallint" />
-          <Property Name="ExpenseItemID" Type="smallint" />
           <Property Name="ActionDate" Type="date" />
           <Property Name="ProcessName" Type="nvarchar" MaxLength="50" />
           <Property Name="ProcessID" Type="bigint" />
@@ -3260,15 +3339,25 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.ExpenseGroup' does not have
           <Property Name="Description" Type="nvarchar" MaxLength="500" />
           <Property Name="TotalAmount" Type="float" />
           <Property Name="PartnershipRate" Type="float" />
+          <Property Name="CapacityRate" Type="float" />
           <Property Name="Collection" Type="float" />
           <Property Name="Payment" Type="float" />
-          <Property Name="Amount" Type="float" />
+          <Property Name="Amount" Type="float" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
           <Property Name="RecordEmployeeID" Type="int" />
           <Property Name="RecordDate" Type="datetime" />
           <Property Name="UpdateEmployeeID" Type="int" />
           <Property Name="UpdateDate" Type="datetime" />
           <Property Name="ProcessUID" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="PartnerActionType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ActionTypeName" Type="nvarchar" MaxLength="40" />
+          <Property Name="SortBy" Type="char" MaxLength="2" />
+          <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityType Name="Partnership">
           <Key>
@@ -5775,6 +5864,102 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentExpenseSlip' does 
           <Property Name="FullName" Type="nvarchar" MaxLength="150" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentPartnerEarn' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VDocumentPartnerEarn">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="PeriodCode" Type="nvarchar" MaxLength="8" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="DocumentNumber" Type="nvarchar" MaxLength="16" />
+          <Property Name="FromBankAccountID" Type="int" />
+          <Property Name="PartnerID" Type="int" />
+          <Property Name="PartnerRate" Type="float" />
+          <Property Name="CapacityRate" Type="float" />
+          <Property Name="GrossAmount" Type="float" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="AmountEarned" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="DocumentDate" Type="date" />
+          <Property Name="Description" Type="nvarchar" MaxLength="250" />
+          <Property Name="PartnerActionTypeID" Type="int" />
+          <Property Name="ActionTypeName" Type="nvarchar" MaxLength="80" />
+          <Property Name="ExchangeRate" Type="float" />
+          <Property Name="SystemAmount" Type="float" />
+          <Property Name="SystemCurrency" Type="nvarchar" MaxLength="4" />
+          <Property Name="ReferenceNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateEmployee" Type="int" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UID" Type="uniqueidentifier" />
+          <Property Name="IsAutoCompute" Type="bit" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
+          <Property Name="AccountCode" Type="nvarchar" MaxLength="20" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentPartnerEarnRow' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VDocumentPartnerEarnRow">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="DocumentID" Type="bigint" />
+          <Property Name="ExpenseGroupID" Type="smallint" />
+          <Property Name="BaseAmount" Type="float" />
+          <Property Name="PartnerRate" Type="float" />
+          <Property Name="CapacityRate" Type="float" />
+          <Property Name="EarnedAmount" Type="float" />
+          <Property Name="PayedAmount" Type="float" />
+          <Property Name="BalanceAmount" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ExpenseGroupName" Type="nvarchar" MaxLength="40" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentPartnerPayment' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VDocumentPartnerPayment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="PeriodCode" Type="nvarchar" MaxLength="8" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="DocumentNumber" Type="nvarchar" MaxLength="16" />
+          <Property Name="FromBankAccountID" Type="int" />
+          <Property Name="PayMethodID" Type="smallint" />
+          <Property Name="PartnerID" Type="int" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="DocumentDate" Type="date" />
+          <Property Name="Description" Type="nvarchar" MaxLength="250" />
+          <Property Name="PartnerActionTypeID" Type="int" />
+          <Property Name="ActionTypeName" Type="nvarchar" MaxLength="80" />
+          <Property Name="ExchangeRate" Type="float" />
+          <Property Name="SystemAmount" Type="float" />
+          <Property Name="SystemCurrency" Type="nvarchar" MaxLength="4" />
+          <Property Name="ReferenceNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateEmployee" Type="int" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UID" Type="uniqueidentifier" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
+          <Property Name="AccountCode" Type="nvarchar" MaxLength="20" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="MethodName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentPosCancel' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VDocumentPosCancel">
           <Key>
@@ -7235,6 +7420,58 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VMall' does not have a prim
           <Property Name="LeasingCompanyName" Type="nvarchar" MaxLength="150" />
           <Property Name="InvestorCompanyName" Type="nvarchar" MaxLength="150" />
           <Property Name="MallUID" Type="uniqueidentifier" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPartnerActions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VPartnerActions">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="Amount" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="PartnerID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="ActionDate" Type="date" />
+          <Property Name="ProcessName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProcessID" Type="bigint" />
+          <Property Name="ProcessDate" Type="date" />
+          <Property Name="PeriodCode" Type="nvarchar" MaxLength="8" />
+          <Property Name="ExpenseYear" Type="int" />
+          <Property Name="ExpenseMonth" Type="int" />
+          <Property Name="DocumentNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="TotalAmount" Type="float" />
+          <Property Name="PartnershipRate" Type="float" />
+          <Property Name="CapacityRate" Type="float" />
+          <Property Name="Collection" Type="float" />
+          <Property Name="Payment" Type="float" />
+          <Property Name="Amount" Type="float" Nullable="false" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="UpdateEmployeeID" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="ProcessUID" Type="uniqueidentifier" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPartnership' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VPartnership">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="PartnerID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="PartnershipRate" Type="float" />
+          <Property Name="DateStart" Type="date" />
+          <Property Name="DateEnd" Type="date" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="AccountCode" Type="nvarchar" MaxLength="20" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPersonalDocument' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -8776,6 +9013,23 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="Description" Type="nvarchar" Mode="In" />
           <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="AddPartnerEarnDocument" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PartnerID" Type="int" Mode="In" />
+          <Parameter Name="PeriodCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
+          <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="AddPartnerPaymentToAction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DocumentID" Type="bigint" Mode="In" />
+          <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="AddPartnerShipEarnDocument" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PartnerID" Type="int" Mode="In" />
+          <Parameter Name="LocationID" Type="int" Mode="In" />
+          <Parameter Name="DocumentID" Type="bigint" Mode="In" />
+          <Parameter Name="PeriodCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
+        </Function>
         <Function Name="AddPosBasket" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
           <Parameter Name="EmployeeID" Type="int" Mode="In" />
@@ -9375,6 +9629,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="DocumentEmployeePermit" EntityType="Self.DocumentEmployeePermit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentExpenseSlip" EntityType="Self.DocumentExpenseSlip" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentNumber" EntityType="Self.DocumentNumber" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DocumentPartnerEarn" EntityType="Self.DocumentPartnerEarn" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DocumentPartnerEarnRow" EntityType="Self.DocumentPartnerEarnRow" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DocumentPartnerPayment" EntityType="Self.DocumentPartnerPayment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentPosCancel" EntityType="Self.DocumentPosCancel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentPosCollections" EntityType="Self.DocumentPosCollections" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentPosRefund" EntityType="Self.DocumentPosRefund" Schema="dbo" store:Type="Tables" />
@@ -9465,6 +9722,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="OurCompanyPartner" EntityType="Self.OurCompanyPartner" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Partner" EntityType="Self.Partner" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PartnerActions" EntityType="Self.PartnerActions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PartnerActionType" EntityType="Self.PartnerActionType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Partnership" EntityType="Self.Partnership" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PartnerUser" EntityType="Self.PartnerUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PayMethod" EntityType="Self.PayMethod" Schema="dbo" store:Type="Tables" />
@@ -10437,6 +10695,93 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentExpenseSlip].[PosStatusID] AS [PosStatusID], 
     [VDocumentExpenseSlip].[FullName] AS [FullName]
     FROM [dbo].[VDocumentExpenseSlip] AS [VDocumentExpenseSlip]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VDocumentPartnerEarn" EntityType="Self.VDocumentPartnerEarn" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VDocumentPartnerEarn].[ID] AS [ID], 
+    [VDocumentPartnerEarn].[OurCompanyID] AS [OurCompanyID], 
+    [VDocumentPartnerEarn].[PeriodCode] AS [PeriodCode], 
+    [VDocumentPartnerEarn].[LocationID] AS [LocationID], 
+    [VDocumentPartnerEarn].[DocumentNumber] AS [DocumentNumber], 
+    [VDocumentPartnerEarn].[FromBankAccountID] AS [FromBankAccountID], 
+    [VDocumentPartnerEarn].[PartnerID] AS [PartnerID], 
+    [VDocumentPartnerEarn].[PartnerRate] AS [PartnerRate], 
+    [VDocumentPartnerEarn].[CapacityRate] AS [CapacityRate], 
+    [VDocumentPartnerEarn].[GrossAmount] AS [GrossAmount], 
+    [VDocumentPartnerEarn].[Amount] AS [Amount], 
+    [VDocumentPartnerEarn].[AmountEarned] AS [AmountEarned], 
+    [VDocumentPartnerEarn].[Currency] AS [Currency], 
+    [VDocumentPartnerEarn].[DocumentDate] AS [DocumentDate], 
+    [VDocumentPartnerEarn].[Description] AS [Description], 
+    [VDocumentPartnerEarn].[PartnerActionTypeID] AS [PartnerActionTypeID], 
+    [VDocumentPartnerEarn].[ActionTypeName] AS [ActionTypeName], 
+    [VDocumentPartnerEarn].[ExchangeRate] AS [ExchangeRate], 
+    [VDocumentPartnerEarn].[SystemAmount] AS [SystemAmount], 
+    [VDocumentPartnerEarn].[SystemCurrency] AS [SystemCurrency], 
+    [VDocumentPartnerEarn].[ReferenceNumber] AS [ReferenceNumber], 
+    [VDocumentPartnerEarn].[RecordDate] AS [RecordDate], 
+    [VDocumentPartnerEarn].[RecordEmployeeID] AS [RecordEmployeeID], 
+    [VDocumentPartnerEarn].[RecordIP] AS [RecordIP], 
+    [VDocumentPartnerEarn].[UpdateDate] AS [UpdateDate], 
+    [VDocumentPartnerEarn].[UpdateEmployee] AS [UpdateEmployee], 
+    [VDocumentPartnerEarn].[UpdateIP] AS [UpdateIP], 
+    [VDocumentPartnerEarn].[UID] AS [UID], 
+    [VDocumentPartnerEarn].[IsAutoCompute] AS [IsAutoCompute], 
+    [VDocumentPartnerEarn].[IsActive] AS [IsActive], 
+    [VDocumentPartnerEarn].[LocationFullName] AS [LocationFullName], 
+    [VDocumentPartnerEarn].[AccountCode] AS [AccountCode], 
+    [VDocumentPartnerEarn].[FullName] AS [FullName]
+    FROM [dbo].[VDocumentPartnerEarn] AS [VDocumentPartnerEarn]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VDocumentPartnerEarnRow" EntityType="Self.VDocumentPartnerEarnRow" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VDocumentPartnerEarnRow].[ID] AS [ID], 
+    [VDocumentPartnerEarnRow].[DocumentID] AS [DocumentID], 
+    [VDocumentPartnerEarnRow].[ExpenseGroupID] AS [ExpenseGroupID], 
+    [VDocumentPartnerEarnRow].[BaseAmount] AS [BaseAmount], 
+    [VDocumentPartnerEarnRow].[PartnerRate] AS [PartnerRate], 
+    [VDocumentPartnerEarnRow].[CapacityRate] AS [CapacityRate], 
+    [VDocumentPartnerEarnRow].[EarnedAmount] AS [EarnedAmount], 
+    [VDocumentPartnerEarnRow].[PayedAmount] AS [PayedAmount], 
+    [VDocumentPartnerEarnRow].[BalanceAmount] AS [BalanceAmount], 
+    [VDocumentPartnerEarnRow].[Currency] AS [Currency], 
+    [VDocumentPartnerEarnRow].[CreatedDate] AS [CreatedDate], 
+    [VDocumentPartnerEarnRow].[ExpenseGroupName] AS [ExpenseGroupName]
+    FROM [dbo].[VDocumentPartnerEarnRow] AS [VDocumentPartnerEarnRow]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VDocumentPartnerPayment" EntityType="Self.VDocumentPartnerPayment" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VDocumentPartnerPayment].[ID] AS [ID], 
+    [VDocumentPartnerPayment].[OurCompanyID] AS [OurCompanyID], 
+    [VDocumentPartnerPayment].[PeriodCode] AS [PeriodCode], 
+    [VDocumentPartnerPayment].[LocationID] AS [LocationID], 
+    [VDocumentPartnerPayment].[DocumentNumber] AS [DocumentNumber], 
+    [VDocumentPartnerPayment].[FromBankAccountID] AS [FromBankAccountID], 
+    [VDocumentPartnerPayment].[PayMethodID] AS [PayMethodID], 
+    [VDocumentPartnerPayment].[PartnerID] AS [PartnerID], 
+    [VDocumentPartnerPayment].[Amount] AS [Amount], 
+    [VDocumentPartnerPayment].[Currency] AS [Currency], 
+    [VDocumentPartnerPayment].[DocumentDate] AS [DocumentDate], 
+    [VDocumentPartnerPayment].[Description] AS [Description], 
+    [VDocumentPartnerPayment].[PartnerActionTypeID] AS [PartnerActionTypeID], 
+    [VDocumentPartnerPayment].[ActionTypeName] AS [ActionTypeName], 
+    [VDocumentPartnerPayment].[ExchangeRate] AS [ExchangeRate], 
+    [VDocumentPartnerPayment].[SystemAmount] AS [SystemAmount], 
+    [VDocumentPartnerPayment].[SystemCurrency] AS [SystemCurrency], 
+    [VDocumentPartnerPayment].[ReferenceNumber] AS [ReferenceNumber], 
+    [VDocumentPartnerPayment].[RecordDate] AS [RecordDate], 
+    [VDocumentPartnerPayment].[RecordEmployeeID] AS [RecordEmployeeID], 
+    [VDocumentPartnerPayment].[RecordIP] AS [RecordIP], 
+    [VDocumentPartnerPayment].[UpdateDate] AS [UpdateDate], 
+    [VDocumentPartnerPayment].[UpdateEmployee] AS [UpdateEmployee], 
+    [VDocumentPartnerPayment].[UpdateIP] AS [UpdateIP], 
+    [VDocumentPartnerPayment].[UID] AS [UID], 
+    [VDocumentPartnerPayment].[IsActive] AS [IsActive], 
+    [VDocumentPartnerPayment].[LocationFullName] AS [LocationFullName], 
+    [VDocumentPartnerPayment].[AccountCode] AS [AccountCode], 
+    [VDocumentPartnerPayment].[FullName] AS [FullName], 
+    [VDocumentPartnerPayment].[MethodName] AS [MethodName]
+    FROM [dbo].[VDocumentPartnerPayment] AS [VDocumentPartnerPayment]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentPosCancel" EntityType="Self.VDocumentPosCancel" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -11728,6 +12073,51 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VMall].[InvestorCompanyName] AS [InvestorCompanyName], 
     [VMall].[MallUID] AS [MallUID]
     FROM [dbo].[VMall] AS [VMall]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VPartnerActions" EntityType="Self.VPartnerActions" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VPartnerActions].[ID] AS [ID], 
+    [VPartnerActions].[OurCompanyID] AS [OurCompanyID], 
+    [VPartnerActions].[PartnerID] AS [PartnerID], 
+    [VPartnerActions].[LocationID] AS [LocationID], 
+    [VPartnerActions].[ActionDate] AS [ActionDate], 
+    [VPartnerActions].[ProcessName] AS [ProcessName], 
+    [VPartnerActions].[ProcessID] AS [ProcessID], 
+    [VPartnerActions].[ProcessDate] AS [ProcessDate], 
+    [VPartnerActions].[PeriodCode] AS [PeriodCode], 
+    [VPartnerActions].[ExpenseYear] AS [ExpenseYear], 
+    [VPartnerActions].[ExpenseMonth] AS [ExpenseMonth], 
+    [VPartnerActions].[DocumentNumber] AS [DocumentNumber], 
+    [VPartnerActions].[Description] AS [Description], 
+    [VPartnerActions].[TotalAmount] AS [TotalAmount], 
+    [VPartnerActions].[PartnershipRate] AS [PartnershipRate], 
+    [VPartnerActions].[CapacityRate] AS [CapacityRate], 
+    [VPartnerActions].[Collection] AS [Collection], 
+    [VPartnerActions].[Payment] AS [Payment], 
+    [VPartnerActions].[Amount] AS [Amount], 
+    [VPartnerActions].[Currency] AS [Currency], 
+    [VPartnerActions].[RecordEmployeeID] AS [RecordEmployeeID], 
+    [VPartnerActions].[RecordDate] AS [RecordDate], 
+    [VPartnerActions].[UpdateEmployeeID] AS [UpdateEmployeeID], 
+    [VPartnerActions].[UpdateDate] AS [UpdateDate], 
+    [VPartnerActions].[ProcessUID] AS [ProcessUID], 
+    [VPartnerActions].[FullName] AS [FullName], 
+    [VPartnerActions].[LocationFullName] AS [LocationFullName]
+    FROM [dbo].[VPartnerActions] AS [VPartnerActions]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VPartnership" EntityType="Self.VPartnership" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VPartnership].[ID] AS [ID], 
+    [VPartnership].[PartnerID] AS [PartnerID], 
+    [VPartnership].[LocationID] AS [LocationID], 
+    [VPartnership].[PartnershipRate] AS [PartnershipRate], 
+    [VPartnership].[DateStart] AS [DateStart], 
+    [VPartnership].[DateEnd] AS [DateEnd], 
+    [VPartnership].[IsActive] AS [IsActive], 
+    [VPartnership].[AccountCode] AS [AccountCode], 
+    [VPartnership].[FullName] AS [FullName], 
+    [VPartnership].[LocationFullName] AS [LocationFullName]
+    FROM [dbo].[VPartnership] AS [VPartnership]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VPersonalDocument" EntityType="Self.VPersonalDocument" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -13889,17 +14279,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VExpenseDocumentRows" EntityType="db293_ActionTimeDbModel.VExpenseDocumentRows" />
           <EntitySet Name="VExpenseActions" EntityType="db293_ActionTimeDbModel.VExpenseActions" />
           <EntitySet Name="Partner" EntityType="db293_ActionTimeDbModel.Partner" />
-          <EntitySet Name="PartnerActions" EntityType="db293_ActionTimeDbModel.PartnerActions" />
           <EntitySet Name="Partnership" EntityType="db293_ActionTimeDbModel.Partnership" />
           <EntitySet Name="PartnerUser" EntityType="db293_ActionTimeDbModel.PartnerUser" />
           <EntitySet Name="ExpenseChartGroup" EntityType="db293_ActionTimeDbModel.ExpenseChartGroup" />
           <EntitySet Name="ExpenseChartGroupItems" EntityType="db293_ActionTimeDbModel.ExpenseChartGroupItems" />
-          <FunctionImport Name="AddExpenseDocumentGroupRowsChart" ReturnType="Collection(Int64)">
-            <Parameter Name="DocumentID" Mode="In" Type="Int64" />
-            <Parameter Name="GroupID" Mode="In" Type="Int16" />
-            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
-            <Parameter Name="RecordIP" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="AddExpenseDocumentGroupRowsChartLoc" ReturnType="Collection(Int64)">
             <Parameter Name="DocumentID" Mode="In" Type="Int64" />
             <Parameter Name="GroupID" Mode="In" Type="Int16" />
@@ -13917,6 +14300,39 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
             <Parameter Name="RecordIP" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="PartnerActions" EntityType="db293_ActionTimeDbModel.PartnerActions" />
+          <EntitySet Name="PartnerActionType" EntityType="db293_ActionTimeDbModel.PartnerActionType" />
+          <FunctionImport Name="AddExpenseDocumentGroupRowsChart" ReturnType="Collection(Int64)">
+            <Parameter Name="DocumentID" Mode="In" Type="Int64" />
+            <Parameter Name="GroupID" Mode="In" Type="Int16" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordIP" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="DocumentPartnerEarn" EntityType="db293_ActionTimeDbModel.DocumentPartnerEarn" />
+          <EntitySet Name="DocumentPartnerEarnRow" EntityType="db293_ActionTimeDbModel.DocumentPartnerEarnRow" />
+          <EntitySet Name="DocumentPartnerPayment" EntityType="db293_ActionTimeDbModel.DocumentPartnerPayment" />
+          <EntitySet Name="VDocumentPartnerPayment" EntityType="db293_ActionTimeDbModel.VDocumentPartnerPayment" />
+          <EntitySet Name="VPartnership" EntityType="db293_ActionTimeDbModel.VPartnership" />
+          <EntitySet Name="VDocumentPartnerEarn" EntityType="db293_ActionTimeDbModel.VDocumentPartnerEarn" />
+          <EntitySet Name="VDocumentPartnerEarnRow" EntityType="db293_ActionTimeDbModel.VDocumentPartnerEarnRow" />
+          <FunctionImport Name="AddPartnerEarnDocument" ReturnType="Collection(String)">
+            <Parameter Name="PartnerID" Mode="In" Type="Int32" />
+            <Parameter Name="PeriodCode" Mode="In" Type="String" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordIP" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddPartnerPaymentToAction">
+            <Parameter Name="DocumentID" Mode="In" Type="Int64" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AddPartnerShipEarnDocument">
+            <Parameter Name="PartnerID" Mode="In" Type="Int32" />
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="DocumentID" Mode="In" Type="Int64" />
+            <Parameter Name="PeriodCode" Mode="In" Type="String" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="VPartnerActions" EntityType="db293_ActionTimeDbModel.VPartnerActions" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -22824,38 +23240,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UID" Type="Guid" />
           <Property Name="IsActive" Type="Boolean" />
         </EntityType>
-        <EntityType Name="PartnerActions">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OurCompanyID" Type="Int32" />
-          <Property Name="PartnerID" Type="Int32" />
-          <Property Name="LocationID" Type="Int32" />
-          <Property Name="ExpenseActionID" Type="Int64" />
-          <Property Name="ExpenseGroupID" Type="Int16" />
-          <Property Name="ExpenseItemID" Type="Int16" />
-          <Property Name="ActionDate" Type="DateTime" Precision="0" />
-          <Property Name="ProcessName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ProcessID" Type="Int64" />
-          <Property Name="ProcessDate" Type="DateTime" Precision="0" />
-          <Property Name="PeriodCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
-          <Property Name="ExpenseYear" Type="Int32" />
-          <Property Name="ExpenseMonth" Type="Int32" />
-          <Property Name="DocumentNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="TotalAmount" Type="Double" />
-          <Property Name="PartnershipRate" Type="Double" />
-          <Property Name="Collection" Type="Double" />
-          <Property Name="Payment" Type="Double" />
-          <Property Name="Amount" Type="Double" />
-          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
-          <Property Name="RecordEmployeeID" Type="Int32" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdateEmployeeID" Type="Int32" />
-          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
-          <Property Name="ProcessUID" Type="Guid" />
-        </EntityType>
         <EntityType Name="Partnership">
           <Key>
             <PropertyRef Name="ID" />
@@ -22927,6 +23311,265 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Total" Type="Double" />
           <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Name="TaxTotal" Type="Double" />
+        </EntityType>
+        <EntityType Name="PartnerActions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="PartnerID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="ActionDate" Type="DateTime" Precision="0" />
+          <Property Name="ProcessName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessID" Type="Int64" />
+          <Property Name="ProcessDate" Type="DateTime" Precision="0" />
+          <Property Name="PeriodCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="ExpenseYear" Type="Int32" />
+          <Property Name="ExpenseMonth" Type="Int32" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="TotalAmount" Type="Double" />
+          <Property Name="PartnershipRate" Type="Double" />
+          <Property Name="CapacityRate" Type="Double" />
+          <Property Name="Collection" Type="Double" />
+          <Property Name="Payment" Type="Double" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="ProcessUID" Type="Guid" />
+        </EntityType>
+        <EntityType Name="PartnerActionType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ActionTypeName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="DocumentPartnerEarn">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="PeriodCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="FromBankAccountID" Type="Int32" />
+          <Property Name="PartnerID" Type="Int32" />
+          <Property Name="PartnerRate" Type="Double" />
+          <Property Name="CapacityRate" Type="Double" />
+          <Property Name="GrossAmount" Type="Double" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentDate" Type="DateTime" Precision="0" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="PartnerActionTypeID" Type="Int32" />
+          <Property Name="ActionTypeName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="ExchangeRate" Type="Double" />
+          <Property Name="SystemAmount" Type="Double" />
+          <Property Name="SystemCurrency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="ReferenceNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployee" Type="Int32" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UID" Type="Guid" />
+          <Property Name="IsAutoCompute" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="AmountEarned" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="DocumentPartnerEarnRow">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DocumentID" Type="Int64" />
+          <Property Name="ExpenseGroupID" Type="Int16" />
+          <Property Name="BaseAmount" Type="Double" />
+          <Property Name="PartnerRate" Type="Double" />
+          <Property Name="CapacityRate" Type="Double" />
+          <Property Name="EarnedAmount" Type="Double" />
+          <Property Name="PayedAmount" Type="Double" />
+          <Property Name="BalanceAmount" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="DocumentPartnerPayment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="FromBankAccountID" Type="Int32" />
+          <Property Name="PayMethodID" Type="Int16" />
+          <Property Name="PartnerID" Type="Int32" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentDate" Type="DateTime" Precision="0" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="PartnerActionTypeID" Type="Int32" />
+          <Property Name="ActionTypeName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="ExchangeRate" Type="Double" />
+          <Property Name="SystemAmount" Type="Double" />
+          <Property Name="SystemCurrency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="ReferenceNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployee" Type="Int32" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UID" Type="Guid" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="PeriodCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VDocumentPartnerPayment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="PeriodCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="FromBankAccountID" Type="Int32" />
+          <Property Name="PayMethodID" Type="Int16" />
+          <Property Name="PartnerID" Type="Int32" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentDate" Type="DateTime" Precision="0" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="PartnerActionTypeID" Type="Int32" />
+          <Property Name="ActionTypeName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="ExchangeRate" Type="Double" />
+          <Property Name="SystemAmount" Type="Double" />
+          <Property Name="SystemCurrency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="ReferenceNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployee" Type="Int32" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UID" Type="Guid" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
+          <Property Name="AccountCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="MethodName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VPartnership">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="PartnerID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="PartnershipRate" Type="Double" />
+          <Property Name="DateStart" Type="DateTime" Precision="0" />
+          <Property Name="DateEnd" Type="DateTime" Precision="0" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="AccountCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VDocumentPartnerEarn">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="PeriodCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="FromBankAccountID" Type="Int32" />
+          <Property Name="PartnerID" Type="Int32" />
+          <Property Name="PartnerRate" Type="Double" />
+          <Property Name="CapacityRate" Type="Double" />
+          <Property Name="GrossAmount" Type="Double" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentDate" Type="DateTime" Precision="0" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="PartnerActionTypeID" Type="Int32" />
+          <Property Name="ActionTypeName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="ExchangeRate" Type="Double" />
+          <Property Name="SystemAmount" Type="Double" />
+          <Property Name="SystemCurrency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="ReferenceNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployee" Type="Int32" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UID" Type="Guid" />
+          <Property Name="IsAutoCompute" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
+          <Property Name="AccountCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="AmountEarned" Type="Double" />
+        </EntityType>
+        <EntityType Name="VDocumentPartnerEarnRow">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="DocumentID" Type="Int64" />
+          <Property Name="ExpenseGroupID" Type="Int16" />
+          <Property Name="BaseAmount" Type="Double" />
+          <Property Name="PartnerRate" Type="Double" />
+          <Property Name="CapacityRate" Type="Double" />
+          <Property Name="EarnedAmount" Type="Double" />
+          <Property Name="PayedAmount" Type="Double" />
+          <Property Name="BalanceAmount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ExpenseGroupName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VPartnerActions">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="Amount" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="PartnerID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="ActionDate" Type="DateTime" Precision="0" />
+          <Property Name="ProcessName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessID" Type="Int64" />
+          <Property Name="ProcessDate" Type="DateTime" Precision="0" />
+          <Property Name="PeriodCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="ExpenseYear" Type="Int32" />
+          <Property Name="ExpenseMonth" Type="Int32" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="TotalAmount" Type="Double" />
+          <Property Name="PartnershipRate" Type="Double" />
+          <Property Name="CapacityRate" Type="Double" />
+          <Property Name="Collection" Type="Double" />
+          <Property Name="Payment" Type="Double" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="ProcessUID" Type="Guid" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -31583,39 +32226,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PartnerActions">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.PartnerActions">
-              <MappingFragment StoreEntitySet="PartnerActions">
-                <ScalarProperty Name="ProcessUID" ColumnName="ProcessUID" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Payment" ColumnName="Payment" />
-                <ScalarProperty Name="Collection" ColumnName="Collection" />
-                <ScalarProperty Name="PartnershipRate" ColumnName="PartnershipRate" />
-                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
-                <ScalarProperty Name="ExpenseMonth" ColumnName="ExpenseMonth" />
-                <ScalarProperty Name="ExpenseYear" ColumnName="ExpenseYear" />
-                <ScalarProperty Name="PeriodCode" ColumnName="PeriodCode" />
-                <ScalarProperty Name="ProcessDate" ColumnName="ProcessDate" />
-                <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
-                <ScalarProperty Name="ProcessName" ColumnName="ProcessName" />
-                <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
-                <ScalarProperty Name="ExpenseItemID" ColumnName="ExpenseItemID" />
-                <ScalarProperty Name="ExpenseGroupID" ColumnName="ExpenseGroupID" />
-                <ScalarProperty Name="ExpenseActionID" ColumnName="ExpenseActionID" />
-                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-                <ScalarProperty Name="PartnerID" ColumnName="PartnerID" />
-                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Partnership">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Partnership">
               <MappingFragment StoreEntitySet="Partnership">
@@ -31665,7 +32275,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="AddExpenseDocumentGroupRowsChart" FunctionName="db293_ActionTimeDbModel.Store.AddExpenseDocumentGroupRowsChart" />
           <FunctionImportMapping FunctionImportName="AddExpenseDocumentGroupRowsChartLoc" FunctionName="db293_ActionTimeDbModel.Store.AddExpenseDocumentGroupRowsChartLoc" />
           <EntitySetMapping Name="VExpenseSalePartnerless">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VExpenseSalePartnerless">
@@ -31695,6 +32304,278 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="ResetExpenseDocument" FunctionName="db293_ActionTimeDbModel.Store.ResetExpenseDocument" />
           <FunctionImportMapping FunctionImportName="AddExpenseDocumentToActions" FunctionName="db293_ActionTimeDbModel.Store.AddExpenseDocumentToActions" />
+          <EntitySetMapping Name="PartnerActions">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.PartnerActions">
+              <MappingFragment StoreEntitySet="PartnerActions">
+                <ScalarProperty Name="ProcessUID" ColumnName="ProcessUID" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Payment" ColumnName="Payment" />
+                <ScalarProperty Name="Collection" ColumnName="Collection" />
+                <ScalarProperty Name="CapacityRate" ColumnName="CapacityRate" />
+                <ScalarProperty Name="PartnershipRate" ColumnName="PartnershipRate" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="ExpenseMonth" ColumnName="ExpenseMonth" />
+                <ScalarProperty Name="ExpenseYear" ColumnName="ExpenseYear" />
+                <ScalarProperty Name="PeriodCode" ColumnName="PeriodCode" />
+                <ScalarProperty Name="ProcessDate" ColumnName="ProcessDate" />
+                <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+                <ScalarProperty Name="ProcessName" ColumnName="ProcessName" />
+                <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="PartnerID" ColumnName="PartnerID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PartnerActionType">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.PartnerActionType">
+              <MappingFragment StoreEntitySet="PartnerActionType">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddExpenseDocumentGroupRowsChart" FunctionName="db293_ActionTimeDbModel.Store.AddExpenseDocumentGroupRowsChart" />
+          <EntitySetMapping Name="DocumentPartnerEarn">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentPartnerEarn">
+              <MappingFragment StoreEntitySet="DocumentPartnerEarn">
+                <ScalarProperty Name="AmountEarned" ColumnName="AmountEarned" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsAutoCompute" ColumnName="IsAutoCompute" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="ReferenceNumber" ColumnName="ReferenceNumber" />
+                <ScalarProperty Name="SystemCurrency" ColumnName="SystemCurrency" />
+                <ScalarProperty Name="SystemAmount" ColumnName="SystemAmount" />
+                <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
+                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
+                <ScalarProperty Name="PartnerActionTypeID" ColumnName="PartnerActionTypeID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DocumentDate" ColumnName="DocumentDate" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="GrossAmount" ColumnName="GrossAmount" />
+                <ScalarProperty Name="CapacityRate" ColumnName="CapacityRate" />
+                <ScalarProperty Name="PartnerRate" ColumnName="PartnerRate" />
+                <ScalarProperty Name="PartnerID" ColumnName="PartnerID" />
+                <ScalarProperty Name="FromBankAccountID" ColumnName="FromBankAccountID" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="PeriodCode" ColumnName="PeriodCode" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DocumentPartnerEarnRow">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentPartnerEarnRow">
+              <MappingFragment StoreEntitySet="DocumentPartnerEarnRow">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="BalanceAmount" ColumnName="BalanceAmount" />
+                <ScalarProperty Name="PayedAmount" ColumnName="PayedAmount" />
+                <ScalarProperty Name="EarnedAmount" ColumnName="EarnedAmount" />
+                <ScalarProperty Name="CapacityRate" ColumnName="CapacityRate" />
+                <ScalarProperty Name="PartnerRate" ColumnName="PartnerRate" />
+                <ScalarProperty Name="BaseAmount" ColumnName="BaseAmount" />
+                <ScalarProperty Name="ExpenseGroupID" ColumnName="ExpenseGroupID" />
+                <ScalarProperty Name="DocumentID" ColumnName="DocumentID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DocumentPartnerPayment">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentPartnerPayment">
+              <MappingFragment StoreEntitySet="DocumentPartnerPayment">
+                <ScalarProperty Name="PeriodCode" ColumnName="PeriodCode" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="ReferenceNumber" ColumnName="ReferenceNumber" />
+                <ScalarProperty Name="SystemCurrency" ColumnName="SystemCurrency" />
+                <ScalarProperty Name="SystemAmount" ColumnName="SystemAmount" />
+                <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
+                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
+                <ScalarProperty Name="PartnerActionTypeID" ColumnName="PartnerActionTypeID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DocumentDate" ColumnName="DocumentDate" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="PartnerID" ColumnName="PartnerID" />
+                <ScalarProperty Name="PayMethodID" ColumnName="PayMethodID" />
+                <ScalarProperty Name="FromBankAccountID" ColumnName="FromBankAccountID" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VDocumentPartnerPayment">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentPartnerPayment">
+              <MappingFragment StoreEntitySet="VDocumentPartnerPayment">
+                <ScalarProperty Name="MethodName" ColumnName="MethodName" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="AccountCode" ColumnName="AccountCode" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="ReferenceNumber" ColumnName="ReferenceNumber" />
+                <ScalarProperty Name="SystemCurrency" ColumnName="SystemCurrency" />
+                <ScalarProperty Name="SystemAmount" ColumnName="SystemAmount" />
+                <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
+                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
+                <ScalarProperty Name="PartnerActionTypeID" ColumnName="PartnerActionTypeID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DocumentDate" ColumnName="DocumentDate" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="PartnerID" ColumnName="PartnerID" />
+                <ScalarProperty Name="PayMethodID" ColumnName="PayMethodID" />
+                <ScalarProperty Name="FromBankAccountID" ColumnName="FromBankAccountID" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="PeriodCode" ColumnName="PeriodCode" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VPartnership">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VPartnership">
+              <MappingFragment StoreEntitySet="VPartnership">
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="AccountCode" ColumnName="AccountCode" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+                <ScalarProperty Name="PartnershipRate" ColumnName="PartnershipRate" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="PartnerID" ColumnName="PartnerID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VDocumentPartnerEarn">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentPartnerEarn">
+              <MappingFragment StoreEntitySet="VDocumentPartnerEarn">
+                <ScalarProperty Name="AmountEarned" ColumnName="AmountEarned" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="AccountCode" ColumnName="AccountCode" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsAutoCompute" ColumnName="IsAutoCompute" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="ReferenceNumber" ColumnName="ReferenceNumber" />
+                <ScalarProperty Name="SystemCurrency" ColumnName="SystemCurrency" />
+                <ScalarProperty Name="SystemAmount" ColumnName="SystemAmount" />
+                <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
+                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
+                <ScalarProperty Name="PartnerActionTypeID" ColumnName="PartnerActionTypeID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DocumentDate" ColumnName="DocumentDate" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="GrossAmount" ColumnName="GrossAmount" />
+                <ScalarProperty Name="CapacityRate" ColumnName="CapacityRate" />
+                <ScalarProperty Name="PartnerRate" ColumnName="PartnerRate" />
+                <ScalarProperty Name="PartnerID" ColumnName="PartnerID" />
+                <ScalarProperty Name="FromBankAccountID" ColumnName="FromBankAccountID" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="PeriodCode" ColumnName="PeriodCode" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VDocumentPartnerEarnRow">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentPartnerEarnRow">
+              <MappingFragment StoreEntitySet="VDocumentPartnerEarnRow">
+                <ScalarProperty Name="ExpenseGroupName" ColumnName="ExpenseGroupName" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="BalanceAmount" ColumnName="BalanceAmount" />
+                <ScalarProperty Name="PayedAmount" ColumnName="PayedAmount" />
+                <ScalarProperty Name="EarnedAmount" ColumnName="EarnedAmount" />
+                <ScalarProperty Name="CapacityRate" ColumnName="CapacityRate" />
+                <ScalarProperty Name="PartnerRate" ColumnName="PartnerRate" />
+                <ScalarProperty Name="BaseAmount" ColumnName="BaseAmount" />
+                <ScalarProperty Name="ExpenseGroupID" ColumnName="ExpenseGroupID" />
+                <ScalarProperty Name="DocumentID" ColumnName="DocumentID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddPartnerEarnDocument" FunctionName="db293_ActionTimeDbModel.Store.AddPartnerEarnDocument" />
+          <FunctionImportMapping FunctionImportName="AddPartnerPaymentToAction" FunctionName="db293_ActionTimeDbModel.Store.AddPartnerPaymentToAction" />
+          <FunctionImportMapping FunctionImportName="AddPartnerShipEarnDocument" FunctionName="db293_ActionTimeDbModel.Store.AddPartnerShipEarnDocument" />
+          <EntitySetMapping Name="VPartnerActions">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VPartnerActions">
+              <MappingFragment StoreEntitySet="VPartnerActions">
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="ProcessUID" ColumnName="ProcessUID" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Payment" ColumnName="Payment" />
+                <ScalarProperty Name="Collection" ColumnName="Collection" />
+                <ScalarProperty Name="CapacityRate" ColumnName="CapacityRate" />
+                <ScalarProperty Name="PartnershipRate" ColumnName="PartnershipRate" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="ExpenseMonth" ColumnName="ExpenseMonth" />
+                <ScalarProperty Name="ExpenseYear" ColumnName="ExpenseYear" />
+                <ScalarProperty Name="PeriodCode" ColumnName="PeriodCode" />
+                <ScalarProperty Name="ProcessDate" ColumnName="ProcessDate" />
+                <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+                <ScalarProperty Name="ProcessName" ColumnName="ProcessName" />
+                <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="PartnerID" ColumnName="PartnerID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

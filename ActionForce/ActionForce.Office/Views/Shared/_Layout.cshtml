@@ -187,13 +187,6 @@
 
                 <li class="nav-item"><a href="/Employee" class="nav-link"><i data-feather="users"></i> <span>H. Çalışanlar</span></a></li>
 
-                <li class="nav-item with-sub @(this.ViewContext.RouteData.Values["controller"].ToString() == "Partner"  ? "show" : "")">
-                    <a href="/Partner" class="nav-link"><i data-feather="command"></i> <span>O. İş Ortakları</span></a>
-                    <ul>
-                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Partner" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Partner">01 İş Ortakları</a></li>
-                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Partner" && this.ViewContext.RouteData.Values["action"].ToString() == "Partnership" ? "class=active" : "")><a href="/Partner/Partnership">02 Ortaklıklar</a></li>
-                    </ul>
-                </li>
 
 
                 <li class="nav-label mg-t-10 active">Satış - Fiyat</li>
@@ -206,12 +199,16 @@
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Sale" && this.ViewContext.RouteData.Values["action"].ToString() == "PriceCategory" ? "class=active" : "")><a href="/Sale/PriceCategory">02 Fiyat Kategorileri</a></li>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Sale" && this.ViewContext.RouteData.Values["action"].ToString() == "TicketProduct" ? "class=active" : "")><a href="/Sale/TicketProduct">03 Bilet Ürünleri</a></li>
                     </ul>
-                    <a href="/Sale/Price" class="nav-link"><i data-feather="clipboard"></i> <span>S. Satışlar</span></a>
+                </li>
+                <li class="nav-item with-sub @(this.ViewContext.RouteData.Values["controller"].ToString() == "Sale" && (this.ViewContext.RouteData.Values["action"].ToString() == "Index" || this.ViewContext.RouteData.Values["action"].ToString() == "SaleAction"  ) ? "show" : "")">
+
+                    <a href="/Sale/Index" class="nav-link"><i data-feather="clipboard"></i> <span>S. Satışlar</span></a>
                     <ul>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Sale" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Sale/Index">01 Satış Listesi</a></li>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Sale" && this.ViewContext.RouteData.Values["action"].ToString() == "SaleAction" ? "class=active" : "")><a href="/Sale/SaleAction">02 Satış Tahsilat Cari</a></li>
                     </ul>
                 </li>
+
 
 
 
@@ -272,6 +269,7 @@
                             <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Revenue" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Revenue">01 Hasılat Raporu</a></li>
 
                             <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Revenue" && this.ViewContext.RouteData.Values["action"].ToString() == "Parameters" ? "class=active" : "")><a href="/Revenue/Parameters">02 Parametreler</a></li>
+                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Revenue" && this.ViewContext.RouteData.Values["action"].ToString() == "Benefits" ? "class=active" : "")><a href="/Revenue/Benefits">03 Kâr - Zarar Raporu</a></li>
 
                         </ul>
                     </li>
@@ -279,18 +277,31 @@
                     <li class="nav-label mg-t-10">Masraf - Maliyet</li>
 
                     <li class="nav-item with-sub  @(this.ViewContext.RouteData.Values["controller"].ToString() == "Expense" ? "show" : "")">
-                        <a href="/Expense" class="nav-link"><i data-feather="briefcase"></i> <span>M. Masraf Yönetimi</span></a>
+                        <a href="/Expense" class="nav-link"><i data-feather="inbox"></i> <span>M. Masraf Yönetimi</span></a>
                         <ul>
 
                             <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Expense" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Expense">01 Masraf Listesi</a></li>
 
                             <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Expense" && this.ViewContext.RouteData.Values["action"].ToString() == "NewItem" ? "class=active" : "")><a href="/Expense/NewItem">02 Masraf Kalemi Ekle</a></li>
                             <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Expense" && this.ViewContext.RouteData.Values["action"].ToString() == "NewDocument" ? "class=active" : "")><a href="/Expense/NewDocument">03 Yeni Masraf Ekle</a></li>
+                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Expense" && this.ViewContext.RouteData.Values["action"].ToString() == "DistGroup" ? "class=active" : "")><a href="/Expense/DistGroup">04 Dağılım Grubu</a></li>
 
-                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Expense" && this.ViewContext.RouteData.Values["action"].ToString() == "Cost" ? "class=active" : "")><a href="/Expense/Cost">04 Maliyet</a></li>
+                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Expense" && this.ViewContext.RouteData.Values["action"].ToString() == "Cost" ? "class=active" : "")><a href="/Expense/Cost">05 Maliyet</a></li>
 
                         </ul>
                     </li>
+                    <li class="nav-item with-sub  @(this.ViewContext.RouteData.Values["controller"].ToString() == "Partner" ? "show" : "")">
+                        <a href="/Partner" class="nav-link"><i data-feather="command"></i> <span>O. İş Ortakları</span></a>
+                        <ul>
+                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Partner" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Partner">01 İş Ortakları</a></li>
+                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Partner" && this.ViewContext.RouteData.Values["action"].ToString() == "Partnership" ? "class=active" : "")><a href="/Partner/Partnership">02 Ortaklıklar</a></li>
+                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Partner" && this.ViewContext.RouteData.Values["action"].ToString() == "Earns" ? "class=active" : "")><a href="/Partner/Earns">03 Hakedişler</a></li>
+                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Partner" && this.ViewContext.RouteData.Values["action"].ToString() == "Payments" ? "class=active" : "")><a href="/Partner/Payments">04 Ödemeler</a></li>
+                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Partner" && this.ViewContext.RouteData.Values["action"].ToString() == "Actions" ? "class=active" : "")><a href="/Partner/Actions">05 Cari Hesap</a></li>
+                        </ul>
+                    </li>
+
+
 
 
 
