@@ -7432,6 +7432,34 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VMall' does not have a prim
           <Property Name="MallUID" Type="uniqueidentifier" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPartner' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VPartner">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="OurCompanyID" />
+            <PropertyRef Name="FullName" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" Nullable="false" />
+          <Property Name="AccountCode" Type="nvarchar" MaxLength="20" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="TaxOffice" Type="nvarchar" MaxLength="50" />
+          <Property Name="TaxNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="EMail" Type="nvarchar" MaxLength="110" />
+          <Property Name="PhoneCode" Type="nvarchar" MaxLength="5" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="Address" Type="nvarchar" MaxLength="350" />
+          <Property Name="Country" Type="int" />
+          <Property Name="State" Type="int" />
+          <Property Name="City" Type="int" />
+          <Property Name="PostCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="UID" Type="uniqueidentifier" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="CountryName" Type="nvarchar" MaxLength="50" />
+          <Property Name="StateName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CityName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPartnerActions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VPartnerActions">
           <Key>
@@ -12093,6 +12121,29 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VMall].[MallUID] AS [MallUID]
     FROM [dbo].[VMall] AS [VMall]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VPartner" EntityType="Self.VPartner" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VPartner].[ID] AS [ID], 
+    [VPartner].[OurCompanyID] AS [OurCompanyID], 
+    [VPartner].[AccountCode] AS [AccountCode], 
+    [VPartner].[FullName] AS [FullName], 
+    [VPartner].[TaxOffice] AS [TaxOffice], 
+    [VPartner].[TaxNumber] AS [TaxNumber], 
+    [VPartner].[EMail] AS [EMail], 
+    [VPartner].[PhoneCode] AS [PhoneCode], 
+    [VPartner].[Phone] AS [Phone], 
+    [VPartner].[Address] AS [Address], 
+    [VPartner].[Country] AS [Country], 
+    [VPartner].[State] AS [State], 
+    [VPartner].[City] AS [City], 
+    [VPartner].[PostCode] AS [PostCode], 
+    [VPartner].[UID] AS [UID], 
+    [VPartner].[IsActive] AS [IsActive], 
+    [VPartner].[CountryName] AS [CountryName], 
+    [VPartner].[StateName] AS [StateName], 
+    [VPartner].[CityName] AS [CityName]
+    FROM [dbo].[VPartner] AS [VPartner]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VPartnerActions" EntityType="Self.VPartnerActions" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VPartnerActions].[ID] AS [ID], 
@@ -14354,6 +14405,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="VPartnerActions" EntityType="db293_ActionTimeDbModel.VPartnerActions" />
+          <EntitySet Name="VPartner" EntityType="db293_ActionTimeDbModel.VPartner" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -23604,6 +23656,32 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ActionTypeID" Type="Int32" />
           <Property Name="LocationUID" Type="Guid" />
         </EntityType>
+        <EntityType Name="VPartner">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="OurCompanyID" />
+            <PropertyRef Name="FullName" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
+          <Property Name="AccountCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="TaxOffice" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TaxNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="EMail" Type="String" MaxLength="110" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneCode" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="Int32" />
+          <Property Name="State" Type="Int32" />
+          <Property Name="City" Type="Int32" />
+          <Property Name="PostCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="UID" Type="Guid" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StateName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CityName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -32616,6 +32694,31 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="PartnerID" ColumnName="PartnerID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VPartner">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VPartner">
+              <MappingFragment StoreEntitySet="VPartner">
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="PostCode" ColumnName="PostCode" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="PhoneCode" ColumnName="PhoneCode" />
+                <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="TaxNumber" ColumnName="TaxNumber" />
+                <ScalarProperty Name="TaxOffice" ColumnName="TaxOffice" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="AccountCode" ColumnName="AccountCode" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>

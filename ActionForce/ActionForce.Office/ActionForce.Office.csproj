@@ -2434,7 +2434,9 @@
     <Compile Include="Models\FormModels\MallMotoColorFormModel.cs" />
     <Compile Include="Models\FormModels\MargeSaleFormModel.cs" />
     <Compile Include="Models\FormModels\PartnerEarnFormModel.cs" />
+    <Compile Include="Models\FormModels\PartnerFormModel.cs" />
     <Compile Include="Models\FormModels\PartnerPaymentFormModel.cs" />
+    <Compile Include="Models\FormModels\PartnershipFormModel.cs" />
     <Compile Include="Models\FormModels\PosFormModel.cs" />
     <Compile Include="Models\LocationPart.cs" />
     <Compile Include="Models\Location\LocationEmployeeModel.cs" />
@@ -2840,6 +2842,9 @@
     <Content Include="Views\Partner\NewEarnDocument.cshtml" />
     <Content Include="Views\Partner\Actions.cshtml" />
     <Content Include="Views\Revenue\Benefits.cshtml" />
+    <Content Include="Views\Partner\Detail.cshtml" />
+    <Content Include="Views\Partner\NewPartner.cshtml" />
+    <Content Include="Views\Partner\PrePartnership.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

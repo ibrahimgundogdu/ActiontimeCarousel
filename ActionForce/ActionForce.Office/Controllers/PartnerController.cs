@@ -16,10 +16,265 @@ namespace ActionForce.Office.Controllers
         {
             PartnerControlModel model = new PartnerControlModel();
 
-            model.Partners = Db.Partner.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.VPartners = Db.VPartner.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
 
             return View(model);
         }
+
+
+
+        [AllowAnonymous]
+        public ActionResult NewPartner()
+        {
+            PartnerControlModel model = new PartnerControlModel();
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result ?? null;
+            }
+
+            model.Countries = Db.Country.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            int firstCountryId = model.Countries.FirstOrDefault().ID;
+            model.States = Db.State.Where(x => x.CountryID == firstCountryId).ToList();
+            int firstStateId = model.States.FirstOrDefault().ID;
+            model.Cities = Db.City.Where(x => x.CountryID == firstCountryId && x.StateID == firstStateId).ToList();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddPartner(PartnerFormModel form)
+        {
+            PartnerControlModel model = new PartnerControlModel();
+
+            model.Result = new Result();
+
+            if (form != null)
+            {
+
+                Partner partner = new Partner();
+
+                partner.UID = form.UID;
+                partner.IsActive = true;
+                partner.OurCompanyID = model.Authentication.ActionEmployee.OurCompanyID.Value;
+                partner.Phone = form.Phone;
+                partner.AccountCode = form.AccountCode;
+                partner.Address = form.Address;
+                partner.City = form.CityID;
+                partner.Country = form.Country;
+                partner.EMail = form.EMail;
+                partner.FullName = form.FullName;
+                partner.PhoneCode = form.PhoneCode;
+                partner.PostCode = form.PostCode;
+                partner.State = form.StateID;
+                partner.TaxNumber = form.TaxNumber;
+                partner.TaxOffice = form.TaxOffice;
+
+                Db.Partner.Add(partner);
+                Db.SaveChanges();
+
+                model.Result.IsSuccess = true;
+                model.Result.Message = "Partner Eklendi";
+
+                OfficeHelper.AddApplicationLog("Office", "Partner", "Insert", partner.ID.ToString(), "Partner", "AddPartner", null, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, partner);
+
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Form Verileri Gelmedi";
+            }
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("Detail", "Partner", new { id = form.UID });
+        }
+
+
+
+
+
+        [AllowAnonymous]
+        public ActionResult Detail(Guid? id)
+        {
+            PartnerControlModel model = new PartnerControlModel();
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result ?? null;
+            }
+
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            model.VPartner = Db.VPartner.FirstOrDefault(x => x.UID == id);
+            if (model.VPartner == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            List<int> discardLocIds = new List<int>() { 175, 179, 212 }.ToList();
+
+            model.Partnerships = Db.VPartnership.Where(x => x.PartnerID == model.VPartner.ID).ToList();
+            model.PartnerUsers = Db.PartnerUser.Where(x => x.PartnerID == model.VPartner.ID).ToList();
+            model.Locations = Db.Location.Where(x => x.IsActive == true && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID.Value && x.LocationTypeID != 5 && x.LocationTypeID != 6 && !discardLocIds.Contains(x.LocationID)).ToList();
+
+            model.Countries = Db.Country.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            int firstCountryId = model.Countries.FirstOrDefault().ID;
+            model.States = Db.State.Where(x => x.CountryID == firstCountryId).ToList();
+            int firstStateId = model.States.FirstOrDefault().ID;
+            model.Cities = Db.City.Where(x => x.CountryID == firstCountryId && x.StateID == firstStateId).ToList();
+
+
+
+
+
+            return View(model);
+
+        }
+
+        [AllowAnonymous]
+        public ActionResult PrePartnership(PartnershipFormModel form)
+        {
+            PartnerControlModel model = new PartnerControlModel();
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result ?? null;
+            }
+
+            model.Location = Db.Location.FirstOrDefault(x => x.LocationID == form.LocationID);
+            model.VPartner = Db.VPartner.FirstOrDefault(x => x.UID == form.PartnerUID && x.ID == form.PartnerID);
+            model.Partnerships = Db.VPartnership.Where(x => x.PartnerID == model.VPartner.ID).ToList();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditPartner(PartnerFormModel form)
+        {
+            PartnerControlModel model = new PartnerControlModel();
+
+            model.Result = new Result();
+
+            if (form != null)
+            {
+
+
+                var partner = Db.Partner.FirstOrDefault(x => x.UID == form.UID && x.ID == form.PartnerID);
+
+                if (partner != null)
+                {
+
+                    Partner self = new Partner()
+                    {
+                        IsActive = partner.IsActive,
+                        OurCompanyID = partner.OurCompanyID,
+                        UID = partner.UID,
+                        ID = partner.ID,
+                        AccountCode = partner.AccountCode,
+                        Address = partner.Address,
+                        City = partner.City,
+                        Country = partner.Country,
+                        EMail = partner.EMail,
+                        FullName = partner.FullName,
+                        Phone = partner.Phone,
+                        PhoneCode = partner.PhoneCode,
+                        PostCode = partner.PostCode,
+                        State = partner.State,
+                        TaxNumber = partner.TaxNumber,
+                        TaxOffice = partner.TaxOffice
+
+                    };
+
+
+                    partner.AccountCode = form.AccountCode;
+                    partner.Address = form.Address;
+                    partner.City = form.CityID;
+                    partner.Country = form.Country;
+                    partner.EMail = form.EMail;
+                    partner.FullName = form.FullName;
+                    partner.IsActive = form.IsActive == "1" ? true : false;
+                    partner.Phone = form.Phone;
+                    partner.PhoneCode = form.PhoneCode;
+                    partner.PostCode = form.PostCode;
+                    partner.State = form.StateID;
+                    partner.TaxNumber = form.TaxNumber;
+                    partner.TaxOffice = form.TaxOffice;
+
+                    Db.SaveChanges();
+
+                    model.Result.IsSuccess = true;
+                    model.Result.Message = "Partner Güncellendi";
+
+                    var isequal = OfficeHelper.PublicInstancePropertiesEqual<Partner>(self, partner, OfficeHelper.getIgnorelist());
+                    OfficeHelper.AddApplicationLog("Office", "Partner", "Update", partner.ID.ToString(), "Partner", "EditPartner", isequal, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                }
+                else
+                {
+                    model.Result.IsSuccess = false;
+                    model.Result.Message = "Partner Bulunamadı";
+                }
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Form Verileri Gelmedi";
+            }
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("Detail", "Partner", new { id = form.UID });
+        }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult GetStateList(int countryid)
+        {
+            var statelist = Db.State.Where(x => x.CountryID == countryid && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+
+            List<SelectListItem> list = new List<SelectListItem>();
+            foreach (var state in statelist)
+            {
+                list.Add(new SelectListItem()
+                {
+                    Value = state.ID.ToString(),
+                    Text = state.StateName
+                });
+            }
+
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult GetCityList(int stateid)
+        {
+            var citylist = Db.City.Where(x => x.StateID == stateid && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+
+            List<SelectListItem> list = new List<SelectListItem>();
+            foreach (var city in citylist)
+            {
+                list.Add(new SelectListItem()
+                {
+                    Value = city.ID.ToString(),
+                    Text = city.CityName
+                });
+            }
+
+            return Json(list, JsonRequestBehavior.AllowGet);
+
+        }
+
+
 
 
         [AllowAnonymous]

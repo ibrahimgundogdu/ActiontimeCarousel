@@ -1,0 +1,274 @@
+﻿@model PartnerControlModel
+@{
+    ViewBag.Title = "Partner";
+}
+
+@section style{
+    <link rel="stylesheet" href="/assets/css/dashforge.profile.css">
+}
+
+<div class="content-header">
+    <div class="content-search">
+        <span class="tx-20">İşortağı Ekleme</span>
+    </div>
+    <nav class="nav">
+        @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
+    </nav>
+</div>
+<div class="content-body">
+    <div class="pd-x-0 tx-13">
+        <div class="media d-block d-lg-flex">
+            <div class="media-body  mg-t-40 mg-lg-t-0">
+                <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+                    <div>
+                        <h4 class="mg-b-0 tx-spacing--1">Yeni İşortağı</h4>
+                    </div>
+                    <div class="d-none d-md-block">
+
+                        <a href="/Partner/Index" class="btn btn-primary btn-uppercase"><i data-feather="list"></i> &nbsp; İşortakları Listesi</a> &nbsp;
+
+                    </div>
+                </div>
+                @using (Html.BeginForm("AddPartner", "Partner", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="row row-xs">
+                        <div class="col-lg-12">
+                            <input id="PartnerUID" name="UID" type="hidden" value="@(Guid.NewGuid())" />
+                            <div class="form-group row mg-b-5 bg-gray-100">
+                                <label for="AccountCode" class="col-sm-3 col-form-label">İşortağı No</label>
+                                <div class="col-sm-6">
+                                    <input id="AccountCode" name="AccountCode" autocomplete="off" type="text" class="form-control tx-16 text-danger" maxlength="20" placeholder="İşortağı No" value="" required>
+                                </div>
+                                <div class="col-sm-3"></div>
+                            </div>
+
+                            <div class="form-group row mg-b-5 bg-gray-100">
+                                <label for="FullName" class="col-sm-3 col-form-label">Adı Soyadı / Ünvanı</label>
+                                <div class="col-sm-6">
+                                    <input id="FullName" name="FullName" autocomplete="off" type="text" class="form-control tx-16" maxlength="150" placeholder="Adı Soyadı / Ünvanı" value="" required>
+                                </div>
+                                <div class="col-sm-3"></div>
+                            </div>
+
+                            <div class="form-group row mg-b-5">
+                                <label for="TaxOffice" class="col-sm-3 col-form-label">Vergi Dairesi</label>
+                                <div class="col-sm-6">
+                                    <input id="TaxOffice" name="TaxOffice" autocomplete="off" type="text" class="form-control" placeholder="Vergi Dairesi" value="">
+                                </div>
+                                <div class="col-sm-3"></div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="TaxNumber" class="col-sm-3 col-form-label">Vergi Numarası</label>
+                                <div class="col-sm-6">
+                                    <input id="TaxNumber" name="TaxNumber" autocomplete="off" type="text" class="form-control" placeholder="Vergi Numarası" value="">
+                                </div>
+                                <div class="col-sm-3"></div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="EMail" class="col-sm-3 col-form-label">Email Adresi</label>
+                                <div class="col-sm-6">
+                                    <input id="EMail" name="EMail" autocomplete="off" type="text" class="form-control" placeholder="Email Adresi" value="">
+                                </div>
+                                <div class="col-sm-3"></div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="Phone" class="col-sm-3 col-form-label">Telefon</label>
+                                <div class="col-sm-2">
+                                    <input id="PhoneCode" name="PhoneCode" autocomplete="off" type="text" class="form-control" placeholder="+90" value="+90">
+                                </div>
+                                <div class="col-sm-4">
+                                    <input id="Phone" name="Phone" autocomplete="off" type="text" class="form-control" placeholder="5555555555" value="">
+                                </div>
+                                <div class="col-sm-3"></div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="Address" class="col-sm-3 col-form-label">Adres</label>
+                                <div class="col-sm-6">
+                                    <textarea id="Address" name="Address" rows="2" cols="20" class="form-control" style="width:100% !important;"></textarea>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+
+
+
+
+
+                            <div class="form-group row mg-b-5">
+                                <label for="Country" class="col-sm-3 col-form-label">Ülke</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control" id="Country" name="Country">
+                                        <option value="">Ülke Seçiminiz</option>
+                                        @foreach (var item in Model.Countries)
+                                        {
+                                            <option value="@item.ID">@(item.CountryName)</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-3"> </div>
+                            </div>
+
+                            <div class="form-group row mg-b-5">
+                                <label for="State" class="col-sm-3 col-form-label">Eyalet</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control" id="State" name="StateID">
+                                        <option value="">Eyalet Seçiminiz</option>
+                                        @foreach (var item in Model.States)
+                                        {
+                                            <option value="@item.ID">@(item.StateName)</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-3"> </div>
+                            </div>
+
+                            <div class="form-group row mg-b-5">
+                                <label for="City" class="col-sm-3 col-form-label">Şehir</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control" id="City" name="CityID">
+                                        <option value="">Şehir Seçiminiz</option>
+                                        @foreach (var item in Model.Cities.OrderBy(x => x.CityName))
+                                        {
+                                            <option value="@item.ID">@(item.CityName)</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-3"> </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <label for="PostCode" class="col-sm-3 col-form-label">Posta Kodu</label>
+                                <div class="col-sm-6">
+                                    <input id="PostCode" name="PostCode" autocomplete="off" type="text" class="form-control" placeholder="Posta Kodu" value="">
+                                </div>
+                                <div class="col-sm-3"></div>
+                            </div>
+
+                           
+
+
+                            <div class="form-group row mg-b-0">
+                                <div class="col-sm-3">
+
+                                </div>
+                                <div class="col-sm-6">
+                                    <button type="submit" class="btn btn-success btn-block">Yeni İşortağı Ekle</button>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script>
+        $(function () {
+            'use strict'
+            $('.select2').select2({
+                placeholder: 'Lokasyon Seçiminiz',
+                searchInputPlaceholder: 'Lokasyon Seçimi'
+            });
+
+        });
+
+
+        $(document).ready(function () {
+
+            $("#Country").change(function () {
+
+                var countryID = $("#Country").val();
+
+                $.ajax
+                    ({
+                        url: '/Partner/GetStateList',
+                        type: 'POST',
+                        datatype: 'application/json',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            countryid: countryID
+                        }),
+                        success: function (data) {
+
+                            $("#City").empty();
+                            $("#City").append($('<option></option>', { "value": '', "text": 'Şehir Seçiminiz' }));
+
+                            $("#State").empty();
+                            $("#State").append($('<option></option>', { "value": '', "text": 'Eyalet Seçiminiz' }));
+
+                            $.each(data, function (index, label) {
+                                $("#State").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                            });
+                        },
+                        error: function () {
+                        },
+                    });
+            });
+
+
+
+            $("#State").change(function () {
+
+                var stateID = $("#State").val();
+
+                $.ajax
+                    ({
+                        url: '/Partner/GetCityList',
+                        type: 'POST',
+                        datatype: 'application/json',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            stateid: stateID
+                        }),
+                        success: function (data) {
+
+                            $("#City").empty();
+
+                            $("#City").append($('<option></option>', { "value": '', "text": 'Şehir Seçiminiz' }));
+
+                            $.each(data, function (index, label) {
+                                $("#City").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                            });
+                        },
+                        error: function () {
+                        },
+                    });
+            });
+
+
+        });
+
+
+    </script>
+
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+}
+
+
+

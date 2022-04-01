@@ -10,7 +10,9 @@ namespace ActionForce.Office
     {
         public Result Result { get; set; }
         public Partner Partner { get; set; }
+        public VPartner VPartner { get; set; }
         public List<Partner> Partners { get; set; }
+        public List<VPartner> VPartners { get; set; }
 
         public PartnerFilterModel Filters { get; set; }
 
@@ -38,6 +40,9 @@ namespace ActionForce.Office
         public List<VDocumentPartnerPayment> DocumentPartnerPayments { get; set; }
         public List<PayMethod> PayMethods { get; set; }
 
+        public List<Country> Countries { get; set; }
+        public List<State> States { get; set; }
+        public List<City> Cities { get; set; }
 
 
     }

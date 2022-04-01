@@ -294,10 +294,10 @@
                         <a href="/Partner" class="nav-link"><i data-feather="command"></i> <span>O. İş Ortakları</span></a>
                         <ul>
                             <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Partner" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Partner">01 İş Ortakları</a></li>
-                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Partner" && this.ViewContext.RouteData.Values["action"].ToString() == "Partnership" ? "class=active" : "")><a href="/Partner/Partnership">02 Ortaklıklar</a></li>
-                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Partner" && this.ViewContext.RouteData.Values["action"].ToString() == "Earns" ? "class=active" : "")><a href="/Partner/Earns">03 Hakedişler</a></li>
-                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Partner" && this.ViewContext.RouteData.Values["action"].ToString() == "Payments" ? "class=active" : "")><a href="/Partner/Payments">04 Ödemeler</a></li>
-                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Partner" && this.ViewContext.RouteData.Values["action"].ToString() == "Actions" ? "class=active" : "")><a href="/Partner/Actions">05 Cari Hesap</a></li>
+                            @*<li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Partner" && this.ViewContext.RouteData.Values["action"].ToString() == "Partnership" ? "class=active" : "")><a href="/Partner/Partnership">02 Ortaklıklar</a></li>*@
+                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Partner" && this.ViewContext.RouteData.Values["action"].ToString() == "Earns" ? "class=active" : "")><a href="/Partner/Earns">02 Hakedişler</a></li>
+                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Partner" && this.ViewContext.RouteData.Values["action"].ToString() == "Payments" ? "class=active" : "")><a href="/Partner/Payments">03 Ödemeler</a></li>
+                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Partner" && this.ViewContext.RouteData.Values["action"].ToString() == "Actions" ? "class=active" : "")><a href="/Partner/Actions">04 Cari Hesap</a></li>
                         </ul>
                     </li>
 

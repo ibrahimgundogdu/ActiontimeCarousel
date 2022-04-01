@@ -419,6 +419,7 @@ namespace ActionForce.Entity
         public virtual DbSet<VDocumentPartnerEarn> VDocumentPartnerEarn { get; set; }
         public virtual DbSet<VDocumentPartnerEarnRow> VDocumentPartnerEarnRow { get; set; }
         public virtual DbSet<VPartnerActions> VPartnerActions { get; set; }
+        public virtual DbSet<VPartner> VPartner { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

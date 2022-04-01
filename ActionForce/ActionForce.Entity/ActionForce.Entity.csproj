@@ -1257,6 +1257,9 @@
     <Compile Include="VMall.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VPartner.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VPartnerActions.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
