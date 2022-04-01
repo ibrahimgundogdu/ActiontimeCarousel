@@ -780,5 +780,52 @@ namespace ActionForce.Office.Controllers
 
         }
 
+        //Benefits
+        [AllowAnonymous]
+        public ActionResult Benefits(string PeriodCode, int[] LocationID)
+        {
+            RevenueControlModel model = new RevenueControlModel();
+
+            if (model.Authentication.ActionEmployee.RoleGroup.RoleLevel < 5)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+
+            if (string.IsNullOrEmpty(PeriodCode))
+            {
+                PeriodCode = DateTime.Now.ToString("yyyy-MM");
+            }
+
+            model.SelectedPeriod = PeriodCode;
+
+            List<int> locationIds = Db.ExpenseChartGroupItems.Where(x => x.ChartGroupID == 1 && x.PeriodCode == PeriodCode).Select(x => x.LocationID).ToList();
+
+            model.OfficeLocations = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && (x.LocationTypeID == 5 || x.LocationTypeID == 6)).ToList();
+            model.Locations = Db.Location.Where(x => locationIds.Contains(x.LocationID)).ToList();
+            model.PartnerActions = Db.VPartnerActions.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.PeriodCode == model.SelectedPeriod).ToList();
+            model.ExpensePeriods = Db.ExpensePeriod.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+            var expenseDocumentCharts = Db.VExpenseDocumentChart.Where(x => x.ExpensePeriodCode == PeriodCode && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+            if (LocationID != null)
+            {
+                var discartIds = model.OfficeLocations.Where(x => !LocationID.Contains(x.LocationID) && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).Select(x => x.LocationID).ToList();
+
+                var discartedCharts = expenseDocumentCharts.Where(x => discartIds.Contains(x.SourceExpenseCenterID.Value) && x.ExpenseGroupID == 2 && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+                model.ExpenseDocumentCharts = expenseDocumentCharts.Except<VExpenseDocumentChart>(discartedCharts).ToList();
+                model.OfficeLocationIds = LocationID.ToList();
+            }
+            else
+            {
+                model.ExpenseDocumentCharts = expenseDocumentCharts;
+            }
+
+            model.ExpenseSalePartnerless = Db.VExpenseSalePartnerless.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.PeriodCode == model.SelectedPeriod).ToList();
+
+            return View(model);
+        }
+
     }
 }

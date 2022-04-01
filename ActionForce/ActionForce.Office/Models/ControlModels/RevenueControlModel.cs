@@ -36,9 +36,15 @@ namespace ActionForce.Office
 
         public FilterModel Filters { get; set; }
         public CounterModel Counters { get; set; }
+        public List<ExpensePeriod> ExpensePeriods { get; set; }
+        public List<VExpenseDocumentChart> ExpenseDocumentCharts { get; set; }
+        public List<VExpenseSalePartnerless> ExpenseSalePartnerless { get; set; }
+        public List<VPartnerActions> PartnerActions { get; set; }
 
-       
+        public List<Location> OfficeLocations { get; set; }
+        public List<int> OfficeLocationIds { get; set; }
 
+        public string SelectedPeriod { get; set; }
 
     }
 

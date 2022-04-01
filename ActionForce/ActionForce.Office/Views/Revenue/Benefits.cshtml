@@ -1,0 +1,228 @@
+﻿@model RevenueControlModel
+@{
+    ViewBag.Title = "Hasılat - Kâr / Zarar";
+}
+@section style{
+
+}
+
+<div class="content-header">
+    <div class="content-search">
+        <span class="tx-20">Hasılat - Kâr / Zarar</span>
+    </div>
+    <nav class="nav">
+
+        @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
+
+    </nav>
+</div>
+<div class="content-body">
+    @using (Html.BeginForm("Benefits", "Revenue", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-row align-items-end">
+
+            <div class="form-group col-md-2 d-flex align-items-end">
+                <select class="form-control select2" id="PeriodCode" name="PeriodCode">
+                    @foreach (var item in Model.ExpensePeriods.OrderBy(x => x.DateBegin))
+                    {
+                        <option value="@item.PeriodCode" @(item.PeriodCode == Model.SelectedPeriod ? "selected" : "")>@(Html.Raw($"<strong>{item.PeriodCode}</strong>"))</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group col-md-8 d-flex align-items-end">
+                <select class="form-control select2" id="LocationID" multiple name="LocationID">
+                    @foreach (var item in Model.OfficeLocations.OrderBy(x => x.LocationFullName))
+                    {
+                        <option value="@item.LocationID" @( Model?.OfficeLocationIds != null && Model.OfficeLocationIds.Any(x => x == item.LocationID) ? "selected" : "" )>@(Html.Raw($"<strong>{item.LocationFullName}</strong>"))</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group col-md-2 d-flex align-items-end ">
+                <button class="btn btn-primary btn-block" type="submit" id="btnsearch">Listele</button> &nbsp;
+            </div>
+        </div>
+    }
+
+    @if (Model.ExpenseDocumentCharts != null && Model.ExpenseDocumentCharts.Count > 0)
+    {
+        List<short> salaryitems = new List<short>() { 5, 33 }.ToList();
+        List<short> expenseitems = new List<short>() { 25, 26 }.ToList();
+        List<short> otheritems = new List<short>() { 5, 33, 25, 26, 4, 42, 23, 44 }.ToList();
+
+        double TotalSale = 0;
+        double TotalRent = 0;
+        double TotalSalary = 0;
+        double TotalPremium = 0;
+        double TotalFood = 0;
+        double TotalVat = 0;
+        double TotalExpense = 0;
+        double TotalOther = 0;
+        double TotalOffice = 0;
+        double TotalGross = 0;
+        double TotalPartner = 0;
+        double TotalNet = 0;
+
+
+
+
+
+
+
+
+
+
+        <div class="table">
+            <table class="table table-sm table-hover">
+                <thead>
+
+                    <tr>
+                        <th>Lokasyon</th>
+                        <th>Dönemi</th>
+                        <th class="text-right">Satış</th>
+                        <th class="text-right">Kira</th>
+                        <th class="text-right">İşçilik</th>
+                        <th class="text-right">Prim</th>
+                        <th class="text-right">Yemek</th>
+                        <th class="text-right">KDV</th>
+                        <th class="text-right">Masrafı</th>
+                        <th class="text-right">Diğer</th>
+                        <th class="text-right">İşletme Maliyeti</th>
+                        <th class="text-right">Brüt</th>
+                        <th class="text-right">Ortakçı</th>
+                        <th class="text-right">Net</th>
+                        <th></th>
+
+
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var location in Model.Locations.OrderBy(x => x.LocationFullName))
+                    {
+                        var sales = Model.ExpenseSalePartnerless.Where(x => x.LocationID == location.LocationID).Sum(x => x.Total);
+                        var rent = Model.ExpenseDocumentCharts.Where(x => x.ExpenseCenterID == location.LocationID && x.ExpenseGroupID == 1 && x.ExpenseItemID == 4).Sum(x => x.DistributedAmount);
+                        var salary = Model.ExpenseDocumentCharts.Where(x => x.ExpenseCenterID == location.LocationID && x.ExpenseGroupID == 1 && salaryitems.Contains(x.ExpenseItemID.Value)).Sum(x => x.DistributedAmount);
+                        var premium = Model.ExpenseDocumentCharts.Where(x => x.ExpenseCenterID == location.LocationID && x.ExpenseGroupID == 1 && x.ExpenseItemID == 42).Sum(x => x.DistributedAmount);
+                        var food = Model.ExpenseDocumentCharts.Where(x => x.ExpenseCenterID == location.LocationID && x.ExpenseGroupID == 1 && x.ExpenseItemID == 23).Sum(x => x.DistributedAmount);
+                        var vat = Model.ExpenseDocumentCharts.Where(x => x.ExpenseCenterID == location.LocationID && x.ExpenseGroupID == 1 && x.ExpenseItemID == 44).Sum(x => x.DistributedAmount);
+                        var expense = Model.ExpenseDocumentCharts.Where(x => x.ExpenseCenterID == location.LocationID && x.ExpenseGroupID == 1 && expenseitems.Contains(x.ExpenseItemID.Value)).Sum(x => x.DistributedAmount);
+                        var other = Model.ExpenseDocumentCharts.Where(x => x.ExpenseCenterID == location.LocationID && x.ExpenseGroupID == 1 && !otheritems.Contains(x.ExpenseItemID.Value)).Sum(x => x.DistributedAmount);
+                        var office = Model.ExpenseDocumentCharts.Where(x => x.ExpenseCenterID == location.LocationID && (x.ExpenseGroupID == 2 || x.ExpenseGroupID == 3) && x.ExpenseItemID != 42).Sum(x => x.DistributedAmount);
+                        var gross = (sales - rent - salary - food - vat - expense - other - office);
+                        var partner = Model.PartnerActions.Where(x => x.LocationID == location.LocationID).Sum(x => x.Amount);
+                        var netto = gross - partner;
+
+
+                        <tr>
+                            <td title="@(location.LocationID)">@(location.LocationFullName)</td>
+                            <td title="Dönem" class="font-weight-bold">@(Model.SelectedPeriod)</td>
+                            <td title="Satış" class="text-right font-weight-bold text-primary">@(sales?.ToString("N2"))</td>
+                            <td title="Kira" class="text-right">@(rent?.ToString("N2"))</td>
+                            <td title="İşçilik" class="text-right">@(salary?.ToString("N2"))</td>
+                            <td title="Prim" class="text-right text-black-50">@(premium?.ToString("N2"))</td>
+                            <td title="Yemek" class="text-right">@(food?.ToString("N2"))</td>
+                            <td title="KDV" class="text-right">@(vat?.ToString("N2"))</td>
+                            <td title="Masraf" class="text-right">@(expense?.ToString("N2"))</td>
+                            <td title="Diğer" class="text-right">@(other?.ToString("N2"))</td>
+                            <td title="İşletme Maliyeti" class="text-right">@(office?.ToString("N2"))</td>
+                            <td title="Brüt" class="text-right">@(gross?.ToString("N2"))</td>
+                            <td title="Ortakçı" class="text-right">@(partner.ToString("N2"))</td>
+                            <td title="Net" class="text-right">@(netto?.ToString("N2"))</td>
+                            <td class="text-right">@(location.Currency)</td>
+
+                        </tr>
+
+                        TotalSale += sales ?? 0;
+                        TotalRent += rent ?? 0;
+                        TotalSalary += salary ?? 0;
+                        TotalPremium += premium ?? 0;
+                        TotalFood += food ?? 0;
+                        TotalVat += vat ?? 0;
+                        TotalExpense += expense ?? 0;
+                        TotalOther += other ?? 0;
+                        TotalOffice += office ?? 0;
+                        TotalGross += gross ?? 0;
+                        TotalPartner += partner;
+                        TotalNet += netto ?? 0;
+                    }
+
+
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th class="tx-sm-14">Toplam</th>
+                        <th class="tx-sm-14">@(Model.SelectedPeriod)</th>
+                        <th class="tx-sm-14 text-right">@(TotalSale.ToString("N2"))</th>
+                        <th class="tx-sm-14 text-right">@(TotalRent.ToString("N2"))</th>
+                        <th class="tx-sm-14 text-right">@(TotalSalary.ToString("N2"))</th>
+                        <th class="tx-sm-14 text-right">@(TotalPremium.ToString("N2"))</th>
+                        <th class="tx-sm-14 text-right">@(TotalFood.ToString("N2"))</th>
+                        <th class="tx-sm-14 text-right">@(TotalVat.ToString("N2"))</th>
+                        <th class="tx-sm-14 text-right">@(TotalExpense.ToString("N2"))</th>
+                        <th class="tx-sm-14 text-right">@(TotalOther.ToString("N2"))</th>
+                        <th class="tx-sm-14 text-right">@(TotalOffice.ToString("N2"))</th>
+                        <th class="tx-sm-14 text-right">@(TotalGross.ToString("N2"))</th>
+                        <th class="tx-sm-14 text-right">@(TotalPartner.ToString("N2"))</th>
+                        <th class="tx-sm-14 text-right">@(TotalNet.ToString("N2"))</th>
+                        <th class="tx-sm-14 font-weight-bold">@(Model.Authentication.ActionEmployee.OurCompany.Currency)</th>
+                    </tr>
+                </tfoot>
+
+            </table>
+        </div>
+
+    }
+    <footer class="content-footer">
+        <div>
+            <span>&copy; @DateTime.Now.Year UFE Group LLC </span>
+        </div>
+
+    </footer>
+
+
+
+</div>
+
+
+
+@section scripts {
+
+    <script>
+        $(function () {
+
+            $('#LocationID').select2({
+                placeholder: 'Lokasyon Seçiminiz',
+                searchInputPlaceholder: 'Search options',
+                allowClear: true
+            });
+
+            $('#PeriodCode').select2({
+                placeholder: 'Periyot Seçiminiz',
+                searchInputPlaceholder: 'Search options',
+                allowClear: true
+            });
+
+         
+        });
+
+
+    </script>
+
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+}

@@ -21,5 +21,6 @@ namespace ActionForce.Entity
         public Nullable<double> Total { get; set; }
         public string Currency { get; set; }
         public Nullable<double> TaxTotal { get; set; }
+        public string PeriodCode { get; set; }
     }
 }

@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9994b25f60eb42c19af558a806d4e321" Name="Diagram1" ZoomLevel="22">
+      <Diagram DiagramId="9994b25f60eb42c19af558a806d4e321" Name="Diagram1" ZoomLevel="67">
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Action" Width="1.5" PointX="10.625" PointY="20" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionAccounts" Width="1.5" PointX="2.75" PointY="16.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRow" Width="1.5" PointX="12.25" PointY="19.25" />
@@ -420,7 +420,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VPartnership" Width="1.5" PointX="57.5" PointY="18.125" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentPartnerEarn" Width="1.5" PointX="35.375" PointY="48.5" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentPartnerEarnRow" Width="1.5" PointX="29.375" PointY="43.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VPartnerActions" Width="1.5" PointX="3.7949341944395254" PointY="1.4543049640275096" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VPartnerActions" Width="1.5" PointX="29.375" PointY="48.125" />
         
         
         

@@ -47,5 +47,6 @@ namespace ActionForce.Entity
         public string AccountCode { get; set; }
         public string FullName { get; set; }
         public Nullable<double> AmountEarned { get; set; }
+        public Nullable<System.DateTime> ActionDate { get; set; }
     }
 }

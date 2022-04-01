@@ -19,6 +19,7 @@ namespace ActionForce.Office
 
         public VPartnerActions PartnerAction { get; set; }
         public List<VPartnerActions> PartnerActions { get; set; }
+        public List<VPartnerActions> OldPartnerActions { get; set; }
 
         public VPartnership Partnership { get; set; }
         public List<VPartnership> Partnerships { get; set; }

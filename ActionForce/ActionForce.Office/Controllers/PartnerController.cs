@@ -147,6 +147,7 @@ namespace ActionForce.Office.Controllers
             {
                 var totalAmount = Convert.ToDouble(form.PaymentAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var partnership = Db.Partnership.FirstOrDefault(x => x.ID == form.PartnershipID);
+                var period = Db.ExpensePeriod.FirstOrDefault(x => x.PeriodCode == form.ExpensePeriodCode);
                 var exchange = OfficeHelper.GetExchange(form.DocumentDate);
                 var currency = model.Authentication.ActionEmployee.OurCompany.Currency;
 
@@ -164,6 +165,7 @@ namespace ActionForce.Office.Controllers
                 document.Amount = totalAmount;
                 document.Currency = currency;
                 document.DocumentDate = form.DocumentDate;
+                document.ActionDate = period?.DateEnd;
                 document.PeriodCode = form.ExpensePeriodCode;
                 document.IsActive = true;
                 document.OurCompanyID = model.Authentication.ActionEmployee.OurCompanyID;
@@ -247,6 +249,7 @@ namespace ActionForce.Office.Controllers
             {
                 var totalAmount = Convert.ToDouble(form.PaymentAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var partnership = Db.Partnership.FirstOrDefault(x => x.ID == form.PartnershipID);
+                var period = Db.ExpensePeriod.FirstOrDefault(x => x.PeriodCode == form.ExpensePeriodCode);
                 var exchange = OfficeHelper.GetExchange(form.DocumentDate);
                 var currency = model.Authentication.ActionEmployee.OurCompany.Currency;
 
@@ -282,7 +285,8 @@ namespace ActionForce.Office.Controllers
                         SystemAmount = document.SystemAmount,
                         SystemCurrency = document.SystemCurrency,
                         UpdateDate = document.UpdateDate,
-                        UpdateIP = document.UpdateIP
+                        UpdateIP = document.UpdateIP,
+                        ActionDate = document.ActionDate
                     };
 
 
@@ -293,6 +297,7 @@ namespace ActionForce.Office.Controllers
                     document.Description = form.PaymentDescription;
                     document.Amount = totalAmount;
                     document.DocumentDate = form.DocumentDate;
+                    document.ActionDate = period.DateEnd;
                     document.PeriodCode = form.ExpensePeriodCode;
                     document.IsActive = form.IsActive == "1" ? true : false;
                     document.LocationID = partnership?.LocationID;
@@ -496,6 +501,7 @@ namespace ActionForce.Office.Controllers
                         UID = document.UID,
                         DocumentNumber = document.DocumentNumber,
                         DocumentDate = document.DocumentDate,
+                        ActionDate = document.ActionDate,
                         ID = document.ID,
                         UpdateEmployee = document.UpdateEmployee,
                         ActionTypeName = document.ActionTypeName,
@@ -659,29 +665,43 @@ namespace ActionForce.Office.Controllers
             var beginperiod = model.ExpensePeriods.FirstOrDefault(x => x.PeriodCode == model.Filters.PeriodCodeBegin);
             var endperiod = model.ExpensePeriods.FirstOrDefault(x => x.PeriodCode == model.Filters.PeriodCodeEnd);
 
+            if (beginperiod.DateBegin > endperiod.DateBegin)
+            {
+                beginperiod = endperiod;
+                model.Filters.PeriodCodeBegin = beginperiod.PeriodCode;
+            }
+
+            IQueryable<VPartnerActions> oldactions;
             IQueryable<VPartnerActions> actions;
 
             if (model.Filters.PartnerID != null || model.Filters.LocationID != null || !string.IsNullOrEmpty(model.Filters.PeriodCodeEnd) || !string.IsNullOrEmpty(model.Filters.PeriodCodeBegin))
             {
+                oldactions = Db.VPartnerActions.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.ActionDate < beginperiod.DateBegin);
                 actions = Db.VPartnerActions.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID);
 
                 if (model.Filters.PartnerID != null)
                 {
+                    oldactions = oldactions.Where(x => x.PartnerID == model.Filters.PartnerID);
                     actions = actions.Where(x => x.PartnerID == model.Filters.PartnerID);
                 }
 
                 if (model.Filters.LocationID != null)
                 {
+                    oldactions = oldactions.Where(x => x.LocationID == model.Filters.LocationID);
                     actions = actions.Where(x => x.LocationID == model.Filters.LocationID);
                 }
 
                 if (!string.IsNullOrEmpty(model.Filters.PeriodCodeBegin))
                 {
-                    //actions = actions.Where(x => x.ExpenseYear >= beginperiod.DateYear && x.mo);
+                    actions = actions.Where(x => x.ActionDate >= beginperiod.DateBegin);
                 }
 
-               
+                if (!string.IsNullOrEmpty(model.Filters.PeriodCodeEnd))
+                {
+                    actions = actions.Where(x => x.ActionDate <= endperiod.DateEnd);
+                }
 
+                model.OldPartnerActions = oldactions.ToList();
                 model.PartnerActions = actions.ToList();
             }
 

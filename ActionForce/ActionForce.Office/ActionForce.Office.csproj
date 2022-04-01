@@ -2838,6 +2838,8 @@
     <Content Include="Views\Partner\Earns.cshtml" />
     <Content Include="Views\Partner\EarnDetail.cshtml" />
     <Content Include="Views\Partner\NewEarnDocument.cshtml" />
+    <Content Include="Views\Partner\Actions.cshtml" />
+    <Content Include="Views\Revenue\Benefits.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

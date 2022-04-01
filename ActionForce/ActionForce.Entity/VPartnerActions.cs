@@ -41,5 +41,7 @@ namespace ActionForce.Entity
         public Nullable<System.Guid> ProcessUID { get; set; }
         public string FullName { get; set; }
         public string LocationFullName { get; set; }
+        public Nullable<int> ActionTypeID { get; set; }
+        public Nullable<System.Guid> LocationUID { get; set; }
     }
 }

@@ -40,5 +40,6 @@ namespace ActionForce.Entity
         public Nullable<System.Guid> UID { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public string PeriodCode { get; set; }
+        public Nullable<System.DateTime> ActionDate { get; set; }
     }
 }

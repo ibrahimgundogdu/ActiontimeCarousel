@@ -44,5 +44,6 @@ namespace ActionForce.Entity
         public Nullable<bool> IsAutoCompute { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<double> AmountEarned { get; set; }
+        public Nullable<System.DateTime> ActionDate { get; set; }
     }
 }

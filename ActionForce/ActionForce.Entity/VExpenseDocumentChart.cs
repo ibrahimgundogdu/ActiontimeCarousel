@@ -34,5 +34,9 @@ namespace ActionForce.Entity
         public long ExpenseDocumentID { get; set; }
         public string RecorderFullName { get; set; }
         public string UpdaterFullName { get; set; }
+        public string ExpensePeriodCode { get; set; }
+        public Nullable<int> SourceExpenseCenterID { get; set; }
+        public Nullable<short> ExpenseGroupID { get; set; }
+        public Nullable<int> OurCompanyID { get; set; }
     }
 }
