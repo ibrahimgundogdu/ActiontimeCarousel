@@ -1483,7 +1483,7 @@ namespace ActionForce.Office.Controllers
                             {
                                 if (item.DistributeGroupID == 4)
                                 {
-                                    var dresult = Db.AddExpenseDocumentGroupRowsChartLoc(item.ID, item.DistributeGroupID,item.ExpenseCenterID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress()).FirstOrDefault().Value;
+                                    var dresult = Db.AddExpenseDocumentGroupRowsChartLoc(item.ID, item.DistributeGroupID, item.ExpenseCenterID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress()).FirstOrDefault().Value;
                                 }
                             }
                         }
@@ -1520,8 +1520,230 @@ namespace ActionForce.Office.Controllers
 
         }
 
+        //AddDistGroup
+        [AllowAnonymous]
+        public ActionResult DistGroup(Guid? id, string period)
+        {
+            ExpenseControlModel model = new ExpenseControlModel();
+
+            model.ExpenseChartGroups = Db.ExpenseChartGroup.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+            if (id != null)
+            {
+                model.ExpenseChartGroup = Db.ExpenseChartGroup.FirstOrDefault(x => x.UID == id);
+            }
+            else
+            {
+                model.ExpenseChartGroup = Db.ExpenseChartGroup.FirstOrDefault(x => x.ID > 0);
+            }
+
+            model.ExpensePeriods = Db.ExpensePeriod.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+            if (string.IsNullOrEmpty(period))
+            {
+                period = "2022-01";
+            }
+
+            model.ExpensePeriod = model.ExpensePeriods.FirstOrDefault(x => x.PeriodCode == period);
+            model.ExpenseChartGroupItems = Db.ExpenseChartGroupItems.Where(x => x.PeriodCode == model.ExpensePeriod.PeriodCode && x.ChartGroupID == model.ExpenseChartGroup.ID).ToList();
+
+            List<int> noTypeId = new List<int>() { 5, 6 };
+            List<int> noTestId = new List<int>() { 175, 179, 212 };
+            List<int> GroupId = model.ExpenseChartGroupItems.Select(x => x.LocationID).ToList();
+
+            model.Locations = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && !noTypeId.Contains(x.LocationTypeID.Value) && !noTestId.Contains(x.LocationID) && GroupId.Contains(x.LocationID)).ToList();
+            model.OutLocations = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && !noTypeId.Contains(x.LocationTypeID.Value) && !noTestId.Contains(x.LocationID) && !GroupId.Contains(x.LocationID)).ToList();
+
+            return View(model);
+        }
 
 
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult RemoveDistItems(int[] GroupItems, short GroupID, Guid? GroupUID, string PeriodCode)
+        {
+            ExpenseControlModel model = new ExpenseControlModel();
+            model.Result = new Result();
+
+            var ItemIds = GroupItems.ToList();
+
+            var groupItems = Db.ExpenseChartGroupItems.Where(x => x.ChartGroupID == GroupID && ItemIds.Contains(x.ID)).ToList();
+
+            if (groupItems.Count > 0)
+            {
+                Db.ExpenseChartGroupItems.RemoveRange(groupItems);
+                Db.SaveChanges();
+
+                model.Result.IsSuccess = true;
+                model.Result.Message = "Seçili Lokasyonlar Kaldırıldı.";
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Seçili Lokasyon Bulunamadı.";
+            }
+
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("DistGroup", "Expense", new { id = GroupUID, period = PeriodCode });
+        }
+
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddDistItems(int[] LocationIds, short GroupID, Guid? GroupUID, string PeriodCode)
+        {
+            ExpenseControlModel model = new ExpenseControlModel();
+            model.Result = new Result();
+            List<ExpenseChartGroupItems> expenseChartGroupItems = new List<ExpenseChartGroupItems>();
+
+            var ItemIds = LocationIds.ToList();
+
+            foreach (var item in ItemIds)
+            {
+                expenseChartGroupItems.Add(new ExpenseChartGroupItems()
+                {
+                    ChartGroupID = GroupID,
+                    LocationID = item,
+                    PeriodCode = PeriodCode
+                });
+            }
+
+            if (expenseChartGroupItems.Count > 0)
+            {
+                Db.ExpenseChartGroupItems.AddRange(expenseChartGroupItems);
+                Db.SaveChanges();
+
+                model.Result.IsSuccess = true;
+                model.Result.Message = "Seçili Lokasyonlar Eklendi.";
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Seçili Lokasyon Bulunamadı.";
+            }
+
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("DistGroup", "Expense", new { id = GroupUID, period = PeriodCode });
+        }
+
+
+
+
+
+
+
+
+
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddDistGroup(DistGroupFormModel form)
+        {
+            ExpenseControlModel model = new ExpenseControlModel();
+
+            model.Result = new Result();
+
+            if (form != null && !string.IsNullOrEmpty(form.GroupName))
+            {
+                var dgroup = Db.ExpenseChartGroup.FirstOrDefault(x => x.GroupCode == form.GroupCode || x.GroupName.Trim() == form.GroupName.Trim());
+
+                if (dgroup == null)
+                {
+                    dgroup = new ExpenseChartGroup();
+                    //form.GroupUID = Guid.NewGuid();
+
+                    dgroup.UID = form.GroupUID;
+                    dgroup.IsActive = true;
+                    dgroup.OurCompanyID = model.Authentication.ActionEmployee.OurCompanyID.Value;
+                    dgroup.GroupCode = form.GroupCode;
+                    dgroup.GroupName = form.GroupName;
+                    dgroup.SortBy = form.SortBy;
+
+                    Db.ExpenseChartGroup.Add(dgroup);
+                    Db.SaveChanges();
+
+                    model.Result.IsSuccess = true;
+                    model.Result.Message = "Masraf Dagılım Grubu Eklendi";
+
+                    OfficeHelper.AddApplicationLog("Office", "ExpenseChartGroup", "Insert", dgroup.ID.ToString(), "Expense", "AddDistGroup", null, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, dgroup);
+                }
+                else
+                {
+                    model.Result.IsSuccess = false;
+                    model.Result.Message = "Benzer Masraf Dagılım Grubu Bulundu";
+                }
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Form Verileri Gelmedi";
+            }
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("DistGroup", "Expense", new { id = form.GroupUID });
+        }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult EditDistGroup(DistGroupFormModel form)
+        {
+            ExpenseControlModel model = new ExpenseControlModel();
+
+            model.Result = new Result();
+
+            if (form != null && !string.IsNullOrEmpty(form.GroupName))
+            {
+                var dgroup = Db.ExpenseChartGroup.FirstOrDefault(x => x.ID == form.GroupID && x.UID == form.GroupUID);
+
+                if (dgroup != null)
+                {
+                    ExpenseChartGroup self = new ExpenseChartGroup()
+                    {
+                        GroupCode = dgroup.GroupCode,
+                        GroupName = dgroup.GroupName,
+                        ID = dgroup.ID,
+                        UID = dgroup.UID,
+                        IsActive = dgroup.IsActive,
+                        OurCompanyID = dgroup.OurCompanyID,
+                        SortBy = dgroup.SortBy
+                    };
+
+                    dgroup.GroupCode = form.GroupCode;
+                    dgroup.GroupName = form.GroupName;
+                    dgroup.SortBy = form.SortBy;
+
+                    Db.SaveChanges();
+
+                    model.Result.IsSuccess = true;
+                    model.Result.Message = "Masraf Dagılım Grubu Güncellendi";
+
+                    var isequal = OfficeHelper.PublicInstancePropertiesEqual<ExpenseChartGroup>(self, dgroup, OfficeHelper.getIgnorelist());
+                    OfficeHelper.AddApplicationLog("Office", "ExpenseDocument", "Update", dgroup.ID.ToString(), "Expense", "Detail", isequal, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                }
+                else
+                {
+                    model.Result.IsSuccess = false;
+                    model.Result.Message = "Benzer Masraf Dagılım Grubu Bulunamadı";
+                }
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Form Verileri Gelmedi";
+            }
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("DistGroup", "Expense", new { id = form.GroupUID });
+        }
 
 
     }

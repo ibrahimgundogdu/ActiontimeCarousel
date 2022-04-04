@@ -20,5 +20,6 @@ namespace ActionForce.Entity
         public Nullable<bool> IsActive { get; set; }
         public int OurCompanyID { get; set; }
         public string GroupCode { get; set; }
+        public Nullable<System.Guid> UID { get; set; }
     }
 }

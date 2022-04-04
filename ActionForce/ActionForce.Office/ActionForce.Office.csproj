@@ -2387,6 +2387,7 @@
     <Compile Include="Models\FilterModel\PosFilterModel.cs" />
     <Compile Include="Models\FormModels\ArrangeFormModel.cs" />
     <Compile Include="Models\FormModels\CostumeTypeFormModel.cs" />
+    <Compile Include="Models\FormModels\DistGroupFormModel.cs" />
     <Compile Include="Models\FormModels\ExpenseFormModel.cs" />
     <Compile Include="Models\FormModels\FormCardReplace.cs" />
     <Compile Include="Models\FormModels\FormExpenseDocumentImport.cs" />
@@ -2437,6 +2438,7 @@
     <Compile Include="Models\FormModels\PartnerFormModel.cs" />
     <Compile Include="Models\FormModels\PartnerPaymentFormModel.cs" />
     <Compile Include="Models\FormModels\PartnershipFormModel.cs" />
+    <Compile Include="Models\FormModels\PartnerUserFormModel.cs" />
     <Compile Include="Models\FormModels\PosFormModel.cs" />
     <Compile Include="Models\LocationPart.cs" />
     <Compile Include="Models\Location\LocationEmployeeModel.cs" />
@@ -2845,6 +2847,9 @@
     <Content Include="Views\Partner\Detail.cshtml" />
     <Content Include="Views\Partner\NewPartner.cshtml" />
     <Content Include="Views\Partner\PrePartnership.cshtml" />
+    <Content Include="Views\Partner\NewPartnerUser.cshtml" />
+    <Content Include="Views\Partner\DetailPartnerUser.cshtml" />
+    <Content Include="Views\Expense\DistGroup.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

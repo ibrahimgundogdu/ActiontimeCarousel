@@ -1,0 +1,332 @@
+﻿@model ExpenseControlModel
+@{
+    ViewBag.Title = "Dağıtım Grupları";
+}
+
+@section style{
+
+}
+
+<div class="row no-gutters">
+
+
+
+    <div class="col-md-3 mg-t-1 pd-r-0 pd-l-0 pd-t-0">
+        <div class="m-2">
+
+
+            @using (Html.BeginForm("AddDistGroup", "Expense", FormMethod.Post))
+            {
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <input id="GroupCode" name="GroupCode" type="text" class="form-control" autocomplete="off" value="" placeholder="Kod" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <input id="GroupName" name="GroupName" type="text" class="form-control" autocomplete="off" value="" placeholder="Grup Adı" required>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <input id="SortBy" name="SortBy" type="text" class="form-control" autocomplete="off" value="" placeholder="Sıra" required>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <input id="GroupUID" name="GroupUID" type="hidden" value="@(Guid.NewGuid())" />
+                        <input id="Submit" type="submit" class="btn btn-primary btn-block" value="Ekle" />
+                    </div>
+                </div>
+            }
+
+        </div>
+        <div id="scrollBank" class="card-body pd-0  pos-relative bd ht-100v">
+
+            <div class="contact-list">
+
+                <div class="table-responsive" id="BankList">
+
+                    <table class="table table-primary table-hover table-striped mg-b-0">
+                        <thead>
+                            <tr class="table-active">
+                                <th>#</th>
+                                <th>Kod</th>
+                                <th>Grup Adı</th>
+                                <th>Sıra</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.ExpenseChartGroups)
+                            {
+                                <tr>
+                                    <td><span class="@(item.IsActive == true ? "tx-success":"tx-danger")">@(item.ID)</span></td>
+                                    <td scope="row" class="@(item.IsActive == true ? "":"tx-danger")"><b>@(item.GroupCode)</b></td>
+                                    <td scope="row" class="@(item.IsActive == true ? "":"tx-danger")">
+                                        @if (item.ID > 0)
+                                        {
+                                            <a href="/Expense/DistGroup/@(item.UID)" class="text-primary tx-15"> <b>@(item.GroupName)</b></a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-primary tx-15">@(item.GroupName)</span>
+                                        }
+
+                                    </td>
+                                    <td>@(item.SortBy)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+    <div class="col-md-7 mg-t-0 pd-r-0 pd-l-0 pd-t-0">
+        <div class="pd-5">
+
+            <div class="card ht-100p mt-1">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h6 class="mg-b-0">@(Model.ExpenseChartGroup.GroupName)</h6>
+                </div>
+                <div class="card-body pd-0">
+
+                    <div class="m-2">
+
+
+                        @using (Html.BeginForm("EditDistGroup", "Expense", FormMethod.Post))
+                        {
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <input id="GroupCode2" name="GroupCode" type="text" class="form-control" autocomplete="off" value="@(Model.ExpenseChartGroup.GroupCode)" placeholder="Kod" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <input id="GroupName2" name="GroupName" type="text" class="form-control" autocomplete="off" value="@(Model.ExpenseChartGroup.GroupName)" placeholder="Grup Adı" required>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <input id="SortBy2" name="SortBy" type="text" class="form-control" autocomplete="off" value="@(Model.ExpenseChartGroup.SortBy)" placeholder="Sıra" required>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <input id="GroupID" name="GroupID" type="hidden" value="@(Model.ExpenseChartGroup.ID)" />
+                                    <input id="GroupUID" name="GroupUID" type="hidden" value="@(Model.ExpenseChartGroup.UID)" />
+                                    <input id="Submit" type="submit" class="btn btn-primary btn-block" value="Güncelle" />
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+
+
+            @using (Html.BeginForm("RemoveDistItems", "Expense", FormMethod.Post))
+            {
+                <div class="card ht-100p mt-3">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h6 class="mg-b-0">@(Model.ExpensePeriod.PeriodCode) - @(Model.ExpenseChartGroup.GroupName) &nbsp; @(Model.ExpenseChartGroupItems.Count)</h6>
+                    </div>
+                    <div class="card-body pd-0">
+
+                        <div class="m-2">
+
+                            <div class="table">
+                                <table class="table table-striped table-hover table-primary">
+                                    <thead>
+
+                                        <tr>
+                                            <th>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="chkAll" onchange="chkControl()">
+                                                    <label class="custom-control-label" for="chkAll"></label>
+                                                </div>
+                                            </th>
+                                            <th>#</th>
+                                            <th>Lokasyon</th>
+                                            <th>Grup</th>
+                                            <th>Dönemi</th>
+                                            <th>Aktif</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var exp in Model.Locations.OrderBy(x => x.LocationFullName))
+                                        {
+                                            var groupItem = Model.ExpenseChartGroupItems.FirstOrDefault(x => x.ChartGroupID == Model.ExpenseChartGroup.ID && x.PeriodCode == Model.ExpensePeriod.PeriodCode && x.LocationID == exp.LocationID);
+
+                                            <tr class="@(exp.IsActive == true ? "" : "text-danger")">
+                                                <td>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input name="GroupItems" type="checkbox" class="custom-control-input shiftcheck" id="GroupItem@(groupItem.ID)" value="@(groupItem.ID)">
+                                                        <label class="custom-control-label" for="GroupItem@(groupItem.ID)"></label>
+                                                    </div>
+                                                </td>
+                                                <td class="tx-sm-13">@(exp.LocationID)</td>
+                                                <td class="tx-sm-13 font-weight-bold">@(exp.LocationFullName)</td>
+                                                <td class="tx-sm-13 font-weight-bold">@(Model.ExpenseChartGroup.GroupName)</td>
+                                                <td class="tx-sm-13 font-weight-bold">@(Model.ExpensePeriod.PeriodCode)</td>
+                                                <td class="tx-sm-13">@(exp.IsActive == true ? "Aktif" : "Pasif")</td>
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="card-footer text-left tx-13">
+                        <input name="GroupID" type="hidden" value="@(Model.ExpenseChartGroup.ID)" />
+                        <input name="GroupUID" type="hidden" value="@(Model.ExpenseChartGroup.UID)" />
+                        <input name="PeriodCode" type="hidden" value="@(Model.ExpensePeriod.PeriodCode)" />
+                        <input id="Submit" type="submit" class="btn btn-danger btn-block" value="Seçili Olanları Kaldır" />
+                    </div>
+
+                </div>
+            }
+
+            @using (Html.BeginForm("AddDistItems", "Expense", FormMethod.Post))
+            {
+                <div class="card ht-100p mt-3">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <h6 class="mg-b-0">@(Model.ExpensePeriod.PeriodCode) - @(Model.ExpenseChartGroup.GroupName) &nbsp; @(Model.OutLocations.Count)</h6>
+                    </div>
+                    <div class="card-body pd-0">
+
+                        <div class="m-2">
+
+                            <div class="table">
+                                <table class="table table-striped table-hover table-light">
+                                    <thead>
+
+                                        <tr>
+                                            <th>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="outAll" onchange="outControl()">
+                                                    <label class="custom-control-label" for="outAll"></label>
+                                                </div>
+                                            </th>
+                                            <th>#</th>
+                                            <th>Lokasyon</th>
+                                            <th>Grup</th>
+                                            <th>Dönemi</th>
+                                            <th>Aktif</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var exp in Model.OutLocations.OrderBy(x => x.LocationFullName))
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input name="LocationIds" type="checkbox" class="custom-control-input outshiftcheck" id="OutGroupItem@(exp.LocationID)" value="@(exp.LocationID)">
+                                                        <label class="custom-control-label" for="OutGroupItem@(exp.LocationID)"></label>
+                                                    </div>
+                                                </td>
+                                                <td class="tx-sm-13">@(exp.LocationID)</td>
+                                                <td class="tx-sm-13 font-weight-bold">@(exp.LocationFullName)</td>
+                                                <td class="tx-sm-13 font-weight-bold">@(Model.ExpenseChartGroup.GroupName)</td>
+                                                <td class="tx-sm-13 font-weight-bold">@(Model.ExpensePeriod.PeriodCode)</td>
+                                                <td class="tx-sm-13 @(exp.IsActive == true ? "":"text-danger")">@(exp.IsActive == true ? "Aktif":"Pasif")</td>
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card-footer text-left tx-13">
+                        <input name="GroupID" type="hidden" value="@(Model.ExpenseChartGroup.ID)" />
+                        <input name="GroupUID" type="hidden" value="@(Model.ExpenseChartGroup.UID)" />
+                        <input name="PeriodCode" type="hidden" value="@(Model.ExpensePeriod.PeriodCode)" />
+                        <input id="Submit" type="submit" class="btn btn-primary btn-block" value="Seçili Olanları Ekle" />
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+    <div class="col-md-2 mg-t-0 pd-r-0 pd-l-0 pd-t-0">
+        <div class="pd-5">
+
+
+
+            <div class="card ht-100p mt-1">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h6 class="mg-b-0">Dönemler</h6>
+                </div>
+                <div class="card-body pd-0">
+
+                    <div class="m-2">
+
+                        @foreach (var item in Model.ExpensePeriods.OrderBy(x => x.DateBegin))
+                        {
+                            <a class="btn btn-block btn-primary font-weight-bold @(Model.ExpensePeriod.PeriodCode == item.PeriodCode ? "active":"") mb-1" href="/Expense/DistGroup/@(Model.ExpenseChartGroup.UID)?period=@(item.PeriodCode)">@(item.PeriodCode)</a>
+                        }
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+    </div>
+</div>
+
+
+
+@section scripts {
+
+    <script type="text/javascript">
+
+        function chkControl() {
+
+            if ($('input#chkAll').is(':checked')) {
+                $(".shiftcheck").prop('checked', true);
+            }
+            else {
+                $(".shiftcheck").prop('checked', false);
+            };
+
+        };
+
+
+        function outControl() {
+
+            if ($('input#outAll').is(':checked')) {
+                $(".outshiftcheck").prop('checked', true);
+            }
+            else {
+                $(".outshiftcheck").prop('checked', false);
+            };
+
+        };
+
+
+
+
+
+    </script>
+
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+
+}
+

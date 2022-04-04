@@ -46,5 +46,12 @@ namespace ActionForce.Office
         public ExpenseChartGroup ExpenseChartGroup { get; set; }
         public List<ExpenseChartGroup> ExpenseChartGroups { get; set; }
         public List<ExpenseChartGroupItems> ExpenseChartGroupItems { get; set; }
+
+        public List<Location> Locations { get; set; }
+        public List<Location> OutLocations { get; set; }
+
+
+
+
     }
 }

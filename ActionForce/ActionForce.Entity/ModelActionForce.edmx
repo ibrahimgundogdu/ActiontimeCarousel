@@ -2505,6 +2505,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="GroupName" Type="nvarchar" MaxLength="40" />
           <Property Name="SortBy" Type="char" MaxLength="3" />
           <Property Name="IsActive" Type="bit" />
+          <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="ExpenseChartGroupItems">
           <Key>
@@ -23352,6 +23353,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
           <Property Name="GroupCode" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="UID" Type="Guid" />
         </EntityType>
         <EntityType Name="ExpenseChartGroupItems">
           <Key>
@@ -32371,6 +32373,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="ExpenseChartGroup">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ExpenseChartGroup">
               <MappingFragment StoreEntitySet="ExpenseChartGroup">
+                <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="GroupCode" ColumnName="GroupCode" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />

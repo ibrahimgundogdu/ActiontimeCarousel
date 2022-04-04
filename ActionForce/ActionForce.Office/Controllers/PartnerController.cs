@@ -142,17 +142,196 @@ namespace ActionForce.Office.Controllers
         {
             PartnerControlModel model = new PartnerControlModel();
 
+            if (form.LocationID == 0)
+            {
+                return RedirectToAction("Index");
+            }
+
             if (TempData["Result"] != null)
             {
                 model.Result = TempData["Result"] as Result ?? null;
             }
 
             model.Location = Db.Location.FirstOrDefault(x => x.LocationID == form.LocationID);
-            model.VPartner = Db.VPartner.FirstOrDefault(x => x.UID == form.PartnerUID && x.ID == form.PartnerID);
-            model.Partnerships = Db.VPartnership.Where(x => x.PartnerID == model.VPartner.ID).ToList();
+            model.VPartner = Db.VPartner.FirstOrDefault(x => x.ID == form.PartnerID);
+            model.Partnership = Db.VPartnership.FirstOrDefault(x => x.LocationID == model.Location.LocationID && x.PartnerID == model.VPartner.ID);
+            model.UFEPartnership = Db.VPartnership.FirstOrDefault(x => x.LocationID == model.Location.LocationID && x.PartnerID == 0);
+
 
             return View(model);
         }
+
+        //AddUser
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditPartnership(PartnershipFormModel form)
+        {
+            PartnerControlModel model = new PartnerControlModel();
+
+            model.Result = new Result();
+
+            if (form != null && form.LocationID > 0 && form.PartnerID >= 0)
+            {
+
+                var partner = Db.Partner.FirstOrDefault(x => x.UID == form.PartnerUID && x.ID == form.PartnerID);
+                var location = Db.Location.FirstOrDefault(x => x.LocationUID == form.LocationUID && x.LocationID == form.LocationID);
+
+                if (partner != null && location != null)
+                {
+
+                    if (form.SubmitUpdate == "1")
+                    {
+                        var partnership = Db.Partnership.FirstOrDefault(x => x.ID == form.PartnershipID);
+                        var ufePartnership = Db.Partnership.FirstOrDefault(x => x.ID == form.UFEPartnershipID);
+
+                        var periodbegin = Db.ExpensePeriod.FirstOrDefault(x => x.DateYear == form.DateStart.Year && x.DateMonth == form.DateStart.Month);
+
+                        DateTime? dateEnd = null;
+                        if (form.DateEnd != null)
+                        {
+                            dateEnd = Db.ExpensePeriod.FirstOrDefault(x => x.DateYear == form.DateEnd.Value.Year && x.DateMonth == form.DateEnd.Value.Month)?.DateEnd;
+                        }
+
+                        var differentRate = form.PartnershipRate - partnership.PartnershipRate;
+
+                        if (partnership != null)
+                        {
+                            Partnership self = new Partnership()
+                            {
+                                IsActive = partnership.IsActive,
+                                ID = partnership.ID,
+                                DateEnd = partnership.DateEnd,
+                                LocationID = partnership.LocationID,
+                                PartnerID = partnership.PartnerID,
+                                DateStart = partnership.DateStart,
+                                PartnershipRate = partnership.PartnershipRate
+                            };
+
+                            partnership.DateEnd = dateEnd;
+                            partnership.DateStart = periodbegin.DateBegin;
+                            partnership.LocationID = form.LocationID;
+                            partnership.PartnerID = form.PartnerID;
+                            partnership.PartnershipRate = form.PartnershipRate;
+
+                            //ufePartnership.DateStart = partnership.DateStart;
+                            //ufePartnership.DateEnd = null;
+                            ufePartnership.PartnershipRate -= differentRate;
+
+                            Db.SaveChanges();
+
+
+                            model.Result.IsSuccess = true;
+                            model.Result.Message = "Partnership Güncellendi";
+
+                            var isequal = OfficeHelper.PublicInstancePropertiesEqual<Partnership>(self, partnership, OfficeHelper.getIgnorelist());
+                            OfficeHelper.AddApplicationLog("Office", "Partnership", "Update", partner.ID.ToString(), "Partner", "EditPartner", isequal, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                        }
+                        else
+                        {
+                            model.Result.IsSuccess = false;
+                            model.Result.Message = "Partner Bulunamadı";
+                        }
+                    }
+
+                    if (form.SubmitAdd == "1")
+                    {
+                        var ufePartnership = Db.Partnership.FirstOrDefault(x => x.ID == form.UFEPartnershipID);
+
+                        var periodbegin = Db.ExpensePeriod.FirstOrDefault(x => x.DateYear == form.DateStart.Year && x.DateMonth == form.DateStart.Month);
+
+                        DateTime? dateEnd = null;
+                        if (form.DateEnd != null)
+                        {
+                            dateEnd = Db.ExpensePeriod.FirstOrDefault(x => x.DateYear == form.DateEnd.Value.Year && x.DateMonth == form.DateEnd.Value.Month)?.DateEnd;
+                        }
+
+                        var differentRate = form.PartnershipRate;
+
+                        Partnership partnership = new Partnership()
+                        {
+                            IsActive = true,
+                            DateEnd = dateEnd,
+                            LocationID = form.LocationID,
+                            PartnerID = form.PartnerID,
+                            DateStart = periodbegin.DateBegin,
+                            PartnershipRate = form.PartnershipRate
+                        };
+
+                        Db.Partnership.Add(partnership);
+                        Db.SaveChanges();
+
+                        ufePartnership.PartnershipRate -= differentRate;
+
+                        Db.SaveChanges();
+
+                        model.Result.IsSuccess = true;
+                        model.Result.Message = "Partnership Eklendi";
+
+                        OfficeHelper.AddApplicationLog("Office", "Partnership", "Insert", partner.ID.ToString(), "Partner", "EditPartnership", null, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, partnership);
+
+                    }
+
+                    if (form.SubmitEnd == "1")
+                    {
+                        var ufePartnership = Db.Partnership.FirstOrDefault(x => x.ID == form.UFEPartnershipID);
+                        var partnership = Db.Partnership.FirstOrDefault(x => x.ID == form.PartnershipID);
+
+                        if (partnership != null)
+                        {
+
+                            Partnership self = new Partnership()
+                            {
+                                IsActive = partnership.IsActive,
+                                ID = partnership.ID,
+                                DateEnd = partnership.DateEnd,
+                                LocationID = partnership.LocationID,
+                                PartnerID = partnership.PartnerID,
+                                DateStart = partnership.DateStart,
+                                PartnershipRate = partnership.PartnershipRate
+                            };
+
+
+
+                            partnership.DateEnd = DateTime.Now.Date;
+                            Db.SaveChanges();
+
+                            model.Result.IsSuccess = true;
+                            model.Result.Message = "Partnership Sonlandırıldı";
+
+                            var isequal = OfficeHelper.PublicInstancePropertiesEqual<Partnership>(self, partnership, OfficeHelper.getIgnorelist());
+                            OfficeHelper.AddApplicationLog("Office", "Partner", "Update", partner.ID.ToString(), "Partner", "EditPartner", isequal, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+
+                            ufePartnership.PartnershipRate += partnership.PartnershipRate;
+
+                            Db.SaveChanges();
+
+
+                        }
+                        else
+                        {
+                            model.Result.IsSuccess = false;
+                            model.Result.Message = "Partner Bulunamadı";
+                        }
+                    }
+
+                }
+
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Form Verileri Gelmedi";
+            }
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("Detail", "Partner", new { id = form.PartnerUID });
+        }
+
 
         [HttpPost]
         [AllowAnonymous]
@@ -235,6 +414,84 @@ namespace ActionForce.Office.Controllers
         }
 
 
+        [AllowAnonymous]
+        public ActionResult NewPartnerUser(Guid? id)
+        {
+            PartnerControlModel model = new PartnerControlModel();
+            model.VPartner = Db.VPartner.FirstOrDefault(x => x.UID == id);
+
+            return View(model);
+        }
+
+        //DetailPartnerUser
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddPartnerUser(PartnerUserFormModel form)
+        {
+            PartnerControlModel model = new PartnerControlModel();
+
+            model.Result = new Result();
+
+            if (form != null && form.PartnerUID != null && !string.IsNullOrEmpty(form.UserFullname))
+            {
+                var partner = Db.Partner.FirstOrDefault(x => x.UID == form.PartnerUID);
+
+                if (partner != null)
+                {
+                    string username = form.Username.Trim();
+                    if (Db.PartnerUser.Any(x => x.Username == username))
+                    {
+                        username = username + "_1";
+                    };
+
+                    string password = string.Empty;
+
+                    if (form.Password.Trim() == form.Password2.Trim())
+                    {
+                        password = OfficeHelper.makeMD5(form.Password.Trim());
+
+                        PartnerUser partneruser = new PartnerUser();
+
+                        partneruser.UID = Guid.NewGuid();
+                        partneruser.IsActive = true;
+                        partneruser.UserFullname = form.UserFullname;
+                        partneruser.Username = username;
+                        partneruser.Password = password;
+                        partneruser.Email = form.Email;
+                        partneruser.PartnerID = partner.ID;
+
+                        Db.PartnerUser.Add(partneruser);
+                        Db.SaveChanges();
+
+                        model.Result.IsSuccess = true;
+                        model.Result.Message = "Partner User Eklendi";
+
+                        OfficeHelper.AddApplicationLog("Office", "PartnerUser", "Insert", partneruser.ID.ToString(), "Partner", "AddPartnerUser", null, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, partneruser);
+                    }
+                    else
+                    {
+                        model.Result.IsSuccess = false;
+                        model.Result.Message = "Girilen Şifreler Farklı";
+                    }
+                }
+                else
+                {
+                    model.Result.IsSuccess = false;
+                    model.Result.Message = "İşortağı bulunamadı";
+                }
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Form Verileri Gelmedi";
+            }
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("Detail", "Partner", new { id = form.PartnerUID });
+        }
+
         [HttpPost]
         [AllowAnonymous]
         public ActionResult GetStateList(int countryid)
@@ -273,6 +530,145 @@ namespace ActionForce.Office.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
 
         }
+
+        [AllowAnonymous]
+        public ActionResult DetailPartnerUser(Guid? id)
+        {
+            PartnerControlModel model = new PartnerControlModel();
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result ?? null;
+            }
+
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            model.PartnerUser = Db.PartnerUser.FirstOrDefault(x => x.UID == id);
+            if (model.PartnerUser == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            model.Partner = Db.Partner.FirstOrDefault(x => x.ID == model.PartnerUser.PartnerID);
+
+            return View(model);
+        }
+
+        //EditPartnerUser
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditPartnerUser(PartnerUserFormModel form)
+        {
+            PartnerControlModel model = new PartnerControlModel();
+
+            model.Result = new Result();
+
+            if (form != null && form.PartnerUserID > 0)
+            {
+                var partner = Db.Partner.FirstOrDefault(x => x.UID == form.PartnerUID);
+
+                if (partner != null)
+                {
+                    var partneruser = Db.PartnerUser.FirstOrDefault(x => x.ID == form.PartnerUserID);
+
+                    if (partneruser != null)
+                    {
+
+
+                        if (form.SubmitUpdate == "1")
+                        {
+                            string username = form.Username.Trim();
+
+                            if (Db.PartnerUser.Any(x => x.Username == username && x.ID != form.PartnerUserID))
+                            {
+                                username = username + "_1";
+                            };
+
+                            string password = string.Empty;
+
+                            if (form.Password.Trim() == form.Password2.Trim())
+                            {
+                                password = OfficeHelper.makeMD5(form.Password.Trim());
+
+                                PartnerUser self = new PartnerUser()
+                                {
+                                    IsActive = partneruser.IsActive,
+                                    UID = partneruser.UID,
+                                    ID = partneruser.ID,
+                                    Email = partneruser.Email,
+                                    Username = partneruser.Username,
+                                    UserFullname = partneruser.UserFullname,
+                                    PartnerID = partneruser.PartnerID,
+                                    Password = partneruser.Password
+                                };
+
+                                partneruser.UserFullname = form.UserFullname;
+                                partneruser.Username = username;
+                                partneruser.Password = password;
+                                partneruser.Email = form.Email;
+
+                                Db.SaveChanges();
+
+                                model.Result.IsSuccess = true;
+                                model.Result.Message = "Partner Kullanıcısı Güncellendi";
+
+                                var isequal = OfficeHelper.PublicInstancePropertiesEqual<PartnerUser>(self, partneruser, OfficeHelper.getIgnorelist());
+                                OfficeHelper.AddApplicationLog("Office", "PartnerUser", "Update", partneruser.ID.ToString(), "Partner", "EditPartnerUser", isequal, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                            }
+                            else
+                            {
+                                model.Result.IsSuccess = false;
+                                model.Result.Message = "Girilen Şifreler Farklı";
+                            }
+                        }
+
+                        if (form.SubmitRemove == "1")
+                        {
+                            partneruser.IsActive = false;
+                            Db.SaveChanges();
+
+                            model.Result.IsSuccess = false;
+                            model.Result.Message = "Kullanıcı Pasife Çekildi";
+                        }
+
+                        if (form.SubmitRemove == "0")
+                        {
+                            partneruser.IsActive = true;
+                            Db.SaveChanges();
+
+                            model.Result.IsSuccess = false;
+                            model.Result.Message = "Kullanıcı Aktif Edildi";
+                        }
+                    }
+                    else
+                    {
+                        model.Result.IsSuccess = false;
+                        model.Result.Message = "Partner Kullanıcısı Bulunamadı";
+                    }
+                }
+                else
+                {
+                    model.Result.IsSuccess = false;
+                    model.Result.Message = "Partner Bulunamadı";
+                }
+
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Form Verileri Gelmedi";
+            }
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("Detail", "Partner", new { id = form.PartnerUID });
+        }
+
 
 
 

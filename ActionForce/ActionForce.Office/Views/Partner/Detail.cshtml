@@ -182,12 +182,12 @@
                     </div>
                 }
 
-            <div class="row no-gutters mt-5 d-flex align-items-center justify-content-between">
+                <div class="row no-gutters mt-5 d-flex align-items-center justify-content-between">
 
-                <div class="col-md-6">
-                    <h4>Ortaklık Pay Listesi</h4>
-                </div>
-                <div class="col-md-6">
+                    <div class="col-md-6">
+                        <h4>Ortaklık Pay Listesi</h4>
+                    </div>
+                    <div class="col-md-6">
                         @using (Html.BeginForm("PrePartnership", "Partner", FormMethod.Post))
                         {
                             @Html.AntiForgeryToken()
@@ -213,48 +213,58 @@
                         }
                         @*<a href="/Partner/AddPartnership" class="btn btn-primary btn-sm tx-14 mb-1"> Yeni Ortaklık Payı Ekle </a>*@
 
-                </div>
+                    </div>
 
-               
 
-                <div class="col-md-12 mg-t-0 pd-r-0 pd-l-0 pd-t-0">
-                    <div class="table-responsive" id="LocationList">
-                        <table class="table table-primary table-hover table-striped mg-b-0">
-                            <thead>
-                                <tr class="table-active">
-                                    <th>#</th>
-                                    <th scope="col">Lokasyon</th>
-                                    <th scope="col">Oran</th>
-                                    <th scope="col">Başlangıç</th>
-                                    <th scope="col">Bitiş</th>
-                                    <th scope="col">Aktif</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.Partnerships)
-                                {
-                                    <tr>
-                                        <td>@(item.ID)</td>
-                                        <td>@(item.LocationFullName)</td>
-                                        <td>@(item.PartnershipRate)</td>
-                                        <td>@(item.DateStart?.ToString("d"))</td>
-                                        <td>@(item.DateEnd?.ToString("d"))</td>
-                                        <td>@(item.IsActive)</td>
+
+                    <div class="col-md-12 mg-t-0 pd-r-0 pd-l-0 pd-t-0">
+                        <div class="table-responsive" id="LocationList">
+                            <table class="table table-primary table-hover table-striped mg-b-0">
+                                <thead>
+                                    <tr class="table-active">
+                                        <th>#</th>
+                                        <th scope="col">Lokasyon</th>
+                                        <th scope="col">Oran</th>
+                                        <th scope="col">Başlangıç</th>
+                                        <th scope="col">Bitiş</th>
+                                        <th scope="col">Aktif</th>
+                                        <th></th>
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Partnerships)
+                                    {
+                                        <tr>
+                                            <td>@(item.ID)</td>
+                                            <td>@(item.LocationFullName)</td>
+                                            <td>@(item.PartnershipRate)</td>
+                                            <td>@(item.DateStart?.ToString("d"))</td>
+                                            <td>@(item.DateEnd?.ToString("d"))</td>
+                                            <td>@(item.IsActive)</td>
+                                            <td style="width:100px;">
+                                                @using (Html.BeginForm("PrePartnership", "Partner", FormMethod.Post))
+                                                {
+                                                    @Html.AntiForgeryToken()
+                                                    <input name="LocationID" type="hidden" value="@(item.LocationID)" />
+                                                    <input name="PartnerID" type="hidden" value="@(item.PartnerID)" />
+                                                    <button class="btn btn-primary btn-block mb-0 btn-sm" type="submit" id="btnsearch">Detay</button>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
 
                 </div>
-
-            </div>
 
                 <div class="row no-gutters mt-5 d-flex align-items-center justify-content-between">
                     <h4>Kullanıcı Listesi</h4>
 
                     <div class="d-flex">
-                        <a href="/Partner/AddUser" class="btn btn-primary btn-sm tx-14 mb-1"> Yeni Kullanıcı Ekle </a>
+                        <a href="/Partner/NewPartnerUser/@(Model.VPartner.UID)" class="btn btn-primary btn-sm tx-14 mb-1"> Yeni Kullanıcı Ekle </a>
                     </div>
 
 
@@ -269,7 +279,7 @@
                                         <th scope="col">Şifre</th>
                                         <th scope="col">Email</th>
                                         <th scope="col">Aktif</th>
-
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -282,6 +292,9 @@
                                             <td>@(!string.IsNullOrEmpty(item.Password) ? "***":"")</td>
                                             <td>@(item.Email)</td>
                                             <td>@(item.IsActive)</td>
+                                            <td style="width:100px;">
+                                                <a href="/Partner/DetailPartnerUser/@(item.UID)" class="btn btn-primary btn-sm tx-14 mb-1"> Detay </a>
+                                            </td>
                                         </tr>
                                     }
                                 </tbody>

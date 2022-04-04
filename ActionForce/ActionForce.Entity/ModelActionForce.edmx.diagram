@@ -421,7 +421,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentPartnerEarn" Width="1.5" PointX="35.375" PointY="48.5" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentPartnerEarnRow" Width="1.5" PointX="29.375" PointY="43.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VPartnerActions" Width="1.5" PointX="29.375" PointY="48.125" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VPartner" Width="1.5" PointX="5.161615772713728" PointY="21.812728266144511" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VPartner" Width="1.5" PointX="5.5" PointY="47.875" />
         
         
         

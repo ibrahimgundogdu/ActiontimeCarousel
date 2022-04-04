@@ -24,6 +24,7 @@ namespace ActionForce.Office
         public List<VPartnerActions> OldPartnerActions { get; set; }
 
         public VPartnership Partnership { get; set; }
+        public VPartnership UFEPartnership { get; set; }
         public List<VPartnership> Partnerships { get; set; }
 
         public Location Location { get; set; }
