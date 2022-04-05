@@ -96,8 +96,8 @@ namespace ActionForce.PosLocation.Controllers
                     wReader.LocationTypeID = reader.LocationTypeID;
                     wReader.CardReaderTypeID = reader.CardReaderTypeID;
                     wReader.LocationPartID = reader.LocationPartID;
-                    wReader.PartName = part.PartName;
-                    wReader.PartGroupName = part.PartName;
+                    wReader.PartName = part?.PartName;
+                    wReader.PartGroupName = part?.PartName;
 
                     Db.SaveChanges();
 
