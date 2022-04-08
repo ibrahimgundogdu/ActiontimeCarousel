@@ -1049,7 +1049,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult AddExpenseAuto(string ExpensePeriod, string Location, string Office, string Rent, string Vat, string Expense, string Reset)
+        public ActionResult AddExpenseAuto(string ExpensePeriod, string Location, string Office, string Rent, string Vat, string Expense, string Reset, string Manuel)
         {
             ExpenseControlModel model = new ExpenseControlModel();
 
@@ -1093,15 +1093,22 @@ namespace ActionForce.Office.Controllers
 
                     var documentO = documentManager.ComputeExpenseDucumentOfficeRent(ExpensePeriod, model.Authentication);
                 }
+
                 if (Vat == "1")
                 {
                     var document = documentManager.ComputeExpenseDucumentVat(ExpensePeriod, model.Authentication);
                 }
+
                 if (Expense == "1")
                 {
                     var documentL = documentManager.ComputeExpenseDucumentLocationExpense(ExpensePeriod, model.Authentication);
 
                     var documentB = documentManager.ComputeExpenseDucumentBankExpense(ExpensePeriod, model.Authentication);
+                }
+
+                if (Manuel == "1")
+                {
+                    var document = documentManager.ComputeExpenseDucumentManuel(ExpensePeriod, model.Authentication);
                 }
 
                 model.Result.IsSuccess = true;

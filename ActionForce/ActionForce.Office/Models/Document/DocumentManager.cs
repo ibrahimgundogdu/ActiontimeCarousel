@@ -7244,6 +7244,47 @@ namespace ActionForce.Office
         }
 
 
+        //Manuel
+        public Result ComputeExpenseDucumentManuel(string expensePeriod, AuthenticationModel authentication)
+        {
+            Result result = new Result();
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var period = Db.ExpensePeriod.FirstOrDefault(x => x.PeriodCode == expensePeriod);
+
+                var expenseDocuments = Db.ExpenseDocument.Where(x => x.OurCompanyID == authentication.ActionEmployee.OurCompanyID && x.AutoComputeTypeID == null && x.DistributeGroupID > 0 && x.ExpensePeriodCode == expensePeriod).ToList();
+
+                try
+                {
+                    foreach (var doc in expenseDocuments)
+                    {
+                        var mresult = Db.AddExpenseDocumentChartManuel(doc.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress()).FirstOrDefault();
+
+                        if (doc?.StatusID == 1)
+                        {
+                            var sresult = Db.AddExpenseDocumentToActions(doc.ID, authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress()).FirstOrDefault();
+                        }
+                    }
+
+                    result.IsSuccess = true;
+                    result.Message = "Hesaplama Tamamlandı";
+
+                }
+                catch (Exception ex)
+                {
+                    result.IsSuccess = false;
+                    result.Message = "Hesaplama Yapılırken Hata Oluştu";
+                }
+                
+            }
+
+            return result;
+        }
+
+
+
+
         //reset
         public Result ResetExpenseDucument(string expensePeriod, AuthenticationModel authentication)
         {

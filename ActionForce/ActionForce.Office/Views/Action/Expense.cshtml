@@ -8,23 +8,23 @@
 
 <div class="content-header">
     <div class="content-search">
-        <span class="tx-20">Masraf Yönetimi - Maliyet Dokümanları</span>
+        <span class="tx-20">Masraf Yönetimi - Masraf Dokümanları</span>
     </div>
     <nav class="nav">
-        <a href="/Expense"> <i data-feather="menu"></i> </a> &nbsp;
+        <a href="/Action/Expense"> <i data-feather="menu"></i> </a> &nbsp;
         @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
 
     </nav>
 </div>
 <div class="content-body">
-    @using (Html.BeginForm("CostFilter", "Expense", FormMethod.Post))
+    @using (Html.BeginForm("ExpenseFilter", "Action", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
         <div class="form-row align-items-end">
 
             <div class="form-group col-md-3 d-flex align-items-end">
                 <select class="form-control select2" id="ECID" name="ECID">
-                    <option value="" label="Masraf Merkezi Seçiminiz"></option>
+                    <option value="" label="Gelir/Gider Merkezi Seçiminiz"></option>
                     @foreach (var item in Model.ExpenseCenters.OrderBy(x => x.SortBy))
                     {
                         <option value="@item.ID" @(Model.Filters.ExpenseCenterID == item.ID ? "selected" : "")>@(Html.Raw($"<strong>{item.ExpenseCenterName}</strong> ({item.IsActive}) "))</option>
@@ -32,7 +32,7 @@
                 </select>
             </div>
 
-            <div class="form-group col-md-3 d-flex align-items-end">
+            <div class="form-group col-md-2 d-flex align-items-end">
                 <select class="form-control select2" id="EIID" name="EIID">
                     <option value="" label="Masraf Kalemi Seçiminiz"></option>
                     @foreach (var item in Model.ExpenseItems.OrderBy(x => x.SortBy))
@@ -42,8 +42,8 @@
                 </select>
             </div>
 
-            <div class="form-group col-md-2 d-flex align-items-end">
-                <select class="form-control" id="EGID" name="EGID">
+            <div class="form-group col-md-1 d-flex align-items-end">
+                <select class="form-control select2" id="EGID" name="EGID">
                     <option value="" label="Grup Seçiminiz"></option>
                     @foreach (var item in Model.ExpenseGroups.OrderBy(x => x.SortBy))
                     {
@@ -52,8 +52,18 @@
                 </select>
             </div>
 
-            <div class="form-group col-md-2 d-flex align-items-end">
-                <select class="form-control" id="EPCD" name="EPCD">
+            <div class="form-group col-md-1 d-flex align-items-end">
+                <select class="form-control select2" id="ESID" name="ESID">
+                    <option value="" label="Durum Seçiminiz"></option>
+                    @foreach (var item in Model.ExpenseDocumentStatuses.OrderBy(x => x.SortBy))
+                    {
+                        <option value="@item.ID" @(Model.Filters.ExpenseStatusID == item.ID ? "selected" : "")>@(Html.Raw($"<strong>{item.StatusName}</strong>"))</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group col-md-1 d-flex align-items-end">
+                <select class="form-control select2" id="EPCD" name="EPCD">
                     <option value="" label="Dönem"></option>
                     @foreach (var item in Model.ExpensePeriods.OrderBy(x => x.DateBegin))
                     {
@@ -62,14 +72,33 @@
                 </select>
             </div>
 
-            <div class="form-group col-md-2 d-flex align-items-end ">
-                <button class="btn btn-primary btn-block" type="submit" id="btnsearch">Ara</button>
+            <div class="form-group col-md-1 d-flex align-items-end">
+                <select class="form-control select2" id="EDID" name="EDID">
+                    <option value="" label="Dağılım Seçiminiz"></option>
+                    @foreach (var item in Model.ExpenseChartGroups.OrderBy(x => x.SortBy))
+                    {
+                        <option value="@item.ID" @(Model.Filters?.DistributeGroupID == item.ID ? "selected" : "")>@(Html.Raw($"<strong>{item.GroupCode} {item.GroupName}</strong>"))</option>
+                    }
+                </select>
+            </div>
+
+
+
+            <div class="form-group col-md-1 d-flex align-items-end">
+                <input type="text" id="DTBG" name="DTBG" class="form-control" autocomplete="off" placeholder="Başlangıç Tarihi" value="@(Model.Filters.DateBegin.Value.ToString("yyyy-MM-dd"))">
+            </div>
+            <div class="form-group col-md-1 d-flex align-items-end">
+                <input type="text" id="DTEN" name="DTEN" class="form-control" autocomplete="off" placeholder="Bitiş Tarihi" value="@(Model.Filters.DateEnd.Value.ToString("yyyy-MM-dd"))">
+            </div>
+            <div class="form-group col-md-1 d-flex align-items-end ">
+                <button class="btn btn-primary btn-block" type="submit" id="btnsearch">Ara</button> &nbsp;
+                <a href="/Action/NewDocument" class="btn btn-success btn-block font-weight-bold">Yeni</a>
             </div>
 
         </div>
     }
 
-    @if (Model.ExpenseActions != null && Model.ExpenseActions.Count > 0)
+    @if (Model.ExpenseDocuments != null && Model.ExpenseDocuments.Count > 0)
     {
         <div>
             <div class="table">
@@ -78,42 +107,47 @@
 
                         <tr>
                             <th>#</th>
-                            <th>Kurum</th>
-                            <th>Doküman</th>
-                            <th>Merkez</th>
-                            <th>Lokasyon</th>
-                            <th>Maliyet</th>
+                            <th>Doküman No</th>
+                            <th>Tarih</th>
+                            <th>G/G Merkezi</th>
+                            <th>M. Kalemi</th>
                             <th>Grubu</th>
+                            <th>DG</th>
                             <th>Dönemi</th>
-                            <th class="text-right">Dağıtılan</th>
-                            <th class="text-right">Oran (%)</th>
-                            <th class="text-right">Tutar</th>
+                            <th>KDV</th>
+                            <th class="text-right">Tutarı</th>
+                            <th class="text-right">Dağıtım</th>
                             <th></th>
+                            <th>Durum</th>
                             <th>Kayıt</th>
-                            <th>Traih</th>
-
+                            <th>Aktif</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
 
-                        @foreach (var exp in Model.ExpenseActions.OrderByDescending(x => x.LocationFullName).ThenByDescending(x => x.RecordDate))
+                        @foreach (var exp in Model.ExpenseDocuments.OrderByDescending(x => x.DocumentDate).ThenByDescending(x => x.RecordDate))
                         {
                             <tr>
 
                                 <td class="tx-sm-13">@(exp.ID)</td>
-                                <td class="tx-sm-13"> @(exp.OurCompanyCode)</td>
-                                <td class="tx-sm-13"> @(exp.DocumentNumber)</td>
+                                <td class="tx-sm-13 font-weight-bold"><a href="/Action/Detail/@(exp.UID)" target="_blank" class="@(exp.StatusID == 1 ? "text-black-50":"")"> @(exp.DocumentNumber)</a></td>
+                                <td class="tx-sm-13 font-weight-bold">@(exp.DocumentDate.Value.ToString("d"))</td>
                                 <td class="tx-sm-13">@(exp.ExpenseCenterName)</td>
-                                <td class="tx-sm-13 font-weight-bold">@(exp.LocationFullName)</td>
                                 <td class="tx-sm-13">@(exp.ExpenseItemName)</td>
                                 <td class="tx-sm-13">@(exp.ExpenseGroupName)</td>
-                                <td class="tx-sm-13">@(exp.ExpensePeriodCode)</td>
-                                <td class="tx-sm-13 text-right">@(exp.Total?.ToString("N2"))</td>
-                                <td class="tx-sm-13 font-weight-bold text-right">@(exp.Rate?.ToString("N2"))</td>
-                                <td class="tx-sm-13 font-weight-bold text-right">@(exp.Amount?.ToString("N2"))</td>
+                                <td class="tx-sm-13"><span title="@(exp.GroupName)"></span> @(exp.GroupCode)</td>
+                                <td class="tx-sm-13 font-weight-bold text-right">@(exp.ExpensePeriodCode)</td>
+                                <td class="tx-sm-13 font-weight-bold text-right">@(exp.TaxRate)</td>
+                                <td class="tx-sm-13 font-weight-bold text-right">@(exp.TotalAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 font-weight-bold text-right">@(exp.DistributionAmount?.ToString("N2"))</td>
                                 <td class="tx-sm-13">@(exp.Currency)</td>
-                                <td class="tx-sm-13">@(exp.RecordEmployeeName)</td>
+                                <td class="tx-sm-13">@(exp.StatusName)</td>
                                 <td class="tx-sm-13">@(exp.RecordDate)</td>
+                                <td class="tx-sm-13">@(exp.IsActive == true ? "Aktif":"Pasif")</td>
+                                <td class="tx-sm-13"><a href="/Action/Detail/@(exp.UID)" target="_blank" class="@(exp.StatusID == 1 ? "text-black-50":"")"> <i data-feather="file-text"></i></a></td>
+                                <td class="tx-sm-13"><a href="/Action/Chart/@(exp.UID)" target="_blank" class="@(exp.StatusID == 1 ? "text-black-50":"text-warning") "> <i data-feather="list"></i></a></td>
 
                             </tr>
                         }
@@ -122,9 +156,10 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th colspan="10"></th>
-                            <th class="tx-sm-13 font-weight-bold text-right">@(Model.ExpenseActions.Sum(x=> x.Amount)?.ToString("N2"))</th>
-                            <th colspan="3"></th>
+                            <th colspan="9"></th>
+                            <th class="tx-sm-13 font-weight-bold text-right">@(Model.ExpenseDocuments.Sum(x=> x.TotalAmount)?.ToString("N2"))</th>
+                            <th class="tx-sm-13 font-weight-bold text-right">@(Model.ExpenseDocuments.Sum(x=> x.DistributionAmount)?.ToString("N2"))</th>
+                            <th colspan="6"></th>
 
                         </tr>
                     </tfoot>
@@ -151,7 +186,7 @@
         $(function () {
 
             $('#ECID').select2({
-                placeholder: 'Lokasyon Seçiminiz',
+                placeholder: 'G/G Merkezi Seçiminiz',
                 searchInputPlaceholder: 'Search options',
                 allowClear: true
             });

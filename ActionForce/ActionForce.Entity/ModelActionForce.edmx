@@ -8970,6 +8970,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
           <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="AddExpenseDocumentChartManuel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DocumentID" Type="bigint" Mode="In" />
+          <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
+          <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="AddExpenseDocumentChartMonthlyFoodCard" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DocumentID" Type="bigint" Mode="In" />
           <Parameter Name="ParentDocumentID" Type="bigint" Mode="In" />
@@ -14407,6 +14412,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </FunctionImport>
           <EntitySet Name="VPartnerActions" EntityType="db293_ActionTimeDbModel.VPartnerActions" />
           <EntitySet Name="VPartner" EntityType="db293_ActionTimeDbModel.VPartner" />
+          <FunctionImport Name="AddExpenseDocumentChartManuel" ReturnType="Collection(Int64)">
+            <Parameter Name="DocumentID" Mode="In" Type="Int64" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordIP" Mode="In" Type="String" />
+          </FunctionImport>
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -32727,6 +32737,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddExpenseDocumentChartManuel" FunctionName="db293_ActionTimeDbModel.Store.AddExpenseDocumentChartManuel" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

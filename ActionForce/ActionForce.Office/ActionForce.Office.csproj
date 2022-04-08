@@ -2850,6 +2850,10 @@
     <Content Include="Views\Partner\NewPartnerUser.cshtml" />
     <Content Include="Views\Partner\DetailPartnerUser.cshtml" />
     <Content Include="Views\Expense\DistGroup.cshtml" />
+    <Content Include="Views\Action\Expense.cshtml" />
+    <Content Include="Views\Action\NewDocument.cshtml" />
+    <Content Include="Views\Action\Detail.cshtml" />
+    <Content Include="Views\Action\Chart.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
