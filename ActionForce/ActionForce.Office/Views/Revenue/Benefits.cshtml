@@ -24,6 +24,7 @@
 
             <div class="form-group col-md-2 d-flex align-items-end">
                 <select class="form-control select2" id="PeriodCode" name="PeriodCode">
+                    <option value="">Periyot Seçiminiz</option>
                     @foreach (var item in Model.ExpensePeriods.OrderBy(x => x.DateBegin))
                     {
                         <option value="@item.PeriodCode" @(item.PeriodCode == Model.SelectedPeriod ? "selected" : "")>@(Html.Raw($"<strong>{item.PeriodCode}</strong>"))</option>
@@ -104,6 +105,12 @@
                     @foreach (var location in Model.Locations.OrderBy(x => x.LocationFullName))
                     {
                         var sales = Model.ExpenseSalePartnerless.Where(x => x.LocationID == location.LocationID).Sum(x => x.Total);
+
+                        if (sales == null || sales <= 0 )
+                        {
+                            sales = Model.ExpenseSaleSystemless.Where(x => x.LocationID == location.LocationID).Sum(x => x.Total);
+                        }
+
                         var rent = Model.ExpenseDocumentCharts.Where(x => x.ExpenseCenterID == location.LocationID && x.ExpenseGroupID == 1 && x.ExpenseItemID == 4).Sum(x => x.DistributedAmount);
                         var salary = Model.ExpenseDocumentCharts.Where(x => x.ExpenseCenterID == location.LocationID && x.ExpenseGroupID == 1 && salaryitems.Contains(x.ExpenseItemID.Value)).Sum(x => x.DistributedAmount);
                         var premium = Model.ExpenseDocumentCharts.Where(x => x.ExpenseCenterID == location.LocationID && x.ExpenseGroupID == 1 && x.ExpenseItemID == 42).Sum(x => x.DistributedAmount);

@@ -31,7 +31,6 @@ namespace ActionForce.Entity
         public virtual DbSet<ActionAccounts> ActionAccounts { get; set; }
         public virtual DbSet<ActionRow> ActionRow { get; set; }
         public virtual DbSet<ActionRowDocument> ActionRowDocument { get; set; }
-        public virtual DbSet<ActionRowExpense> ActionRowExpense { get; set; }
         public virtual DbSet<ActionRowLabors> ActionRowLabors { get; set; }
         public virtual DbSet<ActionRowProcess> ActionRowProcess { get; set; }
         public virtual DbSet<ActionRowResult> ActionRowResult { get; set; }
@@ -420,6 +419,7 @@ namespace ActionForce.Entity
         public virtual DbSet<VDocumentPartnerEarnRow> VDocumentPartnerEarnRow { get; set; }
         public virtual DbSet<VPartnerActions> VPartnerActions { get; set; }
         public virtual DbSet<VPartner> VPartner { get; set; }
+        public virtual DbSet<VExpenseSaleSystemless> VExpenseSaleSystemless { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

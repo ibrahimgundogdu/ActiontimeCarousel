@@ -823,6 +823,7 @@ namespace ActionForce.Office.Controllers
             }
 
             model.ExpenseSalePartnerless = Db.VExpenseSalePartnerless.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.PeriodCode == model.SelectedPeriod).ToList();
+            model.ExpenseSaleSystemless = Db.VExpenseSaleSystemless.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.PeriodCode == model.SelectedPeriod).ToList();
 
             return View(model);
         }

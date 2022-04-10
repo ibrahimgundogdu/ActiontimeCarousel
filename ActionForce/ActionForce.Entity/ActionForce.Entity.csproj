@@ -65,9 +65,6 @@
     <Compile Include="ActionRowDocument.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
-    <Compile Include="ActionRowExpense.cs">
-      <DependentUpon>ModelActionForce.tt</DependentUpon>
-    </Compile>
     <Compile Include="ActionRowLabors.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -1228,6 +1225,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VExpenseSalePartnerly.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VExpenseSaleSystemless.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VLocation.cs">

@@ -1,7 +1,10 @@
 ﻿using ActionForce.Entity;
+using ClosedXML.Excel;
+using LinqToExcel;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -1319,8 +1322,308 @@ namespace ActionForce.Office.Controllers
         }
 
 
+        [AllowAnonymous]
+        public FileResult GetExpenseTemplate()
+        {
+            ExpenseControlModel model = new ExpenseControlModel();
+
+            string targetpath = Server.MapPath("~/Document/Expense/");
+            string FileName = $"ExpenseTemplate.xlsx";
+
+            var isCreated = CreateExcelExpense(FileName);
+
+            if (isCreated == true)
+            {
+                string path = targetpath + FileName;
+                return File(path, "application/vnd.ms-excel", FileName);
+            }
+            else
+            {
+                return null;
+            }
 
 
+        }
+
+        public bool CreateExcelExpense(string FileName)
+        {
+            ExpenseControlModel model = new ExpenseControlModel();
+
+            bool isSuccess = false;
+
+            try
+            {
+                using (var workbook = new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add("ExpenseTemplate");
+
+                    worksheet.Cell("A1").Value = "MasrafMerkezi";
+                    worksheet.Cell("B1").Value = "MasrafGrubu";
+                    worksheet.Cell("C1").Value = "MasrafKalemi";
+                    worksheet.Cell("D1").Value = "DagitimTutari";
+                    worksheet.Cell("E1").Value = "KDVOrani";
+                    worksheet.Cell("F1").Value = "DagitimGrubu";
+
+                    worksheet.Cell("A2").Value = 131;
+                    worksheet.Cell("B2").Value = 2;
+                    worksheet.Cell("C2").Value = 31;
+                    worksheet.Cell("D2").Value = 10000;
+                    worksheet.Cell("E2").Value = 18;
+                    worksheet.Cell("F2").Value = "T";
+
+                    //MasrafMerkezi
+                    var worksheet1 = workbook.Worksheets.Add("MasrafMerkezi");
+
+                    worksheet1.Cell("A1").Value = "ID";
+                    worksheet1.Cell("B1").Value = "Masraf Merkezi";
+                    worksheet1.Cell("C1").Value = "Türü";
+
+                    int rownum = 2;
+                    var denyLocationIds = new List<int>() { 179, 175, 212 }.ToList();
+                    var expenseCenters = Db.VLocation.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true && !denyLocationIds.Contains(x.LocationID)).Select(x => new { ID = x.LocationID, Name = x.LocationFullName, TypeName = x.LocationTypeName }).ToList();
+                    foreach (var item in expenseCenters.OrderBy(x => x.Name))
+                    {
+
+                        worksheet1.Cell("A" + rownum).Value = item.ID;
+                        worksheet1.Cell("B" + rownum).Value = item.Name;
+                        worksheet1.Cell("C" + rownum).Value = item.TypeName;
+
+                        rownum++;
+                    }
+
+                    //MasrafGrubu
+                    var worksheet2 = workbook.Worksheets.Add("MasrafGrubu");
+
+                    worksheet2.Cell("A1").Value = "ID";
+                    worksheet2.Cell("B1").Value = "Masraf Grubu";
+
+                    rownum = 2;
+
+                    var expenseGroups = Db.ExpenseGroup.ToList();
+                    foreach (var item in expenseGroups.OrderBy(x => x.SortBy))
+                    {
+
+                        worksheet2.Cell("A" + rownum).Value = item.ID;
+                        worksheet2.Cell("B" + rownum).Value = item.ExpenseGroupName;
+
+                        rownum++;
+                    }
+
+                    //MasrafKalemi
+                    var worksheet3 = workbook.Worksheets.Add("MasrafKalemi");
+
+                    worksheet3.Cell("A1").Value = "ID";
+                    worksheet3.Cell("B1").Value = "Masraf Kalemleri";
+
+                    rownum = 2;
+
+                    var expenseItems = Db.ExpenseItem.ToList();
+                    foreach (var item in expenseItems.OrderBy(x => x.SortBy))
+                    {
+
+                        worksheet3.Cell("A" + rownum).Value = item.ID;
+                        worksheet3.Cell("B" + rownum).Value = item.ExpenseItemName;
+
+                        rownum++;
+                    }
+
+                    //DagitimGrubu
+                    var worksheet4 = workbook.Worksheets.Add("DagitimGrubu");
+
+                    worksheet4.Cell("A1").Value = "ID";
+                    worksheet4.Cell("B1").Value = "Kodu";
+                    worksheet4.Cell("C1").Value = "Dağıtım Grubu";
+
+                    rownum = 2;
+
+                    var distributeGroups = Db.ExpenseChartGroup.Where(x => x.IsActive == true).ToList();
+                    foreach (var item in distributeGroups.OrderBy(x => x.SortBy))
+                    {
+                        worksheet4.Cell("A" + rownum).Value = item.ID;
+                        worksheet4.Cell("B" + rownum).Value = item.GroupCode;
+                        worksheet4.Cell("C" + rownum).Value = item.GroupName;
+
+                        rownum++;
+                    }
+
+
+                    string targetpath = Server.MapPath("~/Document/Expense/");
+                    string pathToExcelFile = targetpath + FileName;
+                    workbook.SaveAs(pathToExcelFile);
+
+                    isSuccess = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                isSuccess = false;
+            }
+
+            return isSuccess;
+        }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddExpenseImport(FormExpenseDocumentImport form)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+            model.Result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                InfoKeyList = new List<InfoKey>()
+            };
+
+            if (form == null)
+            {
+                return RedirectToAction("NewDocument");
+            }
+
+            var expensePeriod = Db.ExpensePeriod.FirstOrDefault(x => x.PeriodCode == form.ExpensePeriod);
+            var datalistforlog = new List<ExcelExpenseDocument>();
+            DateTime documentDate = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone ?? 3).Date;
+
+            if (expensePeriod != null)
+            {
+                List<ExpenseDocument> expenseDocuments = new List<ExpenseDocument>();
+                List<ExpenseDocumentRows> expenseRowList = new List<ExpenseDocumentRows>();
+                List<ExpenseDocumentChart> expenseChartList = new List<ExpenseDocumentChart>();
+
+
+                if (form.ExpenseFile != null && form.ExpenseFile.ContentLength > 0)
+                {
+
+                    if (form.ExpenseFile.ContentType == "application/vnd.ms-excel" || form.ExpenseFile.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                    {
+                        string filename = Guid.NewGuid().ToString() + Path.GetExtension(form.ExpenseFile.FileName);
+                        string targetpath = Server.MapPath("~/Document/Expense/");
+                        string pathToExcelFile = targetpath + filename;
+
+
+                        form.ExpenseFile.SaveAs(Path.Combine(targetpath, filename));
+
+
+
+                        var connectionString = "";
+                        if (filename.EndsWith(".xls"))
+                        {
+                            connectionString = string.Format("Provider=Microsoft.Jet.OLEDB.4.0; data source={0}; Extended Properties=Excel 8.0;", pathToExcelFile);
+                        }
+                        else if (filename.EndsWith(".xlsx"))
+                        {
+                            connectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"Excel 12.0 Xml;HDR=YES;IMEX=1\";", pathToExcelFile);
+                        }
+
+
+                        string sheetName = "ExpenseTemplate";
+                        var excelFile = new ExcelQueryFactory(pathToExcelFile);
+                        var expenseList = from a in excelFile.Worksheet<ExcelExpenseDocument>(sheetName) select a;
+                        datalistforlog = expenseList.ToList();
+
+                        foreach (var item in datalistforlog)
+                        {
+                            var distGrup = Db.ExpenseChartGroup.FirstOrDefault(x => x.GroupCode == item.DagitimGrubu);
+                            if (distGrup == null)
+                            {
+                                distGrup = Db.ExpenseChartGroup.FirstOrDefault(x => x.ID == 5);
+                            }
+
+                            var document = new ExpenseDocument();
+                            var UID = Guid.NewGuid();
+
+                            document.UID = UID;
+                            document.DocumentNumber = OfficeHelper.GetDocumentNumber(model.Authentication.ActionEmployee.OurCompanyID ?? 2, "EXD");
+                            document.RecordDate = DateTime.UtcNow.AddHours(3);
+                            document.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                            document.RecordIP = OfficeHelper.GetIPAddress();
+                            document.DocumentSource = "Excel";
+                            document.ExpenseDescription = "";
+                            document.DistributionAmount = item.DagitimTutari;
+                            document.TotalAmount = item.DagitimTutari;
+                            document.ExpenseGroupID = item.MasrafGrubu;
+                            document.Currency = model.Authentication.ActionEmployee.OurCompany.Currency;
+                            document.DocumentDate = documentDate;
+                            document.ExpenseItemID = item.MasrafKalemi;
+                            document.ExpenseCenterID = item.MasrafMerkezi;
+                            document.ExpensePeriod = expensePeriod.DateBegin;
+                            document.IsActive = true;
+                            document.StatusID = 0;
+                            document.OurCompanyID = model.Authentication.ActionEmployee.OurCompanyID;
+                            document.TaxRate = item.KDVOrani;
+                            document.DistributeGroupID = distGrup.ID;
+
+                            if (form.ExpensePeriod != null)
+                            {
+                                document.ExpenseYear = document.ExpensePeriod.Value.Year;
+                                document.ExpenseMonth = document.ExpensePeriod.Value.Month;
+                                document.ExpensePeriodCode = document.ExpenseYear.ToString() + "-" + (document.ExpenseMonth <= 9 ? "0" + document.ExpenseMonth.ToString() : document.ExpenseMonth.ToString());
+                            }
+
+                            Db.ExpenseDocument.Add(document);
+                            Db.SaveChanges();
+
+                            expenseDocuments.Add(document); //listeye eklenir
+
+                            model.Result.IsSuccess = true;
+                            model.Result.Message = "Masraf Dokümanı Eklendi";
+
+                            OfficeHelper.AddApplicationLog("Office", "ExpenseDocument", "Insert", document.ID.ToString(), "Expense", "AddExpenseImport", null, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, document);
+
+                        }
+
+                        // rowslar dağıtım cetveli ve maliyetler eklenir
+
+                        foreach (var item in expenseDocuments)
+                        {
+
+                            if (item.ExpenseGroupID == 2 || item.ExpenseGroupID == 3)
+                            {
+                                if (item.DistributeGroupID == 1 || item.DistributeGroupID == 2 || item.DistributeGroupID == 3)
+                                {
+                                    var dresult = Db.AddExpenseDocumentGroupRowsChart(item.ID, item.DistributeGroupID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress()).FirstOrDefault().Value;
+                                }
+                            }
+                            else if (item.ExpenseGroupID == 1)
+                            {
+                                if (item.DistributeGroupID == 4)
+                                {
+                                    var dresult = Db.AddExpenseDocumentGroupRowsChartLoc(item.ID, item.DistributeGroupID, item.ExpenseCenterID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress()).FirstOrDefault().Value;
+                                }
+                            }
+                        }
+
+                        //deleting excel file from folder
+                        if ((System.IO.File.Exists(pathToExcelFile)))
+                        {
+                            System.IO.File.Delete(pathToExcelFile);
+                        }
+                    }
+                    else
+                    {
+                        model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = false, Name = "Format Hatası", Message = "Sadece Excel Dosyası Geçerlidir." });
+                    }
+                }
+                else
+                {
+                    model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = false, Name = "Dosya Hatası", Message = "Excel Dosyası Seçin." });
+                }
+
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = $"Masraf Dokümanı bilgisi bulunamadı";
+            }
+
+            model.Result.IsSuccess = false;
+            model.Result.Message = $"Masraf Dokümanı ekleme tamamlandı";
+
+            TempData["result"] = model.Result;
+
+            return RedirectToAction("Expense");
+
+        }
 
 
     }

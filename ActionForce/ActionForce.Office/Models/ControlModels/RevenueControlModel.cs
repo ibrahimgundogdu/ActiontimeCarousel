@@ -39,6 +39,7 @@ namespace ActionForce.Office
         public List<ExpensePeriod> ExpensePeriods { get; set; }
         public List<VExpenseDocumentChart> ExpenseDocumentCharts { get; set; }
         public List<VExpenseSalePartnerless> ExpenseSalePartnerless { get; set; }
+        public List<VExpenseSaleSystemless> ExpenseSaleSystemless { get; set; }
         public List<VPartnerActions> PartnerActions { get; set; }
 
         public List<Location> OfficeLocations { get; set; }
