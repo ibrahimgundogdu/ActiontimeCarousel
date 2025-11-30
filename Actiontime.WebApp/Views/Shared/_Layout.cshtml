@@ -1,0 +1,255 @@
+﻿
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>@ViewData["Title"] - Actiontime</title>
+	<link type="text/css" rel="stylesheet" href="/assets/css/main.css">
+	<link href="/assets/lib/font-awesome/css/all.min.css" rel="stylesheet" />
+</head>
+<body>
+
+
+	<header class="header ">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="header-side header-side-tiny">
+					<div class="row">
+
+						<div class="logo">
+							<a href="/">
+								ACTM
+							</a>
+							<a href="/" class="mobile">
+								ACTM
+							</a>
+						</div>
+					</div>
+				</div>
+				<div class="header-content">
+					<div class="row" style="text-align:end;">
+
+
+
+						<div class="search ">
+							<span class="name">@(User.Identity.Name)</span><br /><span class="title">@(User.FindFirst("Username").Value)</span>
+						</div><!-- search -->
+
+
+
+
+						<div class="user">
+							<a asp-controller="Account" asp-action="Logout" style="padding-top:10px;">
+								<span class="icon">
+									<i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>
+								</span>
+							</a>
+							
+						</div><!-- user -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<main class="main">
+		<div class="container-fluid">
+			<div class="row">
+
+
+				<div class="side-menu side-menu-tiny">
+					<div class="sidebar">
+						<ul>
+							<li class="@(this.ViewContext.RouteData.Values["controller"].ToString() == "Home" ? "active" : "")">
+								<a href="/" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Dashboard">
+									<span class="icon">
+										<i class="fa fa-clone fa-lg" aria-hidden="true"></i>
+									</span>
+									<span class="name">Dashboard</span>
+								</a>
+							</li>
+							<li class="@(this.ViewContext.RouteData.Values["controller"].ToString() == "Setup" ? "active" : "")">
+								<a asp-controller="Setup" asp-action="Index" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Setup">
+									<span class="icon"><i class="fa fa-cog fa-lg" aria-hidden="true"></i></span>
+									<span class="name">Setup</span>
+								</a>
+							</li>
+
+							<li class="@(this.ViewContext.RouteData.Values["controller"].ToString() == "Device" ? "active" : "")">
+								<a asp-controller="Device" asp-action="Index" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Devices">
+									<span class="icon"><i class="fa fa-microchip fa-lg" aria-hidden="true"></i></span>
+									<span class="name">Devices</span>
+								</a>
+							</li>
+
+							
+						</ul>
+					</div>
+				</div><!-- side-menu -->
+
+				<div class="general-content">
+
+
+					@RenderBody()
+
+				</div><!-- general-content -->
+
+				<div class="drawer-menu">
+					<ul>
+						<li class="active">
+							<a href="/" title="">
+								<span class="icon">
+									<i class="fa fa-clone fa-lg" aria-hidden="true"></i>
+								</span>
+							</a>
+						</li>
+						<li>
+							<a asp-controller="Setup" asp-action="Index" title="" data-bs-original-title="Drawer">
+								<span class="icon">
+									<i class="fa fa-cog fa-lg" aria-hidden="true"></i>
+								</span>
+							</a>
+						</li>
+						<li>
+							<a asp-controller ="Device" asp-action="Index">
+								<span class="icon">
+									<i class="fa fa-microchip fa-lg" aria-hidden="true"></i>
+								</span>
+							</a>
+						</li>
+						
+					</ul>
+				</div>
+
+				<div class="dateinfo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="now time">
+					<span>@(DateTime.Now.ToString("dd.MM"))</span>
+					<span>@(DateTime.Now.ToString("yyyy"))</span>
+				</div><!-- dateinfo -->
+
+			</div>
+		</div>
+	</main>
+
+
+	<footer class="footer ">
+	</footer>
+	<div class="modal fade" id="formExampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="formExampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="formExampleModalLabel">Form Example Modal</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="form">
+						<form action="#">
+							<div class="mb-3">
+								<label for="exampleFormControlInput1" class="form-label">Email address</label>
+								<input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+							</div>
+							<div class="input-group mb-3">
+								<span class="input-group-text" id="basic-addon1"></span>
+								<input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+							</div>
+
+							<div class="input-group mb-3">
+								<input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+								<span class="input-group-text" id="basic-addon2">example.com</span>
+							</div>
+
+							<label for="basic-url" class="form-label">Your vanity URL</label>
+							<div class="input-group mb-3">
+								<span class="input-group-text" id="basic-addon3">https://example.com/users/</span>
+								<input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+							</div>
+
+							<div class="input-group mb-3">
+								<span class="input-group-text">$</span>
+								<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+								<span class="input-group-text">.00</span>
+							</div>
+
+							<div class="input-group mb-3">
+								<input type="text" class="form-control" placeholder="Username" aria-label="Username">
+								<span class="input-group-text"></span>
+								<input type="text" class="form-control" placeholder="Server" aria-label="Server">
+							</div>
+
+							<div class="input-group mb-3">
+								<span class="input-group-text">With textarea</span>
+								<textarea class="form-control" aria-label="With textarea"></textarea>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="input-group mb-3">
+										<label class="input-group-text" for="inputGroupSelect01">Options</label>
+										<select class="form-select" id="inputGroupSelect01">
+											<option selected>Choose...</option>
+											<option value="1">One</option>
+											<option value="2">Two</option>
+											<option value="3">Three</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="input-group mb-3">
+										<label class="input-group-text" for="inputGroupSelect01">Options</label>
+										<select class="form-select" id="inputGroupSelect01">
+											<option selected>Choose...</option>
+											<option value="1">One</option>
+											<option value="2">Two</option>
+											<option value="3">Three</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label for="inputCity" class="form-label">City</label>
+									<input type="text" class="form-control" id="inputCity">
+								</div>
+								<div class="col-md-4">
+									<label for="inputState" class="form-label">State</label>
+									<select id="inputState" class="form-select">
+										<option selected>Choose...</option>
+										<option>...</option>
+									</select>
+								</div>
+								<div class="col-md-2 mb-3">
+									<label for="inputZip" class="form-label">Zip</label>
+									<input type="text" class="form-control" id="inputZip">
+								</div>
+								<div class="col-12">
+									<div class="mb-3">
+										<label class="form-label">Message</label>
+										<textarea class="form-control" aria-label="With textarea"></textarea>
+									</div>
+								</div>
+								<div class="col-12">
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="gridCheck">
+										<label class="form-check-label" for="gridCheck">
+											Check me out
+										</label>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><span>Close</span></button>
+					<button type="button" class="btn btn-success"><span>Save</span></button>
+					<button type="button" class="btn btn-primary"><span>Save</span></button>
+					<button type="button" class="btn btn-warning"><span>Save</span></button>
+					<button type="button" class="btn btn-danger"><span>Save</span></button>
+					<button type="button" class="btn btn-info"><span>Save</span></button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="/assets/js/index.js" asp-append-version="true"></script>
+	@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

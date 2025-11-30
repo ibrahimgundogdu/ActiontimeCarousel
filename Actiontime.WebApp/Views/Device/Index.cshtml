@@ -1,0 +1,110 @@
+﻿@{
+	ViewData["Title"] = "Setup Page";
+}
+@model DeviceControlModel
+<div class="general-content-head">
+	<h1>Devices</h1>
+</div><!-- general-content-head -->
+
+
+<div class="box box-height-auto">
+	<div class="table-section">
+		<div class="table-section-head">
+			<div class="section-title"><b>QR READERS</b></div>
+
+		</div>
+		<div class="table-responsive">
+			<table class="table table-planing" cellpadding="0" cellspacing="0">
+
+				<tr class="moon-bg-turqoise">
+					<th style="width: 60px;">
+						#
+					</th>
+					<th style="width: 200px;">
+						Serial Number
+					</th>
+					<th>
+						Part Name
+					</th>
+					
+					<th>IP</th>
+					<th style="width:41px;">
+						
+					</th>
+				</tr>
+				@foreach (var item in Model.QRReaders)
+				{
+
+
+					<tr class="@(item.LocationPartId >0 ? "" : "empty-row")">
+						<td>
+							#@(item.Id)
+						</td>
+						<td>
+							<strong>@(item.SerialNumber)</strong>
+						</td>
+						<td style="text-align:center;">
+							#@(item.LocationPartId) @(item.PartName)
+						</td>
+						<td>
+							@(item.Ipaddress)
+						</td>
+						<td>
+							<a asp-controller="Device" asp-action="Index" asp-route-id="@(item.SerialNumber)" class="btn btn-info" style="width:100px;">
+								<span>  <i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i></span>
+							</a>
+						</td>
+					</tr>
+				}
+
+
+
+			</table>
+			
+
+            @if (Model.QRReader != null)
+            {
+                <div>
+                   <form method="post" asp-controller="Device" asp-action="PartUpdate">
+                        <div class="drawer__header">
+                            <div class="drawer__title">
+                                <strong> Device Part Edit </strong>
+                            </div>
+                           
+                        </div>
+                        <div class="drawer__content">
+                            <div class="form">
+                                
+                                    <div class="mb-3">
+										<label for="SerialNumber" class="form-label">Serial Number</label>
+										<input type="text" class="form-control fa-bold" name="SerialNumber" id="SerialNumber" value="@(Model.QRReader.SerialNumber)" readonly>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="input-group mb-3">
+											<label class="input-group-text" for="PartId" style="width:200px;margin-right:12px;">Part</label>
+											<select asp-for="PartId" asp-items="Model.Items" class="form-select"></select>
+											
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group mb-3">
+										<span class="input-group-text" for="PartName" style="width:200px;margin-right:12px;">Part Name</span>
+										<input type="text" class="form-control" name="PartName" id="PartName" value="@(Model.QRReader.PartName)">
+                                       
+                                    </div>
+
+                               
+                            </div>
+                            <div class="drawer--footer">
+								<button class="btn btn-info" style="width:200px;" type="submit">
+									<span>Save Device Part</span>
+								</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            }
+			
+		</div>
+	</div>
+</div>

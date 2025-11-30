@@ -1,0 +1,186 @@
+﻿@{
+	ViewData["Title"] = "Setup Page";
+}
+@model SetupControlModel
+<div class="general-content-head">
+	<h1>Setup</h1>
+</div><!-- general-content-head -->
+
+<div class="page-header">
+	<div class="page-title">
+		01. Select Location
+	</div>
+	<div class="page-date">
+		@(DateTime.Now.ToLongDateString())
+	</div>
+</div>
+<div class="weekly-sheet">
+	<form method="post" asp-controller="Setup" asp-action="Location" class="page-header">
+		<div class="percent">
+			<div class="form-group mb-0">
+				<select class="form-control" name="LocationId">
+					@foreach (var item in Model.CLocations)
+					{
+						<option value="@(item.LocationId)">@(item.LocationFullName)</option>
+					}
+				</select>
+			</div>
+		</div>
+		<div class="weekly-date">
+			<div class="date">
+				<div class="btn-set" style="width:200px;margin-right:12px;">
+					<button class="btn btn-info" style="width:200px;" type="submit">
+						<span>Select Location</span>
+					</button>
+
+				</div>
+			</div>
+
+		</div>
+	</form>
+</div>
+<div class="weekly-progress">
+	<div class="moon-progress">
+		<div class="moon-progress-bar">
+			<span style="width:69%;"></span>
+		</div>
+	</div>
+</div>
+<div class="box box-height-auto">
+	<div class="table-section">
+		<div class="table-section-head">
+			<div class="section-title"><b>SETUP STEPS</b></div>
+
+		</div>
+		<div class="table-responsive">
+			<table class="table table-planing" cellpadding="0" cellspacing="0">
+
+				<tr class="moon-bg-turqoise">
+					<th style="width: 60px;">
+						#
+					</th>
+					<th style="width: 200px;">
+						Step
+					</th>
+					<th>
+
+					</th>
+					<th style="width:41px;">
+
+					</th>
+				</tr>
+
+				<tr class="@(Model.Location != null ? "" : "empty-row")">
+					<td>
+						01
+					</td>
+					<td>
+						Current Location
+					</td>
+					<td style="text-align:center;">
+						<strong>
+							@(Model.Location != null ? Model.Location.LocationName : "")
+						</strong>
+					</td>
+					<td>
+					</td>
+				</tr>
+
+				<tr class="@((Model.Employees?.Count ?? 0) <= 0 ? "empty-row" : "")">
+					<td>
+						02
+					</td>
+					<td>
+						Get Location Employees
+					</td>
+					<td style="text-align:center;">
+						<strong>
+							@((Model.Employees?.Count ?? 0) > 0 ? Model.Employees.Count.ToString() : "0")
+						</strong>
+					</td>
+					<td>
+						<a asp-controller="Setup" asp-action="Employee" class="btn btn-info" style="width:100px;">
+							<span>  <i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i></span>
+						</a>
+					</td>
+				</tr>
+				<tr class="@((Model.LocationPartials?.Count ?? 0) <= 0 ? "empty-row" : "")">
+					<td>
+						03
+					</td>
+					<td>
+						Get Location Parts
+					</td>
+					<td style="text-align:center;">
+						<strong>
+							@((Model.LocationPartials?.Count ?? 0) > 0 ? Model.LocationPartials.Count.ToString() : "0")
+						</strong>
+					</td>
+					<td>
+						<a asp-controller="Setup" asp-action="LocationPartial" asp-route-id="@(Model.Location?.Id)" class="btn btn-info" style="width:100px;">
+							<span>  <i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i></span>
+						</a>
+					</td>
+				</tr>
+				<tr class="@((Model.LocationSchedules?.Count ?? 0) > 0 || (Model.EmployeeSchedules?.Count ?? 0) > 0 ? "" : "empty-row")">
+					<td>
+						04
+					</td>
+					<td>
+						Get Schedules (L - E)
+					</td>
+					<td style="text-align:center;">
+						<strong>
+
+							@((Model.LocationSchedules?.Count ?? 0) > 0 ? Model.LocationSchedules.Count.ToString() : "0") - @((Model.EmployeeSchedules?.Count ?? 0) > 0 ? Model.EmployeeSchedules.Count.ToString() : "0")
+						</strong>
+					</td>
+					<td>
+						<a asp-controller="Setup" asp-action="Schedule" asp-route-id="@(Model.Location?.Id)" class="btn btn-info" style="width:100px;">
+							<span>  <i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i></span>
+						</a>
+					</td>
+				</tr>
+				<tr class="@((Model.ProductPrices?.Count ?? 0) <= 0 ? "empty-row" : "")">
+					<td>
+						05
+					</td>
+					<td>
+						Get Prices
+					</td>
+					<td style="text-align:center;">
+						<strong>
+							@((Model.ProductPrices?.Count ?? 0) > 0 ? Model.ProductPrices.Count.ToString() : "0")
+						</strong>
+					</td>
+					<td>
+						<a asp-controller="Setup" asp-action="Price" asp-route-id="@(Model.Location?.Id)" class="btn btn-info" style="width:100px;">
+							<span>  <i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i></span>
+						</a>
+					</td>
+				</tr>
+				<tr class="@((Model.CashActionTypes?.Count ?? 0) <= 0 ? "empty-row" : "")">
+					<td>
+						06
+					</td>
+					<td>
+						Get Lookups
+					</td>
+					<td style="text-align:center;">
+						<strong>
+							@((Model.CashActionTypes?.Count ?? 0) > 0 ? Model.CashActionTypes.Count.ToString() : "0")
+						</strong>
+					</td>
+					<td>
+						<a asp-controller="Setup" asp-action="Lookup" class="btn btn-info" style="width:100px;">
+							<span>  <i class="fa fa-arrow-right fa-lg" aria-hidden="true"></i></span>
+						</a>
+					</td>
+				</tr>
+			</table>
+			<div class="excel-export">
+				
+			</div>
+		</div>
+	</div>
+</div>

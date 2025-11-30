@@ -1,0 +1,16 @@
+C:\Source\Repos\ActionTime\Actiontime.Models\bin\Release\net6.0\Actiontime.Models.deps.json
+C:\Source\Repos\ActionTime\Actiontime.Models\bin\Release\net6.0\Actiontime.Models.dll
+C:\Source\Repos\ActionTime\Actiontime.Models\bin\Release\net6.0\Actiontime.Models.pdb
+C:\Source\Repos\ActionTime\Actiontime.Models\bin\Release\net6.0\Actiontime.Data.dll
+C:\Source\Repos\ActionTime\Actiontime.Models\bin\Release\net6.0\Actiontime.Data.pdb
+C:\Source\Repos\ActionTime\Actiontime.Models\obj\Release\net6.0\Actiontime.Models.csproj.AssemblyReference.cache
+C:\Source\Repos\ActionTime\Actiontime.Models\obj\Release\net6.0\Actiontime.Models.GeneratedMSBuildEditorConfig.editorconfig
+C:\Source\Repos\ActionTime\Actiontime.Models\obj\Release\net6.0\Actiontime.Models.AssemblyInfoInputs.cache
+C:\Source\Repos\ActionTime\Actiontime.Models\obj\Release\net6.0\Actiontime.Models.AssemblyInfo.cs
+C:\Source\Repos\ActionTime\Actiontime.Models\obj\Release\net6.0\Actiontime.Models.csproj.CoreCompileInputs.cache
+C:\Source\Repos\ActionTime\Actiontime.Models\obj\Release\net6.0\Actiontime.Models.dll
+C:\Source\Repos\ActionTime\Actiontime.Models\obj\Release\net6.0\refint\Actiontime.Models.dll
+C:\Source\Repos\ActionTime\Actiontime.Models\obj\Release\net6.0\Actiontime.Models.pdb
+C:\Source\Repos\ActionTime\Actiontime.Models\obj\Release\net6.0\ref\Actiontime.Models.dll
+C:\Source\Repos\ActionTime\Actiontime.Models\obj\Release\net6.0\Actiontime.Models.sourcelink.json
+C:\Source\Repos\ActionTime\Actiontime.Models\obj\Release\net6.0\Actionti.3E3A2541.Up2Date

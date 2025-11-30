@@ -1,0 +1,72 @@
+﻿@model LoginViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Actiontime Local</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/assets/css/main.css" type="text/css">
+</head>
+<body>
+      
+
+
+    <main class="main">
+        <div class="container-fluid">
+            <div class="row">
+
+                <div class="login-screen">
+                    <div class="login-container">
+                        <div class="wellcome">
+                            <div class="bottom">
+                                <h1>Actiontime</h1>
+                                <p>@($"{DateTime.Now.ToLongDateString()} {DateTime.Now.ToLongTimeString()}")</p>
+                            </div>
+                        </div><!-- wellcome -->
+                        <div class="login-section">
+                            <div class="centered">
+                                <h2>Wellcome to Admin Panel</h2>
+                                <form asp-controller="Account" asp-action="Login" method="post">
+                                    <div class="form-group">
+                                        <input type="text" asp-for="Username" placeholder="Username">
+                                        <span asp-validation-for="Username" class="text-danger small"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" asp-for="Password" placeholder="Password">
+                                        <span asp-validation-for="Password" class="text-danger small"></span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+
+                                    </div>
+                                    <div class="button-group">
+                                        <button type="submit" class="btn btn-info">
+                                            <span>Log In</span>
+                                        </button>
+                                    </div>
+                                </form>
+								<p class="text-center">
+									<div asp-validation-summary="ModelOnly" class="text-danger small"></div>
+								</p>
+                            </div><!-- centered -->
+                            <div class="deep">
+                               
+                            </div>
+                        </div><!-- login-section -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/assets/js/index.js"></script>
+</body>
+</html>

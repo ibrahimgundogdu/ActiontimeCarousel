@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Actiontime.Data", "Actiontime.Data\Actiontime.Data.csproj", "{8D124711-E23D-4FC6-91E0-45492312EF6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Actiontime.DataCloud", "Actiontime.DataCloud\Actiontime.DataCloud.csproj", "{8756A8CF-AF7F-41C9-94EE-3A308B12C6A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Actiontime.Models", "Actiontime.Models\Actiontime.Models.csproj", "{829B0E9E-A54A-4227-BC83-1E64D0ECACA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Actiontime.Services", "Actiontime.Services\Actiontime.Services.csproj", "{F074421A-69BA-429D-83E4-62DC51C51B6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Actiontime.TicketAPI", "Actiontime.TicketAPI\Actiontime.TicketAPI.csproj", "{D869A6F3-908E-4AEF-BD43-0C6311653C22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Actiontime.WebApp", "Actiontime.WebApp\Actiontime.WebApp.csproj", "{743A7E5C-3356-4E3B-8D09-1BFD19E1CC96}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8D124711-E23D-4FC6-91E0-45492312EF6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D124711-E23D-4FC6-91E0-45492312EF6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D124711-E23D-4FC6-91E0-45492312EF6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D124711-E23D-4FC6-91E0-45492312EF6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8756A8CF-AF7F-41C9-94EE-3A308B12C6A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8756A8CF-AF7F-41C9-94EE-3A308B12C6A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8756A8CF-AF7F-41C9-94EE-3A308B12C6A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8756A8CF-AF7F-41C9-94EE-3A308B12C6A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{829B0E9E-A54A-4227-BC83-1E64D0ECACA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{829B0E9E-A54A-4227-BC83-1E64D0ECACA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{829B0E9E-A54A-4227-BC83-1E64D0ECACA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{829B0E9E-A54A-4227-BC83-1E64D0ECACA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F074421A-69BA-429D-83E4-62DC51C51B6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F074421A-69BA-429D-83E4-62DC51C51B6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F074421A-69BA-429D-83E4-62DC51C51B6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F074421A-69BA-429D-83E4-62DC51C51B6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D869A6F3-908E-4AEF-BD43-0C6311653C22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D869A6F3-908E-4AEF-BD43-0C6311653C22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D869A6F3-908E-4AEF-BD43-0C6311653C22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D869A6F3-908E-4AEF-BD43-0C6311653C22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{743A7E5C-3356-4E3B-8D09-1BFD19E1CC96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{743A7E5C-3356-4E3B-8D09-1BFD19E1CC96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{743A7E5C-3356-4E3B-8D09-1BFD19E1CC96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{743A7E5C-3356-4E3B-8D09-1BFD19E1CC96}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1FE6DE49-4D42-41B9-9928-B02698B7BC21}
+	EndGlobalSection
+EndGlobal

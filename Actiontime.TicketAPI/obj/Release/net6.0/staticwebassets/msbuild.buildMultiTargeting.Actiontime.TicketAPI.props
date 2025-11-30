@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Actiontime.TicketAPI.props" />
+</Project>

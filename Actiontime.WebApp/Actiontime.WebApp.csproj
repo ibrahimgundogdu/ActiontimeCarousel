@@ -1,0 +1,100 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\assets\.DS_Store" />
+    <None Include="wwwroot\assets\img\.DS_Store" />
+    <None Include="wwwroot\assets\img\0fe2a97fedae05656aac57584071b30d.svg" />
+    <None Include="wwwroot\assets\img\attach.svg" />
+    <None Include="wwwroot\assets\img\avatar-01.svg" />
+    <None Include="wwwroot\assets\img\avatar-02.svg" />
+    <None Include="wwwroot\assets\img\avatar-03.svg" />
+    <None Include="wwwroot\assets\img\avatar-04.svg" />
+    <None Include="wwwroot\assets\img\avatar-05.svg" />
+    <None Include="wwwroot\assets\img\avatar-06.svg" />
+    <None Include="wwwroot\assets\img\calendar.svg" />
+    <None Include="wwwroot\assets\img\cf4662abf26052fda12a9b88a4f61286.svg" />
+    <None Include="wwwroot\assets\img\chat.svg" />
+    <None Include="wwwroot\assets\img\checkbox.svg" />
+    <None Include="wwwroot\assets\img\comments.svg" />
+    <None Include="wwwroot\assets\img\contact.svg" />
+    <None Include="wwwroot\assets\img\csv.svg" />
+    <None Include="wwwroot\assets\img\dashboard.svg" />
+    <None Include="wwwroot\assets\img\datatable-dots.svg" />
+    <None Include="wwwroot\assets\img\dot.svg" />
+    <None Include="wwwroot\assets\img\dots.svg" />
+    <None Include="wwwroot\assets\img\download.svg" />
+    <None Include="wwwroot\assets\img\excel.svg" />
+    <None Include="wwwroot\assets\img\file-manager.svg" />
+    <None Include="wwwroot\assets\img\hamburger.svg" />
+    <None Include="wwwroot\assets\img\instagram.svg" />
+    <None Include="wwwroot\assets\img\logo-tiny.svg" />
+    <None Include="wwwroot\assets\img\logo.svg" />
+    <None Include="wwwroot\assets\img\long-arrow-lower.svg" />
+    <None Include="wwwroot\assets\img\long-arrow-upper.svg" />
+    <None Include="wwwroot\assets\img\mail.svg" />
+    <None Include="wwwroot\assets\img\notes.svg" />
+    <None Include="wwwroot\assets\img\notification-close.svg" />
+    <None Include="wwwroot\assets\img\notification.svg" />
+    <None Include="wwwroot\assets\img\pagination-first.svg" />
+    <None Include="wwwroot\assets\img\pagination-last.svg" />
+    <None Include="wwwroot\assets\img\pagination-left.svg" />
+    <None Include="wwwroot\assets\img\pagination-right.svg" />
+    <None Include="wwwroot\assets\img\pdf.svg" />
+    <None Include="wwwroot\assets\img\print.svg" />
+    <None Include="wwwroot\assets\img\profile-facebook.svg" />
+    <None Include="wwwroot\assets\img\progress-arrow.svg" />
+    <None Include="wwwroot\assets\img\projects.svg" />
+    <None Include="wwwroot\assets\img\search.svg" />
+    <None Include="wwwroot\assets\img\select-down-arrow.svg" />
+    <None Include="wwwroot\assets\img\settings.svg" />
+    <None Include="wwwroot\assets\img\shop.svg" />
+    <None Include="wwwroot\assets\img\sidemenu-sub-arrow.svg" />
+    <None Include="wwwroot\assets\img\task-commet.svg" />
+    <None Include="wwwroot\assets\img\task-plus.svg" />
+    <None Include="wwwroot\assets\img\tasks-calendar.svg" />
+    <None Include="wwwroot\assets\img\tasks-ok.svg" />
+    <None Include="wwwroot\assets\img\tasks.svg" />
+    <None Include="wwwroot\assets\img\time.svg" />
+    <None Include="wwwroot\assets\img\twitter.svg" />
+    <None Include="wwwroot\assets\img\user-lock.svg" />
+    <None Include="wwwroot\assets\img\user-logout.svg" />
+    <None Include="wwwroot\assets\img\user-mail.svg" />
+    <None Include="wwwroot\assets\img\user-section-icon-1.svg" />
+    <None Include="wwwroot\assets\img\user-section-icon-2.svg" />
+    <None Include="wwwroot\assets\img\user-section-icon-3.svg" />
+    <None Include="wwwroot\assets\img\user-section-icon-4.svg" />
+    <None Include="wwwroot\assets\img\user-settings.svg" />
+    <None Include="wwwroot\assets\img\user-tasks.svg" />
+    <None Include="wwwroot\assets\img\user-user.svg" />
+    <None Include="wwwroot\assets\js\index.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.36">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.36" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.36">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="NETCore.Encrypt" Version="2.1.1" />
+    <PackageReference Include="System.Text.Json" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Actiontime.Data\Actiontime.Data.csproj" />
+    <ProjectReference Include="..\Actiontime.Services\Actiontime.Services.csproj" />
+  </ItemGroup>
+
+</Project>
