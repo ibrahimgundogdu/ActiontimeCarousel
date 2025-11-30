@@ -1,0 +1,785 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\obj\\Release\\net6.0\\scopedcss\\projectbundle\\Actiontime.WebApp.bundle.scp.css",
+      "PackagePath": "staticwebassets\\Actiontime.WebApp.bundle.scp.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\css\\main.css",
+      "PackagePath": "staticwebassets\\assets\\css\\main.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\0fe2a97fedae05656aac57584071b30d.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\0fe2a97fedae05656aac57584071b30d.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\2c0b14e864a54c96acb3c52962372586.png",
+      "PackagePath": "staticwebassets\\assets\\img\\2c0b14e864a54c96acb3c52962372586.png"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\angular.png",
+      "PackagePath": "staticwebassets\\assets\\img\\angular.png"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\attach.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\attach.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\avatar-01.png",
+      "PackagePath": "staticwebassets\\assets\\img\\avatar-01.png"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\avatar-01.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\avatar-01.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\avatar-02.png",
+      "PackagePath": "staticwebassets\\assets\\img\\avatar-02.png"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\avatar-02.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\avatar-02.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\avatar-03.png",
+      "PackagePath": "staticwebassets\\assets\\img\\avatar-03.png"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\avatar-03.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\avatar-03.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\avatar-04.png",
+      "PackagePath": "staticwebassets\\assets\\img\\avatar-04.png"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\avatar-04.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\avatar-04.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\avatar-05.png",
+      "PackagePath": "staticwebassets\\assets\\img\\avatar-05.png"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\avatar-05.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\avatar-05.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\avatar-06.png",
+      "PackagePath": "staticwebassets\\assets\\img\\avatar-06.png"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\avatar-06.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\avatar-06.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\bitbucket.png",
+      "PackagePath": "staticwebassets\\assets\\img\\bitbucket.png"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\calendar.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\calendar.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\cf4662abf26052fda12a9b88a4f61286.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\cf4662abf26052fda12a9b88a4f61286.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\chat.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\chat.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\checkbox.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\checkbox.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\comments.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\comments.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\contact.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\contact.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\csv.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\csv.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\dashboard.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\dashboard.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\datatable-dots.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\datatable-dots.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\dot.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\dot.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\dots.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\dots.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\download.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\download.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\dropbox.png",
+      "PackagePath": "staticwebassets\\assets\\img\\dropbox.png"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\excel.png",
+      "PackagePath": "staticwebassets\\assets\\img\\excel.png"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\excel.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\excel.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\facebook-messenger.png",
+      "PackagePath": "staticwebassets\\assets\\img\\facebook-messenger.png"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\file-manager.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\file-manager.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\firebase.png",
+      "PackagePath": "staticwebassets\\assets\\img\\firebase.png"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\gitlab.png",
+      "PackagePath": "staticwebassets\\assets\\img\\gitlab.png"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\hamburger.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\hamburger.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\instagram.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\instagram.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\java.png",
+      "PackagePath": "staticwebassets\\assets\\img\\java.png"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\login-pattern.png",
+      "PackagePath": "staticwebassets\\assets\\img\\login-pattern.png"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\logo-tiny.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\logo-tiny.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\logo.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\logo.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\long-arrow-lower.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\long-arrow-lower.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\long-arrow-upper.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\long-arrow-upper.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\mail.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\mail.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\notes.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\notes.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\notification-close.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\notification-close.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\notification.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\notification.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\pagination-first-left.png",
+      "PackagePath": "staticwebassets\\assets\\img\\pagination-first-left.png"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\pagination-first.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\pagination-first.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\pagination-last.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\pagination-last.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\pagination-left.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\pagination-left.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\pagination-right.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\pagination-right.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\pdf.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\pdf.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\print.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\print.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\profile-banner.jpg",
+      "PackagePath": "staticwebassets\\assets\\img\\profile-banner.jpg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\profile-facebook.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\profile-facebook.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\progress-arrow.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\progress-arrow.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\projects.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\projects.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\python.png",
+      "PackagePath": "staticwebassets\\assets\\img\\python.png"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\search.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\search.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\select-down-arrow.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\select-down-arrow.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\settings.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\settings.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\shop.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\shop.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\sidemenu-sub-arrow.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\sidemenu-sub-arrow.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\slack.png",
+      "PackagePath": "staticwebassets\\assets\\img\\slack.png"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\stok-img.png",
+      "PackagePath": "staticwebassets\\assets\\img\\stok-img.png"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\task-box-banner-img.png",
+      "PackagePath": "staticwebassets\\assets\\img\\task-box-banner-img.png"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\task-commet.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\task-commet.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\task-plus.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\task-plus.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\tasks-calendar.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\tasks-calendar.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\tasks-ok.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\tasks-ok.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\tasks.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\tasks.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\time.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\time.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\twitter.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\twitter.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\user-lock.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\user-lock.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\user-logout.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\user-logout.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\user-mail.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\user-mail.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\user-section-icon-1.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\user-section-icon-1.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\user-section-icon-2.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\user-section-icon-2.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\user-section-icon-3.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\user-section-icon-3.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\user-section-icon-4.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\user-section-icon-4.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\user-settings.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\user-settings.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\user-tasks.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\user-tasks.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\user-user.svg",
+      "PackagePath": "staticwebassets\\assets\\img\\user-user.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\img\\vue.png",
+      "PackagePath": "staticwebassets\\assets\\img\\vue.png"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\js\\index.js",
+      "PackagePath": "staticwebassets\\assets\\js\\index.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\js\\index.js.LICENSE.txt",
+      "PackagePath": "staticwebassets\\assets\\js\\index.js.LICENSE.txt"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\css\\all.css",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\css\\all.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\css\\all.min.css",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\css\\all.min.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\css\\brands.css",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\css\\brands.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\css\\brands.min.css",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\css\\brands.min.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\css\\fontawesome.css",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\css\\fontawesome.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\css\\fontawesome.min.css",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\css\\fontawesome.min.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\css\\regular.css",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\css\\regular.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\css\\regular.min.css",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\css\\regular.min.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\css\\solid.css",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\css\\solid.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\css\\solid.min.css",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\css\\solid.min.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\css\\svg-with-js.css",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\css\\svg-with-js.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\css\\svg-with-js.min.css",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\css\\svg-with-js.min.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\css\\v4-font-face.css",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\css\\v4-font-face.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\css\\v4-font-face.min.css",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\css\\v4-font-face.min.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\css\\v4-shims.css",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\css\\v4-shims.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\css\\v4-shims.min.css",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\css\\v4-shims.min.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\css\\v5-font-face.css",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\css\\v5-font-face.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\css\\v5-font-face.min.css",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\css\\v5-font-face.min.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\js\\all.js",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\js\\all.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\js\\all.min.js",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\js\\all.min.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\js\\brands.js",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\js\\brands.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\js\\brands.min.js",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\js\\brands.min.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\js\\conflict-detection.js",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\js\\conflict-detection.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\js\\conflict-detection.min.js",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\js\\conflict-detection.min.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\js\\fontawesome.js",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\js\\fontawesome.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\js\\fontawesome.min.js",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\js\\fontawesome.min.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\js\\regular.js",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\js\\regular.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\js\\regular.min.js",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\js\\regular.min.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\js\\solid.js",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\js\\solid.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\js\\solid.min.js",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\js\\solid.min.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\js\\v4-shims.js",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\js\\v4-shims.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\js\\v4-shims.min.js",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\js\\v4-shims.min.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\sprites\\brands.svg",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\sprites\\brands.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\sprites\\regular.svg",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\sprites\\regular.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\sprites\\solid.svg",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\sprites\\solid.svg"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\webfonts\\fa-brands-400.ttf",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\webfonts\\fa-brands-400.ttf"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\webfonts\\fa-brands-400.woff2",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\webfonts\\fa-brands-400.woff2"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\webfonts\\fa-regular-400.ttf",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\webfonts\\fa-regular-400.ttf"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\webfonts\\fa-regular-400.woff2",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\webfonts\\fa-regular-400.woff2"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\webfonts\\fa-solid-900.ttf",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\webfonts\\fa-solid-900.ttf"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\webfonts\\fa-solid-900.woff2",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\webfonts\\fa-solid-900.woff2"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\webfonts\\fa-v4compatibility.ttf",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\webfonts\\fa-v4compatibility.ttf"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\assets\\lib\\font-awesome\\webfonts\\fa-v4compatibility.woff2",
+      "PackagePath": "staticwebassets\\assets\\lib\\font-awesome\\webfonts\\fa-v4compatibility.woff2"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\favicon.ico",
+      "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\LICENSE",
+      "PackagePath": "staticwebassets\\lib\\bootstrap"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css.map"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js.map"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\LICENSE.md"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.min.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\jquery\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery\\LICENSE.txt"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\jquery\\dist\\jquery.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.js"
+    },
+    {
+      "Id": "C:\\Source\\Repos\\ActionTime\\Actiontime.WebApp\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "obj\\Release\\net6.0\\staticwebassets\\msbuild.Actiontime.WebApp.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Release\\net6.0\\staticwebassets\\msbuild.build.Actiontime.WebApp.props",
+      "PackagePath": "build\\Actiontime.WebApp.props"
+    },
+    {
+      "Id": "obj\\Release\\net6.0\\staticwebassets\\msbuild.buildMultiTargeting.Actiontime.WebApp.props",
+      "PackagePath": "buildMultiTargeting\\Actiontime.WebApp.props"
+    },
+    {
+      "Id": "obj\\Release\\net6.0\\staticwebassets\\msbuild.buildTransitive.Actiontime.WebApp.props",
+      "PackagePath": "buildTransitive\\Actiontime.WebApp.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

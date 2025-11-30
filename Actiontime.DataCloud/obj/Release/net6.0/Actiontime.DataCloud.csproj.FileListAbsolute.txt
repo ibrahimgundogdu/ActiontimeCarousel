@@ -1,0 +1,15 @@
+C:\Source\Repos\ActionTime\Actiontime.DataCloud\bin\Release\net6.0\Actiontime.DataCloud.deps.json
+C:\Source\Repos\ActionTime\Actiontime.DataCloud\bin\Release\net6.0\Actiontime.DataCloud.runtimeconfig.json
+C:\Source\Repos\ActionTime\Actiontime.DataCloud\bin\Release\net6.0\Actiontime.DataCloud.dll
+C:\Source\Repos\ActionTime\Actiontime.DataCloud\bin\Release\net6.0\Actiontime.DataCloud.pdb
+C:\Source\Repos\ActionTime\Actiontime.DataCloud\obj\Release\net6.0\Actiontime.DataCloud.csproj.AssemblyReference.cache
+C:\Source\Repos\ActionTime\Actiontime.DataCloud\obj\Release\net6.0\Actiontime.DataCloud.GeneratedMSBuildEditorConfig.editorconfig
+C:\Source\Repos\ActionTime\Actiontime.DataCloud\obj\Release\net6.0\Actiontime.DataCloud.AssemblyInfoInputs.cache
+C:\Source\Repos\ActionTime\Actiontime.DataCloud\obj\Release\net6.0\Actiontime.DataCloud.AssemblyInfo.cs
+C:\Source\Repos\ActionTime\Actiontime.DataCloud\obj\Release\net6.0\Actiontime.DataCloud.csproj.CoreCompileInputs.cache
+C:\Source\Repos\ActionTime\Actiontime.DataCloud\obj\Release\net6.0\Actiontime.DataCloud.dll
+C:\Source\Repos\ActionTime\Actiontime.DataCloud\obj\Release\net6.0\refint\Actiontime.DataCloud.dll
+C:\Source\Repos\ActionTime\Actiontime.DataCloud\obj\Release\net6.0\Actiontime.DataCloud.pdb
+C:\Source\Repos\ActionTime\Actiontime.DataCloud\obj\Release\net6.0\Actiontime.DataCloud.genruntimeconfig.cache
+C:\Source\Repos\ActionTime\Actiontime.DataCloud\obj\Release\net6.0\ref\Actiontime.DataCloud.dll
+C:\Source\Repos\ActionTime\Actiontime.DataCloud\obj\Release\net6.0\Actiontime.DataCloud.sourcelink.json

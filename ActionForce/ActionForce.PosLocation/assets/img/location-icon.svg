@@ -1,4 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="84" height="84" viewBox="0 0 84 84">
-  <path d="M29.5,2A24.482,24.482,0,0,0,5,26.5C5,44.875,29.5,72,29.5,72S54,44.875,54,26.5A24.482,24.482,0,0,0,29.5,2ZM12,26.5a17.5,17.5,0,0,1,35,0c0,10.08-10.08,25.165-17.5,34.58C22.22,51.735,12,36.475,12,26.5Z" transform="translate(12.5 5)" fill="currentColor"/>
-  <circle cx="8.75" cy="8.75" r="8.75" transform="translate(33.25 22.75)" fill="currentColor"/>
-</svg>
