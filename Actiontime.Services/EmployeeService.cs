@@ -25,12 +25,15 @@ namespace Actiontime.Services
 	{
 		private readonly ApplicationDbContext _db;
 		private readonly ApplicationCloudDbContext _cdb;
-		public EmployeeService()
+        private readonly CloudService _cloudService;
+
+        public EmployeeService(ApplicationDbContext db, ApplicationCloudDbContext cdb)
 		{
 
-			_db = new ApplicationDbContext();
-			_cdb = new ApplicationCloudDbContext();
-		}
+			_db = db;
+			_cdb = cdb;
+            _cloudService = new CloudService(db, cdb);
+        }
 
 		public Employee? CheckEmployeeLogin(string Username, string Password)
 		{
@@ -423,7 +426,7 @@ namespace Actiontime.Services
 								_db.SyncProcesses.Add(process);
 								_db.SaveChanges(true);
 
-								CloudService _cloudService = new CloudService();
+								
 								Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
 
 								WebSocketResult wsresult = new WebSocketResult()
@@ -458,7 +461,6 @@ namespace Actiontime.Services
 									_db.SyncProcesses.Add(process);
 									_db.SaveChanges(true);
 
-									CloudService _cloudService = new CloudService();
 									Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
 
 									
@@ -598,7 +600,6 @@ namespace Actiontime.Services
 										_db.SyncProcesses.Add(process);
 										_db.SaveChanges(true);
 
-										CloudService _cloudService = new CloudService();
 										Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
 
 										WebSocketResult wsresultb = new WebSocketResult()
@@ -645,7 +646,6 @@ namespace Actiontime.Services
 										_db.SyncProcesses.Add(process);
 										_db.SaveChanges(true);
 
-										CloudService _cloudService = new CloudService();
 										Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
 
 										WebSocketResult wsresultb = new WebSocketResult()

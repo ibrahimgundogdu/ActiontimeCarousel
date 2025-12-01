@@ -109,6 +109,8 @@ C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Actiont
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Actiontime.TicketAPI.runtimeconfig.json
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Actiontime.TicketAPI.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Actiontime.TicketAPI.pdb
+C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Azure.Core.dll
+C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Azure.Identity.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Humanizer.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microsoft.Data.SqlClient.dll
@@ -125,6 +127,7 @@ C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microso
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microsoft.Extensions.Configuration.Json.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microsoft.Extensions.DependencyModel.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microsoft.Extensions.FileProviders.Abstractions.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microsoft.Extensions.FileProviders.Physical.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microsoft.Extensions.FileSystemGlobbing.dll
@@ -133,6 +136,7 @@ C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microso
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microsoft.Extensions.Options.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microsoft.Extensions.Primitives.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microsoft.Identity.Client.dll
+C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microsoft.Identity.Client.Extensions.Msal.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
@@ -140,7 +144,9 @@ C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microso
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microsoft.OpenApi.dll
+C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microsoft.SqlServer.Server.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
+C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Mono.TextTemplating.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\MQTTnet.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\MQTTnet.Extensions.ManagedClient.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Newtonsoft.Json.dll
@@ -148,10 +154,12 @@ C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\RabbitM
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\System.CodeDom.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\System.Configuration.ConfigurationManager.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\System.Drawing.Common.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\System.IO.Pipelines.dll
+C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\System.Memory.Data.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\System.Runtime.Caching.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Source\Repos\ActiontimeCarousel\Actiontime.TicketAPI\bin\Debug\net6.0\System.Security.Permissions.dll

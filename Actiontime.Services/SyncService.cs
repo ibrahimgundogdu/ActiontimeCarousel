@@ -1,5 +1,6 @@
 ﻿using Actiontime.Data.Context;
 using Actiontime.Data.Entities;
+using Actiontime.DataCloud.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,17 @@ namespace Actiontime.Services
 {
     public class SyncService
     {
-        public SyncService()
+        private readonly ApplicationDbContext _db;
+        private readonly ApplicationCloudDbContext _cdb;
+        private readonly CloudService _cloudService;
+        public SyncService(ApplicationDbContext db, ApplicationCloudDbContext cdb)
         {
+            _db = db;   
+            _cdb = cdb;
+            _cloudService = new CloudService(db, cdb);
         }
 
-        public static void AddQuee(string EntityName, short Process, long Id, Guid? Uid)
+        public void AddQuee(string EntityName, short Process, long Id, Guid? Uid)
         {
             try
             {
@@ -27,13 +34,9 @@ namespace Actiontime.Services
                     EntityUid = Uid
                 };
 
-                using (ApplicationDbContext _db = new ApplicationDbContext())
-                {
-                    _db.SyncProcesses.Add(process);
-                    _db.SaveChanges();
-                }
+                _db.SyncProcesses.Add(process);
+                _db.SaveChanges();
 
-                CloudService _cloudService = new CloudService();
 
                 Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
 

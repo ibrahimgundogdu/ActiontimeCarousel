@@ -1,5 +1,6 @@
 ﻿using Actiontime.Data.Context;
 using Actiontime.Data.Entities;
+using Actiontime.DataCloud.Context;
 using Actiontime.Models;
 using Actiontime.Models.ResultModel;
 using Actiontime.Models.SerializeModels;
@@ -14,10 +15,13 @@ namespace Actiontime.TicketAPI.Controllers
     public class SaleOrderController : ControllerBase
     {
         SaleOrderService _orderService;
+        private readonly ApplicationDbContext _db;
+        private readonly ApplicationCloudDbContext _cdb;
 
-        public SaleOrderController()
+        public SaleOrderController(ApplicationDbContext db, ApplicationCloudDbContext cdb)
         {
-            _orderService = new SaleOrderService();
+            _orderService = new SaleOrderService(db, cdb);
+
         }
 
 

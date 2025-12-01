@@ -1,4 +1,6 @@
-﻿using Actiontime.Data.Entities;
+﻿using Actiontime.Data.Context;
+using Actiontime.Data.Entities;
+using Actiontime.DataCloud.Context;
 using Actiontime.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,11 +12,12 @@ namespace Actiontime.TicketAPI.Controllers
     public class ConnectivityController : ControllerBase
     {
         ConnectivityService _connectivityService;
-        public ConnectivityController()
+        private readonly ApplicationDbContext _db;
+        public ConnectivityController(ApplicationDbContext db)
         {
-            _connectivityService = new ConnectivityService();
+            _connectivityService = new ConnectivityService(db);
         }
-        
+
         [HttpGet()]
         public bool Ping()
         {
@@ -27,6 +30,6 @@ namespace Actiontime.TicketAPI.Controllers
             return _connectivityService.GetOurLocation();
         }
 
-        
+
     }
 }

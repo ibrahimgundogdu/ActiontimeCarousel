@@ -19,12 +19,15 @@ namespace Actiontime.Services
         private readonly ApplicationCloudDbContext _cdb;
         CloudService _cloudService;
 
-        public CashService()
+        public CashService(ApplicationDbContext db, ApplicationCloudDbContext cdb)
         {
-            _db = new ApplicationDbContext();
-            _cdb = new ApplicationCloudDbContext();
-            _cloudService = new CloudService();
+            _db = db;
+            _cdb = cdb;
+            _cloudService = new CloudService(db, cdb);
         }
+
+
+
 
         public List<CashDocumentType> CashDocumentList()
         {
@@ -93,7 +96,6 @@ namespace Actiontime.Services
                 _db.SyncProcesses.Add(process);
                 _db.SaveChanges(true);
 
-                CloudService _cloudService = new CloudService();
                 Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
 
 
@@ -358,7 +360,6 @@ namespace Actiontime.Services
                 _db.SyncProcesses.Add(process);
                 _db.SaveChanges(true);
 
-                CloudService _cloudService = new CloudService();
                 Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
 
 

@@ -32,11 +32,11 @@ namespace Actiontime.Services
         private readonly ApplicationCloudDbContext _cdb;
         CloudService _cloudService;
 
-        public SaleOrderService()
+        public SaleOrderService(ApplicationDbContext db, ApplicationCloudDbContext cdb)
         {
-            _db = new ApplicationDbContext();
-            _cdb = new ApplicationCloudDbContext();
-            _cloudService = new CloudService();
+            _db = db;
+            _cdb = cdb;
+            _cloudService = new CloudService(db,cdb);
         }
 
         public bool AddBasket(Basket? item)

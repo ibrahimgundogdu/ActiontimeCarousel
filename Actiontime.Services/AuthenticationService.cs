@@ -10,11 +10,14 @@ namespace Actiontime.Services
 {
     public class AppAuthenticationService
     {
-        private ApplicationDbContext _db; 
-        public AppAuthenticationService()
+        private readonly ApplicationDbContext _db; 
+        
+        public AppAuthenticationService(ApplicationDbContext db)
         {
-            _db = new ApplicationDbContext();
+            _db = db;
         }
+
+
 
         public Data.Entities.Employee LoginAsync(string username, string password)
         {

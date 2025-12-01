@@ -1,4 +1,6 @@
-﻿using Actiontime.Data.Entities;
+﻿using Actiontime.Data.Context;
+using Actiontime.Data.Entities;
+using Actiontime.DataCloud.Context;
 using Actiontime.Models;
 using Actiontime.Models.ResultModel;
 using Actiontime.Models.SerializeModels;
@@ -14,9 +16,11 @@ namespace Actiontime.TicketAPI.Controllers
 	{
 
 		LocationService _locationService;
-		public LocationController()
+        private readonly ApplicationDbContext _db;
+        private readonly ApplicationCloudDbContext _cdb;
+        public LocationController(ApplicationDbContext db, ApplicationCloudDbContext cdb)
 		{
-			_locationService = new LocationService();
+			_locationService = new LocationService(db, cdb);
 		}
 
 		[HttpGet()]

@@ -1,12 +1,1 @@
-{
-  "Version": 1,
-  "Hash": "3V7vMkSyWoac5Qtz9ORC6En7kZpIHJTMDXdSqLTsoPU=",
-  "Source": "Actiontime.TicketAPI",
-  "BasePath": "_content/Actiontime.TicketAPI",
-  "Mode": "Default",
-  "ManifestType": "Publish",
-  "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": [],
-  "Endpoints": []
-}
+{"Version":1,"Hash":"kJ9+ejBkuaSWEFtLc2s1kQFReRxtJwfC/97T1AbIiBs=","Source":"Actiontime.TicketAPI","BasePath":"/","Mode":"Root","ManifestType":"Publish","ReferencedProjectsConfiguration":[],"DiscoveryPatterns":[],"Assets":[],"Endpoints":[]}

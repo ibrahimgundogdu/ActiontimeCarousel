@@ -1,1 +1,1 @@
-﻿Scaffold-DbContext "Data Source=192.168.0.106;Initial Catalog=ActionTimeLocalDb; Persist Security Info=True; User ID=sa;Password=n4q4n6O0;TrustServerCertificate=True" Microsoft.EntityFrameworkCore.SqlServer -ContextDir Context -OutputDir Entities -context ApplicationDbContext  -force 
+﻿Scaffold-DbContext "Data Source=10.229.3.106;Initial Catalog=ActionTimeLocalDb; Persist Security Info=True; User ID=sa;Password=n4q4n6O0;TrustServerCertificate=True" Microsoft.EntityFrameworkCore.SqlServer -ContextDir Context -OutputDir Entities -context ApplicationDbContext  -force 

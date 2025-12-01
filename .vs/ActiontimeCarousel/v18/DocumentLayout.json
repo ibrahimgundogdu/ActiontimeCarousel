@@ -1,0 +1,364 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Source\\Repos\\ActiontimeCarousel\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{F074421A-69BA-429D-83E4-62DC51C51B6E}|Actiontime.Services\\Actiontime.Services.csproj|c:\\source\\repos\\actiontimecarousel\\actiontime.services\\cashservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F074421A-69BA-429D-83E4-62DC51C51B6E}|Actiontime.Services\\Actiontime.Services.csproj|solutionrelative:actiontime.services\\cashservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F074421A-69BA-429D-83E4-62DC51C51B6E}|Actiontime.Services\\Actiontime.Services.csproj|c:\\source\\repos\\actiontimecarousel\\actiontime.services\\employeeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F074421A-69BA-429D-83E4-62DC51C51B6E}|Actiontime.Services\\Actiontime.Services.csproj|solutionrelative:actiontime.services\\employeeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F074421A-69BA-429D-83E4-62DC51C51B6E}|Actiontime.Services\\Actiontime.Services.csproj|c:\\source\\repos\\actiontimecarousel\\actiontime.services\\locationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F074421A-69BA-429D-83E4-62DC51C51B6E}|Actiontime.Services\\Actiontime.Services.csproj|solutionrelative:actiontime.services\\locationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F074421A-69BA-429D-83E4-62DC51C51B6E}|Actiontime.Services\\Actiontime.Services.csproj|c:\\source\\repos\\actiontimecarousel\\actiontime.services\\saleorderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F074421A-69BA-429D-83E4-62DC51C51B6E}|Actiontime.Services\\Actiontime.Services.csproj|solutionrelative:actiontime.services\\saleorderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F074421A-69BA-429D-83E4-62DC51C51B6E}|Actiontime.Services\\Actiontime.Services.csproj|c:\\source\\repos\\actiontimecarousel\\actiontime.services\\syncservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F074421A-69BA-429D-83E4-62DC51C51B6E}|Actiontime.Services\\Actiontime.Services.csproj|solutionrelative:actiontime.services\\syncservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F074421A-69BA-429D-83E4-62DC51C51B6E}|Actiontime.Services\\Actiontime.Services.csproj|c:\\source\\repos\\actiontimecarousel\\actiontime.services\\cloudservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F074421A-69BA-429D-83E4-62DC51C51B6E}|Actiontime.Services\\Actiontime.Services.csproj|solutionrelative:actiontime.services\\cloudservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D869A6F3-908E-4AEF-BD43-0C6311653C22}|Actiontime.TicketAPI\\Actiontime.TicketAPI.csproj|c:\\source\\repos\\actiontimecarousel\\actiontime.ticketapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D869A6F3-908E-4AEF-BD43-0C6311653C22}|Actiontime.TicketAPI\\Actiontime.TicketAPI.csproj|solutionrelative:actiontime.ticketapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D869A6F3-908E-4AEF-BD43-0C6311653C22}|Actiontime.TicketAPI\\Actiontime.TicketAPI.csproj|c:\\source\\repos\\actiontimecarousel\\actiontime.ticketapi\\backgroundworkerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D869A6F3-908E-4AEF-BD43-0C6311653C22}|Actiontime.TicketAPI\\Actiontime.TicketAPI.csproj|solutionrelative:actiontime.ticketapi\\backgroundworkerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D869A6F3-908E-4AEF-BD43-0C6311653C22}|Actiontime.TicketAPI\\Actiontime.TicketAPI.csproj|c:\\source\\repos\\actiontimecarousel\\actiontime.ticketapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{D869A6F3-908E-4AEF-BD43-0C6311653C22}|Actiontime.TicketAPI\\Actiontime.TicketAPI.csproj|solutionrelative:actiontime.ticketapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{743A7E5C-3356-4E3B-8D09-1BFD19E1CC96}|Actiontime.WebApp\\Actiontime.WebApp.csproj|c:\\source\\repos\\actiontimecarousel\\actiontime.webapp\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{743A7E5C-3356-4E3B-8D09-1BFD19E1CC96}|Actiontime.WebApp\\Actiontime.WebApp.csproj|solutionrelative:actiontime.webapp\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D124711-E23D-4FC6-91E0-45492312EF6F}|Actiontime.Data\\Actiontime.Data.csproj|c:\\source\\repos\\actiontimecarousel\\actiontime.data\\context\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D124711-E23D-4FC6-91E0-45492312EF6F}|Actiontime.Data\\Actiontime.Data.csproj|solutionrelative:actiontime.data\\context\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D869A6F3-908E-4AEF-BD43-0C6311653C22}|Actiontime.TicketAPI\\Actiontime.TicketAPI.csproj|c:\\source\\repos\\actiontimecarousel\\actiontime.ticketapi\\controllers\\saleordercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D869A6F3-908E-4AEF-BD43-0C6311653C22}|Actiontime.TicketAPI\\Actiontime.TicketAPI.csproj|solutionrelative:actiontime.ticketapi\\controllers\\saleordercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D869A6F3-908E-4AEF-BD43-0C6311653C22}|Actiontime.TicketAPI\\Actiontime.TicketAPI.csproj|c:\\source\\repos\\actiontimecarousel\\actiontime.ticketapi\\controllers\\locationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D869A6F3-908E-4AEF-BD43-0C6311653C22}|Actiontime.TicketAPI\\Actiontime.TicketAPI.csproj|solutionrelative:actiontime.ticketapi\\controllers\\locationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D869A6F3-908E-4AEF-BD43-0C6311653C22}|Actiontime.TicketAPI\\Actiontime.TicketAPI.csproj|c:\\source\\repos\\actiontimecarousel\\actiontime.ticketapi\\controllers\\employeecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D869A6F3-908E-4AEF-BD43-0C6311653C22}|Actiontime.TicketAPI\\Actiontime.TicketAPI.csproj|solutionrelative:actiontime.ticketapi\\controllers\\employeecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D869A6F3-908E-4AEF-BD43-0C6311653C22}|Actiontime.TicketAPI\\Actiontime.TicketAPI.csproj|c:\\source\\repos\\actiontimecarousel\\actiontime.ticketapi\\controllers\\connectivitycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D869A6F3-908E-4AEF-BD43-0C6311653C22}|Actiontime.TicketAPI\\Actiontime.TicketAPI.csproj|solutionrelative:actiontime.ticketapi\\controllers\\connectivitycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D869A6F3-908E-4AEF-BD43-0C6311653C22}|Actiontime.TicketAPI\\Actiontime.TicketAPI.csproj|c:\\source\\repos\\actiontimecarousel\\actiontime.ticketapi\\controllers\\cashcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D869A6F3-908E-4AEF-BD43-0C6311653C22}|Actiontime.TicketAPI\\Actiontime.TicketAPI.csproj|solutionrelative:actiontime.ticketapi\\controllers\\cashcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F074421A-69BA-429D-83E4-62DC51C51B6E}|Actiontime.Services\\Actiontime.Services.csproj|c:\\source\\repos\\actiontimecarousel\\actiontime.services\\qrreaderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F074421A-69BA-429D-83E4-62DC51C51B6E}|Actiontime.Services\\Actiontime.Services.csproj|solutionrelative:actiontime.services\\qrreaderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F074421A-69BA-429D-83E4-62DC51C51B6E}|Actiontime.Services\\Actiontime.Services.csproj|c:\\source\\repos\\actiontimecarousel\\actiontime.services\\connectivityservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F074421A-69BA-429D-83E4-62DC51C51B6E}|Actiontime.Services\\Actiontime.Services.csproj|solutionrelative:actiontime.services\\connectivityservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 12,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e506b91c-c606-466a-90a9-123d1d1e12b3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "SaleOrderService.cs",
+              "DocumentMoniker": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Services\\SaleOrderService.cs",
+              "RelativeDocumentMoniker": "Actiontime.Services\\SaleOrderService.cs",
+              "ToolTip": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Services\\SaleOrderService.cs",
+              "RelativeToolTip": "Actiontime.Services\\SaleOrderService.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAADwvyYAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T02:07:42.03Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "CloudService.cs",
+              "DocumentMoniker": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Services\\CloudService.cs",
+              "RelativeDocumentMoniker": "Actiontime.Services\\CloudService.cs",
+              "ToolTip": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Services\\CloudService.cs",
+              "RelativeToolTip": "Actiontime.Services\\CloudService.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAkwB8AAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T00:59:39.142Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "BackgroundWorkerService.cs",
+              "DocumentMoniker": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.TicketAPI\\BackgroundWorkerService.cs",
+              "RelativeDocumentMoniker": "Actiontime.TicketAPI\\BackgroundWorkerService.cs",
+              "ToolTip": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.TicketAPI\\BackgroundWorkerService.cs",
+              "RelativeToolTip": "Actiontime.TicketAPI\\BackgroundWorkerService.cs",
+              "ViewState": "AgIAABwBAAAAAAAAAAAUwDMAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T00:49:00.427Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "SyncService.cs",
+              "DocumentMoniker": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Services\\SyncService.cs",
+              "RelativeDocumentMoniker": "Actiontime.Services\\SyncService.cs",
+              "ToolTip": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Services\\SyncService.cs",
+              "RelativeToolTip": "Actiontime.Services\\SyncService.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAADwvxQAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T02:09:56.447Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Data\\Context\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "Actiontime.Data\\Context\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Data\\Context\\ApplicationDbContext.cs",
+              "RelativeToolTip": "Actiontime.Data\\Context\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAoAAABPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T00:48:26.404Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CashService.cs",
+              "DocumentMoniker": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Services\\CashService.cs",
+              "RelativeDocumentMoniker": "Actiontime.Services\\CashService.cs",
+              "ToolTip": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Services\\CashService.cs",
+              "RelativeToolTip": "Actiontime.Services\\CashService.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABoAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T01:43:15.383Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "EmployeeService.cs",
+              "DocumentMoniker": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Services\\EmployeeService.cs",
+              "RelativeDocumentMoniker": "Actiontime.Services\\EmployeeService.cs",
+              "ToolTip": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Services\\EmployeeService.cs",
+              "RelativeToolTip": "Actiontime.Services\\EmployeeService.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAADwvyIAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T01:49:28.058Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "LocationService.cs",
+              "DocumentMoniker": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Services\\LocationService.cs",
+              "RelativeDocumentMoniker": "Actiontime.Services\\LocationService.cs",
+              "ToolTip": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Services\\LocationService.cs",
+              "RelativeToolTip": "Actiontime.Services\\LocationService.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAADwvx8AAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T01:53:15.717Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "ConnectivityController.cs",
+              "DocumentMoniker": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.TicketAPI\\Controllers\\ConnectivityController.cs",
+              "RelativeDocumentMoniker": "Actiontime.TicketAPI\\Controllers\\ConnectivityController.cs",
+              "ToolTip": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.TicketAPI\\Controllers\\ConnectivityController.cs",
+              "RelativeToolTip": "Actiontime.TicketAPI\\Controllers\\ConnectivityController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvxAAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T07:21:03.343Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.TicketAPI\\appsettings.json",
+              "RelativeDocumentMoniker": "Actiontime.TicketAPI\\appsettings.json",
+              "ToolTip": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.TicketAPI\\appsettings.json",
+              "RelativeToolTip": "Actiontime.TicketAPI\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-01T08:21:16.608Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "CashController.cs",
+              "DocumentMoniker": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.TicketAPI\\Controllers\\CashController.cs",
+              "RelativeDocumentMoniker": "Actiontime.TicketAPI\\Controllers\\CashController.cs",
+              "ToolTip": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.TicketAPI\\Controllers\\CashController.cs",
+              "RelativeToolTip": "Actiontime.TicketAPI\\Controllers\\CashController.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAADwvxIAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T07:20:47.43Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.TicketAPI\\Program.cs",
+              "RelativeDocumentMoniker": "Actiontime.TicketAPI\\Program.cs",
+              "ToolTip": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.TicketAPI\\Program.cs",
+              "RelativeToolTip": "Actiontime.TicketAPI\\Program.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAswAkAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T00:56:07.171Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.WebApp\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "Actiontime.WebApp\\Controllers\\AccountController.cs",
+              "ToolTip": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.WebApp\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "Actiontime.WebApp\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAAYwCEAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T01:32:24.517Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "EmployeeController.cs",
+              "DocumentMoniker": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.TicketAPI\\Controllers\\EmployeeController.cs",
+              "RelativeDocumentMoniker": "Actiontime.TicketAPI\\Controllers\\EmployeeController.cs",
+              "ToolTip": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.TicketAPI\\Controllers\\EmployeeController.cs",
+              "RelativeToolTip": "Actiontime.TicketAPI\\Controllers\\EmployeeController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABIAAABYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T07:21:13.873Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "SaleOrderController.cs",
+              "DocumentMoniker": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.TicketAPI\\Controllers\\SaleOrderController.cs",
+              "RelativeDocumentMoniker": "Actiontime.TicketAPI\\Controllers\\SaleOrderController.cs",
+              "ToolTip": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.TicketAPI\\Controllers\\SaleOrderController.cs",
+              "RelativeToolTip": "Actiontime.TicketAPI\\Controllers\\SaleOrderController.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAUwA4AAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T07:25:47.199Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "LocationController.cs",
+              "DocumentMoniker": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.TicketAPI\\Controllers\\LocationController.cs",
+              "RelativeDocumentMoniker": "Actiontime.TicketAPI\\Controllers\\LocationController.cs",
+              "ToolTip": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.TicketAPI\\Controllers\\LocationController.cs",
+              "RelativeToolTip": "Actiontime.TicketAPI\\Controllers\\LocationController.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAUwBQAAABYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T07:25:00.018Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "QRReaderService.cs",
+              "DocumentMoniker": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Services\\QRReaderService.cs",
+              "RelativeDocumentMoniker": "Actiontime.Services\\QRReaderService.cs",
+              "ToolTip": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Services\\QRReaderService.cs",
+              "RelativeToolTip": "Actiontime.Services\\QRReaderService.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAABYAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T02:06:55.531Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "ConnectivityService.cs",
+              "DocumentMoniker": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Services\\ConnectivityService.cs",
+              "RelativeDocumentMoniker": "Actiontime.Services\\ConnectivityService.cs",
+              "ToolTip": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Services\\ConnectivityService.cs",
+              "RelativeToolTip": "Actiontime.Services\\ConnectivityService.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAUwBUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T01:48:58.923Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 1529,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -5,6 +5,7 @@ using Actiontime.DataCloud.Entities;
 using Actiontime.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace Actiontime.Services
@@ -13,26 +14,36 @@ namespace Actiontime.Services
     {
         private readonly ApplicationDbContext _db;
         private readonly ApplicationCloudDbContext _cdb;
+        private readonly IServiceProvider _sp;
 
-
-        public CloudService()
+        public CloudService(ApplicationDbContext db, ApplicationCloudDbContext cdb, IServiceProvider sp)
         {
-            _db = new ApplicationDbContext();
-            _cdb = new ApplicationCloudDbContext();
+            _db = db;
+            _cdb = cdb;
+            _sp = sp;
         }
+
+        public CloudService(ApplicationDbContext db, ApplicationCloudDbContext cdb)
+        {
+            _db = db;
+            _cdb = cdb;
+        }
+
+        private SaleOrderService GetSaleOrderService() =>
+        _sp.GetRequiredService<SaleOrderService>();
 
         public void AddCloudProcess(SyncProcess process)
         {
 
             if (process.Entity == "Order" && process.Process == 1)
             {
-                SaleOrderService _saleOrderService = new SaleOrderService();
 
+                var saleOrder = GetSaleOrderService();
                 var localOrder = _db.Orders.FirstOrDefault(x => x.Id == process.EntityId);
 
                 if (localOrder != null)
                 {
-                    _saleOrderService.CheckOrderAction(localOrder.Id, localOrder.EmployeeId ?? 6070);
+                    saleOrder.CheckOrderAction(localOrder.Id, localOrder.EmployeeId ?? 6070);
                 }
 
 
@@ -159,7 +170,7 @@ namespace Actiontime.Services
 
                         // cari hareket işlenir CheckLocationPosTicketSale
 
-                        _saleOrderService.CheckLocationPosTicketSale(ticketSale.Id);
+                        saleOrder.CheckLocationPosTicketSale(ticketSale.Id);
 
 
                     }
@@ -719,7 +730,7 @@ namespace Actiontime.Services
                                 ParameterName = "@RecordIP",
                                 SqlDbType = System.Data.SqlDbType.NVarChar,
                                 Size = 20,
-                                Value = "192.168.0.106",
+                                Value = "localhost",
                             };
 
                             var parameterUID = new SqlParameter

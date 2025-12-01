@@ -23,10 +23,13 @@ namespace Actiontime.Services
     public class LocationService
     {
         private readonly ApplicationDbContext _db;
-        public LocationService()
+        private readonly ApplicationCloudDbContext _cdb;
+        private readonly CloudService _cloudService;
+        public LocationService(ApplicationDbContext db, ApplicationCloudDbContext cdb)
         {
-
-            _db = new ApplicationDbContext();
+            _db = db;
+            _cdb = cdb;
+            _cloudService = new CloudService(db,cdb);
         }
 
         public OurLocation? GetOurLocation()
@@ -205,7 +208,7 @@ namespace Actiontime.Services
                             _db.SyncProcesses.Add(process);
                             _db.SaveChanges(true);
 
-                            CloudService _cloudService = new CloudService();
+                            
                             Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
 
 
@@ -232,7 +235,6 @@ namespace Actiontime.Services
                                 _db.SyncProcesses.Add(process);
                                 _db.SaveChanges(true);
 
-                                CloudService _cloudService = new CloudService();
                                 Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
                             }
                             else
@@ -794,7 +796,6 @@ namespace Actiontime.Services
             _db.SyncProcesses.Add(process);
             _db.SaveChanges(true);
 
-            CloudService _cloudService = new CloudService();
             Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
 
             result.Success = true;
@@ -821,7 +822,6 @@ namespace Actiontime.Services
 
         public void GetSync()
         {
-            CloudService _cloudService = new CloudService();
             var processList = _db.SyncProcesses.ToList();
 
             foreach (var process in processList)

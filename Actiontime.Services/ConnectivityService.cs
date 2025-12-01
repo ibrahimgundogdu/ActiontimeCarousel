@@ -15,9 +15,9 @@ namespace Actiontime.Services
     public class ConnectivityService
     {
         private readonly ApplicationDbContext _db; 
-        public ConnectivityService() {
+        public ConnectivityService(ApplicationDbContext db) {
         
-            _db = new ApplicationDbContext();
+            _db = db;
         }
 
         public OurLocation GetOurLocation()

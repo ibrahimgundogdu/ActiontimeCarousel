@@ -1,20 +1,22 @@
-﻿using Microsoft.Extensions.Hosting;
-using MQTTnet.Client;
-using MQTTnet;
-using MQTTnet.Packets;
-using Actiontime.Services;
-using Actiontime.Data.Context;
-using Newtonsoft.Json;
-using System.Numerics;
-using RabbitMQ.Client;
-using System.Text;
-using RabbitMQ.Client.Events;
-using Actiontime.Models;
+﻿using Actiontime.Data.Context;
 using Actiontime.Data.Entities;
-using Microsoft.Extensions.Logging;
-using System.Threading.Channels;
-using System.Diagnostics;
+using Actiontime.DataCloud.Context;
+using Actiontime.Models;
 using Actiontime.Models.ResultModel;
+using Actiontime.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using MQTTnet;
+using MQTTnet.Client;
+using MQTTnet.Packets;
+using Newtonsoft.Json;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+using System.Diagnostics;
+using System.Numerics;
+using System.Text;
+using System.Threading.Channels;
 
 namespace Actiontime.TicketAPI
 {
@@ -24,20 +26,38 @@ namespace Actiontime.TicketAPI
 		private static MqttFactory mqttFactory = new MqttFactory();
 		private static IMqttClient mqttClient = mqttFactory.CreateMqttClient();
 		private static MqttClientOptions mqttClientOptions;
-		//private readonly SaleOrderService _orderService;
+        private readonly IConfiguration _configuration;
+		private readonly QRReaderService _readerService;
+        private readonly IDbContextFactory<ApplicationDbContext> _dbFactory;
+        private readonly IDbContextFactory<ApplicationCloudDbContext> _cdbFactory;
+
+        //private readonly SaleOrderService _orderService;
 
 
-		public BackgroundWorkerService(ILogger<BackgroundWorkerService> logger, IConfiguration configuration)
+        public BackgroundWorkerService(ILogger<BackgroundWorkerService> logger, IConfiguration configuration, IDbContextFactory<ApplicationDbContext> dbFactory,
+    IDbContextFactory<ApplicationCloudDbContext> cdbFactory)
 		{
 			_logger = logger;
-			mqttClientOptions = new MqttClientOptionsBuilder().WithConnectionUri(new Uri("mqtt://192.168.0.106:1883")).WithCredentials(username: "hezarfen", password: "n4q4n6O0").WithClientId(Environment.MachineName).Build();
-			//_orderService = new SaleOrderService();
+            _configuration = configuration;
+			string ServiceIp = $"mqtt://{_configuration["DefaultParameters:ServiceIp"]}:1883";
 
-			//mqttClient.DisconnectedAsync += async e =>
-			//{
-			//	await ReconnectAsync();
-			//};
-		}
+            mqttClientOptions = new MqttClientOptionsBuilder().WithConnectionUri(new Uri(ServiceIp)).WithCredentials(username: "hezarfen", password: "n4q4n6O0").WithClientId(Environment.MachineName).Build();
+
+            _dbFactory = dbFactory;
+            _cdbFactory = cdbFactory;
+
+            using var db = _dbFactory.CreateDbContext();
+            using var cdb = _cdbFactory.CreateDbContext();
+            
+            _readerService = new QRReaderService(db, cdb);
+
+            //_orderService = new SaleOrderService();
+
+            //mqttClient.DisconnectedAsync += async e =>
+            //{
+            //	await ReconnectAsync();
+            //};
+        }
 
 
 
@@ -49,7 +69,11 @@ namespace Actiontime.TicketAPI
 
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
-			_logger.LogInformation("Servis Başladı.");
+            using var db = _dbFactory.CreateDbContext();
+            using var cdb = _cdbFactory.CreateDbContext();
+            var reader = new QRReaderService(db, cdb);
+
+            _logger.LogInformation("Servis Başladı.");
 
 			await ConnectClient();
 
@@ -92,7 +116,7 @@ namespace Actiontime.TicketAPI
 			await mqttClient.DisconnectAsync(mqttClientDisconnectOptions, CancellationToken.None);
 		}
 
-		public static async Task Subscribe()
+		public async Task Subscribe()
 		{
 			var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder()
 				.WithTopicFilter(
@@ -144,7 +168,7 @@ namespace Actiontime.TicketAPI
 			_logger.LogInformation($"MQTT Mesaj Gitti: {Message}");
 		}
 
-		public static async Task ReceiveMessage(MqttApplicationMessageReceivedEventArgs args)
+		public async Task ReceiveMessage(MqttApplicationMessageReceivedEventArgs args)
 		{
 
 			if (args != null)
@@ -156,7 +180,6 @@ namespace Actiontime.TicketAPI
 
 					var message = System.Text.Encoding.Default.GetString(bytemessage);
 
-					QRReaderService _readerService = new QRReaderService();
 					var result = await _readerService.AddReader(message);
 
 					_logger.LogInformation($"MQTT Mesaj Geldi: {message}");
@@ -171,7 +194,7 @@ namespace Actiontime.TicketAPI
 
 					var message = System.Text.Encoding.Default.GetString(bytemessage);
 
-					QRReaderService _readerService = new QRReaderService();
+
 					var result = await _readerService.ConfirmQR(message);
 
 					_logger.LogInformation($"MQTT Mesaj Geldi: {message}");
@@ -186,7 +209,6 @@ namespace Actiontime.TicketAPI
 
 					var message = System.Text.Encoding.Default.GetString(bytemessage);
 
-					QRReaderService _readerService = new QRReaderService();
 					var result = await _readerService.StartQR(message);
 
 					_logger.LogInformation($"MQTT Mesaj Geldi: {message}");
@@ -205,7 +227,6 @@ namespace Actiontime.TicketAPI
 
 					var message = System.Text.Encoding.Default.GetString(bytemessage);
 
-					QRReaderService _readerService = new QRReaderService();
 					var result = await _readerService.CompleteQR(message);
 
 					_logger.LogInformation($"MQTT Mesaj Geldi: {message}");
@@ -224,7 +245,6 @@ namespace Actiontime.TicketAPI
 
 					var message = System.Text.Encoding.Default.GetString(bytemessage);
 
-					QRReaderService _readerService = new QRReaderService();
 					var result = await _readerService.AddDrawer(message);
 
 					_logger.LogInformation($"MQTT Mesaj Geldi: {message}");
@@ -236,9 +256,9 @@ namespace Actiontime.TicketAPI
 			}
 		}
 
-		public static async Task SendWebSocketMessage(WebSocketProcess Process, string ConfirmNumber)
+		public async Task SendWebSocketMessage(WebSocketProcess Process, string ConfirmNumber)
 		{
-			QRReaderService _readerService = new QRReaderService();
+
 
 			WebSocketResult result = new WebSocketResult();
 

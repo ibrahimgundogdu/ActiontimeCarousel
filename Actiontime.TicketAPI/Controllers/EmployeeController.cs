@@ -1,4 +1,6 @@
-﻿using Actiontime.Data.Entities;
+﻿using Actiontime.Data.Context;
+using Actiontime.Data.Entities;
+using Actiontime.DataCloud.Context;
 using Actiontime.Models.ResultModel;
 using Actiontime.Models.SerializeModels;
 using Actiontime.Services;
@@ -11,10 +13,12 @@ namespace Actiontime.TicketAPI.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
+        private readonly ApplicationDbContext _db;
+        private readonly ApplicationCloudDbContext _cdb;
         EmployeeService _employeeService;
-        public EmployeeController()
+        public EmployeeController(ApplicationDbContext db, ApplicationCloudDbContext cdb)
         {
-            _employeeService = new EmployeeService();
+            _employeeService = new EmployeeService(db, cdb);
         }
 
 

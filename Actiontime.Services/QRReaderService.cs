@@ -21,12 +21,15 @@ namespace Actiontime.Services
 	public class QRReaderService
 	{
 		private readonly ApplicationDbContext _db;
-		//private readonly RabbitMQService _rabbitmqService;
-		public QRReaderService()
+		private readonly ApplicationCloudDbContext _cdb;
+        private readonly SyncService _syncService;
+
+        public QRReaderService(ApplicationDbContext db, ApplicationCloudDbContext cdb)
 		{
-			_db = new ApplicationDbContext();
-			//_rabbitmqService = new RabbitMQService();
-		}
+			_db = db;
+			_cdb = cdb;
+            _syncService = new SyncService(db, cdb);
+        }
 
 		public async Task<ReaderResult> AddReader(string message)
 		{
@@ -552,7 +555,9 @@ namespace Actiontime.Services
 											orderRow.SyncDate = DateTime.Now;
 											_db.SaveChanges();
 
-											Task task = Task.Run(() => SyncService.AddQuee("OrderRow", 2, orderRow.Id, orderRow.Uid));
+                                            
+
+                                            Task task = Task.Run(() => _syncService.AddQuee("OrderRow", 2, orderRow.Id, orderRow.Uid));
 
 										}
 
