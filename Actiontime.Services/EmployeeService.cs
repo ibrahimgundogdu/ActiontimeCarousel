@@ -23,44 +23,57 @@ namespace Actiontime.Services
 {
 	public class EmployeeService
 	{
-		private readonly ApplicationDbContext _db;
-		private readonly ApplicationCloudDbContext _cdb;
+        private readonly IDbContextFactory<ApplicationDbContext> _dbFactory;
+        private readonly IDbContextFactory<ApplicationCloudDbContext> _cdbFactory;
         private readonly CloudService _cloudService;
+        private ApplicationDbContext db;
+        private ApplicationCloudDbContext cdb;
 
-        public EmployeeService(ApplicationDbContext db, ApplicationCloudDbContext cdb)
+        public EmployeeService(IDbContextFactory<ApplicationDbContext> dbFactory, IDbContextFactory<ApplicationCloudDbContext> cdbFactory, CloudService cloudService)
 		{
 
-			_db = db;
-			_cdb = cdb;
-            _cloudService = new CloudService(db, cdb);
+            _dbFactory = dbFactory ?? throw new ArgumentNullException(nameof(dbFactory));
+            _cdbFactory = cdbFactory ?? throw new ArgumentNullException(nameof(cdbFactory));
+            _cloudService = cloudService ?? throw new ArgumentNullException(nameof(cloudService));
         }
 
-		public Employee? CheckEmployeeLogin(string Username, string Password)
+        public Employee? CheckEmployeeLogin(string Username, string Password)
 		{
-			var _password = ServiceHelper.MD5Hash(Password).ToUpper();
+            using var _db = _dbFactory.CreateDbContext();
+            //using var _cdb = _cdbFactory.CreateDbContext();
+
+            var _password = ServiceHelper.MD5Hash(Password).ToUpper();
 			return _db.Employees.FirstOrDefault(x => x.Username == Username && x.Password.ToUpper() == _password);
 		}
 
 		public Employee? GetEmployee(int employeeID)
 		{
-			return _db.Employees.FirstOrDefault(x => x.Id == employeeID);
+            using var _db = _dbFactory.CreateDbContext();
+            //using var _cdb = _cdbFactory.CreateDbContext();
+            return _db.Employees.FirstOrDefault(x => x.Id == employeeID);
 		}
 
 		public List<Employee>? GetEmployeeList()
 		{
-			return _db.Employees.ToList();
+            using var _db = _dbFactory.CreateDbContext();
+            //using var _cdb = _cdbFactory.CreateDbContext();
+            return _db.Employees.ToList();
 		}
 
 		public EmployeeSchedule? GetEmployeeSchedule(DateTime date, int employeeId)
 		{
-			var location = _db.OurLocations.FirstOrDefault();
+            using var _db = _dbFactory.CreateDbContext();
+
+            var location = _db.OurLocations.FirstOrDefault();
 
 			return _db.EmployeeSchedules.FirstOrDefault(x => x.EmployeeId == employeeId && x.ScheduleDate == date && x.LocationId == location.Id);
 		}
 
 		public List<EmployeeSchedule>? GetEmployeeSchedules(DateTime date, int employeeId)
 		{
-			var location = _db.OurLocations.FirstOrDefault();
+            using var _db = _dbFactory.CreateDbContext();
+
+            var location = _db.OurLocations.FirstOrDefault();
 
 			var schedule = _db.EmployeeSchedules.FirstOrDefault(x => x.EmployeeId == employeeId && x.ScheduleDate == date && x.LocationId == location.Id);
 
@@ -70,7 +83,9 @@ namespace Actiontime.Services
 		//
 		public void GetSchedules()
 		{
-			var sqlemp = "EXEC GetEmployeeSchedules";
+            using var _db = _dbFactory.CreateDbContext();
+
+            var sqlemp = "EXEC GetEmployeeSchedules";
 			_db.Database.ExecuteSqlRaw(sqlemp);
 
 			var sqlloc = "EXEC GetLocationSchedules";
@@ -79,10 +94,13 @@ namespace Actiontime.Services
 
 		public void GetShifts()
 		{
-			var location = _db.OurLocations.FirstOrDefault();
+            using var _db = _dbFactory.CreateDbContext();
+            using var _cdb = _cdbFactory.CreateDbContext();
 
-			//Localler
-			var locShift = _db.LocationShifts.FirstOrDefault(x => x.ShiftDate == location.LocalDate && x.LocationId == location.Id);
+            var location = _db.OurLocations.FirstOrDefault();
+            
+            //Localler
+            var locShift = _db.LocationShifts.FirstOrDefault(x => x.ShiftDate == location.LocalDate && x.LocationId == location.Id);
 			var empShifts = _db.EmployeeShifts.Where(x => x.ShiftDate == location.LocalDate && x.LocationId == location.Id).ToList();
 			var empBreaks = _db.EmployeeBreaks.Where(x => x.BreakDate == location.LocalDate && x.LocationId == location.Id).ToList();
 
@@ -220,14 +238,19 @@ namespace Actiontime.Services
 
 		public void GetLookups()
 		{
-			var sql = "EXEC GetLookups";
+            using var _db = _dbFactory.CreateDbContext();
+
+            var sql = "EXEC GetLookups";
 			_db.Database.ExecuteSqlRaw(sql);
 		}
 
 		//GetPersonInfo  GetPersonInfoList
 		public PersonInfo GetPersonInfo(int employeeID)
 		{
-			PersonInfo info = new PersonInfo();
+            using var _db = _dbFactory.CreateDbContext();
+           
+
+            PersonInfo info = new PersonInfo();
 			info.Id = employeeID;
 
 			var employee = _db.Employees.FirstOrDefault(x => x.Id == employeeID);
@@ -297,7 +320,9 @@ namespace Actiontime.Services
 
 		public List<PersonInfo> GetPersonInfoList()
 		{
-			List<PersonInfo> infos = new List<PersonInfo>();
+            using var _db = _dbFactory.CreateDbContext();
+
+            List<PersonInfo> infos = new List<PersonInfo>();
 
 			var employees = _db.Employees.ToList();
 			var location = _db.OurLocations.FirstOrDefault();
@@ -369,7 +394,10 @@ namespace Actiontime.Services
 		//CheckEmployeeShift
 		public string CheckEmployeeShift(int employeeId)
 		{
-			string result = string.Empty;
+            using var _db = _dbFactory.CreateDbContext();
+            using var _cdb = _cdbFactory.CreateDbContext();
+
+            string result = string.Empty;
 			WebSocketService webSocketService = new WebSocketService();
 
 			var dateKey = DateTime.Now;
@@ -550,7 +578,10 @@ namespace Actiontime.Services
 		//CheckEmployeeBreak
 		public string CheckEmployeeBreak(int employeeId)
 		{
-			string result = string.Empty;
+            using var _db = _dbFactory.CreateDbContext();
+            using var _cdb = _cdbFactory.CreateDbContext();
+
+            string result = string.Empty;
 			WebSocketService webSocketService = new WebSocketService();
 
 			var dateKey = DateTime.Now;//.AddHours(-10);

@@ -6,6 +6,7 @@ using Actiontime.Models.ResultModel;
 using Actiontime.Models.SerializeModels;
 using Actiontime.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Actiontime.TicketAPI.Controllers
 {
@@ -14,14 +15,20 @@ namespace Actiontime.TicketAPI.Controllers
     public class CashController : ControllerBase
     {
         CashService _cashService;
-        private IWebHostEnvironment _env;
-        private readonly ApplicationDbContext _db;
-        private readonly ApplicationCloudDbContext _cdb;
+        CloudService _cloudService;
 
-        public CashController(IWebHostEnvironment env, ApplicationDbContext db, ApplicationCloudDbContext cdb)
+        private IWebHostEnvironment _env;
+        private readonly IDbContextFactory<ApplicationDbContext> _dbFactory;
+        private readonly IDbContextFactory<ApplicationCloudDbContext> _cdbFactory;
+
+        public CashController(IWebHostEnvironment env, IDbContextFactory<ApplicationDbContext> dbFactory, IDbContextFactory<ApplicationCloudDbContext> cdbFactory, CloudService cloudService)
         {
-            _cashService = new CashService(db, cdb);
+            _dbFactory = dbFactory ?? throw new ArgumentNullException(nameof(dbFactory));
+            _cdbFactory = cdbFactory ?? throw new ArgumentNullException(nameof(cdbFactory));
+            _cloudService = cloudService ?? throw new ArgumentNullException(nameof(cloudService));
+            _cashService = new CashService(_dbFactory, _cdbFactory, _cloudService);
             _env = env;
+
         }
 
         [HttpGet()]

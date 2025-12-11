@@ -21,6 +21,8 @@ namespace Actiontime.TicketAPI
             //builder.Services.AddDbContext<ApplicationCloudDbContext>(opts => opts.UseSqlServer(cloudConn));
             builder.Services.AddDbContextFactory<ApplicationCloudDbContext>(opts => opts.UseSqlServer(cloudConn));
 
+
+
             builder.Services.AddControllers();
             builder.Services.AddHostedService<BackgroundWorkerService>();
             //builder.Services.AddTransient<BackgroundWorkerService>();

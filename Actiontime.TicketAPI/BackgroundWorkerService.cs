@@ -23,11 +23,14 @@ namespace Actiontime.TicketAPI
 	public class BackgroundWorkerService : BackgroundService
 	{
 		private static ILogger<BackgroundWorkerService> _logger;
-		private static MqttFactory mqttFactory = new MqttFactory();
+        private readonly IServiceProvider _sp;
+        private static MqttFactory mqttFactory = new MqttFactory();
 		private static IMqttClient mqttClient = mqttFactory.CreateMqttClient();
 		private static MqttClientOptions mqttClientOptions;
         private readonly IConfiguration _configuration;
 		private readonly QRReaderService _readerService;
+		private readonly SyncService _syncService;
+		private readonly CloudService _cloudService;
         private readonly IDbContextFactory<ApplicationDbContext> _dbFactory;
         private readonly IDbContextFactory<ApplicationCloudDbContext> _cdbFactory;
 
@@ -35,7 +38,7 @@ namespace Actiontime.TicketAPI
 
 
         public BackgroundWorkerService(ILogger<BackgroundWorkerService> logger, IConfiguration configuration, IDbContextFactory<ApplicationDbContext> dbFactory,
-    IDbContextFactory<ApplicationCloudDbContext> cdbFactory)
+    IDbContextFactory<ApplicationCloudDbContext> cdbFactory, IServiceProvider sp)
 		{
 			_logger = logger;
             _configuration = configuration;
@@ -48,8 +51,12 @@ namespace Actiontime.TicketAPI
 
             using var db = _dbFactory.CreateDbContext();
             using var cdb = _cdbFactory.CreateDbContext();
-            
-            _readerService = new QRReaderService(db, cdb);
+
+			_sp = sp;
+
+            _cloudService = new CloudService(_dbFactory, _cdbFactory, _sp );
+            _syncService = new SyncService(_dbFactory, _cdbFactory, _cloudService);
+            _readerService = new QRReaderService(_dbFactory, _cdbFactory, _syncService);
 
             //_orderService = new SaleOrderService();
 
@@ -71,7 +78,6 @@ namespace Actiontime.TicketAPI
 		{
             using var db = _dbFactory.CreateDbContext();
             using var cdb = _cdbFactory.CreateDbContext();
-            var reader = new QRReaderService(db, cdb);
 
             _logger.LogInformation("Servis Başladı.");
 

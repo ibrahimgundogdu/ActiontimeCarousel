@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Actiontime.Models")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+65c06128262a11b99d120f83a2a3adae13ceb268")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b085a98d365834022c3332c275ac75d20d4428fb")]
 [assembly: System.Reflection.AssemblyProductAttribute("Actiontime.Models")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Actiontime.Models")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

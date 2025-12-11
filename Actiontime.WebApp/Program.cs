@@ -1,5 +1,6 @@
 using Actiontime.Data.Context;
 using Actiontime.DataCloud.Context;
+using Actiontime.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,7 @@ namespace Actiontime.WebApp
 
             var cloudConnectionString = builder.Configuration.GetConnectionString("CloudConnection");
             builder.Services.AddDbContext<ApplicationCloudDbContext>(options => options.UseSqlServer(cloudConnectionString));
+
 
 
             builder.Services

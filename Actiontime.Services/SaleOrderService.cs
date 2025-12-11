@@ -28,19 +28,24 @@ namespace Actiontime.Services
 {
     public class SaleOrderService
     {
-        private readonly ApplicationDbContext _db;
-        private readonly ApplicationCloudDbContext _cdb;
-        CloudService _cloudService;
+        private readonly IDbContextFactory<ApplicationDbContext> _dbFactory;
+        private readonly IDbContextFactory<ApplicationCloudDbContext> _cdbFactory;
+        private readonly CloudService _cloudService;
+        private ApplicationDbContext db;
+        private ApplicationCloudDbContext cdb;
 
-        public SaleOrderService(ApplicationDbContext db, ApplicationCloudDbContext cdb)
+        public SaleOrderService(IDbContextFactory<ApplicationDbContext> dbFactory, IDbContextFactory<ApplicationCloudDbContext> cdbFactory, CloudService cloudService)
         {
-            _db = db;
-            _cdb = cdb;
-            _cloudService = new CloudService(db,cdb);
+
+            _dbFactory = dbFactory ?? throw new ArgumentNullException(nameof(dbFactory));
+            _cdbFactory = cdbFactory ?? throw new ArgumentNullException(nameof(cdbFactory));
+            _cloudService = cloudService ?? throw new ArgumentNullException(nameof(cloudService));
         }
 
         public bool AddBasket(Basket? item)
         {
+            using var _db = _dbFactory.CreateDbContext();
+
             bool result = false;
 
             if (item != null)
@@ -98,6 +103,7 @@ namespace Actiontime.Services
 
         public AddOrderResult AddOrder(string token, int paymethodId, AppBasketItem[] items)
         {
+            using var _db = _dbFactory.CreateDbContext();
             AddOrderResult result = new AddOrderResult()
             {
                 id = 0,
@@ -282,6 +288,8 @@ namespace Actiontime.Services
         //GetReceipt
         public TicketReceipt GetReceipt(int orderId)
         {
+            using var _db = _dbFactory.CreateDbContext();
+
             TicketReceipt receipt = new TicketReceipt();
 
             if (orderId > 0)
@@ -366,7 +374,7 @@ namespace Actiontime.Services
 
         public void AddPrintLog(int orderId)
         {
-
+            using var _db = _dbFactory.CreateDbContext();
 
             try
             {
@@ -387,6 +395,8 @@ namespace Actiontime.Services
 
         public List<Vorder> GetOrders()
         {
+            using var _db = _dbFactory.CreateDbContext();
+
             var date = _db.OurLocations.FirstOrDefault()?.LocalDate;
 
             return _db.Vorders.Where(x => x.Date >= date).ToList();
@@ -394,11 +404,15 @@ namespace Actiontime.Services
 
         public List<VorderRow>? GetOrderRows(int orderId)
         {
+            using var _db = _dbFactory.CreateDbContext();
+
             return _db.VorderRows.Where(x => x.OrderId == orderId).ToList();
         }
 
         public VOrderInfo? GetOrder(int orderId)
         {
+            using var _db = _dbFactory.CreateDbContext();
+
             VOrderInfo vOrderInfo = new VOrderInfo();
 
             var _order = _db.Vorders.FirstOrDefault(x => x.Id == orderId);
@@ -428,6 +442,8 @@ namespace Actiontime.Services
 
         public OrderRefund GetOrderRefund(int orderId)
         {
+            using var _db = _dbFactory.CreateDbContext();
+
             OrderRefund model = new OrderRefund();
 
             var order = _db.Vorders.FirstOrDefault(x => x.Id == orderId);
@@ -559,6 +575,8 @@ namespace Actiontime.Services
         {
             AppResult result = new AppResult() { Success = true, Message = "Refundable", Description = string.Empty };
 
+            using var _db = _dbFactory.CreateDbContext();
+
             var order = _db.Orders.FirstOrDefault(x => x.Id == orderId);
             if (order != null)
             {
@@ -629,6 +647,8 @@ namespace Actiontime.Services
 
         public bool? CancelOrder(int orderId, int employeeId)
         {
+            using var _db = _dbFactory.CreateDbContext();
+
             bool isCancelled = false;
 
             var _order = _db.Orders.FirstOrDefault(x => x.Id == orderId);
@@ -661,6 +681,8 @@ namespace Actiontime.Services
 
         public AppResult OrderRowReusable(int rowId, int employeeId)
         {
+            using var _db = _dbFactory.CreateDbContext();
+
             AppResult result = new AppResult() { Success = false, Message = "Not Successful", Description = string.Empty };
 
             var location = _db.OurLocations.FirstOrDefault();
@@ -745,6 +767,8 @@ namespace Actiontime.Services
 
         public bool? DeleteOrder(int orderId, int employeeId)
         {
+            using var _db = _dbFactory.CreateDbContext();
+
             bool isDeleted = false;
 
             var _order = _db.Orders.FirstOrDefault(x => x.Id == orderId);
@@ -777,6 +801,8 @@ namespace Actiontime.Services
 
         public int GetOrderId(string ticket)
         {
+            using var _db = _dbFactory.CreateDbContext();
+
             int orderId = -1;
 
             int rowId = 0;
@@ -806,6 +832,8 @@ namespace Actiontime.Services
 
         public void CheckOrderAction(int orderId, int employeeId)
         {
+            using var _db = _dbFactory.CreateDbContext();
+
             var _order = _db.Orders.FirstOrDefault(x => x.Id == orderId);
 
             if (_order != null)
@@ -835,6 +863,8 @@ namespace Actiontime.Services
 
         public void CheckLocationPosTicketSale(long orderId)
         {
+
+            using var _cdb = _cdbFactory.CreateDbContext();
             var parameterSaleID = new SqlParameter
             {
                 ParameterName = "@SaleID",
@@ -851,6 +881,8 @@ namespace Actiontime.Services
 
         public AppResult AddOrderRefund(int OrderId, int employeeId, int refundTypeId, string Description)
         {
+            using var _db = _dbFactory.CreateDbContext();
+
             AppResult result = new AppResult() { Success = true, Message = "Refunded", Description = "Refund Succeded" };
 
             var order = _db.Orders.FirstOrDefault(x => x.Id == OrderId);

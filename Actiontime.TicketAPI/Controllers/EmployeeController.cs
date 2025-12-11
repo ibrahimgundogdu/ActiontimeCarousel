@@ -6,6 +6,7 @@ using Actiontime.Models.SerializeModels;
 using Actiontime.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Actiontime.TicketAPI.Controllers
 {
@@ -13,12 +14,18 @@ namespace Actiontime.TicketAPI.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        private readonly ApplicationDbContext _db;
-        private readonly ApplicationCloudDbContext _cdb;
         EmployeeService _employeeService;
-        public EmployeeController(ApplicationDbContext db, ApplicationCloudDbContext cdb)
+        CloudService _cloudService;
+
+        private readonly IDbContextFactory<ApplicationDbContext> _dbFactory;
+        private readonly IDbContextFactory<ApplicationCloudDbContext> _cdbFactory;
+
+        public EmployeeController(IDbContextFactory<ApplicationDbContext> dbFactory, IDbContextFactory<ApplicationCloudDbContext> cdbFactory, CloudService cloudService)
         {
-            _employeeService = new EmployeeService(db, cdb);
+            _dbFactory = dbFactory ?? throw new ArgumentNullException(nameof(dbFactory));
+            _cdbFactory = cdbFactory ?? throw new ArgumentNullException(nameof(cdbFactory));
+            _cloudService = cloudService ?? throw new ArgumentNullException(nameof(cloudService));
+            _employeeService = new EmployeeService(dbFactory, cdbFactory, _cloudService);
         }
 
 

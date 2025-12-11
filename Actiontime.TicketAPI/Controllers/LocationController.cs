@@ -7,6 +7,7 @@ using Actiontime.Models.SerializeModels;
 using Actiontime.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Actiontime.TicketAPI.Controllers
 {
@@ -16,14 +17,21 @@ namespace Actiontime.TicketAPI.Controllers
 	{
 
 		LocationService _locationService;
-        private readonly ApplicationDbContext _db;
-        private readonly ApplicationCloudDbContext _cdb;
-        public LocationController(ApplicationDbContext db, ApplicationCloudDbContext cdb)
-		{
-			_locationService = new LocationService(db, cdb);
-		}
+        CloudService _cloudService;
 
-		[HttpGet()]
+        private readonly IDbContextFactory<ApplicationDbContext> _dbFactory;
+        private readonly IDbContextFactory<ApplicationCloudDbContext> _cdbFactory;
+
+        public LocationController(IDbContextFactory<ApplicationDbContext> dbFactory, IDbContextFactory<ApplicationCloudDbContext> cdbFactory, CloudService cloudService)
+        {
+            _dbFactory = dbFactory ?? throw new ArgumentNullException(nameof(dbFactory));
+            _cdbFactory = cdbFactory ?? throw new ArgumentNullException(nameof(cdbFactory));
+            _cloudService = cloudService ?? throw new ArgumentNullException(nameof(cloudService));
+            _locationService = new LocationService(dbFactory, cdbFactory, _cloudService);
+        }
+
+
+        [HttpGet()]
 		public OurLocation? GetOurLocation()
 		{
 			return _locationService.GetOurLocation();
