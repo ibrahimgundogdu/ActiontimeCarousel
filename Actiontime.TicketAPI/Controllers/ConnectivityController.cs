@@ -2,6 +2,7 @@
 using Actiontime.Data.Entities;
 using Actiontime.DataCloud.Context;
 using Actiontime.Services;
+using Actiontime.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,13 +13,11 @@ namespace Actiontime.TicketAPI.Controllers
     [ApiController]
     public class ConnectivityController : ControllerBase
     {
-        ConnectivityService _connectivityService;
-        private readonly IDbContextFactory<ApplicationDbContext> _dbFactory;
-        public ConnectivityController(IDbContextFactory<ApplicationDbContext> dbFactory)
-        {
-            _dbFactory = dbFactory ?? throw new ArgumentNullException(nameof(dbFactory));
+        private readonly IConnectivityService _connectivityService;
 
-            _connectivityService = new ConnectivityService(_dbFactory);
+        public ConnectivityController(IConnectivityService connectivityService)
+        {
+            _connectivityService = connectivityService;
         }
 
         [HttpGet()]

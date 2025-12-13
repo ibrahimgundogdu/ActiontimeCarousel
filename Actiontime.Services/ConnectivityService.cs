@@ -5,6 +5,7 @@ using Actiontime.DataCloud.Entities;
 using Actiontime.Models;
 using Actiontime.Models.ResultModel;
 using Actiontime.Models.SerializeModels;
+using Actiontime.Services.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,18 +18,17 @@ using System.Threading.Tasks;
 
 namespace Actiontime.Services
 {
-    public class ConnectivityService
+    public class ConnectivityService : IConnectivityService
     {
 
-        private readonly IDbContextFactory<ApplicationDbContext> _dbFactory;
-        public ConnectivityService(IDbContextFactory<ApplicationDbContext> dbFactory) {
+        private readonly ApplicationDbContext _db;
+        public ConnectivityService(ApplicationDbContext db) {
 
-            _dbFactory = dbFactory ?? throw new ArgumentNullException(nameof(dbFactory));
+            _db = db;
         }
 
         public OurLocation GetOurLocation()
         {
-            using var _db = _dbFactory.CreateDbContext();
             return _db.OurLocations.FirstOrDefault();
         }
 

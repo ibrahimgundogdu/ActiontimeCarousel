@@ -1,0 +1,6 @@
+C:\source\repos\ActiontimeCarousel\Actiontime.Services\obj\Debug\net8.0\Actiontime.Services.csproj.AssemblyReference.cache
+C:\source\repos\ActiontimeCarousel\Actiontime.Services\obj\Debug\net8.0\Actiontime.Services.GeneratedMSBuildEditorConfig.editorconfig
+C:\source\repos\ActiontimeCarousel\Actiontime.Services\obj\Debug\net8.0\Actiontime.Services.AssemblyInfoInputs.cache
+C:\source\repos\ActiontimeCarousel\Actiontime.Services\obj\Debug\net8.0\Actiontime.Services.AssemblyInfo.cs
+C:\source\repos\ActiontimeCarousel\Actiontime.Services\obj\Debug\net8.0\Actiontime.Services.csproj.CoreCompileInputs.cache
+C:\source\repos\ActiontimeCarousel\Actiontime.Services\obj\Debug\net8.0\Actiontime.Services.sourcelink.json

@@ -1,6 +1,7 @@
 ﻿using Actiontime.Data.Context;
 using Actiontime.Data.Entities;
 using Actiontime.DataCloud.Context;
+using Actiontime.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,24 +11,23 @@ using System.Threading.Tasks;
 
 namespace Actiontime.Services
 {
-    public class SyncService
+    public class SyncService : ISyncService
     {
-        private readonly IDbContextFactory<ApplicationDbContext> _dbFactory;
-        private readonly IDbContextFactory<ApplicationCloudDbContext> _cdbFactory;
-        private readonly CloudService _cloudService;
+        private readonly ApplicationDbContext _db;
+        private readonly ApplicationCloudDbContext _cdb;
+        private readonly ICloudService _cloudService;
 
-        public SyncService(IDbContextFactory<ApplicationDbContext> dbFactory, IDbContextFactory<ApplicationCloudDbContext> cdbFactory, CloudService cloudService)
+        public SyncService(ApplicationDbContext db, ApplicationCloudDbContext cdb, ICloudService cloudService)
         {
 
-            _dbFactory = dbFactory ?? throw new ArgumentNullException(nameof(dbFactory));
-            _cdbFactory = cdbFactory ?? throw new ArgumentNullException(nameof(cdbFactory));
-            _cloudService = cloudService ?? throw new ArgumentNullException(nameof(cloudService));
+            _db = db;
+            _cdb = cdb;
+            _cloudService = cloudService;
         }
        
 
         public void AddQuee(string EntityName, short Process, long Id, Guid? Uid)
         {
-            using var _db = _dbFactory.CreateDbContext();
 
             try
             {

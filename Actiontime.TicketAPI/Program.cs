@@ -1,6 +1,7 @@
 using Actiontime.Data.Context;
 using Actiontime.Data.Entities;
 using Actiontime.DataCloud.Context;
+using Actiontime.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Actiontime.TicketAPI
@@ -13,15 +14,7 @@ namespace Actiontime.TicketAPI
 
             // Add services to the container.
 
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            //builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
-            builder.Services.AddDbContextFactory<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
-
-            var cloudConn = builder.Configuration.GetConnectionString("CloudConnection");
-            //builder.Services.AddDbContext<ApplicationCloudDbContext>(opts => opts.UseSqlServer(cloudConn));
-            builder.Services.AddDbContextFactory<ApplicationCloudDbContext>(opts => opts.UseSqlServer(cloudConn));
-
-
+            builder.Services.AddMyAppServices(builder.Configuration);
 
             builder.Services.AddControllers();
             builder.Services.AddHostedService<BackgroundWorkerService>();

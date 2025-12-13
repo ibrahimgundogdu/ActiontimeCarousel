@@ -1,0 +1,10 @@
+C:\source\repos\ActiontimeCarousel\Actiontime.WebApp\obj\Debug\net8.0\Actiontime.WebApp.csproj.AssemblyReference.cache
+C:\source\repos\ActiontimeCarousel\Actiontime.WebApp\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\source\repos\ActiontimeCarousel\Actiontime.WebApp\obj\Debug\net8.0\Actiontime.WebApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\source\repos\ActiontimeCarousel\Actiontime.WebApp\obj\Debug\net8.0\Actiontime.WebApp.AssemblyInfoInputs.cache
+C:\source\repos\ActiontimeCarousel\Actiontime.WebApp\obj\Debug\net8.0\Actiontime.WebApp.AssemblyInfo.cs
+C:\source\repos\ActiontimeCarousel\Actiontime.WebApp\obj\Debug\net8.0\Actiontime.WebApp.csproj.CoreCompileInputs.cache
+C:\source\repos\ActiontimeCarousel\Actiontime.WebApp\obj\Debug\net8.0\Actiontime.WebApp.MvcApplicationPartsAssemblyInfo.cache
+C:\source\repos\ActiontimeCarousel\Actiontime.WebApp\obj\Debug\net8.0\Actiontime.WebApp.RazorAssemblyInfo.cache
+C:\source\repos\ActiontimeCarousel\Actiontime.WebApp\obj\Debug\net8.0\Actiontime.WebApp.RazorAssemblyInfo.cs
+C:\source\repos\ActiontimeCarousel\Actiontime.WebApp\obj\Debug\net8.0\Actiontime.WebApp.sourcelink.json

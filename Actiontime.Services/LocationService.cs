@@ -5,6 +5,7 @@ using Actiontime.DataCloud.Entities;
 using Actiontime.Models;
 using Actiontime.Models.ResultModel;
 using Actiontime.Models.SerializeModels;
+using Actiontime.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System;
@@ -21,32 +22,28 @@ using InspectionRow = Actiontime.Data.Entities.InspectionRow;
 
 namespace Actiontime.Services
 {
-    public class LocationService
+    public class LocationService : ILocationService
     {
-        private readonly IDbContextFactory<ApplicationDbContext> _dbFactory;
-        private readonly IDbContextFactory<ApplicationCloudDbContext> _cdbFactory;
-        private readonly CloudService _cloudService;
-        private ApplicationDbContext db;
-        private ApplicationCloudDbContext cdb;
 
-        public LocationService(IDbContextFactory<ApplicationDbContext> dbFactory, IDbContextFactory<ApplicationCloudDbContext> cdbFactory, CloudService cloudService)
+        private readonly ICloudService _cloudService;
+        private readonly ApplicationDbContext _db;
+        private readonly ApplicationCloudDbContext _cdb;
+
+        public LocationService(ApplicationDbContext db, ApplicationCloudDbContext cdb, ICloudService cloudService)
         {
-            _dbFactory = dbFactory ?? throw new ArgumentNullException(nameof(dbFactory));
-            _cdbFactory = cdbFactory ?? throw new ArgumentNullException(nameof(cdbFactory));
-            _cloudService = cloudService ?? throw new ArgumentNullException(nameof(cloudService));
+            _db = db;
+            _cdb = cdb;
+            _cloudService = cloudService;
         }
 
         public OurLocation? GetOurLocation()
         {
-            using var _db = _dbFactory.CreateDbContext();
 
             return _db.OurLocations.FirstOrDefault();
         }
 
         public List<ProductPriceModel>? GetProductPrice()
         {
-            using var _db = _dbFactory.CreateDbContext();
-
             var prices = _db.ProductPrices.OrderBy(x => x.Duration).ToList();
 
             List<ProductPriceModel> priceModels = new List<ProductPriceModel>();
@@ -84,8 +81,6 @@ namespace Actiontime.Services
 
         public LocationSchedule? GetLocationSchedule(DateTime date)
         {
-            using var _db = _dbFactory.CreateDbContext();
-
             var location = _db.OurLocations.FirstOrDefault();
 
             return _db.LocationSchedules.FirstOrDefault(x => x.ScheduleDate == date && x.LocationId == location.Id);
@@ -93,8 +88,6 @@ namespace Actiontime.Services
 
         public List<LocationSchedule>? GetLocationSchedules(DateTime date)
         {
-            using var _db = _dbFactory.CreateDbContext();
-
             var location = _db.OurLocations.FirstOrDefault();
 
             var schedule = _db.LocationSchedules.FirstOrDefault(x => x.ScheduleDate == date && x.LocationId == location.Id);
@@ -105,8 +98,6 @@ namespace Actiontime.Services
         public OurLocationInfo GetOurLocationInfo()
         {
             OurLocationInfo info = new OurLocationInfo();
-
-            using var _db = _dbFactory.CreateDbContext();
 
             var location = _db.OurLocations.FirstOrDefault();
             string statusName = "Waiting";
@@ -163,8 +154,6 @@ namespace Actiontime.Services
         //CheckLocationShift
         public string CheckLocationShift(int employeeId)
         {
-            using var _db = _dbFactory.CreateDbContext();
-
             string result = string.Empty;
 
             var dateKey = DateTime.Now;
@@ -280,8 +269,6 @@ namespace Actiontime.Services
 
         public List<LocationPartModel> GetLiveParts()
         {
-            using var _db = _dbFactory.CreateDbContext();
-
 
             var location = _db.OurLocations.FirstOrDefault();
             var parts = _db.LocationPartials.Where(x => x.IsActive == true).OrderBy(x => x.Number).ToList();
@@ -358,8 +345,6 @@ namespace Actiontime.Services
 
         public InspectionModel GetInspection(int employeeId)
         {
-            using var _db = _dbFactory.CreateDbContext();
-
             var location = _db.OurLocations.FirstOrDefault();
             var employee = _db.Employees.FirstOrDefault(x => x.Id == employeeId);
             var parts = _db.LocationPartials.Where(x => x.IsActive == true).OrderBy(x => x.Number).ToList();
@@ -511,10 +496,6 @@ namespace Actiontime.Services
 
         public InspectionPartModel GetPartInspection(int inspectionId, int partId, int pageId, int employeeId)
         {
-
-            using var _db = _dbFactory.CreateDbContext();
-
-
             var location = _db.OurLocations.FirstOrDefault();
             var employee = _db.Employees.FirstOrDefault(x => x.Id == employeeId);
             var part = _db.LocationPartials.FirstOrDefault(x => x.Id == partId);
@@ -697,7 +678,6 @@ namespace Actiontime.Services
 
         public AppResult SavePartInspection(int inspectionId, int partId, int pageId, int employeeId, string answer, string? description)
         {
-            using var _db = _dbFactory.CreateDbContext();
 
             AppResult result = new() { Success = false, Message = string.Empty, Description = string.Empty };
 
@@ -772,7 +752,6 @@ namespace Actiontime.Services
 
         public AppResult CloseInspection(int inspectionId, int employeeId, string? description)
         {
-            using var _db = _dbFactory.CreateDbContext();
 
             AppResult result = new() { Success = false, Message = string.Empty, Description = string.Empty };
 
@@ -830,7 +809,6 @@ namespace Actiontime.Services
 
         public bool CheckInspection()
         {
-            using var _db = _dbFactory.CreateDbContext();
 
             var location = _db.OurLocations.FirstOrDefault();
 
@@ -846,7 +824,6 @@ namespace Actiontime.Services
 
         public void GetSync()
         {
-            using var _db = _dbFactory.CreateDbContext();
 
             var processList = _db.SyncProcesses.ToList();
 
@@ -859,7 +836,6 @@ namespace Actiontime.Services
 
         public string CompletePartRide(int partId, int employeeId)
         {
-            using var _db = _dbFactory.CreateDbContext();
 
             string result = string.Empty;
 

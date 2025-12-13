@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Actiontime.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Actiontime.Services
 {
-    public class ServiceHelper
+    public class ServiceHelper : IServiceHelper
     {
         public static string MD5Hash(string input)
         {

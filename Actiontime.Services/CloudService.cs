@@ -3,6 +3,7 @@ using Actiontime.Data.Entities;
 using Actiontime.DataCloud.Context;
 using Actiontime.DataCloud.Entities;
 using Actiontime.Models;
+using Actiontime.Services.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,53 +11,43 @@ using System;
 
 namespace Actiontime.Services
 {
-    public class CloudService
+    public class CloudService: ICloudService
     {
-        private readonly IDbContextFactory<ApplicationDbContext> _dbFactory;
-        private readonly IDbContextFactory<ApplicationCloudDbContext> _cdbFactory;
+        private readonly ApplicationDbContext _db;
+        private readonly ApplicationCloudDbContext _cdb;
         private readonly IServiceProvider _sp;
+        
 
-        public CloudService(IDbContextFactory<ApplicationDbContext> dbFactory, IDbContextFactory<ApplicationCloudDbContext> cdbFactory, IServiceProvider sp)
+        public CloudService(ApplicationDbContext db, ApplicationCloudDbContext cdb, IServiceProvider sp)
         {
-            _dbFactory = dbFactory ?? throw new ArgumentNullException(nameof(dbFactory));
-            _cdbFactory = cdbFactory ?? throw new ArgumentNullException(nameof(cdbFactory));
+            _db = db;
+            _cdb = cdb;
             _sp = sp;
         }
-
-
-
-        private SaleOrderService GetSaleOrderService() =>
-        _sp.GetRequiredService<SaleOrderService>();
 
         public void AddCloudProcess(SyncProcess process)
         {
 
-            using var db = _dbFactory.CreateDbContext();
-            using var cdb = _cdbFactory.CreateDbContext();
-
             if (process.Entity == "Order" && process.Process == 1)
             {
-
-                var saleOrder = GetSaleOrderService();
-                var localOrder = db.Orders.FirstOrDefault(x => x.Id == process.EntityId);
+                var localOrder = _db.Orders.FirstOrDefault(x => x.Id == process.EntityId);
 
                 if (localOrder != null)
                 {
-                    saleOrder.CheckOrderAction(localOrder.Id, localOrder.EmployeeId ?? 6070);
+                    // ISaleOrderService artık constructor ile gelmiyor; gerektiğinde resolve et
+                    var orderService = _sp.GetService<ISaleOrderService>();
+                    orderService?.CheckOrderAction(localOrder.Id, localOrder.EmployeeId ?? 6070);
                 }
 
+                var localOrderRows = _db.OrderRows.Where(x => x.OrderId == process.EntityId).ToList();
+                var localPosPayment = _db.OrderPosPayments.FirstOrDefault(x => x.OrderId == process.EntityId);
 
-
-                var localOrderRows = db.OrderRows.Where(x => x.OrderId == process.EntityId).ToList();
-                var localPosPayment = db.OrderPosPayments.FirstOrDefault(x => x.OrderId == process.EntityId);
-
-                var cloudOrder = cdb.TicketSales.FirstOrDefault(x => x.Uid == process.EntityUid && x.LocalOrderId == process.EntityId);
+                var cloudOrder = _cdb.TicketSales.FirstOrDefault(x => x.Uid == process.EntityUid && x.LocalOrderId == process.EntityId);
 
                 try
                 {
                     if (cloudOrder == null)
                     {
-                        //ticketsale eklenir
 
                         TicketSale ticketSale = new TicketSale();
 
@@ -83,8 +74,8 @@ namespace Actiontime.Services
                         ticketSale.IsFinancialization = false;
                         ticketSale.IsActive = localOrder.IsActive;
 
-                        cdb.TicketSales.Add(ticketSale);
-                        cdb.SaveChanges();
+                        _cdb.TicketSales.Add(ticketSale);
+                        _cdb.SaveChanges();
 
                         //ticketsalerows eklenir
 
@@ -124,8 +115,8 @@ namespace Actiontime.Services
                             saleRow.MasterCredit = 0;
                             saleRow.PromoCredit = 0;
 
-                            cdb.TicketSaleRows.Add(saleRow);
-                            cdb.SaveChanges();
+                            _cdb.TicketSaleRows.Add(saleRow);
+                            _cdb.SaveChanges();
 
                         }
 
@@ -155,21 +146,22 @@ namespace Actiontime.Services
                         payment.MaskedPan = string.Empty;
                         payment.RecordDate = localPosPayment?.RecordDate;
 
-                        cdb.TicketSalePosPayments.Add(payment);
-                        cdb.SaveChanges();
+                        _cdb.TicketSalePosPayments.Add(payment);
+                        _cdb.SaveChanges();
 
                         // sync silinir
 
-                        var syncOrder = db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
+                        var syncOrder = _db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
                         if (syncOrder != null)
                         {
-                            db.SyncProcesses.Remove(syncOrder);
-                            db.SaveChanges();
+                            _db.SyncProcesses.Remove(syncOrder);
+                            _db.SaveChanges();
                         }
 
                         // cari hareket işlenir CheckLocationPosTicketSale
 
-                        saleOrder.CheckLocationPosTicketSale(ticketSale.Id);
+                        var orderSvc = _sp.GetService<ISaleOrderService>();
+                        orderSvc?.CheckLocationPosTicketSale(ticketSale.Id);
 
 
                     }
@@ -186,20 +178,20 @@ namespace Actiontime.Services
             if (process.Entity == "OrderRow" && process.Process == 2)
             {
 
-                var localOrderRow = db.OrderRows.FirstOrDefault(x => x.Id == process.EntityId && x.Uid == process.EntityUid);
+                var localOrderRow = _db.OrderRows.FirstOrDefault(x => x.Id == process.EntityId && x.Uid == process.EntityUid);
 
-                var cloudOrderRow = cdb.TicketSaleRows.FirstOrDefault(x => x.Uid == process.EntityUid && x.LocalRowId == process.EntityId);
+                var cloudOrderRow = _cdb.TicketSaleRows.FirstOrDefault(x => x.Uid == process.EntityUid && x.LocalRowId == process.EntityId);
 
                 try
                 {
                     if (cloudOrderRow != null && localOrderRow != null)
                     {
-                        var localConfirm = db.TripConfirms.FirstOrDefault(x => x.SaleOrderRowId == process.EntityId);
+                        var localConfirm = _db.TripConfirms.FirstOrDefault(x => x.SaleOrderRowId == process.EntityId);
 
                         if (localConfirm != null)
                         {
 
-                            TicketTripConfirm confirm = cdb.TicketTripConfirms.FirstOrDefault(x => x.ConfirmNumber == localConfirm.ConfirmNumber && x.TicketNumber == localConfirm.TicketNumber);
+                            TicketTripConfirm confirm = _cdb.TicketTripConfirms.FirstOrDefault(x => x.ConfirmNumber == localConfirm.ConfirmNumber && x.TicketNumber == localConfirm.TicketNumber);
 
                             if (confirm != null)
                             {
@@ -215,7 +207,7 @@ namespace Actiontime.Services
                                 confirm.RecordDate = localConfirm.RecordDate;
                                 confirm.IsApproved = localConfirm.IsApproved;
 
-                                cdb.SaveChanges();
+                                _cdb.SaveChanges();
                             }
                             else
                             {
@@ -233,18 +225,18 @@ namespace Actiontime.Services
                                 confirm.RecordDate = localConfirm.RecordDate;
                                 confirm.IsApproved = localConfirm.IsApproved;
 
-                                cdb.TicketTripConfirms.Add(confirm);
-                                cdb.SaveChanges();
+                                _cdb.TicketTripConfirms.Add(confirm);
+                                _cdb.SaveChanges();
                             }
 
-                            var localTrip = db.Trips.FirstOrDefault(x => x.ConfirmId == localConfirm.Id);
+                            var localTrip = _db.Trips.FirstOrDefault(x => x.ConfirmId == localConfirm.Id);
 
 
 
 
                             if (localTrip != null)
                             {
-                                TicketTrip trip = cdb.TicketTrips.FirstOrDefault(x => x.ConfirmId == confirm.Id);
+                                TicketTrip trip = _cdb.TicketTrips.FirstOrDefault(x => x.ConfirmId == confirm.Id);
 
                                 if (trip != null)
                                 {
@@ -254,7 +246,7 @@ namespace Actiontime.Services
                                     trip.TripCancel = localTrip.TripCancel;
                                     trip.TripEnd = localTrip.TripEnd;
 
-                                    cdb.SaveChanges();
+                                    _cdb.SaveChanges();
 
                                 }
                                 else
@@ -272,8 +264,8 @@ namespace Actiontime.Services
                                     trip.TripCancel = localTrip.TripCancel;
                                     trip.TripEnd = localTrip.TripEnd;
 
-                                    cdb.TicketTrips.Add(trip);
-                                    cdb.SaveChanges();
+                                    _cdb.TicketTrips.Add(trip);
+                                    _cdb.SaveChanges();
 
                                 }
 
@@ -285,17 +277,17 @@ namespace Actiontime.Services
                         }
 
                         cloudOrderRow.StatusId = localOrderRow.RowStatusId;
-                        cdb.SaveChanges();
+                        _cdb.SaveChanges();
 
 
                         // sync silinir
 
-                        var syncOrder = db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
+                        var syncOrder = _db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
 
                         if (syncOrder != null)
                         {
-                            db.SyncProcesses.Remove(syncOrder);
-                            db.SaveChanges();
+                            _db.SyncProcesses.Remove(syncOrder);
+                            _db.SaveChanges();
                         }
 
                     }
@@ -310,14 +302,14 @@ namespace Actiontime.Services
             if (process.Entity == "OrderRefund" && process.Process == 3)
             {
 
-                var localOrder = db.Orders.FirstOrDefault(x => x.Id == process.EntityId);
+                var localOrder = _db.Orders.FirstOrDefault(x => x.Id == process.EntityId);
 
-                var localOrderRows = db.OrderRows.Where(x => x.OrderId == localOrder.Id).ToList();
+                var localOrderRows = _db.OrderRows.Where(x => x.OrderId == localOrder.Id).ToList();
 
-                var localPosPayment = db.OrderPosPayments.FirstOrDefault(x => x.OrderId == process.EntityId);
-                var localPosRefund = db.OrderPosRefunds.FirstOrDefault(x => x.OrderId == process.EntityId);
+                var localPosPayment = _db.OrderPosPayments.FirstOrDefault(x => x.OrderId == process.EntityId);
+                var localPosRefund = _db.OrderPosRefunds.FirstOrDefault(x => x.OrderId == process.EntityId);
 
-                var ticketSale = cdb.TicketSales.FirstOrDefault(x => x.Uid == process.EntityUid && x.LocalOrderId == process.EntityId);
+                var ticketSale = _cdb.TicketSales.FirstOrDefault(x => x.Uid == process.EntityUid && x.LocalOrderId == process.EntityId);
 
                 try
                 {
@@ -328,10 +320,10 @@ namespace Actiontime.Services
                         ticketSale.StatusId = localOrder.OrderStatusId;
                         ticketSale.UpdateDate = localOrder.UpdateDate;
                         ticketSale.UpdateEmployeeId = localOrder.UpdateEmployeeId;
-                        cdb.SaveChanges();
+                        _cdb.SaveChanges();
 
                         //ticketsalerows güncellenir
-                        var ticketSaleRows = cdb.TicketSaleRows.Where(x => x.SaleId == ticketSale.Id).ToList();
+                        var ticketSaleRows = _cdb.TicketSaleRows.Where(x => x.SaleId == ticketSale.Id).ToList();
 
                         foreach (var saleRow in ticketSaleRows)
                         {
@@ -342,15 +334,15 @@ namespace Actiontime.Services
                             saleRow.UpdateDate = localrow.UpdateDate;
                             saleRow.UpdateEmployeeId = localrow.UpdateEmployeeId;
 
-                            cdb.SaveChanges();
+                            _cdb.SaveChanges();
 
                         }
 
                         //cloud a refund eklenir
 
-                        var dayresult = cdb.DayResults.FirstOrDefault(x => x.LocationId == localOrder.LocationId && x.Date == localOrder.Date && x.IsActive == true);
+                        var dayresult = _cdb.DayResults.FirstOrDefault(x => x.LocationId == localOrder.LocationId && x.Date == localOrder.Date && x.IsActive == true);
 
-                        DocumentExpenseSlip slip = cdb.DocumentExpenseSlips.FirstOrDefault(x => x.LocationId == localOrder.LocationId && x.DocumentDate == localPosRefund.RefoundDate && x.SaleId == ticketSale.Id);
+                        DocumentExpenseSlip slip = _cdb.DocumentExpenseSlips.FirstOrDefault(x => x.LocationId == localOrder.LocationId && x.DocumentDate == localPosRefund.RefoundDate && x.SaleId == ticketSale.Id);
 
                         if (slip == null)
                         {
@@ -382,8 +374,8 @@ namespace Actiontime.Services
                             slip.IsConfirmed = true;
                             slip.IsActive = true;
 
-                            cdb.DocumentExpenseSlips.Add(slip);
-                            cdb.SaveChanges();
+                            _cdb.DocumentExpenseSlips.Add(slip);
+                            _cdb.SaveChanges();
                         }
 
                         var parameterSlipID = new SqlParameter
@@ -395,15 +387,15 @@ namespace Actiontime.Services
                         };
 
                         var sqlorder = "EXEC ExpenseSlipCheck @SlipID";
-                        cdb.Database.ExecuteSqlRaw(sqlorder, parameterSlipID);
+                        _cdb.Database.ExecuteSqlRaw(sqlorder, parameterSlipID);
 
                         // sync silinir
 
-                        var syncOrder = db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
+                        var syncOrder = _db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
                         if (syncOrder != null)
                         {
-                            db.SyncProcesses.Remove(syncOrder);
-                            db.SaveChanges();
+                            _db.SyncProcesses.Remove(syncOrder);
+                            _db.SaveChanges();
                         }
                     }
 
@@ -417,9 +409,9 @@ namespace Actiontime.Services
 
             if (process.Entity == "CashDocument" && process.Process == 1)
             {
-                var localDocument = db.CashDocuments.FirstOrDefault(x => x.Id == process.EntityId && x.Uid == process.EntityUid);
-                var localAction = db.CashActions.FirstOrDefault(x => x.ProcessUid == process.EntityUid && x.ProcessId == process.EntityId);
-                var location = db.OurLocations.FirstOrDefault();
+                var localDocument = _db.CashDocuments.FirstOrDefault(x => x.Id == process.EntityId && x.Uid == process.EntityUid);
+                var localAction = _db.CashActions.FirstOrDefault(x => x.ProcessUid == process.EntityUid && x.ProcessId == process.EntityId);
+                var location = _db.OurLocations.FirstOrDefault();
 
                 try
                 {
@@ -428,7 +420,7 @@ namespace Actiontime.Services
                         if (localDocument.CashActionTypeId == 29)
                         {
 
-                            var exist = cdb.DocumentCashExpenses.FirstOrDefault(x => x.Uid == localDocument.Uid);
+                            var exist = _cdb.DocumentCashExpenses.FirstOrDefault(x => x.Uid == localDocument.Uid);
 
                             if (exist == null)
                             {
@@ -456,7 +448,7 @@ namespace Actiontime.Services
                                 };
 
                                 var sqldoc = "EXEC GetDocumentNumberForApp @OurCompanyID, @Prefix, @DocumentNumber OUT";
-                                cdb.Database.ExecuteSqlRaw(sqldoc, parameterOurCompanyId, parameterPrefix, parameterDocumentNumber);
+                                _cdb.Database.ExecuteSqlRaw(sqldoc, parameterOurCompanyId, parameterPrefix, parameterDocumentNumber);
 
                                 string documentNumber = (string)parameterDocumentNumber.Value;
 
@@ -491,8 +483,8 @@ namespace Actiontime.Services
                                 cashExpense.SlipPath = "/Document/Expense";
                                 cashExpense.SlipDocument = localDocument.PhotoFile;
 
-                                cdb.DocumentCashExpenses.Add(cashExpense);
-                                cdb.SaveChanges();
+                                _cdb.DocumentCashExpenses.Add(cashExpense);
+                                _cdb.SaveChanges();
 
                                 // Cash Action Eklenir
 
@@ -506,7 +498,7 @@ namespace Actiontime.Services
                         if (localDocument.CashActionTypeId == 31)
                         {
 
-                            var exist = cdb.DocumentSalaryPayments.FirstOrDefault(x => x.Uid == localDocument.Uid);
+                            var exist = _cdb.DocumentSalaryPayments.FirstOrDefault(x => x.Uid == localDocument.Uid);
 
                             if (exist == null)
                             {
@@ -534,7 +526,7 @@ namespace Actiontime.Services
                                 };
 
                                 var sqldoc = "EXEC GetDocumentNumberForApp @OurCompanyID, @Prefix, @DocumentNumber OUT";
-                                cdb.Database.ExecuteSqlRaw(sqldoc, parameterOurCompanyId, parameterPrefix, parameterDocumentNumber);
+                                _cdb.Database.ExecuteSqlRaw(sqldoc, parameterOurCompanyId, parameterPrefix, parameterDocumentNumber);
 
                                 string documentNumber = (string)parameterDocumentNumber.Value;
 
@@ -562,7 +554,7 @@ namespace Actiontime.Services
                                 };
 
                                 var sqlres = "EXEC GetDayResultIDApp @LocationID, @Date, @DayResultID OUT";
-                                cdb.Database.ExecuteSqlRaw(sqlres, parameterLocationID, parameterDate, parameterDayResultID);
+                                _cdb.Database.ExecuteSqlRaw(sqlres, parameterLocationID, parameterDate, parameterDayResultID);
 
                                 long dayResultId = (long)parameterDayResultID.Value;
 
@@ -594,8 +586,8 @@ namespace Actiontime.Services
                                 salaryPay.ResultId = dayResultId;
 
 
-                                cdb.DocumentSalaryPayments.Add(salaryPay);
-                                cdb.SaveChanges();
+                                _cdb.DocumentSalaryPayments.Add(salaryPay);
+                                _cdb.SaveChanges();
 
                                 // Cash Action Eklenir
 
@@ -644,11 +636,11 @@ namespace Actiontime.Services
 
                         // sync silinir
 
-                        var syncOrder = db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
+                        var syncOrder = _db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
                         if (syncOrder != null)
                         {
-                            db.SyncProcesses.Remove(syncOrder);
-                            db.SaveChanges();
+                            _db.SyncProcesses.Remove(syncOrder);
+                            _db.SaveChanges();
                         }
                     }
 
@@ -664,13 +656,13 @@ namespace Actiontime.Services
             {
 
                 //var location = db.OurLocations.FirstOrDefault();
-                var dayResult = db.DayResults.FirstOrDefault(x => x.Id == process.EntityId && x.Uid == process.EntityUid);
+                var dayResult = _db.DayResults.FirstOrDefault(x => x.Id == process.EntityId && x.Uid == process.EntityUid);
 
                 try
                 {
                     if (dayResult != null)
                     {
-                        var exist = cdb.DayResults.FirstOrDefault(x => x.Uid == dayResult.Uid);
+                        var exist = _cdb.DayResults.FirstOrDefault(x => x.Uid == dayResult.Uid);
 
                         if (exist == null)
                         {
@@ -741,18 +733,18 @@ namespace Actiontime.Services
 
 
                             var sqldoc = "EXEC AddDayResultApp @LocationID, @Date, @StateID, @EnvironmentID, @RecordEmployeeID, @Description, @RecordIP, @UID, @DayResultID OUT";
-                            cdb.Database.ExecuteSqlRaw(sqldoc, parameterLocationID, parameterDate, parameterStateID, parameterEnvironmentID, parameterRecordEmployeeID, parameterDescription, parameterRecordIP, parameterUID, parameterDayResultID);
+                            _cdb.Database.ExecuteSqlRaw(sqldoc, parameterLocationID, parameterDate, parameterStateID, parameterEnvironmentID, parameterRecordEmployeeID, parameterDescription, parameterRecordIP, parameterUID, parameterDayResultID);
 
 
                         }
 
                         // sync silinir
 
-                        var syncOrder = db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
+                        var syncOrder = _db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
                         if (syncOrder != null)
                         {
-                            db.SyncProcesses.Remove(syncOrder);
-                            db.SaveChanges();
+                            _db.SyncProcesses.Remove(syncOrder);
+                            _db.SaveChanges();
                         }
                     }
 
@@ -768,13 +760,13 @@ namespace Actiontime.Services
             {
 
                 // var location = db.OurLocations.FirstOrDefault();
-                var dayResult = db.DayResults.FirstOrDefault(x => x.Id == process.EntityId && x.Uid == process.EntityUid);
+                var dayResult = _db.DayResults.FirstOrDefault(x => x.Id == process.EntityId && x.Uid == process.EntityUid);
 
                 try
                 {
                     if (dayResult != null)
                     {
-                        var exist = cdb.DayResults.FirstOrDefault(x => x.Uid == dayResult.Uid);
+                        var exist = _cdb.DayResults.FirstOrDefault(x => x.Uid == dayResult.Uid);
 
                         if (exist != null)
                         {
@@ -783,7 +775,7 @@ namespace Actiontime.Services
                             exist.UpdateDate = dayResult.UpdateDate;
                             exist.UpdateEmployeeId = dayResult.UpdateEmployeeId;
 
-                            cdb.SaveChanges();
+                            _cdb.SaveChanges();
 
 
                             // image upload edilir.
@@ -812,8 +804,8 @@ namespace Actiontime.Services
                                     doc.IsActive = true;
                                     doc.RecordIp = string.Empty;
 
-                                    cdb.DayResultDocuments.Add(doc);
-                                    cdb.SaveChanges();
+                                    _cdb.DayResultDocuments.Add(doc);
+                                    _cdb.SaveChanges();
 
                                 }
                                 catch (Exception ex)
@@ -824,11 +816,11 @@ namespace Actiontime.Services
 
                             // sync silinir
 
-                            var syncOrder = db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
+                            var syncOrder = _db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
                             if (syncOrder != null)
                             {
-                                db.SyncProcesses.Remove(syncOrder);
-                                db.SaveChanges();
+                                _db.SyncProcesses.Remove(syncOrder);
+                                _db.SaveChanges();
                             }
                         }
                     }
@@ -843,13 +835,13 @@ namespace Actiontime.Services
 
             if (process.Entity == "LocationShift" && process.Process == 1)
             {
-                var locationShift = db.LocationShifts.FirstOrDefault(x => x.Id == process.EntityId && x.Uid == process.EntityUid);
+                var locationShift = _db.LocationShifts.FirstOrDefault(x => x.Id == process.EntityId && x.Uid == process.EntityUid);
 
                 try
                 {
                     if (locationShift != null)
                     {
-                        var exist = cdb.LocationShifts.FirstOrDefault(x => x.Uid == locationShift.Uid && x.LocationId == locationShift.LocationId && x.ShiftDate == locationShift.ShiftDate);
+                        var exist = _cdb.LocationShifts.FirstOrDefault(x => x.Uid == locationShift.Uid && x.LocationId == locationShift.LocationId && x.ShiftDate == locationShift.ShiftDate);
 
                         if (exist != null)
                         {
@@ -859,12 +851,12 @@ namespace Actiontime.Services
                             exist.ShiftFinish = locationShift.ShiftFinish?.TimeOfDay;
 
 
-                            cdb.SaveChanges();
+                            _cdb.SaveChanges();
                         }
                         else
                         {
 
-                            exist = cdb.LocationShifts.FirstOrDefault(x => x.LocationId == locationShift.LocationId && x.ShiftDate == locationShift.ShiftDate);
+                            exist = _cdb.LocationShifts.FirstOrDefault(x => x.LocationId == locationShift.LocationId && x.ShiftDate == locationShift.ShiftDate);
 
                             if (exist != null)
                             {
@@ -874,7 +866,7 @@ namespace Actiontime.Services
                                 exist.ShiftFinish = locationShift.ShiftFinish?.TimeOfDay;
                                 exist.Uid= locationShift.Uid;
 
-                                cdb.SaveChanges();
+                                _cdb.SaveChanges();
                             }
                             else
                             {
@@ -895,19 +887,19 @@ namespace Actiontime.Services
                                 exist.EnvironmentId = 4;
                                 exist.Uid = locationShift.Uid;
 
-                                cdb.LocationShifts.Add(exist);
-                                cdb.SaveChanges();
+                                _cdb.LocationShifts.Add(exist);
+                                _cdb.SaveChanges();
                             }
                             
                         }
 
                         // sync silinir
 
-                        var syncOrder = db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
+                        var syncOrder = _db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
                         if (syncOrder != null)
                         {
-                            db.SyncProcesses.Remove(syncOrder);
-                            db.SaveChanges();
+                            _db.SyncProcesses.Remove(syncOrder);
+                            _db.SaveChanges();
                         }
 
                     }
@@ -922,14 +914,14 @@ namespace Actiontime.Services
 
             if (process.Entity == "LocationShift" && process.Process == 2)
             {
-                var location = db.OurLocations.FirstOrDefault();
-                var locationShift = db.LocationShifts.FirstOrDefault(x => x.Id == process.EntityId && x.Uid == process.EntityUid);
+                var location = _db.OurLocations.FirstOrDefault();
+                var locationShift = _db.LocationShifts.FirstOrDefault(x => x.Id == process.EntityId && x.Uid == process.EntityUid);
 
                 try
                 {
                     if (locationShift != null)
                     {
-                        var exist = cdb.LocationShifts.FirstOrDefault(x => x.Uid == locationShift.Uid && x.LocationId == locationShift.LocationId && x.ShiftDate == locationShift.ShiftDate);
+                        var exist = _cdb.LocationShifts.FirstOrDefault(x => x.Uid == locationShift.Uid && x.LocationId == locationShift.LocationId && x.ShiftDate == locationShift.ShiftDate);
 
                         if (exist != null)
                         {
@@ -942,12 +934,12 @@ namespace Actiontime.Services
                             exist.UpdateEmployeeId = locationShift.EmployeeId;
 
 
-                            cdb.SaveChanges();
+                            _cdb.SaveChanges();
                         }
                         else
                         {
 
-                            exist = cdb.LocationShifts.FirstOrDefault(x => x.LocationId == locationShift.LocationId && x.ShiftDate == locationShift.ShiftDate);
+                            exist = _cdb.LocationShifts.FirstOrDefault(x => x.LocationId == locationShift.LocationId && x.ShiftDate == locationShift.ShiftDate);
 
                             if (exist != null)
                             {
@@ -959,7 +951,7 @@ namespace Actiontime.Services
                                 exist.UpdateDate = location.LocalDateTime;
                                 exist.UpdateEmployeeId = locationShift.EmployeeId;
 
-                                cdb.SaveChanges();
+                                _cdb.SaveChanges();
                             }
                             else
                             {
@@ -982,19 +974,19 @@ namespace Actiontime.Services
                                 exist.EnvironmentId = 4;
                                 exist.Uid = locationShift.Uid;
 
-                                cdb.LocationShifts.Add(exist);
-                                cdb.SaveChanges();
+                                _cdb.LocationShifts.Add(exist);
+                                _cdb.SaveChanges();
                             }
 
                         }
 
                         // sync silinir
 
-                        var syncOrder = db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
+                        var syncOrder = _db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
                         if (syncOrder != null)
                         {
-                            db.SyncProcesses.Remove(syncOrder);
-                            db.SaveChanges();
+                            _db.SyncProcesses.Remove(syncOrder);
+                            _db.SaveChanges();
                         }
 
                     }
@@ -1011,13 +1003,13 @@ namespace Actiontime.Services
             if (process.Entity == "EmployeeShift" && process.Process == 1)
             {
 
-                var employeeShift = db.EmployeeShifts.FirstOrDefault(x => x.Id == process.EntityId && x.Uid == process.EntityUid);
+                var employeeShift = _db.EmployeeShifts.FirstOrDefault(x => x.Id == process.EntityId && x.Uid == process.EntityUid);
 
                 try
                 {
                     if (employeeShift != null)
                     {
-                        var exist = cdb.EmployeeShifts.FirstOrDefault(x => x.Uid == employeeShift.Uid && x.EmployeeId == employeeShift.EmployeeId && x.ShiftDate == employeeShift.ShiftDate && x.IsWorkTime == true);
+                        var exist = _cdb.EmployeeShifts.FirstOrDefault(x => x.Uid == employeeShift.Uid && x.EmployeeId == employeeShift.EmployeeId && x.ShiftDate == employeeShift.ShiftDate && x.IsWorkTime == true);
 
                         if (exist != null)
                         {
@@ -1026,12 +1018,12 @@ namespace Actiontime.Services
                             exist.ShiftStart = employeeShift.ShiftStart.TimeOfDay;
                             exist.ShiftEnd = employeeShift.ShiftEnd?.TimeOfDay;
 
-                            cdb.SaveChanges();
+                            _cdb.SaveChanges();
                         }
                         else
                         {
 
-                            exist = cdb.EmployeeShifts.FirstOrDefault(x => x.EmployeeId == employeeShift.EmployeeId && x.ShiftDate == employeeShift.ShiftDate && x.IsWorkTime == true);
+                            exist = _cdb.EmployeeShifts.FirstOrDefault(x => x.EmployeeId == employeeShift.EmployeeId && x.ShiftDate == employeeShift.ShiftDate && x.IsWorkTime == true);
 
                             if (exist != null)
                             {
@@ -1041,7 +1033,7 @@ namespace Actiontime.Services
                                 exist.ShiftEnd = employeeShift.ShiftEnd?.TimeOfDay;
                                 exist.Uid = employeeShift.Uid;
 
-                                cdb.SaveChanges();
+                                _cdb.SaveChanges();
                             }
                             else
                             {
@@ -1064,19 +1056,19 @@ namespace Actiontime.Services
                                 exist.EnvironmentId = 4;
                                 exist.Uid = employeeShift.Uid;
 
-                                cdb.EmployeeShifts.Add(exist);
-                                cdb.SaveChanges();
+                                _cdb.EmployeeShifts.Add(exist);
+                                _cdb.SaveChanges();
                             }
 
                         }
 
                         // sync silinir
 
-                        var syncOrder = db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
+                        var syncOrder = _db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
                         if (syncOrder != null)
                         {
-                            db.SyncProcesses.Remove(syncOrder);
-                            db.SaveChanges();
+                            _db.SyncProcesses.Remove(syncOrder);
+                            _db.SaveChanges();
                         }
 
                     }
@@ -1093,14 +1085,14 @@ namespace Actiontime.Services
             if (process.Entity == "EmployeeShift" && process.Process == 2)
             {
 
-                var location = db.OurLocations.FirstOrDefault();
-                var employeeShift = db.EmployeeShifts.FirstOrDefault(x => x.Id == process.EntityId && x.Uid == process.EntityUid);
+                var location = _db.OurLocations.FirstOrDefault();
+                var employeeShift = _db.EmployeeShifts.FirstOrDefault(x => x.Id == process.EntityId && x.Uid == process.EntityUid);
 
                 try
                 {
                     if (employeeShift != null)
                     {
-                        var exist = cdb.EmployeeShifts.FirstOrDefault(x => x.Uid == employeeShift.Uid && x.EmployeeId == employeeShift.EmployeeId && x.ShiftDate == employeeShift.ShiftDate && x.IsWorkTime == true);
+                        var exist = _cdb.EmployeeShifts.FirstOrDefault(x => x.Uid == employeeShift.Uid && x.EmployeeId == employeeShift.EmployeeId && x.ShiftDate == employeeShift.ShiftDate && x.IsWorkTime == true);
 
                         if (exist != null)
                         {
@@ -1112,12 +1104,12 @@ namespace Actiontime.Services
                             exist.UpdateDate = location.LocalDateTime;
                             exist.UpdateEmployeeId = employeeShift.EmployeeId;
 
-                            cdb.SaveChanges();
+                            _cdb.SaveChanges();
                         }
                         else
                         {
 
-                            exist = cdb.EmployeeShifts.FirstOrDefault(x => x.EmployeeId == employeeShift.EmployeeId && x.ShiftDate == employeeShift.ShiftDate && x.IsWorkTime == true);
+                            exist = _cdb.EmployeeShifts.FirstOrDefault(x => x.EmployeeId == employeeShift.EmployeeId && x.ShiftDate == employeeShift.ShiftDate && x.IsWorkTime == true);
 
                             if (exist != null)
                             {
@@ -1129,7 +1121,7 @@ namespace Actiontime.Services
                                 exist.UpdateDate = location.LocalDateTime;
                                 exist.UpdateEmployeeId = employeeShift.EmployeeId;
 
-                                cdb.SaveChanges();
+                                _cdb.SaveChanges();
                             }
                             else
                             {
@@ -1154,19 +1146,19 @@ namespace Actiontime.Services
                                 exist.EnvironmentId = 4;
                                 exist.Uid = employeeShift.Uid;
 
-                                cdb.EmployeeShifts.Add(exist);
-                                cdb.SaveChanges();
+                                _cdb.EmployeeShifts.Add(exist);
+                                _cdb.SaveChanges();
                             }
 
                         }
 
                         // sync silinir
 
-                        var syncOrder = db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
+                        var syncOrder = _db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
                         if (syncOrder != null)
                         {
-                            db.SyncProcesses.Remove(syncOrder);
-                            db.SaveChanges();
+                            _db.SyncProcesses.Remove(syncOrder);
+                            _db.SaveChanges();
                         }
 
                     }
@@ -1183,13 +1175,13 @@ namespace Actiontime.Services
             {
 
 
-                var employeeBreak = db.EmployeeBreaks.FirstOrDefault(x => x.Id == process.EntityId && x.Uid == process.EntityUid);
+                var employeeBreak = _db.EmployeeBreaks.FirstOrDefault(x => x.Id == process.EntityId && x.Uid == process.EntityUid);
 
                 try
                 {
                     if (employeeBreak != null)
                     {
-                        var exist = cdb.EmployeeShifts.FirstOrDefault(x => x.Uid == employeeBreak.Uid && x.EmployeeId == employeeBreak.EmployeeId && x.ShiftDate == employeeBreak.BreakDate && x.IsBreakTime == true);
+                        var exist = _cdb.EmployeeShifts.FirstOrDefault(x => x.Uid == employeeBreak.Uid && x.EmployeeId == employeeBreak.EmployeeId && x.ShiftDate == employeeBreak.BreakDate && x.IsBreakTime == true);
 
                         if (exist != null)
                         {
@@ -1198,12 +1190,12 @@ namespace Actiontime.Services
                             exist.BreakStart = employeeBreak.BreakStart.TimeOfDay;
                             exist.BreakEnd = employeeBreak.BreakEnd?.TimeOfDay;
 
-                            cdb.SaveChanges();
+                            _cdb.SaveChanges();
                         }
                         else
                         {
 
-                            exist = cdb.EmployeeShifts.FirstOrDefault(x => x.EmployeeId == employeeBreak.EmployeeId && x.ShiftDate == employeeBreak.BreakDate && x.IsBreakTime == true);
+                            exist = _cdb.EmployeeShifts.FirstOrDefault(x => x.EmployeeId == employeeBreak.EmployeeId && x.ShiftDate == employeeBreak.BreakDate && x.IsBreakTime == true);
 
                             if (exist != null)
                             {
@@ -1213,7 +1205,7 @@ namespace Actiontime.Services
                                 exist.BreakEnd = employeeBreak.BreakEnd?.TimeOfDay;
                                 exist.Uid = employeeBreak.Uid;
 
-                                cdb.SaveChanges();
+                                _cdb.SaveChanges();
                             }
                             else
                             {
@@ -1236,19 +1228,19 @@ namespace Actiontime.Services
                                 exist.EnvironmentId = 4;
                                 exist.Uid = employeeBreak.Uid;
 
-                                cdb.EmployeeShifts.Add(exist);
-                                cdb.SaveChanges();
+                                _cdb.EmployeeShifts.Add(exist);
+                                _cdb.SaveChanges();
                             }
 
                         }
 
                         // sync silinir
 
-                        var syncOrder = db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
+                        var syncOrder = _db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
                         if (syncOrder != null)
                         {
-                            db.SyncProcesses.Remove(syncOrder);
-                            db.SaveChanges();
+                            _db.SyncProcesses.Remove(syncOrder);
+                            _db.SaveChanges();
                         }
 
                     }
@@ -1266,14 +1258,14 @@ namespace Actiontime.Services
             if (process.Entity == "EmployeeBreak" && process.Process == 2)
             {
 
-                var location = db.OurLocations.FirstOrDefault();
-                var employeeBreak = db.EmployeeBreaks.FirstOrDefault(x => x.Id == process.EntityId && x.Uid == process.EntityUid);
+                var location = _db.OurLocations.FirstOrDefault();
+                var employeeBreak = _db.EmployeeBreaks.FirstOrDefault(x => x.Id == process.EntityId && x.Uid == process.EntityUid);
 
                 try
                 {
                     if (employeeBreak != null)
                     {
-                        var exist = cdb.EmployeeShifts.FirstOrDefault(x => x.Uid == employeeBreak.Uid && x.EmployeeId == employeeBreak.EmployeeId && x.ShiftDate == employeeBreak.BreakDate && x.IsBreakTime == true);
+                        var exist = _cdb.EmployeeShifts.FirstOrDefault(x => x.Uid == employeeBreak.Uid && x.EmployeeId == employeeBreak.EmployeeId && x.ShiftDate == employeeBreak.BreakDate && x.IsBreakTime == true);
 
                         if (exist != null)
                         {
@@ -1285,12 +1277,12 @@ namespace Actiontime.Services
                             exist.UpdateDate = location.LocalDateTime;
                             exist.UpdateEmployeeId = employeeBreak.EmployeeId;
 
-                            cdb.SaveChanges();
+                            _cdb.SaveChanges();
                         }
                         else
                         {
 
-                            exist = cdb.EmployeeShifts.FirstOrDefault(x => x.EmployeeId == employeeBreak.EmployeeId && x.ShiftDate == employeeBreak.BreakDate && x.IsBreakTime == true);
+                            exist = _cdb.EmployeeShifts.FirstOrDefault(x => x.EmployeeId == employeeBreak.EmployeeId && x.ShiftDate == employeeBreak.BreakDate && x.IsBreakTime == true);
 
                             if (exist != null)
                             {
@@ -1302,7 +1294,7 @@ namespace Actiontime.Services
                                 exist.UpdateDate = location.LocalDateTime;
                                 exist.UpdateEmployeeId = employeeBreak.EmployeeId;
 
-                                cdb.SaveChanges();
+                                _cdb.SaveChanges();
                             }
                             else
                             {
@@ -1327,19 +1319,19 @@ namespace Actiontime.Services
                                 exist.EnvironmentId = 4;
                                 exist.Uid = employeeBreak.Uid;
 
-                                cdb.EmployeeShifts.Add(exist);
-                                cdb.SaveChanges();
+                                _cdb.EmployeeShifts.Add(exist);
+                                _cdb.SaveChanges();
                             }
 
                         }
 
                         // sync silinir
 
-                        var syncOrder = db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
+                        var syncOrder = _db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
                         if (syncOrder != null)
                         {
-                            db.SyncProcesses.Remove(syncOrder);
-                            db.SaveChanges();
+                            _db.SyncProcesses.Remove(syncOrder);
+                            _db.SaveChanges();
                         }
 
                     }
@@ -1355,13 +1347,13 @@ namespace Actiontime.Services
 
             if (process.Entity == "Inspection" && process.Process == 1)
             {
-                var inspection = db.Inspections.FirstOrDefault(x => x.Id == process.EntityId && x.Uid == process.EntityUid);
+                var inspection = _db.Inspections.FirstOrDefault(x => x.Id == process.EntityId && x.Uid == process.EntityUid);
 
                 try
                 {
                     if (inspection != null)
                     {
-                        var exist = cdb.Inspections.FirstOrDefault(x => x.Uid == inspection.Uid && x.LocationId == inspection.LocationId && x.InspectionDate == inspection.InspectionDate);
+                        var exist = _cdb.Inspections.FirstOrDefault(x => x.Uid == inspection.Uid && x.LocationId == inspection.LocationId && x.InspectionDate == inspection.InspectionDate);
 
                         if (exist != null)
                         {
@@ -1377,7 +1369,7 @@ namespace Actiontime.Services
                             exist.Uid = inspection.Uid;
                             exist.RecordEmployeeId = inspection.RecordEmployeeId;
 
-                            cdb.SaveChanges();
+                            _cdb.SaveChanges();
                         }
                         else
                         {
@@ -1396,20 +1388,20 @@ namespace Actiontime.Services
                             exist.Uid = inspection.Uid;
                             exist.RecordEmployeeId = inspection.RecordEmployeeId;
 
-                            cdb.Inspections.Add(exist);
-                            cdb.SaveChanges();
+                            _cdb.Inspections.Add(exist);
+                            _cdb.SaveChanges();
 
                         }
 
                         // inspection rows eklenir
-                        var inspectionRows = db.VinspectionRows.Where(x => x.InspectionId == inspection.Id).ToList();
+                        var inspectionRows = _db.VinspectionRows.Where(x => x.InspectionId == inspection.Id).ToList();
 
-                        var cloudInspectionRows = cdb.InspectionRows.Where(x => x.InspectionId == exist.Id).ToList();
+                        var cloudInspectionRows = _cdb.InspectionRows.Where(x => x.InspectionId == exist.Id).ToList();
 
                         if (cloudInspectionRows.Count > 0)
                         {
-                            cdb.InspectionRows.RemoveRange(cloudInspectionRows);
-                            cdb.SaveChanges(true);
+                            _cdb.InspectionRows.RemoveRange(cloudInspectionRows);
+                            _cdb.SaveChanges(true);
                         }
 
                         List<DataCloud.Entities.InspectionRow> rows = new();
@@ -1436,17 +1428,17 @@ namespace Actiontime.Services
 
                         if (rows.Count > 0)
                         {
-                            cdb.InspectionRows.AddRange(rows);
-                            cdb.SaveChanges(true);
+                            _cdb.InspectionRows.AddRange(rows);
+                            _cdb.SaveChanges(true);
                         }
 
                         // sync silinir
 
-                        var syncOrder = db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
+                        var syncOrder = _db.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
                         if (syncOrder != null)
                         {
-                            db.SyncProcesses.Remove(syncOrder);
-                            db.SaveChanges();
+                            _db.SyncProcesses.Remove(syncOrder);
+                            _db.SaveChanges();
                         }
 
                     }
@@ -1463,13 +1455,12 @@ namespace Actiontime.Services
 
 
 
+
         }
 
 
         private void AddCashAction(int? CashID, int? LocationID, int? EmployeeID, int? CashActionTypeID, DateTime? ActionDate, string ProcessName, long? ProcessID, DateTime? ProcessDate, string DocumentNumber, string Description, short? Direction, double? Collection, double? Payment, string Currency, int? RecordEmployeeID, DateTime? RecordDate, Guid ProcessUID)
         {
-            using var db = _dbFactory.CreateDbContext();
-            using var cdb = _cdbFactory.CreateDbContext();
 
             var param1 = new SqlParameter("@CashID", CashID);
             var param2 = new SqlParameter("@LocationID", LocationID);
@@ -1492,15 +1483,13 @@ namespace Actiontime.Services
             var param19 = new SqlParameter("@ProcessUID", ProcessUID);
 
             var sqldoc = "EXEC AddCashAction @CashID, @LocationID, @EmployeeID, @CashActionTypeID, @ActionDate, @ProcessName, @ProcessID, @ProcessDate, @DocumentNumber, @Description, @Direction, @Collection, @Payment, @Currency, @Latitude, @Longitude, @RecordEmployeeID, @RecordDate, @ProcessUID ";
-            cdb.Database.ExecuteSqlRaw(sqldoc, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12, param13, param14, param15, param16, param17, param18, param19);
+            _cdb.Database.ExecuteSqlRaw(sqldoc, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12, param13, param14, param15, param16, param17, param18, param19);
 
         }
 
 
         private void AddEmployeeAction(int? EmployeeID, int? LocationID, int? ActionTypeID, string ProcessName, long? ProcessID, DateTime? ProcessDate, string ProcessDetail, short? Direction, double? Collection, double? Payment, string Currency, int? SalaryTypeID, int? RecordEmployeeID, DateTime? RecordDate, Guid ProcessUID, string DocumentNumber, int SalaryCategoryID)
         {
-            using var db = _dbFactory.CreateDbContext();
-            using var cdb = _cdbFactory.CreateDbContext();
 
             var param1 = new SqlParameter("@EmployeeID", EmployeeID);
             var param2 = new SqlParameter("@LocationID", LocationID);
@@ -1523,7 +1512,7 @@ namespace Actiontime.Services
             var param19 = new SqlParameter("@SalaryCategoryID", SalaryCategoryID);
 
             var sqldoc = "EXEC AddEmployeeAction @EmployeeID, @LocationID, @ActionTypeID, @ProcessName, @ProcessID, @ProcessDate, @ProcessDetail, @Direction, @Collection, @Payment, @Currency, @Latitude, @Longitude, @SalaryTypeID, @RecordEmployeeID, @RecordDate, @ProcessUID, @DocumentNumber, @SalaryCategoryID ";
-            cdb.Database.ExecuteSqlRaw(sqldoc, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12, param13, param14, param15, param16, param17, param18, param19);
+            _cdb.Database.ExecuteSqlRaw(sqldoc, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12, param13, param14, param15, param16, param17, param18, param19);
 
         }
 

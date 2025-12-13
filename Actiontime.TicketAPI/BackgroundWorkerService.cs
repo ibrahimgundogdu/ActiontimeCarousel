@@ -1,307 +1,308 @@
-﻿using Actiontime.Data.Context;
-using Actiontime.Data.Entities;
-using Actiontime.DataCloud.Context;
-using Actiontime.Models;
+﻿using Actiontime.Models;
 using Actiontime.Models.ResultModel;
-using Actiontime.Services;
-using Microsoft.EntityFrameworkCore;
+using Actiontime.Services.Interfaces;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MQTTnet;
 using MQTTnet.Client;
-using MQTTnet.Packets;
+using MQTTnet.Formatter;
+using MQTTnet.Protocol;
 using Newtonsoft.Json;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
-using System.Diagnostics;
-using System.Numerics;
+using System;
 using System.Text;
-using System.Threading.Channels;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Actiontime.TicketAPI
 {
-	public class BackgroundWorkerService : BackgroundService
-	{
-		private static ILogger<BackgroundWorkerService> _logger;
+    public class BackgroundWorkerService : BackgroundService
+    {
+        private readonly ILogger<BackgroundWorkerService> _logger;
         private readonly IServiceProvider _sp;
-        private static MqttFactory mqttFactory = new MqttFactory();
-		private static IMqttClient mqttClient = mqttFactory.CreateMqttClient();
-		private static MqttClientOptions mqttClientOptions;
         private readonly IConfiguration _configuration;
-		private readonly QRReaderService _readerService;
-		private readonly SyncService _syncService;
-		private readonly CloudService _cloudService;
-        private readonly IDbContextFactory<ApplicationDbContext> _dbFactory;
-        private readonly IDbContextFactory<ApplicationCloudDbContext> _cdbFactory;
 
-        //private readonly SaleOrderService _orderService;
+        private readonly MqttFactory _mqttFactory;
+        private readonly IMqttClient _mqttClient;
+        private readonly MqttClientOptions _mqttClientOptions;
 
-
-        public BackgroundWorkerService(ILogger<BackgroundWorkerService> logger, IConfiguration configuration, IDbContextFactory<ApplicationDbContext> dbFactory,
-    IDbContextFactory<ApplicationCloudDbContext> cdbFactory, IServiceProvider sp)
-		{
-			_logger = logger;
+        public BackgroundWorkerService(
+            ILogger<BackgroundWorkerService> logger,
+            IConfiguration configuration,
+            IServiceProvider sp)
+        {
+            _logger = logger;
             _configuration = configuration;
-			string ServiceIp = $"mqtt://{_configuration["DefaultParameters:ServiceIp"]}:1883";
+            _sp = sp;
 
-            mqttClientOptions = new MqttClientOptionsBuilder().WithConnectionUri(new Uri(ServiceIp)).WithCredentials(username: "hezarfen", password: "n4q4n6O0").WithClientId(Environment.MachineName).Build();
+            _mqttFactory = new MqttFactory();
+            _mqttClient = _mqttFactory.CreateMqttClient();
 
-            _dbFactory = dbFactory;
-            _cdbFactory = cdbFactory;
+            var host = _configuration["DefaultParameters:ServiceIp"] ?? "127.0.0.1";
+            var portText = _configuration["DefaultParameters:ServicePort"];
+            var port = 1883;
 
-            using var db = _dbFactory.CreateDbContext();
-            using var cdb = _cdbFactory.CreateDbContext();
+            if (!string.IsNullOrEmpty(portText) && int.TryParse(portText, out var p))
+                port = p;
 
-			_sp = sp;
+            _mqttClientOptions = new MqttClientOptionsBuilder()
+                .WithClientId(Environment.MachineName)
+                .WithTcpServer(host, port)
+                .WithCredentials("hezarfen", "n4q4n6O0")
+                // Eğer broker sadece MQTT 3.1.1 destekliyorsa bunu ekle:
+                .WithProtocolVersion(MqttProtocolVersion.V311)
+                .Build();
 
-            _cloudService = new CloudService(_dbFactory, _cdbFactory, _sp );
-            _syncService = new SyncService(_dbFactory, _cdbFactory, _cloudService);
-            _readerService = new QRReaderService(_dbFactory, _cdbFactory, _syncService);
+            _mqttClient.ConnectedAsync += args =>
+            {
+                _logger.LogInformation("MQTT client connected.");
+                return Task.CompletedTask;
+            };
 
-            //_orderService = new SaleOrderService();
+            _mqttClient.DisconnectedAsync += async args =>
+            {
+                _logger.LogWarning("MQTT client disconnected. Reconnecting in 5s...");
 
-            //mqttClient.DisconnectedAsync += async e =>
-            //{
-            //	await ReconnectAsync();
-            //};
+                // Çok agresif reconnect loop’larına girmemek için küçük bir delay
+                await Task.Delay(TimeSpan.FromSeconds(5));
+
+                try
+                {
+                    await _mqttClient.ConnectAsync(_mqttClientOptions, CancellationToken.None);
+                    _logger.LogInformation("MQTT client reconnected.");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Reconnect failed");
+                }
+            };
+
+            _mqttClient.ApplicationMessageReceivedAsync += ReceiveMessage;
         }
 
-
-
-		public override async Task StopAsync(CancellationToken cancellationToken)
-		{
-			_logger.LogInformation("Servis Durdu.");
-			await DisconnectClient();
-		}
-
-		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-		{
-            using var db = _dbFactory.CreateDbContext();
-            using var cdb = _cdbFactory.CreateDbContext();
-
-            _logger.LogInformation("Servis Başladı.");
-
-			await ConnectClient();
-
-			_logger.LogInformation("MQTT Servere Bağlandı.");
-
-			await Subscribe();
-
-			_logger.LogInformation("MQTT Servere Subscribe Olundu.");
-
-			await SendMessage("ConnectionInfo", $"{Environment.MachineName} Bilgisayarı Bağlandı");
-
-		}
-
-		public static async Task ConnectClient()
-		{
-			var response = await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
-		}
-
-
-		public static async Task ReconnectAsync()
-		{
-			Console.WriteLine("Yeniden bağlanılıyor...");
-
-			await Task.Delay(TimeSpan.FromSeconds(5)); // 5 saniye bekleme
-
-			try
-			{
-				await mqttClient.ConnectAsync(mqttClientOptions);
-				Console.WriteLine("Bağlantı Kuruldu.");
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine($"Yeniden bağlanırken hata: {ex.Message}");
-			}
-		}
-
-		public static async Task DisconnectClient()
-		{
-			var mqttClientDisconnectOptions = mqttFactory.CreateClientDisconnectOptionsBuilder().Build();
-			await mqttClient.DisconnectAsync(mqttClientDisconnectOptions, CancellationToken.None);
-		}
-
-		public async Task Subscribe()
-		{
-			var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder()
-				.WithTopicFilter(
-					f =>
-					{
-						f.WithTopic("DeviceInfo");
-					})
-				.WithTopicFilter(
-					f =>
-					{
-						f.WithTopic("CashDrawerInfo");
-					})
-				.WithTopicFilter(
-					f =>
-					{
-						f.WithTopic("QRRead");
-					})
-				.WithTopicFilter(
-					f =>
-					{
-						f.WithTopic("Confirm");
-					})
-				.WithTopicFilter(
-					f =>
-					{
-						f.WithTopic("Complete");
-					})
-				.Build();
-
-			await mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
-
-			mqttClient.ApplicationMessageReceivedAsync += ReceiveMessage;
-		}
-
-		public static async Task SendMessage(string Topic, string Message)
-		{
-			var applicationMessage = new MqttApplicationMessageBuilder()
-				.WithTopic(Topic)
-				.WithPayload(Message)
-				.Build();
-
-			if (!mqttClient.IsConnected)
-			{
-				await ConnectClient();
-			}
-			
-			await mqttClient.PublishAsync(applicationMessage, CancellationToken.None);
-
-			_logger.LogInformation($"MQTT Mesaj Gitti: {Message}");
-		}
-
-		public async Task ReceiveMessage(MqttApplicationMessageReceivedEventArgs args)
-		{
-
-			if (args != null)
-			{
-
-				if (args.ApplicationMessage.Topic == "DeviceInfo")
-				{
-					var bytemessage = args.ApplicationMessage.Payload;
-
-					var message = System.Text.Encoding.Default.GetString(bytemessage);
-
-					var result = await _readerService.AddReader(message);
-
-					_logger.LogInformation($"MQTT Mesaj Geldi: {message}");
-
-					await SendMessage(result.SerialNumber, JsonConvert.SerializeObject(result));
-
-				}
-
-				if (args.ApplicationMessage.Topic == "QRRead")
-				{
-					var bytemessage = args.ApplicationMessage.Payload;
-
-					var message = System.Text.Encoding.Default.GetString(bytemessage);
-
-
-					var result = await _readerService.ConfirmQR(message);
-
-					_logger.LogInformation($"MQTT Mesaj Geldi: {message}");
-
-					await SendMessage(result.SerialNumber, JsonConvert.SerializeObject(result));
-
-				}
-
-				if (args.ApplicationMessage.Topic == "Confirm")
-				{
-					var bytemessage = args.ApplicationMessage.Payload;
-
-					var message = System.Text.Encoding.Default.GetString(bytemessage);
-
-					var result = await _readerService.StartQR(message);
-
-					_logger.LogInformation($"MQTT Mesaj Geldi: {message}");
-
-					await SendMessage(result.SerialNumber, JsonConvert.SerializeObject(result));
-
-					if (result.Success == 1)
-					{
-						await SendWebSocketMessage(WebSocketProcess.RideStart, result.ConfirmNumber);
-					}
-				}
-
-				if (args.ApplicationMessage.Topic == "Complete")
-				{
-					var bytemessage = args.ApplicationMessage.Payload;
-
-					var message = System.Text.Encoding.Default.GetString(bytemessage);
-
-					var result = await _readerService.CompleteQR(message);
-
-					_logger.LogInformation($"MQTT Mesaj Geldi: {message}");
-
-					await SendMessage(result.SerialNumber, JsonConvert.SerializeObject(result));
-
-					if (result.Success == 1)
-					{
-						await SendWebSocketMessage(WebSocketProcess.RideStop, result.ConfirmNumber);
-					}
-				}
-
-				if (args.ApplicationMessage.Topic == "CashDrawerInfo")
-				{
-					var bytemessage = args.ApplicationMessage.Payload;
-
-					var message = System.Text.Encoding.Default.GetString(bytemessage);
-
-					var result = await _readerService.AddDrawer(message);
-
-					_logger.LogInformation($"MQTT Mesaj Geldi: {message}");
-
-					await SendMessage(result.SerialNumber, JsonConvert.SerializeObject(result));
-
-				}
-
-			}
-		}
-
-		public async Task SendWebSocketMessage(WebSocketProcess Process, string ConfirmNumber)
-		{
-
-
-			WebSocketResult result = new WebSocketResult();
-
-			result = await _readerService.CloudRideStartStop(ConfirmNumber);
-			result.Process = Process.ToString();
-
-			var factory = new MqttFactory();
-
-			var mqttClient = factory.CreateMqttClient();
-
-			var options = new MqttClientOptionsBuilder()
-					.WithClientId(ConfirmNumber)
-					.WithWebSocketServer("ws://144.126.132.166:9001") // WebSockets URL
-					.WithCredentials("hezarfen", "n4q4n6O0") // Opsiyonel
-					.Build();
-
-			await mqttClient.ConnectAsync(options, CancellationToken.None);
-
-			if (result != null && result.Success == 1)
-			{		
-
-				var message = new MqttApplicationMessageBuilder()
-					.WithTopic($"Cloud/{result.LocationId}")
-					.WithPayload(JsonConvert.SerializeObject(result))
-					.WithRetainFlag()
-					.Build();
-
-				await mqttClient.PublishAsync(message, CancellationToken.None);
-
-			}
-
-			await mqttClient.DisconnectAsync();
-		}
-
-		
-
-
-
-	}
+        public override async Task StartAsync(CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("BackgroundWorkerService starting.");
+            await base.StartAsync(cancellationToken);
+        }
+
+        public override async Task StopAsync(CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("BackgroundWorkerService stopping.");
+
+            if (_mqttClient.IsConnected)
+            {
+                try
+                {
+                    var disconnectOptions = _mqttFactory
+                        .CreateClientDisconnectOptionsBuilder()
+                        .WithReason(MqttClientDisconnectOptionsReason.NormalDisconnection)
+                        .Build();
+
+                    await _mqttClient.DisconnectAsync(disconnectOptions, cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Error disconnecting MQTT client.");
+                }
+            }
+
+            await base.StopAsync(cancellationToken);
+        }
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            _logger.LogInformation("BackgroundWorkerService ExecuteAsync starting.");
+
+            try
+            {
+                if (!_mqttClient.IsConnected)
+                {
+                    await _mqttClient.ConnectAsync(_mqttClientOptions, stoppingToken);
+                }
+
+                var subscribeOptions = _mqttFactory
+                    .CreateSubscribeOptionsBuilder()
+                    .WithTopicFilter(f => f.WithTopic("DeviceInfo"))
+                    .WithTopicFilter(f => f.WithTopic("CashDrawerInfo"))
+                    .WithTopicFilter(f => f.WithTopic("QRRead"))
+                    .WithTopicFilter(f => f.WithTopic("Confirm"))
+                    .WithTopicFilter(f => f.WithTopic("Complete"))
+                    .Build();
+
+                await _mqttClient.SubscribeAsync(subscribeOptions, stoppingToken);
+
+                _logger.LogInformation("Subscribed to MQTT topics.");
+
+                await SendMessageAsync(
+                    "ConnectionInfo",
+                    $"{Environment.MachineName} Bilgisayarı Bağlandı",
+                    stoppingToken
+                );
+
+                while (!stoppingToken.IsCancellationRequested)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                // normal shutdown
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "MQTT background worker failed");
+            }
+        }
+
+        private async Task ReceiveMessage(MqttApplicationMessageReceivedEventArgs args)
+        {
+            try
+            {
+                if (args?.ApplicationMessage == null)
+                    return;
+
+                var topic = args.ApplicationMessage.Topic ?? string.Empty;
+                var payload = args.ApplicationMessage.PayloadSegment.Count == 0
+                    ? string.Empty
+                    : Encoding.UTF8.GetString(args.ApplicationMessage.PayloadSegment);
+
+                _logger.LogInformation(
+                    "MQTT Msg received. Topic: {topic} Payload: {payload}",
+                    topic,
+                    payload
+                );
+
+                using var scope = _sp.CreateScope();
+                var readerService = scope.ServiceProvider.GetRequiredService<IQRReaderService>();
+
+                if (string.Equals(topic, "DeviceInfo", StringComparison.OrdinalIgnoreCase))
+                {
+                    var result = await readerService.AddReader(payload);
+                    await SendMessageAsync(result.SerialNumber, JsonConvert.SerializeObject(result));
+                }
+                else if (string.Equals(topic, "QRRead", StringComparison.OrdinalIgnoreCase))
+                {
+                    var result = await readerService.ConfirmQR(payload);
+                    await SendMessageAsync(result.SerialNumber, JsonConvert.SerializeObject(result));
+                }
+                else if (string.Equals(topic, "Confirm", StringComparison.OrdinalIgnoreCase))
+                {
+                    var result = await readerService.StartQR(payload);
+                    await SendMessageAsync(result.SerialNumber, JsonConvert.SerializeObject(result));
+
+                    if (result.Success == 1)
+                        await SendWebSocketMessage(WebSocketProcess.RideStart, result.ConfirmNumber);
+                }
+                else if (string.Equals(topic, "Complete", StringComparison.OrdinalIgnoreCase))
+                {
+                    var result = await readerService.CompleteQR(payload);
+                    await SendMessageAsync(result.SerialNumber, JsonConvert.SerializeObject(result));
+
+                    if (result.Success == 1)
+                        await SendWebSocketMessage(WebSocketProcess.RideStop, result.ConfirmNumber);
+                }
+                else if (string.Equals(topic, "CashDrawerInfo", StringComparison.OrdinalIgnoreCase))
+                {
+                    var result = await readerService.AddDrawer(payload);
+                    await SendMessageAsync(result.SerialNumber, JsonConvert.SerializeObject(result));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error handling MQTT message");
+            }
+        }
+
+        private async Task SendMessageAsync(string topic, string payload, CancellationToken cancellation = default)
+        {
+            if (string.IsNullOrEmpty(topic))
+                topic = "Unknown";
+
+            var applicationMessage = new MqttApplicationMessageBuilder()
+                .WithTopic(topic)
+                .WithPayload(payload)
+                .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtMostOnce)
+                .Build();
+
+            if (!_mqttClient.IsConnected)
+            {
+                try
+                {
+                    await _mqttClient.ConnectAsync(_mqttClientOptions, cancellation);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Reconnect failed while publishing.");
+                }
+            }
+
+            try
+            {
+                await _mqttClient.PublishAsync(applicationMessage, cancellation);
+                _logger.LogInformation("Published MQTT message to {topic}", topic);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Publishing MQTT message failed.");
+            }
+        }
+
+        private async Task SendWebSocketMessage(WebSocketProcess process, string confirmNumber)
+        {
+            using var scope = _sp.CreateScope();
+            var readerService = scope.ServiceProvider.GetRequiredService<IQRReaderService>();
+
+            var result = await readerService.CloudRideStartStop(confirmNumber);
+            result.Process = process.ToString();
+
+            var factory = new MqttFactory();
+            var client = factory.CreateMqttClient();
+
+            var options = new MqttClientOptionsBuilder()
+                .WithClientId(confirmNumber)
+                .WithWebSocketServer(ws =>
+                {
+                    // MQTTnet 5 tarzı WebSocket config
+                    ws.WithUri("ws://144.126.132.166:9001");
+                })
+                .WithCredentials("hezarfen", "n4q4n6O0")
+                .WithProtocolVersion(MqttProtocolVersion.V311)
+                .Build();
+
+            try
+            {
+                await client.ConnectAsync(options, CancellationToken.None);
+
+                if (result != null && result.Success == 1)
+                {
+                    var message = new MqttApplicationMessageBuilder()
+                        .WithTopic($"Cloud/{result.LocationId}")
+                        .WithPayload(JsonConvert.SerializeObject(result))
+                        .WithRetainFlag()
+                        .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
+                        .Build();
+
+                    await client.PublishAsync(message, CancellationToken.None);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "SendWebSocketMessage failed");
+            }
+            finally
+            {
+                if (client.IsConnected)
+                {
+                    var disconnectOptions = factory
+                        .CreateClientDisconnectOptionsBuilder()
+                        .WithReason(MqttClientDisconnectOptionsReason.NormalDisconnection)
+                        .Build();
+
+                    await client.DisconnectAsync(disconnectOptions, CancellationToken.None);
+                }
+            }
+        }
+    }
 }

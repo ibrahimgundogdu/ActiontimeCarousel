@@ -4,6 +4,7 @@ using Actiontime.DataCloud.Context;
 using Actiontime.Models.ResultModel;
 using Actiontime.Models.SerializeModels;
 using Actiontime.Services;
+using Actiontime.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,18 +15,13 @@ namespace Actiontime.TicketAPI.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        EmployeeService _employeeService;
-        CloudService _cloudService;
+        private readonly IEmployeeService _employeeService;
+        private readonly ICloudService _cloudService;
 
-        private readonly IDbContextFactory<ApplicationDbContext> _dbFactory;
-        private readonly IDbContextFactory<ApplicationCloudDbContext> _cdbFactory;
-
-        public EmployeeController(IDbContextFactory<ApplicationDbContext> dbFactory, IDbContextFactory<ApplicationCloudDbContext> cdbFactory, CloudService cloudService)
+        public EmployeeController(ICloudService cloudService, IEmployeeService employeeService)
         {
-            _dbFactory = dbFactory ?? throw new ArgumentNullException(nameof(dbFactory));
-            _cdbFactory = cdbFactory ?? throw new ArgumentNullException(nameof(cdbFactory));
-            _cloudService = cloudService ?? throw new ArgumentNullException(nameof(cloudService));
-            _employeeService = new EmployeeService(dbFactory, cdbFactory, _cloudService);
+            _cloudService = cloudService;
+            _employeeService = employeeService;
         }
 
 

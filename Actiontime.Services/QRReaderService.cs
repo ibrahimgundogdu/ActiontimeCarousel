@@ -5,6 +5,7 @@ using Actiontime.DataCloud.Entities;
 using Actiontime.Models;
 using Actiontime.Models.ResultModel;
 using Actiontime.Models.SerializeModels;
+using Actiontime.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
@@ -18,18 +19,18 @@ using System.Threading.Tasks;
 
 namespace Actiontime.Services
 {
-    public class QRReaderService
+    public class QRReaderService: IQRReaderService
     {
-        private readonly IDbContextFactory<ApplicationDbContext> _dbFactory;
-        private readonly IDbContextFactory<ApplicationCloudDbContext> _cdbFactory;
-        SyncService _syncservice;
+        private readonly ApplicationDbContext _db;
+        private readonly ApplicationCloudDbContext _cdb;
+        private readonly ISyncService _syncservice;
 
 
-        public QRReaderService(IDbContextFactory<ApplicationDbContext> dbFactory, IDbContextFactory<ApplicationCloudDbContext> cdbFactory, SyncService syncervice)
+        public QRReaderService(ApplicationDbContext db, ApplicationCloudDbContext cdb, ISyncService syncervice)
         {
-            _dbFactory = dbFactory ?? throw new ArgumentNullException(nameof(dbFactory));
-            _cdbFactory = cdbFactory ?? throw new ArgumentNullException(nameof(cdbFactory));
-            _syncservice = syncervice ?? throw new ArgumentNullException(nameof(syncervice));
+            _db = db;
+            _cdb = cdb;
+            _syncservice = syncervice;
 
         }
 
@@ -37,10 +38,7 @@ namespace Actiontime.Services
         {
             ReaderResult result = new ReaderResult();
 
-            using var db = _dbFactory.CreateDbContext();
-            using var cdb = _cdbFactory.CreateDbContext();
-
-            var location = db.OurLocations.FirstOrDefault();
+            var location = _db.OurLocations.FirstOrDefault();
 
             var device = JsonConvert.DeserializeObject<DeviceInfo?>(message);
             result.SerialNumber = device?.SerialNumber ?? "NoSerial";
@@ -48,7 +46,7 @@ namespace Actiontime.Services
 
             if (device != null)
             {
-                var isexists = db.Qrreaders.FirstOrDefault(x => x.SerialNumber == device.SerialNumber);
+                var isexists = _db.Qrreaders.FirstOrDefault(x => x.SerialNumber == device.SerialNumber);
 
                 if (isexists == null)
                 {
@@ -70,8 +68,8 @@ namespace Actiontime.Services
                     newreader.Uid = Guid.NewGuid();
                     newreader.IsActive = true;
 
-                    db.Qrreaders.Add(newreader);
-                    db.SaveChanges();
+                    _db.Qrreaders.Add(newreader);
+                    _db.SaveChanges();
 
                     isexists = newreader;
                 }
@@ -84,10 +82,10 @@ namespace Actiontime.Services
                     isexists.TriggerTime = device?.TriggerTime;
                     isexists.UpdateDate = DateTime.UtcNow;
 
-                    db.SaveChanges(true);
+                    _db.SaveChanges(true);
                 }
 
-                var parameter = db.QrreaderParameters.FirstOrDefault(x => x.LocationId == 0 && x.QrreaderTypeId == 2);
+                var parameter = _db.QrreaderParameters.FirstOrDefault(x => x.LocationId == 0 && x.QrreaderTypeId == 2);
 
                 if (parameter != null)
                 {
@@ -120,14 +118,13 @@ namespace Actiontime.Services
                     Int64.TryParse(qrParts[0], out orderRowId);
                     Int32.TryParse(qrParts[1], out locationId);
 
-                    using var db = _dbFactory.CreateDbContext();
 
                     var ticketNumber = qr.QRCode.Substring(qrParts[0].Length + 1 + qrParts[1].Length + 1);
 
-                    var orderRow = db.OrderRows.FirstOrDefault(x => x.TicketNumber == ticketNumber && x.RowStatusId == 2 && x.Id == orderRowId && x.LocationId == locationId);
-                    var qrReader = db.Qrreaders.FirstOrDefault(x => x.SerialNumber == qr.SerialNumber);
-                    var confirm = db.TripConfirms.FirstOrDefault(x => x.TicketNumber == qr.QRCode);
-                    var location = db.OurLocations.FirstOrDefault();
+                    var orderRow = _db.OrderRows.FirstOrDefault(x => x.TicketNumber == ticketNumber && x.RowStatusId == 2 && x.Id == orderRowId && x.LocationId == locationId);
+                    var qrReader = _db.Qrreaders.FirstOrDefault(x => x.SerialNumber == qr.SerialNumber);
+                    var confirm = _db.TripConfirms.FirstOrDefault(x => x.TicketNumber == qr.QRCode);
+                    var location = _db.OurLocations.FirstOrDefault();
 
                     if (orderRow != null)
                     {
@@ -151,12 +148,12 @@ namespace Actiontime.Services
                                     confirm.IsApproved = true;
                                     confirm.ReaderSerialNumber = qrReader.SerialNumber;
 
-                                    db.TripConfirms.Add(confirm);
-                                    db.SaveChanges();
+                                    _db.TripConfirms.Add(confirm);
+                                    _db.SaveChanges();
                                 }
                                 else
                                 {
-                                    var trip = db.Trips.FirstOrDefault(x => x.ConfirmId == confirm.Id && x.TicketNumber == confirm.TicketNumber);
+                                    var trip = _db.Trips.FirstOrDefault(x => x.ConfirmId == confirm.Id && x.TicketNumber == confirm.TicketNumber);
 
                                     if (trip != null)
                                     {
@@ -174,7 +171,7 @@ namespace Actiontime.Services
                                     else
                                     {
                                         confirm.ReaderSerialNumber = qrReader.SerialNumber;
-                                        db.SaveChanges();
+                                        _db.SaveChanges();
                                     }
                                 }
 
@@ -259,31 +256,29 @@ namespace Actiontime.Services
                 {
                     string employeeUID = qr.QRCode.Substring(qrParts[0].Length + 1);
 
-                    using var db = _dbFactory.CreateDbContext();
+                    var confirm = _db.TripConfirms.FirstOrDefault(x => x.ConfirmNumber.ToString() == qr.ConfirmNumber);
 
-                    var confirm = db.TripConfirms.FirstOrDefault(x => x.ConfirmNumber.ToString() == qr.ConfirmNumber);
-
-                    var employee = db.Employees.FirstOrDefault(x => x.EmployeeUid.ToString() == employeeUID);
-                    var location = db.OurLocations.FirstOrDefault();
+                    var employee = _db.Employees.FirstOrDefault(x => x.EmployeeUid.ToString() == employeeUID);
+                    var location = _db.OurLocations.FirstOrDefault();
 
                     if (confirm != null)
                     {
                         if (qr.SerialNumber == confirm.ReaderSerialNumber)
                         {
-                            var qrReader = db.Qrreaders.FirstOrDefault(x => x.SerialNumber == qr.SerialNumber);
+                            var qrReader = _db.Qrreaders.FirstOrDefault(x => x.SerialNumber == qr.SerialNumber);
 
-                            var part = db.LocationPartials.FirstOrDefault(x => x.Id == confirm.LocationPartId);
+                            var part = _db.LocationPartials.FirstOrDefault(x => x.Id == confirm.LocationPartId);
 
                             if (qrReader != null && qrReader.IsActive == true)
                             {
                                 if (employee != null)
                                 {
-                                    var trip = db.Trips.FirstOrDefault(x => x.ConfirmId == confirm.Id && x.TicketNumber == confirm.TicketNumber);
+                                    var trip = _db.Trips.FirstOrDefault(x => x.ConfirmId == confirm.Id && x.TicketNumber == confirm.TicketNumber);
 
                                     if (trip == null)
                                     {
                                         confirm.EmployeeId = employee.Id;
-                                        db.SaveChanges();
+                                        _db.SaveChanges();
 
                                         trip = new Trip();
 
@@ -300,8 +295,8 @@ namespace Actiontime.Services
                                         trip.Uid = Guid.NewGuid();
                                         trip.UnitDuration = confirm.UnitDuration;
 
-                                        db.Trips.Add(trip);
-                                        db.SaveChanges();
+                                        _db.Trips.Add(trip);
+                                        _db.SaveChanges();
 
                                         result.ConfirmNumber = confirm.ConfirmNumber.ToString();
                                         result.Success = 1;
@@ -314,7 +309,7 @@ namespace Actiontime.Services
                                     }
                                     else if (trip != null && trip.TripStart != null && trip.TripEnd == null)
                                     {
-                                        location = db.OurLocations.FirstOrDefault();
+                                        location = _db.OurLocations.FirstOrDefault();
                                         var _tripDuration = (trip.TripStart - location.LocalDateTime).Value.TotalSeconds;
 
                                         result.ConfirmNumber = confirm.ConfirmNumber.ToString();
@@ -328,7 +323,7 @@ namespace Actiontime.Services
                                     }
                                     else
                                     {
-                                        location = db.OurLocations.FirstOrDefault();
+                                        location = _db.OurLocations.FirstOrDefault();
                                         var _tripDuration = (trip.TripStart - location.LocalDateTime).Value.TotalSeconds;
 
                                         result.ConfirmNumber = confirm.ConfirmNumber.ToString();
@@ -432,22 +427,20 @@ namespace Actiontime.Services
                 {
                     string employeeUID = qr.QRCode.Substring(qrParts[0].Length + 1);
 
-                    using var db = _dbFactory.CreateDbContext();
-
-                    var confirm = db.TripConfirms.FirstOrDefault(x => x.ConfirmNumber.ToString() == qr.ConfirmNumber);
-                    var qrReader = db.Qrreaders.FirstOrDefault(x => x.SerialNumber == qr.SerialNumber);
-                    var employee = db.Employees.FirstOrDefault(x => x.EmployeeUid.ToString() == employeeUID);
-                    var location = db.OurLocations.FirstOrDefault();
+                    var confirm = _db.TripConfirms.FirstOrDefault(x => x.ConfirmNumber.ToString() == qr.ConfirmNumber);
+                    var qrReader = _db.Qrreaders.FirstOrDefault(x => x.SerialNumber == qr.SerialNumber);
+                    var employee = _db.Employees.FirstOrDefault(x => x.EmployeeUid.ToString() == employeeUID);
+                    var location = _db.OurLocations.FirstOrDefault();
 
                     if (confirm != null)
                     {
-                        var trip = db.Trips.FirstOrDefault(x => x.ConfirmId == confirm.Id && x.TicketNumber == confirm.TicketNumber);
+                        var trip = _db.Trips.FirstOrDefault(x => x.ConfirmId == confirm.Id && x.TicketNumber == confirm.TicketNumber);
 
                         if (qrReader != null && qrReader.IsActive == true)
                         {
                             if (employee != null)
                             {
-                                var orderRow = db.OrderRows.FirstOrDefault(x => x.Id == confirm.SaleOrderRowId && x.OrderId == confirm.SaleOrderId);
+                                var orderRow = _db.OrderRows.FirstOrDefault(x => x.Id == confirm.SaleOrderRowId && x.OrderId == confirm.SaleOrderId);
 
                                 if (trip != null && trip.TripEnd == null)
                                 {
@@ -457,7 +450,7 @@ namespace Actiontime.Services
                                         trip.UpdateDate = DateTime.Now;
                                         trip.UpdateEmployeeId = employee.Id;
 
-                                        db.SaveChanges();
+                                        _db.SaveChanges();
 
                                         if (orderRow != null)
                                         {
@@ -468,13 +461,11 @@ namespace Actiontime.Services
                                             orderRow.UpdateDate = DateTime.Now;
                                             orderRow.UpdateEmployeeId = employee.Id;
                                             orderRow.SyncDate = DateTime.Now;
-                                            db.SaveChanges();
+                                            _db.SaveChanges();
 
                                             // create new contexts for SyncService to avoid using disposed contexts
                                             _ = Task.Run(() =>
                                             {
-                                                using var syncDb = _dbFactory.CreateDbContext();
-                                                using var syncCdb = _cdbFactory.CreateDbContext();
                                                 _syncservice.AddQuee("OrderRow", 2, orderRow.Id, orderRow.Uid);
                                             });
                                         }
@@ -565,23 +556,20 @@ namespace Actiontime.Services
         {
             WebSocketResult result = new WebSocketResult();
 
-            using var db = _dbFactory.CreateDbContext();
-            using var cdb = _cdbFactory.CreateDbContext();
-
-            var location = db.OurLocations.FirstOrDefault();
+            var location = _db.OurLocations.FirstOrDefault();
 
             result.LocationId = location.Id;
             result.ProcessTime = location.LocalDateTime.ToString();
 
             if (!string.IsNullOrEmpty(confirmNumber))
             {
-                var confirm = db.VtripConfirms.FirstOrDefault(x => x.ConfirmNumber.ToString() == confirmNumber);
+                var confirm = _db.VtripConfirms.FirstOrDefault(x => x.ConfirmNumber.ToString() == confirmNumber);
 
                 if (confirm != null)
                 {
                     try
                     {
-                        var locationPartTrip = cdb.LocationPartTrips.FirstOrDefault(x => x.ConfirmNumber == confirm.ConfirmNumber);
+                        var locationPartTrip = _cdb.LocationPartTrips.FirstOrDefault(x => x.ConfirmNumber == confirm.ConfirmNumber);
 
                         if (locationPartTrip != null)
                         {
@@ -599,7 +587,7 @@ namespace Actiontime.Services
                             locationPartTrip.Status = confirm.TripEnd != null ? "Cumpleted" : "Riding";
                             locationPartTrip.ConfirmNumber = confirm.ConfirmNumber.Value;
 
-                            cdb.SaveChanges();
+                            _cdb.SaveChanges();
                         }
                         else
                         {
@@ -619,8 +607,8 @@ namespace Actiontime.Services
                             locationPartTrip.Status = confirm.TripEnd != null ? "Cumpleted" : "Riding";
                             locationPartTrip.ConfirmNumber = confirm.ConfirmNumber.Value;
 
-                            cdb.LocationPartTrips.Add(locationPartTrip);
-                            cdb.SaveChanges();
+                            _cdb.LocationPartTrips.Add(locationPartTrip);
+                            _cdb.SaveChanges();
                         }
 
                         result.Success = 1;
@@ -655,21 +643,19 @@ namespace Actiontime.Services
         {
             DrawerResult result = new DrawerResult();
 
-            using var db = _dbFactory.CreateDbContext();
-
             var device = JsonConvert.DeserializeObject<DrawerDeviceInfo?>(message);
             result.SerialNumber = device?.SerialNumber ?? "NoSerial";
             result.Process = 1002;
 
-            var location = db.OurLocations.FirstOrDefault();
+            var location = _db.OurLocations.FirstOrDefault();
 
             if (device != null)
             {
-                var isexists = db.DrawerDevices.FirstOrDefault(x => x.SerialNumber == device.SerialNumber);
+                var isexists = _db.DrawerDevices.FirstOrDefault(x => x.SerialNumber == device.SerialNumber);
 
                 if (isexists != null)
                 {
-                    db.DrawerDevices.Remove(isexists);
+                    _db.DrawerDevices.Remove(isexists);
                 }
 
                 Data.Entities.DrawerDevice newdrawer = new();
@@ -684,8 +670,8 @@ namespace Actiontime.Services
                 newdrawer.PartName = "Cash Drawer";
                 newdrawer.DateRecord = DateTime.Now;
 
-                db.DrawerDevices.Add(newdrawer);
-                db.SaveChanges(true);
+                _db.DrawerDevices.Add(newdrawer);
+                _db.SaveChanges(true);
             }
 
             return result;

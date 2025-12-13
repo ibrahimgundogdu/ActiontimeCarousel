@@ -7,16 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MQTTnet;
-using MQTTnet.Client;
+using MQTTnet.LowLevelClient;
+using Actiontime.Services.Interfaces;
 
 namespace Actiontime.Services
 {
-	public class WebSocketService
-	{
+	public class WebSocketService : IWebSocketService
+    {
 		public async Task SendWebSocketMessage(WebSocketResult result)
 		{
 
-			var factory = new MqttFactory();
+			var factory = new MqttClientFactory();
 
 			var mqttClient = factory.CreateMqttClient();
 

@@ -1,0 +1,8 @@
+C:\source\repos\ActiontimeCarousel\Actiontime.TicketAPI\obj\Debug\net8.0\Actiontime.TicketAPI.csproj.AssemblyReference.cache
+C:\source\repos\ActiontimeCarousel\Actiontime.TicketAPI\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\source\repos\ActiontimeCarousel\Actiontime.TicketAPI\obj\Debug\net8.0\Actiontime.TicketAPI.GeneratedMSBuildEditorConfig.editorconfig
+C:\source\repos\ActiontimeCarousel\Actiontime.TicketAPI\obj\Debug\net8.0\Actiontime.TicketAPI.AssemblyInfoInputs.cache
+C:\source\repos\ActiontimeCarousel\Actiontime.TicketAPI\obj\Debug\net8.0\Actiontime.TicketAPI.AssemblyInfo.cs
+C:\source\repos\ActiontimeCarousel\Actiontime.TicketAPI\obj\Debug\net8.0\Actiontime.TicketAPI.csproj.CoreCompileInputs.cache
+C:\source\repos\ActiontimeCarousel\Actiontime.TicketAPI\obj\Debug\net8.0\Actiontime.TicketAPI.MvcApplicationPartsAssemblyInfo.cache
+C:\source\repos\ActiontimeCarousel\Actiontime.TicketAPI\obj\Debug\net8.0\Actiontime.TicketAPI.sourcelink.json

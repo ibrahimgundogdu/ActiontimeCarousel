@@ -4,6 +4,7 @@ using Actiontime.DataCloud.Context;
 using Actiontime.Models;
 using Actiontime.Models.ResultModel;
 using Actiontime.Models.SerializeModels;
+using Actiontime.Services.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,36 +15,28 @@ using System.Threading.Tasks;
 
 namespace Actiontime.Services
 {
-    public class CashService
+    public class CashService: ICashService
     {
-        CloudService _cloudService;
-        private ApplicationDbContext db;
-        private ApplicationCloudDbContext cdb;
-        private readonly IDbContextFactory<ApplicationDbContext> _dbFactory;
-        private readonly IDbContextFactory<ApplicationCloudDbContext> _cdbFactory;
 
-        public CashService(IDbContextFactory<ApplicationDbContext> dbFactory, IDbContextFactory<ApplicationCloudDbContext> cdbFactory, CloudService cloudService)
+        private ApplicationDbContext _db;
+        private ApplicationCloudDbContext _cdb;
+        private ICloudService _cloudService;
+
+        public CashService(ApplicationDbContext db, ApplicationCloudDbContext cdb, ICloudService cloudService)
         {
-            _dbFactory = dbFactory ?? throw new ArgumentNullException(nameof(dbFactory));
-            _cdbFactory = cdbFactory ?? throw new ArgumentNullException(nameof(cdbFactory));
-            _cloudService = cloudService ?? throw new ArgumentNullException(nameof(cloudService));
+            _db = db;
+            _cdb = cdb;
+            _cloudService = cloudService;
         }
 
         public List<CashDocumentType> CashDocumentList()
         {
-            using var _db = _dbFactory.CreateDbContext();
-            using var _cdb = _cdbFactory.CreateDbContext();
-
             var vardocuments = _db.CashActionTypes.Where(x => x.IsMobile == true).ToList().Select(x => new CashDocumentType() { Id = x.Id, DocumentName = x.MobileTag }).ToList();
-
             return vardocuments;
         }
 
         public AppResult AddDocument(string? FileName, int EmployeeId, DateTime DocDate, double Amount, string Description, int DocType, string FilePath)
         {
-            using var _db = _dbFactory.CreateDbContext();
-            using var _cdb = _cdbFactory.CreateDbContext();
-
             var result = new AppResult() { Success = false, Message = string.Empty };
 
             var actionType = _db.CashActionTypes.FirstOrDefault(x => x.Id == DocType);
@@ -104,8 +97,6 @@ namespace Actiontime.Services
 
                 Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
 
-
-
                 result.Success = true;
                 result.Message = "OK";
                 result.Description = "Document Creation is Succesful";
@@ -116,7 +107,6 @@ namespace Actiontime.Services
 
         public List<DayResultState> GetDayResultState()
         {
-            using var _db = _dbFactory.CreateDbContext();
             var states = _db.DayResultStates.ToList();
 
             return states;
@@ -124,9 +114,6 @@ namespace Actiontime.Services
 
         public DayResultModel GetDayResult()
         {
-            using var _db = _dbFactory.CreateDbContext();
-            using var _cdb = _cdbFactory.CreateDbContext();
-
             DayResultModel model = new DayResultModel();
 
             var location = _db.OurLocations.FirstOrDefault();
@@ -309,17 +296,11 @@ namespace Actiontime.Services
                 }
 
             }
-
-
             return model;
         }
 
         public List<PosActionModel> GetActions()
         {
-
-            using var _db = _dbFactory.CreateDbContext();
-            using var _cdb = _cdbFactory.CreateDbContext();
-
             List<PosActionModel> model = new List<PosActionModel>();
 
             var location = _db.OurLocations.FirstOrDefault();
@@ -345,9 +326,6 @@ namespace Actiontime.Services
 
         public AppResult UpdateDayResult(string? FileName, int resultId, int stateId, string Description, int EmployeeId, DateTime DocDate, string FilePath)
         {
-            using var _db = _dbFactory.CreateDbContext();
-            using var _cdb = _cdbFactory.CreateDbContext();
-
             var result = new AppResult() { Success = false, Message = string.Empty, Description = string.Empty };
 
             var dayResult = _db.DayResults.FirstOrDefault(x => x.Id == resultId);
@@ -397,9 +375,6 @@ namespace Actiontime.Services
 
 		public string GetCashDrawer()
 		{
-            using var _db = _dbFactory.CreateDbContext();
-            using var _cdb = _cdbFactory.CreateDbContext();
-
             var device = _db.DrawerDevices.Where(x => x.IsActive == true).OrderByDescending(x=> x.Id).FirstOrDefault();
 
             if (device != null)

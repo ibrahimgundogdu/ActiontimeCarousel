@@ -5,6 +5,7 @@ using Actiontime.DataCloud.Entities;
 using Actiontime.Models;
 using Actiontime.Models.ResultModel;
 using Actiontime.Models.SerializeModels;
+using Actiontime.Services.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -21,26 +22,22 @@ using Employee = Actiontime.Data.Entities.Employee;
 
 namespace Actiontime.Services
 {
-	public class EmployeeService
-	{
-        private readonly IDbContextFactory<ApplicationDbContext> _dbFactory;
-        private readonly IDbContextFactory<ApplicationCloudDbContext> _cdbFactory;
-        private readonly CloudService _cloudService;
-        private ApplicationDbContext db;
-        private ApplicationCloudDbContext cdb;
+	public class EmployeeService: IEmployeeService
+    {
 
-        public EmployeeService(IDbContextFactory<ApplicationDbContext> dbFactory, IDbContextFactory<ApplicationCloudDbContext> cdbFactory, CloudService cloudService)
+        private readonly ICloudService _cloudService;
+        private readonly ApplicationDbContext _db;
+        private readonly ApplicationCloudDbContext _cdb;
+
+        public EmployeeService(ApplicationDbContext db, ApplicationCloudDbContext cdb, ICloudService cloudService)
 		{
-
-            _dbFactory = dbFactory ?? throw new ArgumentNullException(nameof(dbFactory));
-            _cdbFactory = cdbFactory ?? throw new ArgumentNullException(nameof(cdbFactory));
-            _cloudService = cloudService ?? throw new ArgumentNullException(nameof(cloudService));
+            _db = db;
+            _cdb = cdb;
+            _cloudService = cloudService;
         }
 
         public Employee? CheckEmployeeLogin(string Username, string Password)
 		{
-            using var _db = _dbFactory.CreateDbContext();
-            //using var _cdb = _cdbFactory.CreateDbContext();
 
             var _password = ServiceHelper.MD5Hash(Password).ToUpper();
 			return _db.Employees.FirstOrDefault(x => x.Username == Username && x.Password.ToUpper() == _password);
@@ -48,22 +45,16 @@ namespace Actiontime.Services
 
 		public Employee? GetEmployee(int employeeID)
 		{
-            using var _db = _dbFactory.CreateDbContext();
-            //using var _cdb = _cdbFactory.CreateDbContext();
             return _db.Employees.FirstOrDefault(x => x.Id == employeeID);
 		}
 
 		public List<Employee>? GetEmployeeList()
 		{
-            using var _db = _dbFactory.CreateDbContext();
-            //using var _cdb = _cdbFactory.CreateDbContext();
             return _db.Employees.ToList();
 		}
 
 		public EmployeeSchedule? GetEmployeeSchedule(DateTime date, int employeeId)
 		{
-            using var _db = _dbFactory.CreateDbContext();
-
             var location = _db.OurLocations.FirstOrDefault();
 
 			return _db.EmployeeSchedules.FirstOrDefault(x => x.EmployeeId == employeeId && x.ScheduleDate == date && x.LocationId == location.Id);
@@ -71,8 +62,6 @@ namespace Actiontime.Services
 
 		public List<EmployeeSchedule>? GetEmployeeSchedules(DateTime date, int employeeId)
 		{
-            using var _db = _dbFactory.CreateDbContext();
-
             var location = _db.OurLocations.FirstOrDefault();
 
 			var schedule = _db.EmployeeSchedules.FirstOrDefault(x => x.EmployeeId == employeeId && x.ScheduleDate == date && x.LocationId == location.Id);
@@ -80,11 +69,8 @@ namespace Actiontime.Services
 			return _db.EmployeeSchedules.Where(x => x.EmployeeId == employeeId && x.ScheduleWeek == schedule.ScheduleWeek && x.LocationId == location.Id).ToList();
 		}
 
-		//
 		public void GetSchedules()
 		{
-            using var _db = _dbFactory.CreateDbContext();
-
             var sqlemp = "EXEC GetEmployeeSchedules";
 			_db.Database.ExecuteSqlRaw(sqlemp);
 
@@ -94,9 +80,6 @@ namespace Actiontime.Services
 
 		public void GetShifts()
 		{
-            using var _db = _dbFactory.CreateDbContext();
-            using var _cdb = _cdbFactory.CreateDbContext();
-
             var location = _db.OurLocations.FirstOrDefault();
             
             //Localler
@@ -234,22 +217,15 @@ namespace Actiontime.Services
 
 		}
 
-
-
 		public void GetLookups()
 		{
-            using var _db = _dbFactory.CreateDbContext();
 
             var sql = "EXEC GetLookups";
 			_db.Database.ExecuteSqlRaw(sql);
 		}
 
-		//GetPersonInfo  GetPersonInfoList
 		public PersonInfo GetPersonInfo(int employeeID)
-		{
-            using var _db = _dbFactory.CreateDbContext();
-           
-
+		{       
             PersonInfo info = new PersonInfo();
 			info.Id = employeeID;
 
@@ -317,11 +293,8 @@ namespace Actiontime.Services
 			return info;
 		}
 
-
 		public List<PersonInfo> GetPersonInfoList()
 		{
-            using var _db = _dbFactory.CreateDbContext();
-
             List<PersonInfo> infos = new List<PersonInfo>();
 
 			var employees = _db.Employees.ToList();
@@ -391,12 +364,8 @@ namespace Actiontime.Services
 			return infos;
 		}
 
-		//CheckEmployeeShift
 		public string CheckEmployeeShift(int employeeId)
 		{
-            using var _db = _dbFactory.CreateDbContext();
-            using var _cdb = _cdbFactory.CreateDbContext();
-
             string result = string.Empty;
 			WebSocketService webSocketService = new WebSocketService();
 
@@ -575,11 +544,8 @@ namespace Actiontime.Services
 			return result;
 		}
 
-		//CheckEmployeeBreak
 		public string CheckEmployeeBreak(int employeeId)
 		{
-            using var _db = _dbFactory.CreateDbContext();
-            using var _cdb = _cdbFactory.CreateDbContext();
 
             string result = string.Empty;
 			WebSocketService webSocketService = new WebSocketService();

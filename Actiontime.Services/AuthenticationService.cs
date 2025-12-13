@@ -1,4 +1,6 @@
 ﻿using Actiontime.Data.Context;
+using Actiontime.Data.Entities;
+using Actiontime.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Actiontime.Services
 {
-    public class AppAuthenticationService
+    public class AppAuthenticationService: IAppAuthenticationService
     {
         private readonly ApplicationDbContext _db; 
         
@@ -19,7 +21,7 @@ namespace Actiontime.Services
 
 
 
-        public Data.Entities.Employee LoginAsync(string username, string password)
+        public Employee LoginAsync(string username, string password)
         {
             var passwordmd5 = ServiceHelper.MD5Hash(password);
             return _db.Employees.FirstOrDefault(x => x.Username == username && x.Password == passwordmd5);

@@ -5,6 +5,7 @@ using Actiontime.Models;
 using Actiontime.Models.ResultModel;
 using Actiontime.Models.SerializeModels;
 using Actiontime.Services;
+using Actiontime.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,20 +16,14 @@ namespace Actiontime.TicketAPI.Controllers
     [ApiController]
     public class SaleOrderController : ControllerBase
     {
-        SaleOrderService _orderService;
-        CloudService _cloudService;
-        private readonly IDbContextFactory<ApplicationDbContext> _dbFactory;
-        private readonly IDbContextFactory<ApplicationCloudDbContext> _cdbFactory;
+        private readonly ISaleOrderService _orderService;
+        private readonly ICloudService _cloudService;
 
-        public SaleOrderController(IDbContextFactory<ApplicationDbContext> dbFactory, IDbContextFactory<ApplicationCloudDbContext> cdbFactory, CloudService cloudService)
+
+        public SaleOrderController(ICloudService cloudService, ISaleOrderService saleOrderService)
         {
-
-            _dbFactory = dbFactory ?? throw new ArgumentNullException(nameof(dbFactory));
-            _cdbFactory = cdbFactory ?? throw new ArgumentNullException(nameof(cdbFactory));
-            _cloudService = cloudService ?? throw new ArgumentNullException(nameof(cloudService));
-
-            _orderService = new SaleOrderService(dbFactory, cdbFactory, _cloudService);
-
+            _cloudService = cloudService;
+            _orderService = saleOrderService;
         }
 
 
