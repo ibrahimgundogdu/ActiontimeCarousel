@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Actiontime.DataCloud")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7d3c83b7aade7ede65e1c6d7f77759ac1c9fa667")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c11cfb1280d999946a2e351683ae8a02e0cfeea7")]
 [assembly: System.Reflection.AssemblyProductAttribute("Actiontime.DataCloud")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Actiontime.DataCloud")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
