@@ -9,6 +9,9 @@ namespace Actiontime.Services.Interfaces
 {
     public interface IWebSocketService
     {
-        Task SendWebSocketMessage(WebSocketResult result);
+        Task SendWebSocketMessage(
+            WebSocketResult result,
+            CancellationToken cancellationToken = default
+        );
     }
 }

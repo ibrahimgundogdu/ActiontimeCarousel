@@ -3567,7 +3567,7 @@
       "projectName": "Actiontime.Models",
       "projectPath": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Models\\Actiontime.Models.csproj",
       "packagesPath": "C:\\Users\\HezarFEN\\.nuget\\packages\\",
-      "outputPath": "C:\\source\\repos\\ActiontimeCarousel\\Actiontime.Models\\obj\\",
+      "outputPath": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Models\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

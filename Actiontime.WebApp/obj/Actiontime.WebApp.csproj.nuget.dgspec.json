@@ -11,7 +11,7 @@
         "projectName": "Actiontime.DataCloud",
         "projectPath": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.DataCloud\\Actiontime.DataCloud.csproj",
         "packagesPath": "C:\\Users\\HezarFEN\\.nuget\\packages\\",
-        "outputPath": "C:\\source\\repos\\ActiontimeCarousel\\Actiontime.DataCloud\\obj\\",
+        "outputPath": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.DataCloud\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -102,7 +102,7 @@
         "projectName": "Actiontime.Data",
         "projectPath": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Data\\Actiontime.Data.csproj",
         "packagesPath": "C:\\Users\\HezarFEN\\.nuget\\packages\\",
-        "outputPath": "C:\\source\\repos\\ActiontimeCarousel\\Actiontime.Data\\obj\\",
+        "outputPath": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Data\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -205,7 +205,7 @@
         "projectName": "Actiontime.Models",
         "projectPath": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Models\\Actiontime.Models.csproj",
         "packagesPath": "C:\\Users\\HezarFEN\\.nuget\\packages\\",
-        "outputPath": "C:\\source\\repos\\ActiontimeCarousel\\Actiontime.Models\\obj\\",
+        "outputPath": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Models\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -292,7 +292,7 @@
         "projectName": "Actiontime.Services",
         "projectPath": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Services\\Actiontime.Services.csproj",
         "packagesPath": "C:\\Users\\HezarFEN\\.nuget\\packages\\",
-        "outputPath": "C:\\source\\repos\\ActiontimeCarousel\\Actiontime.Services\\obj\\",
+        "outputPath": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Services\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -344,10 +344,6 @@
             "MQTTnet": {
               "target": "Package",
               "version": "[5.0.1.1416, )"
-            },
-            "MQTTnet.Extensions.ManagedClient": {
-              "target": "Package",
-              "version": "[4.3.7.1207, )"
             },
             "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation": {
               "target": "Package",
@@ -405,7 +401,7 @@
         "projectName": "Actiontime.WebApp",
         "projectPath": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.WebApp\\Actiontime.WebApp.csproj",
         "packagesPath": "C:\\Users\\HezarFEN\\.nuget\\packages\\",
-        "outputPath": "C:\\source\\repos\\ActiontimeCarousel\\Actiontime.WebApp\\obj\\",
+        "outputPath": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.WebApp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -454,10 +450,6 @@
             "MQTTnet": {
               "target": "Package",
               "version": "[5.0.1.1416, )"
-            },
-            "MQTTnet.Extensions.ManagedClient": {
-              "target": "Package",
-              "version": "[4.3.7.1207, )"
             },
             "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation": {
               "target": "Package",

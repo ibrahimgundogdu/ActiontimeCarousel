@@ -11,7 +11,7 @@
         "projectName": "Actiontime.Data",
         "projectPath": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Data\\Actiontime.Data.csproj",
         "packagesPath": "C:\\Users\\HezarFEN\\.nuget\\packages\\",
-        "outputPath": "C:\\source\\repos\\ActiontimeCarousel\\Actiontime.Data\\obj\\",
+        "outputPath": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.Data\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

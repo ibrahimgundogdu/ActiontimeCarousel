@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "4rlZlT3T1nU=",
+  "dgSpecHash": "hEbkYNf6qa0=",
   "success": true,
   "projectFilePath": "C:\\Source\\Repos\\ActiontimeCarousel\\Actiontime.WebApp\\Actiontime.WebApp.csproj",
   "expectedPackageFiles": [
@@ -59,7 +59,6 @@
     "C:\\Users\\HezarFEN\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "C:\\Users\\HezarFEN\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\HezarFEN\\.nuget\\packages\\mqttnet\\5.0.1.1416\\mqttnet.5.0.1.1416.nupkg.sha512",
-    "C:\\Users\\HezarFEN\\.nuget\\packages\\mqttnet.extensions.managedclient\\4.3.7.1207\\mqttnet.extensions.managedclient.4.3.7.1207.nupkg.sha512",
     "C:\\Users\\HezarFEN\\.nuget\\packages\\netcore.encrypt\\2.1.1\\netcore.encrypt.2.1.1.nupkg.sha512",
     "C:\\Users\\HezarFEN\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\HezarFEN\\.nuget\\packages\\rabbitmq.client\\6.5.0\\rabbitmq.client.6.5.0.nupkg.sha512",

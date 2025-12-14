@@ -1,44 +1,69 @@
 ﻿using Actiontime.Models.ResultModel;
-using Actiontime.Models;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MQTTnet;
-using MQTTnet.LowLevelClient;
 using Actiontime.Services.Interfaces;
+using MQTTnet;
+using MQTTnet.Formatter;
+using MQTTnet.Protocol;
+using Newtonsoft.Json;
 
 namespace Actiontime.Services
 {
-	public class WebSocketService : IWebSocketService
+    public class WebSocketService : IWebSocketService
     {
-		public async Task SendWebSocketMessage(WebSocketResult result)
-		{
+        public async Task SendWebSocketMessage(WebSocketResult result, CancellationToken cancellationToken = default)
+        {
+            if (result is null)
+                throw new ArgumentNullException(nameof(result));
 
-			var factory = new MqttClientFactory();
+            var clientId = string.IsNullOrWhiteSpace(result.ConfirmNumber)
+                ? $"cloud-{Guid.NewGuid():N}"
+                : $"cloud-{result.ConfirmNumber}";
 
-			var mqttClient = factory.CreateMqttClient();
+            var factory = new MqttClientFactory();
+            var mqttClient = factory.CreateMqttClient();
 
-			var options = new MqttClientOptionsBuilder()
-					.WithClientId(result.ConfirmNumber)
-					.WithWebSocketServer("ws://144.126.132.166:9001") // WebSockets URL
-					.WithCredentials("hezarfen", "n4q4n6O0") // Opsiyonel
-					.Build();
+            var options = new MqttClientOptionsBuilder()
+                .WithClientId(clientId)
+                .WithWebSocketServer(ws =>
+                {
+                    ws.WithUri("ws://144.126.132.166:9001");
+                })
+                .WithCredentials("hezarfen", "n4q4n6O0")
+                .WithProtocolVersion(MqttProtocolVersion.V311)
+                .WithCleanSession()
+                .Build();
 
-			await mqttClient.ConnectAsync(options, CancellationToken.None);
+            try
+            {
+                await mqttClient.ConnectAsync(options, cancellationToken);
 
-			var message = new MqttApplicationMessageBuilder()
-					.WithTopic($"Cloud/{result.LocationId}")
-					.WithPayload(JsonConvert.SerializeObject(result))
-					.WithRetainFlag()
-					.Build();
+                var message = new MqttApplicationMessageBuilder()
+                    .WithTopic($"Cloud/{result.LocationId}")
+                    .WithPayload(JsonConvert.SerializeObject(result))
+                    .WithRetainFlag()
+                    .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
+                    .Build();
 
-			await mqttClient.PublishAsync(message, CancellationToken.None);
+                await mqttClient.PublishAsync(message, cancellationToken);
+            }
+            finally
+            {
+                if (mqttClient.IsConnected)
+                {
+                    try
+                    {
+                        var disconnectOptions = factory
+                            .CreateClientDisconnectOptionsBuilder()
+                            .WithReason(MqttClientDisconnectOptionsReason.NormalDisconnection)
+                            .Build();
 
-			await mqttClient.DisconnectAsync();
-
-		}
-	}
+                        await mqttClient.DisconnectAsync(disconnectOptions, cancellationToken);
+                    }
+                    catch
+                    {
+                        // disconnect hata verirse swallow (loglamak istersen ILogger ekleyebilirsin)
+                    }
+                }
+            }
+        }
+    }
 }

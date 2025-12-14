@@ -1,19 +1,11 @@
 ﻿using Actiontime.Models;
-using Actiontime.Models.ResultModel;
 using Actiontime.Services.Interfaces;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using MQTTnet;
-using MQTTnet.Client;
 using MQTTnet.Formatter;
 using MQTTnet.Protocol;
 using Newtonsoft.Json;
-using System;
+using System.Buffers;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Actiontime.TicketAPI
 {
@@ -23,9 +15,19 @@ namespace Actiontime.TicketAPI
         private readonly IServiceProvider _sp;
         private readonly IConfiguration _configuration;
 
-        private readonly MqttFactory _mqttFactory;
+        private readonly MqttClientFactory _mqttFactory;
         private readonly IMqttClient _mqttClient;
-        private readonly MqttClientOptions _mqttClientOptions;
+        private MqttClientOptions _mqttClientOptions = default!;
+
+        // İstersen config’e taşı
+        private readonly string[] _topics = new[]
+        {
+            "DeviceInfo",
+            "CashDrawerInfo",
+            "QRRead",
+            "Confirm",
+            "Complete"
+        };
 
         public BackgroundWorkerService(
             ILogger<BackgroundWorkerService> logger,
@@ -36,9 +38,19 @@ namespace Actiontime.TicketAPI
             _configuration = configuration;
             _sp = sp;
 
-            _mqttFactory = new MqttFactory();
+            _mqttFactory = new MqttClientFactory();
             _mqttClient = _mqttFactory.CreateMqttClient();
 
+            // Event handler’ları burada bağlamak OK (async iş yapma yok)
+            _mqttClient.ConnectedAsync += OnConnected;
+            _mqttClient.DisconnectedAsync += OnDisconnected;
+            _mqttClient.ApplicationMessageReceivedAsync += ReceiveMessage;
+
+            BuildClientOptions();
+        }
+
+        private void BuildClientOptions()
+        {
             var host = _configuration["DefaultParameters:ServiceIp"] ?? "127.0.0.1";
             var portText = _configuration["DefaultParameters:ServicePort"];
             var port = 1883;
@@ -50,41 +62,54 @@ namespace Actiontime.TicketAPI
                 .WithClientId(Environment.MachineName)
                 .WithTcpServer(host, port)
                 .WithCredentials("hezarfen", "n4q4n6O0")
-                // Eğer broker sadece MQTT 3.1.1 destekliyorsa bunu ekle:
                 .WithProtocolVersion(MqttProtocolVersion.V311)
+                .WithCleanSession()
                 .Build();
-
-            _mqttClient.ConnectedAsync += args =>
-            {
-                _logger.LogInformation("MQTT client connected.");
-                return Task.CompletedTask;
-            };
-
-            _mqttClient.DisconnectedAsync += async args =>
-            {
-                _logger.LogWarning("MQTT client disconnected. Reconnecting in 5s...");
-
-                // Çok agresif reconnect loop’larına girmemek için küçük bir delay
-                await Task.Delay(TimeSpan.FromSeconds(5));
-
-                try
-                {
-                    await _mqttClient.ConnectAsync(_mqttClientOptions, CancellationToken.None);
-                    _logger.LogInformation("MQTT client reconnected.");
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Reconnect failed");
-                }
-            };
-
-            _mqttClient.ApplicationMessageReceivedAsync += ReceiveMessage;
         }
 
-        public override async Task StartAsync(CancellationToken cancellationToken)
+        private async Task OnConnected(MqttClientConnectedEventArgs args)
+        {
+            _logger.LogInformation("MQTT connected.");
+
+            // Reconnect olunca otomatik tekrar subscribe
+            var subscribeOptions = _mqttFactory
+                .CreateSubscribeOptionsBuilder()
+                .WithTopicFilter(f => f.WithTopic("DeviceInfo"))
+                .WithTopicFilter(f => f.WithTopic("CashDrawerInfo"))
+                .WithTopicFilter(f => f.WithTopic("QRRead"))
+                .WithTopicFilter(f => f.WithTopic("Confirm"))
+                .WithTopicFilter(f => f.WithTopic("Complete"))
+                .Build();
+
+            try
+            {
+                await _mqttClient.SubscribeAsync(subscribeOptions, CancellationToken.None);
+                _logger.LogInformation("Subscribed to MQTT topics.");
+
+                // İlk bağlantıda “ben bağlandım” mesajı
+                await SendMessageAsync(
+                    "ConnectionInfo",
+                    $"{Environment.MachineName} Bilgisayarı Bağlandı",
+                    CancellationToken.None
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Subscribe failed.");
+            }
+        }
+
+        private Task OnDisconnected(MqttClientDisconnectedEventArgs args)
+        {
+            _logger.LogWarning("MQTT disconnected. Reason: {Reason}", args.Reason);
+            // Reconnect’i ExecuteAsync döngüsü yönetecek.
+            return Task.CompletedTask;
+        }
+
+        public override Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("BackgroundWorkerService starting.");
-            await base.StartAsync(cancellationToken);
+            return base.StartAsync(cancellationToken);
         }
 
         public override async Task StopAsync(CancellationToken cancellationToken)
@@ -115,44 +140,44 @@ namespace Actiontime.TicketAPI
         {
             _logger.LogInformation("BackgroundWorkerService ExecuteAsync starting.");
 
-            try
+            // Tek reconnect döngüsü
+            var retryDelay = TimeSpan.FromSeconds(2);
+            var maxDelay = TimeSpan.FromSeconds(30);
+
+            while (!stoppingToken.IsCancellationRequested)
             {
-                if (!_mqttClient.IsConnected)
+                try
                 {
-                    await _mqttClient.ConnectAsync(_mqttClientOptions, stoppingToken);
-                }
+                    if (!_mqttClient.IsConnected)
+                    {
+                        _logger.LogInformation("Connecting to MQTT...");
+                        await _mqttClient.ConnectAsync(_mqttClientOptions, stoppingToken);
 
-                var subscribeOptions = _mqttFactory
-                    .CreateSubscribeOptionsBuilder()
-                    .WithTopicFilter(f => f.WithTopic("DeviceInfo"))
-                    .WithTopicFilter(f => f.WithTopic("CashDrawerInfo"))
-                    .WithTopicFilter(f => f.WithTopic("QRRead"))
-                    .WithTopicFilter(f => f.WithTopic("Confirm"))
-                    .WithTopicFilter(f => f.WithTopic("Complete"))
-                    .Build();
+                        // ConnectedAsync event’i subscribe + connection info işini halledecek.
+                        retryDelay = TimeSpan.FromSeconds(2);
+                    }
 
-                await _mqttClient.SubscribeAsync(subscribeOptions, stoppingToken);
-
-                _logger.LogInformation("Subscribed to MQTT topics.");
-
-                await SendMessageAsync(
-                    "ConnectionInfo",
-                    $"{Environment.MachineName} Bilgisayarı Bağlandı",
-                    stoppingToken
-                );
-
-                while (!stoppingToken.IsCancellationRequested)
-                {
+                    // Worker “idling”
                     await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
                 }
-            }
-            catch (OperationCanceledException)
-            {
-                // normal shutdown
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "MQTT background worker failed");
+                catch (OperationCanceledException)
+                {
+                    // normal shutdown
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "MQTT connect/loop error. Retrying in {Delay}...", retryDelay);
+
+                    try
+                    {
+                        await Task.Delay(retryDelay, stoppingToken);
+                    }
+                    catch (OperationCanceledException) { }
+
+                    // exponential backoff
+                    var next = TimeSpan.FromSeconds(Math.Min(maxDelay.TotalSeconds, retryDelay.TotalSeconds * 2));
+                    retryDelay = next;
+                }
             }
         }
 
@@ -160,34 +185,32 @@ namespace Actiontime.TicketAPI
         {
             try
             {
-                if (args?.ApplicationMessage == null)
-                    return;
+                var msg = args?.ApplicationMessage;
+                if (msg is null) return;
 
-                var topic = args.ApplicationMessage.Topic ?? string.Empty;
-                var payload = args.ApplicationMessage.PayloadSegment.Count == 0
+                var topic = msg.Topic ?? string.Empty;
+
+                // Use Payload property instead of PayloadSegment (PayloadSegment has no getter)
+                var payload = msg.Payload.IsEmpty || msg.Payload.Length == 0
                     ? string.Empty
-                    : Encoding.UTF8.GetString(args.ApplicationMessage.PayloadSegment);
+                    : Encoding.UTF8.GetString(msg.Payload.ToArray());
 
-                _logger.LogInformation(
-                    "MQTT Msg received. Topic: {topic} Payload: {payload}",
-                    topic,
-                    payload
-                );
+                _logger.LogInformation("MQTT RX Topic: {Topic} Payload: {Payload}", topic, payload);
 
                 using var scope = _sp.CreateScope();
                 var readerService = scope.ServiceProvider.GetRequiredService<IQRReaderService>();
 
-                if (string.Equals(topic, "DeviceInfo", StringComparison.OrdinalIgnoreCase))
+                if (topic.Equals("DeviceInfo", StringComparison.OrdinalIgnoreCase))
                 {
                     var result = await readerService.AddReader(payload);
                     await SendMessageAsync(result.SerialNumber, JsonConvert.SerializeObject(result));
                 }
-                else if (string.Equals(topic, "QRRead", StringComparison.OrdinalIgnoreCase))
+                else if (topic.Equals("QRRead", StringComparison.OrdinalIgnoreCase))
                 {
                     var result = await readerService.ConfirmQR(payload);
                     await SendMessageAsync(result.SerialNumber, JsonConvert.SerializeObject(result));
                 }
-                else if (string.Equals(topic, "Confirm", StringComparison.OrdinalIgnoreCase))
+                else if (topic.Equals("Confirm", StringComparison.OrdinalIgnoreCase))
                 {
                     var result = await readerService.StartQR(payload);
                     await SendMessageAsync(result.SerialNumber, JsonConvert.SerializeObject(result));
@@ -195,7 +218,7 @@ namespace Actiontime.TicketAPI
                     if (result.Success == 1)
                         await SendWebSocketMessage(WebSocketProcess.RideStart, result.ConfirmNumber);
                 }
-                else if (string.Equals(topic, "Complete", StringComparison.OrdinalIgnoreCase))
+                else if (topic.Equals("Complete", StringComparison.OrdinalIgnoreCase))
                 {
                     var result = await readerService.CompleteQR(payload);
                     await SendMessageAsync(result.SerialNumber, JsonConvert.SerializeObject(result));
@@ -203,10 +226,14 @@ namespace Actiontime.TicketAPI
                     if (result.Success == 1)
                         await SendWebSocketMessage(WebSocketProcess.RideStop, result.ConfirmNumber);
                 }
-                else if (string.Equals(topic, "CashDrawerInfo", StringComparison.OrdinalIgnoreCase))
+                else if (topic.Equals("CashDrawerInfo", StringComparison.OrdinalIgnoreCase))
                 {
                     var result = await readerService.AddDrawer(payload);
                     await SendMessageAsync(result.SerialNumber, JsonConvert.SerializeObject(result));
+                }
+                else
+                {
+                    _logger.LogDebug("Unhandled topic: {Topic}", topic);
                 }
             }
             catch (Exception ex)
@@ -217,16 +244,17 @@ namespace Actiontime.TicketAPI
 
         private async Task SendMessageAsync(string topic, string payload, CancellationToken cancellation = default)
         {
-            if (string.IsNullOrEmpty(topic))
+            if (string.IsNullOrWhiteSpace(topic))
                 topic = "Unknown";
 
             var applicationMessage = new MqttApplicationMessageBuilder()
                 .WithTopic(topic)
-                .WithPayload(payload)
+                .WithPayload(payload ?? string.Empty)
                 .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtMostOnce)
                 .Build();
 
-            if (!_mqttClient.IsConnected)
+            // Publish sırasında bağlı değilse: connect dene (ama loop da bağlamaya çalışıyor)
+            if (!_mqttClient.IsConnected && !cancellation.IsCancellationRequested)
             {
                 try
                 {
@@ -235,13 +263,14 @@ namespace Actiontime.TicketAPI
                 catch (Exception ex)
                 {
                     _logger.LogWarning(ex, "Reconnect failed while publishing.");
+                    return;
                 }
             }
 
             try
             {
                 await _mqttClient.PublishAsync(applicationMessage, cancellation);
-                _logger.LogInformation("Published MQTT message to {topic}", topic);
+                _logger.LogInformation("MQTT TX Topic: {Topic}", topic);
             }
             catch (Exception ex)
             {
@@ -255,27 +284,26 @@ namespace Actiontime.TicketAPI
             var readerService = scope.ServiceProvider.GetRequiredService<IQRReaderService>();
 
             var result = await readerService.CloudRideStartStop(confirmNumber);
+            if (result is null) return;
+
             result.Process = process.ToString();
 
-            var factory = new MqttFactory();
+            var factory = new MqttClientFactory();
             var client = factory.CreateMqttClient();
 
             var options = new MqttClientOptionsBuilder()
-                .WithClientId(confirmNumber)
-                .WithWebSocketServer(ws =>
-                {
-                    // MQTTnet 5 tarzı WebSocket config
-                    ws.WithUri("ws://144.126.132.166:9001");
-                })
+                .WithClientId($"cloud-{confirmNumber}")
+                .WithWebSocketServer(ws => ws.WithUri("ws://144.126.132.166:9001"))
                 .WithCredentials("hezarfen", "n4q4n6O0")
                 .WithProtocolVersion(MqttProtocolVersion.V311)
+                .WithCleanSession()
                 .Build();
 
             try
             {
                 await client.ConnectAsync(options, CancellationToken.None);
 
-                if (result != null && result.Success == 1)
+                if (result.Success == 1)
                 {
                     var message = new MqttApplicationMessageBuilder()
                         .WithTopic($"Cloud/{result.LocationId}")
@@ -295,12 +323,16 @@ namespace Actiontime.TicketAPI
             {
                 if (client.IsConnected)
                 {
-                    var disconnectOptions = factory
-                        .CreateClientDisconnectOptionsBuilder()
-                        .WithReason(MqttClientDisconnectOptionsReason.NormalDisconnection)
-                        .Build();
+                    try
+                    {
+                        var disconnectOptions = factory
+                            .CreateClientDisconnectOptionsBuilder()
+                            .WithReason(MqttClientDisconnectOptionsReason.NormalDisconnection)
+                            .Build();
 
-                    await client.DisconnectAsync(disconnectOptions, CancellationToken.None);
+                        await client.DisconnectAsync(disconnectOptions, CancellationToken.None);
+                    }
+                    catch { /* ignore */ }
                 }
             }
         }
