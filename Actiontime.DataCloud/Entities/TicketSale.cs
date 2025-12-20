@@ -13,7 +13,7 @@ public partial class TicketSale
 
     public int? SaleTypeId { get; set; }
 
-    public DateTime? Date { get; set; }
+    public DateOnly? Date { get; set; }
 
     public int? OurCompanyId { get; set; }
 

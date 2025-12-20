@@ -11,12 +11,12 @@ using System;
 
 namespace Actiontime.Services
 {
-    public class CloudService: ICloudService
+    public class CloudService : ICloudService
     {
         private readonly ApplicationDbContext _db;
         private readonly ApplicationCloudDbContext _cdb;
         private readonly IServiceProvider _sp;
-        
+
 
         public CloudService(ApplicationDbContext db, ApplicationCloudDbContext cdb, IServiceProvider sp)
         {
@@ -134,8 +134,8 @@ namespace Actiontime.Services
                         payment.PaymentCurrency = localPosPayment?.Currency == "USD" ? 1 : 1;
                         payment.PaymentInfo = null;
                         payment.PaymentDateTime = localPosPayment?.PaymentDate.ToString();
-                        payment.PaymentDate = (localPosPayment?.PaymentDate ?? DateTime.Now).Date;
-                        payment.PaymentTime = (localPosPayment?.PaymentDate ?? DateTime.Now).TimeOfDay;
+                        payment.PaymentDate = DateOnly.FromDateTime(localPosPayment?.PaymentDate ?? DateTime.Now);
+                        payment.PaymentTime = TimeOnly.FromDateTime(localPosPayment?.PaymentDate ?? DateTime.Now);
                         payment.BankBkmid = 0;
                         payment.BatchNumber = string.Empty;
                         payment.StanNumber = string.Empty;
@@ -241,7 +241,7 @@ namespace Actiontime.Services
                                 if (trip != null)
                                 {
                                     trip.RecordDate = localTrip.RecordDate;
-                                    trip.TripDate = localTrip.TripDate;
+                                    trip.TripDate = DateOnly.FromDateTime((DateTime)localTrip.TripStart);
                                     trip.TripStart = localTrip.TripStart;
                                     trip.TripCancel = localTrip.TripCancel;
                                     trip.TripEnd = localTrip.TripEnd;
@@ -259,7 +259,7 @@ namespace Actiontime.Services
                                     trip.TicketTypeId = cloudOrderRow.TicketTypeId;
                                     trip.TicketNumber = localTrip.TicketNumber;
                                     trip.RecordDate = localTrip.RecordDate;
-                                    trip.TripDate = localTrip.TripDate;
+                                    trip.TripDate = DateOnly.FromDateTime((DateTime)localTrip.TripStart);
                                     trip.TripStart = localTrip.TripStart;
                                     trip.TripCancel = localTrip.TripCancel;
                                     trip.TripEnd = localTrip.TripEnd;
@@ -342,7 +342,7 @@ namespace Actiontime.Services
 
                         var dayresult = _cdb.DayResults.FirstOrDefault(x => x.LocationId == localOrder.LocationId && x.Date == localOrder.Date && x.IsActive == true);
 
-                        DocumentExpenseSlip slip = _cdb.DocumentExpenseSlips.FirstOrDefault(x => x.LocationId == localOrder.LocationId && x.DocumentDate == localPosRefund.RefoundDate && x.SaleId == ticketSale.Id);
+                        DocumentExpenseSlip slip = _cdb.DocumentExpenseSlips.FirstOrDefault(x => x.LocationId == localOrder.LocationId && x.DocumentDate == DateOnly.FromDateTime(localPosRefund.RefoundDate) && x.SaleId == ticketSale.Id);
 
                         if (slip == null)
                         {
@@ -351,7 +351,7 @@ namespace Actiontime.Services
                             slip.ActionTypeId = 41;
                             slip.OurCompanyId = 1;
                             slip.LocationId = localOrder.LocationId;
-                            slip.DocumentDate = localPosRefund?.RefoundDate;
+                            slip.DocumentDate = DateOnly.FromDateTime((DateTime)localPosRefund?.RefoundDate);
                             slip.DocumentNumber = localOrder.OrderNumber;
                             slip.CustomerId = null;
                             slip.CustomerAddress = null;
@@ -475,7 +475,7 @@ namespace Actiontime.Services
                                 cashExpense.SystemAmount = localDocument.Amount;
                                 cashExpense.SystemCurrency = location.Currency;
                                 cashExpense.SlipNumber = string.Empty;
-                                cashExpense.SlipDate = localDocument.DocumentDate;
+                                cashExpense.SlipDate = null;
                                 cashExpense.ReferenceId = localDocument.Id;
                                 cashExpense.EnvironmentId = 4;
                                 cashExpense.Uid = localDocument.Uid;
@@ -847,8 +847,8 @@ namespace Actiontime.Services
                         {
                             exist.ShiftDateStart = locationShift.ShiftStart;
                             exist.ShiftDateFinish = locationShift.ShiftFinish;
-                            exist.ShiftStart = locationShift.ShiftStart.TimeOfDay;
-                            exist.ShiftFinish = locationShift.ShiftFinish?.TimeOfDay;
+                            exist.ShiftStart = TimeOnly.FromDateTime( locationShift.ShiftStart);
+                            exist.ShiftFinish = locationShift.ShiftFinish != null ? TimeOnly.FromDateTime(locationShift.ShiftFinish.Value) : null;
 
 
                             _cdb.SaveChanges();
@@ -862,9 +862,9 @@ namespace Actiontime.Services
                             {
                                 exist.ShiftDateStart = locationShift.ShiftStart;
                                 exist.ShiftDateFinish = locationShift.ShiftFinish;
-                                exist.ShiftStart = locationShift.ShiftStart.TimeOfDay;
-                                exist.ShiftFinish = locationShift.ShiftFinish?.TimeOfDay;
-                                exist.Uid= locationShift.Uid;
+                                exist.ShiftStart = TimeOnly.FromDateTime(locationShift.ShiftStart);  
+                                exist.ShiftFinish = locationShift.ShiftFinish != null ? TimeOnly.FromDateTime(locationShift.ShiftFinish.Value) : null;
+                                exist.Uid = locationShift.Uid;
 
                                 _cdb.SaveChanges();
                             }
@@ -874,11 +874,11 @@ namespace Actiontime.Services
 
                                 exist.ShiftDateStart = locationShift.ShiftStart;
                                 exist.ShiftDateFinish = locationShift.ShiftFinish;
-                                exist.ShiftStart = locationShift.ShiftStart.TimeOfDay;
-                                exist.ShiftFinish = locationShift.ShiftFinish?.TimeOfDay;
+                                exist.ShiftStart = TimeOnly.FromDateTime(locationShift.ShiftStart);
+                                exist.ShiftFinish = locationShift.ShiftFinish != null ? TimeOnly.FromDateTime(locationShift.ShiftFinish.Value) : null;
                                 exist.LocationId = locationShift.LocationId;
                                 exist.EmployeeId = locationShift.EmployeeId;
-                                exist.ShiftDate = locationShift.ShiftDate;
+                                exist.ShiftDate =locationShift.ShiftDate;
                                 exist.LatitudeFinish = 0;
                                 exist.LongitudeFinish = 0;
                                 exist.FromMobileStart = true;
@@ -890,7 +890,7 @@ namespace Actiontime.Services
                                 _cdb.LocationShifts.Add(exist);
                                 _cdb.SaveChanges();
                             }
-                            
+
                         }
 
                         // sync silinir
@@ -927,8 +927,8 @@ namespace Actiontime.Services
                         {
                             exist.ShiftDateStart = locationShift.ShiftStart;
                             exist.ShiftDateFinish = locationShift.ShiftFinish;
-                            exist.ShiftStart = locationShift.ShiftStart.TimeOfDay;
-                            exist.ShiftFinish = locationShift.ShiftFinish?.TimeOfDay;
+                            exist.ShiftStart = TimeOnly.FromDateTime(locationShift.ShiftStart);
+                            exist.ShiftFinish = locationShift.ShiftFinish != null ? TimeOnly.FromDateTime(locationShift.ShiftFinish.Value) : null;
 
                             exist.UpdateDate = location.LocalDateTime;
                             exist.UpdateEmployeeId = locationShift.EmployeeId;
@@ -945,8 +945,8 @@ namespace Actiontime.Services
                             {
                                 exist.ShiftDateStart = locationShift.ShiftStart;
                                 exist.ShiftDateFinish = locationShift.ShiftFinish;
-                                exist.ShiftStart = locationShift.ShiftStart.TimeOfDay;
-                                exist.ShiftFinish = locationShift.ShiftFinish?.TimeOfDay;
+                                exist.ShiftStart = TimeOnly.FromDateTime(locationShift.ShiftStart);
+                                exist.ShiftFinish = locationShift.ShiftFinish != null ? TimeOnly.FromDateTime(locationShift.ShiftFinish.Value) : null;
                                 exist.Uid = locationShift.Uid;
                                 exist.UpdateDate = location.LocalDateTime;
                                 exist.UpdateEmployeeId = locationShift.EmployeeId;
@@ -959,8 +959,8 @@ namespace Actiontime.Services
 
                                 exist.ShiftDateStart = locationShift.ShiftStart;
                                 exist.ShiftDateFinish = locationShift.ShiftFinish;
-                                exist.ShiftStart = locationShift.ShiftStart.TimeOfDay;
-                                exist.ShiftFinish = locationShift.ShiftFinish?.TimeOfDay;
+                                exist.ShiftStart = TimeOnly.FromDateTime(locationShift.ShiftStart);
+                                exist.ShiftFinish = locationShift.ShiftFinish != null ? TimeOnly.FromDateTime(locationShift.ShiftFinish.Value) : null;
                                 exist.LocationId = locationShift.LocationId;
                                 exist.EmployeeId = locationShift.EmployeeId;
                                 exist.ShiftDate = locationShift.ShiftDate;
@@ -1015,8 +1015,8 @@ namespace Actiontime.Services
                         {
                             exist.ShiftDateStart = employeeShift.ShiftStart;
                             exist.ShiftDateEnd = employeeShift.ShiftEnd;
-                            exist.ShiftStart = employeeShift.ShiftStart.TimeOfDay;
-                            exist.ShiftEnd = employeeShift.ShiftEnd?.TimeOfDay;
+                            exist.ShiftStart = TimeOnly.FromDateTime(employeeShift.ShiftStart); 
+                            exist.ShiftEnd = employeeShift.ShiftEnd != null ? TimeOnly.FromDateTime(employeeShift.ShiftEnd.Value) : null;  
 
                             _cdb.SaveChanges();
                         }
@@ -1029,8 +1029,8 @@ namespace Actiontime.Services
                             {
                                 exist.ShiftDateStart = employeeShift.ShiftStart;
                                 exist.ShiftDateEnd = employeeShift.ShiftEnd;
-                                exist.ShiftStart = employeeShift.ShiftStart.TimeOfDay;
-                                exist.ShiftEnd = employeeShift.ShiftEnd?.TimeOfDay;
+                                exist.ShiftStart = TimeOnly.FromDateTime(employeeShift.ShiftStart);
+                                exist.ShiftEnd = employeeShift.ShiftEnd != null ? TimeOnly.FromDateTime(employeeShift.ShiftEnd.Value) : null;
                                 exist.Uid = employeeShift.Uid;
 
                                 _cdb.SaveChanges();
@@ -1041,8 +1041,8 @@ namespace Actiontime.Services
 
                                 exist.ShiftDateStart = employeeShift.ShiftStart;
                                 exist.ShiftDateEnd = employeeShift.ShiftEnd;
-                                exist.ShiftStart = employeeShift.ShiftStart.TimeOfDay;
-                                exist.ShiftEnd = employeeShift.ShiftEnd?.TimeOfDay;
+                                exist.ShiftStart = TimeOnly.FromDateTime(employeeShift.ShiftStart);
+                                exist.ShiftEnd = employeeShift.ShiftEnd != null ? TimeOnly.FromDateTime(employeeShift.ShiftEnd.Value) : null;
                                 exist.LocationId = employeeShift.LocationId;
                                 exist.EmployeeId = employeeShift.EmployeeId;
                                 exist.ShiftDate = employeeShift.ShiftDate;
@@ -1098,8 +1098,8 @@ namespace Actiontime.Services
                         {
                             exist.ShiftDateStart = employeeShift.ShiftStart;
                             exist.ShiftDateEnd = employeeShift.ShiftEnd;
-                            exist.ShiftStart = employeeShift.ShiftStart.TimeOfDay;
-                            exist.ShiftEnd = employeeShift.ShiftEnd?.TimeOfDay;
+                            exist.ShiftStart = TimeOnly.FromDateTime(employeeShift.ShiftStart);
+                            exist.ShiftEnd = employeeShift.ShiftEnd != null ? TimeOnly.FromDateTime(employeeShift.ShiftEnd.Value) : null;
 
                             exist.UpdateDate = location.LocalDateTime;
                             exist.UpdateEmployeeId = employeeShift.EmployeeId;
@@ -1115,8 +1115,8 @@ namespace Actiontime.Services
                             {
                                 exist.ShiftDateStart = employeeShift.ShiftStart;
                                 exist.ShiftDateEnd = employeeShift.ShiftEnd;
-                                exist.ShiftStart = employeeShift.ShiftStart.TimeOfDay;
-                                exist.ShiftEnd = employeeShift.ShiftEnd?.TimeOfDay;
+                                exist.ShiftStart = TimeOnly.FromDateTime(employeeShift.ShiftStart);
+                                exist.ShiftEnd = employeeShift.ShiftEnd != null ? TimeOnly.FromDateTime(employeeShift.ShiftEnd.Value) : null;
                                 exist.Uid = employeeShift.Uid;
                                 exist.UpdateDate = location.LocalDateTime;
                                 exist.UpdateEmployeeId = employeeShift.EmployeeId;
@@ -1129,8 +1129,8 @@ namespace Actiontime.Services
 
                                 exist.ShiftDateStart = employeeShift.ShiftStart;
                                 exist.ShiftDateEnd = employeeShift.ShiftEnd;
-                                exist.ShiftStart = employeeShift.ShiftStart.TimeOfDay;
-                                exist.ShiftEnd = employeeShift.ShiftEnd?.TimeOfDay;
+                                exist.ShiftStart = TimeOnly.FromDateTime(employeeShift.ShiftStart);
+                                exist.ShiftEnd = employeeShift.ShiftEnd != null ? TimeOnly.FromDateTime(employeeShift.ShiftEnd.Value) : null;
                                 exist.LocationId = employeeShift.LocationId;
                                 exist.EmployeeId = employeeShift.EmployeeId;
                                 exist.ShiftDate = employeeShift.ShiftDate;
@@ -1187,8 +1187,8 @@ namespace Actiontime.Services
                         {
                             exist.BreakDateStart = employeeBreak.BreakStart;
                             exist.BreakDateEnd = employeeBreak.BreakEnd;
-                            exist.BreakStart = employeeBreak.BreakStart.TimeOfDay;
-                            exist.BreakEnd = employeeBreak.BreakEnd?.TimeOfDay;
+                            exist.BreakStart = TimeOnly.FromDateTime(employeeBreak.BreakStart);  
+                            exist.BreakEnd = employeeBreak.BreakEnd != null ? TimeOnly.FromDateTime(employeeBreak.BreakEnd.Value) : null;
 
                             _cdb.SaveChanges();
                         }
@@ -1201,8 +1201,8 @@ namespace Actiontime.Services
                             {
                                 exist.BreakDateStart = employeeBreak.BreakStart;
                                 exist.BreakDateEnd = employeeBreak.BreakEnd;
-                                exist.BreakStart = employeeBreak.BreakStart.TimeOfDay;
-                                exist.BreakEnd = employeeBreak.BreakEnd?.TimeOfDay;
+                                exist.BreakStart = TimeOnly.FromDateTime(employeeBreak.BreakStart);
+                                exist.BreakEnd = employeeBreak.BreakEnd != null ? TimeOnly.FromDateTime(employeeBreak.BreakEnd.Value) : null;
                                 exist.Uid = employeeBreak.Uid;
 
                                 _cdb.SaveChanges();
@@ -1213,8 +1213,8 @@ namespace Actiontime.Services
 
                                 exist.BreakDateStart = employeeBreak.BreakStart;
                                 exist.BreakDateEnd = employeeBreak.BreakEnd;
-                                exist.BreakStart = employeeBreak.BreakStart.TimeOfDay;
-                                exist.BreakEnd = employeeBreak.BreakEnd?.TimeOfDay;
+                                exist.BreakStart = TimeOnly.FromDateTime(employeeBreak.BreakStart);
+                                exist.BreakEnd = employeeBreak.BreakEnd != null ? TimeOnly.FromDateTime(employeeBreak.BreakEnd.Value) : null;
                                 exist.LocationId = employeeBreak.LocationId;
                                 exist.EmployeeId = employeeBreak.EmployeeId;
                                 exist.ShiftDate = employeeBreak.BreakDate;
@@ -1271,8 +1271,8 @@ namespace Actiontime.Services
                         {
                             exist.BreakDateStart = employeeBreak.BreakStart;
                             exist.BreakDateEnd = employeeBreak.BreakEnd;
-                            exist.BreakStart = employeeBreak.BreakStart.TimeOfDay;
-                            exist.BreakEnd = employeeBreak.BreakEnd?.TimeOfDay;
+                            exist.BreakStart = TimeOnly.FromDateTime(employeeBreak.BreakStart);
+                            exist.BreakEnd = employeeBreak.BreakEnd != null ? TimeOnly.FromDateTime(employeeBreak.BreakEnd.Value) : null;  
 
                             exist.UpdateDate = location.LocalDateTime;
                             exist.UpdateEmployeeId = employeeBreak.EmployeeId;
@@ -1288,8 +1288,8 @@ namespace Actiontime.Services
                             {
                                 exist.BreakDateStart = employeeBreak.BreakStart;
                                 exist.BreakDateEnd = employeeBreak.BreakEnd;
-                                exist.BreakStart = employeeBreak.BreakStart.TimeOfDay;
-                                exist.BreakEnd = employeeBreak.BreakEnd?.TimeOfDay;
+                                exist.BreakStart = TimeOnly.FromDateTime(employeeBreak.BreakStart);
+                                exist.BreakEnd = employeeBreak.BreakEnd != null ? TimeOnly.FromDateTime(employeeBreak.BreakEnd.Value) : null;
                                 exist.Uid = employeeBreak.Uid;
                                 exist.UpdateDate = location.LocalDateTime;
                                 exist.UpdateEmployeeId = employeeBreak.EmployeeId;
@@ -1302,8 +1302,8 @@ namespace Actiontime.Services
 
                                 exist.BreakDateStart = employeeBreak.BreakStart;
                                 exist.BreakDateEnd = employeeBreak.BreakEnd;
-                                exist.BreakStart = employeeBreak.BreakStart.TimeOfDay;
-                                exist.BreakEnd = employeeBreak.BreakEnd?.TimeOfDay;
+                                exist.BreakStart = TimeOnly.FromDateTime(employeeBreak.BreakStart);
+                                exist.BreakEnd = employeeBreak.BreakEnd != null ? TimeOnly.FromDateTime(employeeBreak.BreakEnd.Value) : null;
                                 exist.LocationId = employeeBreak.LocationId;
                                 exist.EmployeeId = employeeBreak.EmployeeId;
                                 exist.ShiftDate = employeeBreak.BreakDate;
@@ -1451,7 +1451,7 @@ namespace Actiontime.Services
                 }
             }
 
-            
+
 
 
 
@@ -1459,7 +1459,7 @@ namespace Actiontime.Services
         }
 
 
-        private void AddCashAction(int? CashID, int? LocationID, int? EmployeeID, int? CashActionTypeID, DateTime? ActionDate, string ProcessName, long? ProcessID, DateTime? ProcessDate, string DocumentNumber, string Description, short? Direction, double? Collection, double? Payment, string Currency, int? RecordEmployeeID, DateTime? RecordDate, Guid ProcessUID)
+        private void AddCashAction(int? CashID, int? LocationID, int? EmployeeID, int? CashActionTypeID, DateOnly? ActionDate, string ProcessName, long? ProcessID, DateOnly? ProcessDate, string DocumentNumber, string Description, short? Direction, double? Collection, double? Payment, string Currency, int? RecordEmployeeID, DateTime? RecordDate, Guid ProcessUID)
         {
 
             var param1 = new SqlParameter("@CashID", CashID);
@@ -1488,7 +1488,7 @@ namespace Actiontime.Services
         }
 
 
-        private void AddEmployeeAction(int? EmployeeID, int? LocationID, int? ActionTypeID, string ProcessName, long? ProcessID, DateTime? ProcessDate, string ProcessDetail, short? Direction, double? Collection, double? Payment, string Currency, int? SalaryTypeID, int? RecordEmployeeID, DateTime? RecordDate, Guid ProcessUID, string DocumentNumber, int SalaryCategoryID)
+        private void AddEmployeeAction(int? EmployeeID, int? LocationID, int? ActionTypeID, string ProcessName, long? ProcessID, DateOnly? ProcessDate, string ProcessDetail, short? Direction, double? Collection, double? Payment, string Currency, int? SalaryTypeID, int? RecordEmployeeID, DateTime? RecordDate, Guid ProcessUID, string DocumentNumber, int SalaryCategoryID)
         {
 
             var param1 = new SqlParameter("@EmployeeID", EmployeeID);

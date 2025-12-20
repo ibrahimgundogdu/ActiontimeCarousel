@@ -47,7 +47,7 @@ public partial class VtripConfirm
 
     public DateTime? TripEnd { get; set; }
 
-    public TimeSpan? TripDuration { get; set; }
+    public TimeOnly? TripDuration { get; set; }
 
     public int? TripDurationSecond { get; set; }
 }

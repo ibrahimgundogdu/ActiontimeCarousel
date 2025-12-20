@@ -51,11 +51,11 @@ public partial class Location1
 
     public DateTime? LocalDateTime { get; set; }
 
-    public DateTime? LocalDate { get; set; }
+    public DateOnly? LocalDate { get; set; }
 
     public int? DateId { get; set; }
 
-    public DateTime? DateKey { get; set; }
+    public DateOnly? DateKey { get; set; }
 
     public int? Year { get; set; }
 
@@ -81,11 +81,11 @@ public partial class Location1
 
     public int? WeekNumber { get; set; }
 
-    public DateTime? ShiftDate { get; set; }
+    public DateOnly? ShiftDate { get; set; }
 
-    public TimeSpan? ShiftStart { get; set; }
+    public TimeOnly? ShiftStart { get; set; }
 
-    public TimeSpan? ShiftFinish { get; set; }
+    public TimeOnly? ShiftFinish { get; set; }
 
     public string? Duration { get; set; }
 

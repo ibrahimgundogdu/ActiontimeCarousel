@@ -24,7 +24,7 @@ namespace Actiontime.WebApp.Controllers
 		public IActionResult Index()
 		{
 			HomeControlModel model = new HomeControlModel();
-			var currentDate = DateTime.Now.Date;
+			DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
 
 			model.Location = _dbContext.OurLocations.FirstOrDefault();
 			if (model.Location != null)

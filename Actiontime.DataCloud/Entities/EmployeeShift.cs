@@ -11,11 +11,11 @@ public partial class EmployeeShift
 
     public int? LocationId { get; set; }
 
-    public DateTime? ShiftDate { get; set; }
+    public DateOnly? ShiftDate { get; set; }
 
-    public TimeSpan? ShiftStart { get; set; }
+    public TimeOnly? ShiftStart { get; set; }
 
-    public TimeSpan? ShiftEnd { get; set; }
+    public TimeOnly? ShiftEnd { get; set; }
 
     public string? Duration { get; set; }
 
@@ -27,15 +27,15 @@ public partial class EmployeeShift
 
     public DateTime? ShiftDateEnd { get; set; }
 
-    public TimeSpan? ShiftDuration { get; set; }
+    public TimeOnly? ShiftDuration { get; set; }
 
     public int? DurationMinute { get; set; }
 
-    public TimeSpan? BreakStart { get; set; }
+    public TimeOnly? BreakStart { get; set; }
 
-    public TimeSpan? BreakEnd { get; set; }
+    public TimeOnly? BreakEnd { get; set; }
 
-    public TimeSpan? BreakDuration { get; set; }
+    public TimeOnly? BreakDuration { get; set; }
 
     public DateTime? BreakDateStart { get; set; }
 

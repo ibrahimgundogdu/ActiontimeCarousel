@@ -15,9 +15,9 @@ public partial class TicketSaleRow
 
     public DateTime Date { get; set; }
 
-    public DateTime? DateKey { get; set; }
+    public DateOnly? DateKey { get; set; }
 
-    public TimeSpan? TimeKey { get; set; }
+    public TimeOnly? TimeKey { get; set; }
 
     public int? LocationId { get; set; }
 

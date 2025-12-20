@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public int LocationId { get; set; }
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
         public int StateId { get; set; }
         public string StateName { get; set; }
         public int? EnvironmentId { get; set; }

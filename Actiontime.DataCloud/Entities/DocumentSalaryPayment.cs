@@ -15,7 +15,7 @@ public partial class DocumentSalaryPayment
 
     public string? Currency { get; set; }
 
-    public DateTime? Date { get; set; }
+    public DateOnly? Date { get; set; }
 
     public DateTime? RecordDate { get; set; }
 
@@ -68,4 +68,6 @@ public partial class DocumentSalaryPayment
     public bool? IsLumpSum { get; set; }
 
     public string? DocumentFile { get; set; }
+
+    public bool IsLocked { get; set; }
 }

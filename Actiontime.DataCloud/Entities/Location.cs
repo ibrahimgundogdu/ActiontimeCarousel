@@ -61,7 +61,7 @@ public partial class Location
 
     public string? Distance { get; set; }
 
-    public DateTime? LocalDate { get; set; }
+    public DateOnly? LocalDate { get; set; }
 
     public DateTime? LocalDateTime { get; set; }
 
@@ -85,9 +85,9 @@ public partial class Location
 
     public string? UpdateIp { get; set; }
 
-    public bool? ProfitCenter { get; set; }
+    public bool ProfitCenter { get; set; }
 
-    public bool? ExpenseCenter { get; set; }
+    public bool ExpenseCenter { get; set; }
 
     public string? Address { get; set; }
 

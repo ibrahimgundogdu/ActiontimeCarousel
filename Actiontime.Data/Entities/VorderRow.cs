@@ -49,5 +49,5 @@ public partial class VorderRow
 
     public int? TripDurationSecond { get; set; }
 
-    public DateTime? DateKey { get; set; }
+    public DateOnly? DateKey { get; set; }
 }

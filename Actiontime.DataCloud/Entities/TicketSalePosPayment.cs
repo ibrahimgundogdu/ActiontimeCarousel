@@ -27,9 +27,9 @@ public partial class TicketSalePosPayment
 
     public string? PaymentDateTime { get; set; }
 
-    public DateTime PaymentDate { get; set; }
+    public DateOnly PaymentDate { get; set; }
 
-    public TimeSpan PaymentTime { get; set; }
+    public TimeOnly PaymentTime { get; set; }
 
     public short? BankBkmid { get; set; }
 

@@ -13,7 +13,7 @@ public partial class BankAction
 
     public int? BankActionTypeId { get; set; }
 
-    public DateTime? ActionDate { get; set; }
+    public DateOnly? ActionDate { get; set; }
 
     public int? OrderId { get; set; }
 

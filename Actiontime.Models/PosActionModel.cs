@@ -13,7 +13,7 @@ namespace Actiontime.Models
 
         public int? ActionTypeId { get; set; }
 
-        public DateTime? ActionDate { get; set; }
+        public DateOnly? ActionDate { get; set; }
 
         public string? ProcessName { get; set; }
 

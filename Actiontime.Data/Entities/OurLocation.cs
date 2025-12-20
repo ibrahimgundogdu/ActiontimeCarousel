@@ -33,7 +33,7 @@ public partial class OurLocation
 
     public short Timezone { get; set; }
 
-    public DateTime? LocalDate { get; set; }
+    public DateOnly? LocalDate { get; set; }
 
     public DateTime? LocalDateTime { get; set; }
 

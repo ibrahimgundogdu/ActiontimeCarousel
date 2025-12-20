@@ -57,14 +57,14 @@ namespace Actiontime.Services
 		{
             var location = _db.OurLocations.FirstOrDefault();
 
-			return _db.EmployeeSchedules.FirstOrDefault(x => x.EmployeeId == employeeId && x.ScheduleDate == date && x.LocationId == location.Id);
+			return _db.EmployeeSchedules.FirstOrDefault(x => x.EmployeeId == employeeId && x.ScheduleDate == DateOnly.FromDateTime(date) && x.LocationId == location.Id);
 		}
 
 		public List<EmployeeSchedule>? GetEmployeeSchedules(DateTime date, int employeeId)
 		{
             var location = _db.OurLocations.FirstOrDefault();
 
-			var schedule = _db.EmployeeSchedules.FirstOrDefault(x => x.EmployeeId == employeeId && x.ScheduleDate == date && x.LocationId == location.Id);
+			var schedule = _db.EmployeeSchedules.FirstOrDefault(x => x.EmployeeId == employeeId && x.ScheduleDate == DateOnly.FromDateTime(date) && x.LocationId == location.Id);
 
 			return _db.EmployeeSchedules.Where(x => x.EmployeeId == employeeId && x.ScheduleWeek == schedule.ScheduleWeek && x.LocationId == location.Id).ToList();
 		}
@@ -370,7 +370,7 @@ namespace Actiontime.Services
 			WebSocketService webSocketService = new WebSocketService();
 
 			var dateKey = DateTime.Now;
-			var date = dateKey.Date;
+			var date = DateOnly.FromDateTime(dateKey.Date);
 			var location = _db.OurLocations.FirstOrDefault();
 
 			dateKey = location.LocalDateTime ?? dateKey;
@@ -551,7 +551,7 @@ namespace Actiontime.Services
 			WebSocketService webSocketService = new WebSocketService();
 
 			var dateKey = DateTime.Now;//.AddHours(-10);
-			var date = dateKey.Date;
+			var date = DateOnly.FromDateTime(dateKey.Date);
 			var location = _db.OurLocations.FirstOrDefault();
 			dateKey = location.LocalDateTime ?? dateKey;
 			date = location.LocalDate ?? date;

@@ -17,7 +17,7 @@ public partial class CashDocument
 
     public string? Currency { get; set; }
 
-    public DateTime? DocumentDate { get; set; }
+    public DateOnly? DocumentDate { get; set; }
 
     public string? Description { get; set; }
 

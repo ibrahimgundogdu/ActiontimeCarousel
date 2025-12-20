@@ -36,4 +36,6 @@ public partial class ProductPrice
     public string? CategoryName { get; set; }
 
     public string? PriceCategoryName { get; set; }
+
+    public DateTime UpdateDate { get; set; }
 }

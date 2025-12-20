@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Actiontime.Data")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7d3c83b7aade7ede65e1c6d7f77759ac1c9fa667")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f5c3511015a9f576ef63910432b33befaa98149f")]
 [assembly: System.Reflection.AssemblyProductAttribute("Actiontime.Data")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Actiontime.Data")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -15,13 +15,13 @@ public partial class CashAction
 
     public int? CashActionTypeId { get; set; }
 
-    public DateTime? ActionDate { get; set; }
+    public DateOnly? ActionDate { get; set; }
 
     public string? ProcessName { get; set; }
 
     public long? ProcessId { get; set; }
 
-    public DateTime? ProcessDate { get; set; }
+    public DateOnly? ProcessDate { get; set; }
 
     public string? DocumentNumber { get; set; }
 

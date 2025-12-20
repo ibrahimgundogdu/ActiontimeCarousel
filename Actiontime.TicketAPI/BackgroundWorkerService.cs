@@ -6,6 +6,7 @@ using MQTTnet.Protocol;
 using Newtonsoft.Json;
 using System.Buffers;
 using System.Text;
+using System.Threading;
 
 namespace Actiontime.TicketAPI
 {
@@ -18,6 +19,8 @@ namespace Actiontime.TicketAPI
         private readonly MqttClientFactory _mqttFactory;
         private readonly IMqttClient _mqttClient;
         private MqttClientOptions _mqttClientOptions = default!;
+        private readonly SemaphoreSlim _connectLock = new(1, 1);
+        private readonly string _clientId;
 
         // İstersen config’e taşı
         private readonly string[] _topics = new[]
@@ -41,6 +44,9 @@ namespace Actiontime.TicketAPI
             _mqttFactory = new MqttClientFactory();
             _mqttClient = _mqttFactory.CreateMqttClient();
 
+            // make client id stable & reasonably unique per process
+            _clientId = $"{Environment.MachineName}-{Environment.ProcessId}";
+
             // Event handler’ları burada bağlamak OK (async iş yapma yok)
             _mqttClient.ConnectedAsync += OnConnected;
             _mqttClient.DisconnectedAsync += OnDisconnected;
@@ -58,12 +64,14 @@ namespace Actiontime.TicketAPI
             if (!string.IsNullOrEmpty(portText) && int.TryParse(portText, out var p))
                 port = p;
 
+            // KeepAlive ve persistent session kullanımı eklendi.
             _mqttClientOptions = new MqttClientOptionsBuilder()
-                .WithClientId(Environment.MachineName)
+                .WithClientId(_clientId)
                 .WithTcpServer(host, port)
                 .WithCredentials("hezarfen", "n4q4n6O0")
                 .WithProtocolVersion(MqttProtocolVersion.V311)
-                .WithCleanSession()
+                .WithCleanSession(false) // session persist, broker subscriptions saklayabilir
+                .WithKeepAlivePeriod(TimeSpan.FromSeconds(60)) // broker ile uyumlu bir keep-alive
                 .Build();
         }
 
@@ -71,7 +79,8 @@ namespace Actiontime.TicketAPI
         {
             _logger.LogInformation("MQTT connected.");
 
-            // Reconnect olunca otomatik tekrar subscribe
+            // Eğer broker persistent session destekliyorsa subscribe gerekmeyebilir;
+            // yine de ilk bağlantıda subscribe etmek zararlı değil.
             var subscribeOptions = _mqttFactory
                 .CreateSubscribeOptionsBuilder()
                 .WithTopicFilter(f => f.WithTopic("DeviceInfo"))
@@ -87,6 +96,7 @@ namespace Actiontime.TicketAPI
                 _logger.LogInformation("Subscribed to MQTT topics.");
 
                 // İlk bağlantıda “ben bağlandım” mesajı
+                // Gönderim sırasında yeniden connect denemelerini engellemek için PublishConnect logic düzenlendi
                 await SendMessageAsync(
                     "ConnectionInfo",
                     $"{Environment.MachineName} Bilgisayarı Bağlandı",
@@ -101,7 +111,8 @@ namespace Actiontime.TicketAPI
 
         private Task OnDisconnected(MqttClientDisconnectedEventArgs args)
         {
-            _logger.LogWarning("MQTT disconnected. Reason: {Reason}", args.Reason);
+            // Daha ayrıntılı log: broker tarafından bağlantı kesildiyse Exception veya Reason içeriğine bakın
+            _logger.LogWarning("MQTT disconnected. Reason: {Reason} Exception: {Exception}", args.Reason, args.Exception?.Message);
             // Reconnect’i ExecuteAsync döngüsü yönetecek.
             return Task.CompletedTask;
         }
@@ -151,7 +162,17 @@ namespace Actiontime.TicketAPI
                     if (!_mqttClient.IsConnected)
                     {
                         _logger.LogInformation("Connecting to MQTT...");
-                        await _mqttClient.ConnectAsync(_mqttClientOptions, stoppingToken);
+                        // Connect çağrılarını seri hale getiriyoruz
+                        await _connectLock.WaitAsync(stoppingToken);
+                        try
+                        {
+                            if (!_mqttClient.IsConnected)
+                                await _mqttClient.ConnectAsync(_mqttClientOptions, stoppingToken);
+                        }
+                        finally
+                        {
+                            _connectLock.Release();
+                        }
 
                         // ConnectedAsync event’i subscribe + connection info işini halledecek.
                         retryDelay = TimeSpan.FromSeconds(2);
@@ -258,7 +279,16 @@ namespace Actiontime.TicketAPI
             {
                 try
                 {
-                    await _mqttClient.ConnectAsync(_mqttClientOptions, cancellation);
+                    await _connectLock.WaitAsync(cancellation);
+                    try
+                    {
+                        if (!_mqttClient.IsConnected)
+                            await _mqttClient.ConnectAsync(_mqttClientOptions, cancellation);
+                    }
+                    finally
+                    {
+                        _connectLock.Release();
+                    }
                 }
                 catch (Exception ex)
                 {

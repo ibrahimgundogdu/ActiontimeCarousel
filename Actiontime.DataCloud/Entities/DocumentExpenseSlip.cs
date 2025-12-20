@@ -11,7 +11,7 @@ public partial class DocumentExpenseSlip
 
     public int? LocationId { get; set; }
 
-    public DateTime? DocumentDate { get; set; }
+    public DateOnly? DocumentDate { get; set; }
 
     public string? DocumentNumber { get; set; }
 

@@ -7,6 +7,9 @@ namespace Actiontime.Data.Context;
 
 public partial class ApplicationDbContext : DbContext
 {
+    public ApplicationDbContext()
+    {
+    }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -72,6 +75,8 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<MqttTicketLog> MqttTicketLogs { get; set; }
 
     public virtual DbSet<Order> Orders { get; set; }
+
+    public virtual DbSet<OrderBasket> OrderBaskets { get; set; }
 
     public virtual DbSet<OrderPosPayment> OrderPosPayments { get; set; }
 
@@ -139,7 +144,7 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<VtripConfirm> VtripConfirms { get; set; }
 
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("Turkish_CI_AS");
@@ -167,7 +172,6 @@ public partial class ApplicationDbContext : DbContext
         modelBuilder.Entity<BankAction>(entity =>
         {
             entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.ActionDate).HasColumnType("date");
             entity.Property(e => e.Amount).HasComputedColumnSql("([Collection]-[Payment])", false);
             entity.Property(e => e.BankActionTypeId).HasColumnName("BankActionTypeID");
             entity.Property(e => e.BankId).HasColumnName("BankID");
@@ -208,11 +212,11 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Date).HasColumnType("datetime");
             entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
             entity.Property(e => e.LocationId).HasColumnName("LocationID");
-            entity.Property(e => e.MasterPrice).HasDefaultValueSql("((0))");
+            entity.Property(e => e.MasterPrice).HasDefaultValue(0.0);
             entity.Property(e => e.PriceCategoryId).HasColumnName("PriceCategoryID");
             entity.Property(e => e.PriceId).HasColumnName("PriceID");
             entity.Property(e => e.ProductId).HasColumnName("ProductID");
-            entity.Property(e => e.PromoPrice).HasDefaultValueSql("((0))");
+            entity.Property(e => e.PromoPrice).HasDefaultValue(0.0);
             entity.Property(e => e.PromotionId).HasColumnName("PromotionID");
             entity.Property(e => e.RecordDate).HasColumnType("datetime");
             entity.Property(e => e.RecordEmployeeId).HasColumnName("RecordEmployeeID");
@@ -240,17 +244,16 @@ public partial class ApplicationDbContext : DbContext
         modelBuilder.Entity<CashAction>(entity =>
         {
             entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.ActionDate).HasColumnType("date");
             entity.Property(e => e.Amount).HasComputedColumnSql("([Collection]-[Payment])", false);
             entity.Property(e => e.CashActionTypeId).HasColumnName("CashActionTypeID");
             entity.Property(e => e.CashId).HasColumnName("CashID");
-            entity.Property(e => e.Collection).HasDefaultValueSql("((0))");
+            entity.Property(e => e.Collection).HasDefaultValue(0.0);
             entity.Property(e => e.Currency).HasMaxLength(4);
             entity.Property(e => e.LocationId).HasColumnName("LocationID");
             entity.Property(e => e.OrderId)
-                .HasDefaultValueSql("((0))")
+                .HasDefaultValue(0)
                 .HasColumnName("OrderID");
-            entity.Property(e => e.Payment).HasDefaultValueSql("((0))");
+            entity.Property(e => e.Payment).HasDefaultValue(0.0);
             entity.Property(e => e.ProcessId).HasColumnName("ProcessID");
             entity.Property(e => e.ProcessUid).HasColumnName("ProcessUID");
             entity.Property(e => e.RecordDate).HasColumnType("datetime");
@@ -265,7 +268,7 @@ public partial class ApplicationDbContext : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("ID");
             entity.Property(e => e.Code).HasMaxLength(20);
-            entity.Property(e => e.IsMobile).HasDefaultValueSql("(CONVERT([bit],(0)))");
+            entity.Property(e => e.IsMobile).HasDefaultValue(false);
             entity.Property(e => e.MobileTag).HasMaxLength(50);
             entity.Property(e => e.Module).HasMaxLength(10);
             entity.Property(e => e.Name).HasMaxLength(50);
@@ -281,7 +284,6 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.CashActionTypeId).HasColumnName("CashActionTypeID");
             entity.Property(e => e.Currency).HasMaxLength(4);
             entity.Property(e => e.Description).HasMaxLength(500);
-            entity.Property(e => e.DocumentDate).HasColumnType("date");
             entity.Property(e => e.LocationId).HasColumnName("LocationID");
             entity.Property(e => e.PayMethodId).HasColumnName("PayMethodID");
             entity.Property(e => e.PhotoFile).HasMaxLength(80);
@@ -308,7 +310,6 @@ public partial class ApplicationDbContext : DbContext
 
             entity.ToTable("DatePeriod");
 
-            entity.Property(e => e.Date).HasColumnType("date");
             entity.Property(e => e.Day).HasComputedColumnSql("(datepart(day,[Date]))", false);
             entity.Property(e => e.DayName).HasMaxLength(50);
             entity.Property(e => e.Description).HasMaxLength(80);
@@ -332,7 +333,6 @@ public partial class ApplicationDbContext : DbContext
             entity.ToTable("DayResult");
 
             entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.Date).HasColumnType("date");
             entity.Property(e => e.Description).HasMaxLength(1000);
             entity.Property(e => e.EnvironmentId).HasColumnName("EnvironmentID");
             entity.Property(e => e.LocationId).HasColumnName("LocationID");
@@ -368,7 +368,6 @@ public partial class ApplicationDbContext : DbContext
             entity.ToTable("DocumentNumber");
 
             entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.Date).HasColumnType("date");
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.Prefix).HasMaxLength(2);
         });
@@ -428,7 +427,6 @@ public partial class ApplicationDbContext : DbContext
             entity.ToTable("EmployeeBreak");
 
             entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.BreakDate).HasColumnType("date");
             entity.Property(e => e.BreakDuration)
                 .HasPrecision(0)
                 .HasComputedColumnSql("(CONVERT([time](0),[BreakEnd]-[BreakStart]))", false);
@@ -458,9 +456,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.DurationMinute).HasComputedColumnSql("(datediff(minute,[ShiftStart],[ShiftEnd]))", false);
             entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
             entity.Property(e => e.LocationId).HasColumnName("LocationID");
-            entity.Property(e => e.ScheduleDate)
-                .HasComputedColumnSql("(CONVERT([date],[ShiftStart]))", false)
-                .HasColumnType("date");
+            entity.Property(e => e.ScheduleDate).HasComputedColumnSql("(CONVERT([date],[ShiftStart]))", false);
             entity.Property(e => e.ScheduleWeek).HasMaxLength(9);
             entity.Property(e => e.ShiftDuration)
                 .HasPrecision(0)
@@ -486,7 +482,6 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.LocationId).HasColumnName("LocationID");
             entity.Property(e => e.RecordDate).HasColumnType("datetime");
             entity.Property(e => e.RecordEmployeeId).HasColumnName("RecordEmployeeID");
-            entity.Property(e => e.ShiftDate).HasColumnType("date");
             entity.Property(e => e.ShiftDuration)
                 .HasPrecision(0)
                 .HasComputedColumnSql("(CONVERT([time](0),[ShiftEnd]-[ShiftStart]))", false);
@@ -506,7 +501,6 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.LocationId).HasColumnName("LocationID");
             entity.Property(e => e.InspectionTypeId).HasColumnName("InspectionTypeID");
             entity.Property(e => e.InspectorId).HasColumnName("InspectorID");
-            entity.Property(e => e.InspectionDate).HasColumnType("date");
             entity.Property(e => e.DateBegin).HasColumnType("datetime");
             entity.Property(e => e.DateEnd).HasColumnType("datetime");
             entity.Property(e => e.Id)
@@ -545,7 +539,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.EstimatedAnswer).HasMaxLength(20);
             entity.Property(e => e.InspectionCatId).HasColumnName("InspectionCatID");
             entity.Property(e => e.InspectionTypeId).HasColumnName("InspectionTypeID");
-            entity.Property(e => e.IsPart).HasDefaultValueSql("((0))");
+            entity.Property(e => e.IsPart).HasDefaultValue(false);
             entity.Property(e => e.ItemName).HasMaxLength(250);
             entity.Property(e => e.ItemNameTr)
                 .HasMaxLength(250)
@@ -605,9 +599,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Currency).HasMaxLength(20);
             entity.Property(e => e.Description).HasMaxLength(500);
             entity.Property(e => e.Latitude).HasMaxLength(20);
-            entity.Property(e => e.LocalDate)
-                .HasComputedColumnSql("(CONVERT([date],dateadd(hour,[Timezone],getutcdate())))", false)
-                .HasColumnType("date");
+            entity.Property(e => e.LocalDate).HasComputedColumnSql("(CONVERT([date],dateadd(hour,[Timezone],getutcdate())))", false);
             entity.Property(e => e.LocalDateTime)
                 .HasComputedColumnSql("(dateadd(hour,[Timezone],getutcdate()))", false)
                 .HasColumnType("datetime");
@@ -639,8 +631,6 @@ public partial class ApplicationDbContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Currency).HasMaxLength(4);
-            entity.Property(e => e.DateFinish).HasColumnType("date");
-            entity.Property(e => e.DateStart).HasColumnType("date");
             entity.Property(e => e.Description).HasMaxLength(50);
             entity.Property(e => e.LocationId).HasColumnName("LocationID");
             entity.Property(e => e.TypeId).HasColumnName("TypeID");
@@ -672,9 +662,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.DurationMinute).HasComputedColumnSql("(datediff(minute,[ScheduleStart],[ScheduleEnd]))", false);
             entity.Property(e => e.LocationId).HasColumnName("LocationID");
-            entity.Property(e => e.ScheduleDate)
-                .HasComputedColumnSql("(CONVERT([date],[ScheduleStart]))", false)
-                .HasColumnType("date");
+            entity.Property(e => e.ScheduleDate).HasComputedColumnSql("(CONVERT([date],[ScheduleStart]))", false);
             entity.Property(e => e.ScheduleDuration)
                 .HasPrecision(0)
                 .HasComputedColumnSql("(CONVERT([time](0),[ScheduleEnd]-[ScheduleStart]))", false);
@@ -684,7 +672,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Uid)
                 .HasDefaultValueSql("(newid())")
                 .HasColumnName("UID");
-            entity.Property(e => e.UnitPriceMultiplier).HasDefaultValueSql("((1))");
+            entity.Property(e => e.UnitPriceMultiplier).HasDefaultValue(1.0);
         });
 
         modelBuilder.Entity<LocationShift>(entity =>
@@ -704,7 +692,6 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.LocationId).HasColumnName("LocationID");
             entity.Property(e => e.RecordDate).HasColumnType("datetime");
             entity.Property(e => e.RecordEmployeeId).HasColumnName("RecordEmployeeID");
-            entity.Property(e => e.ShiftDate).HasColumnType("date");
             entity.Property(e => e.ShiftDuration)
                 .HasPrecision(0)
                 .HasComputedColumnSql("(CONVERT([time](0),[ShiftFinish]-[ShiftStart]))", false);
@@ -739,7 +726,6 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.CardReaderId).HasColumnName("CardReaderID");
             entity.Property(e => e.Currency).HasMaxLength(4);
             entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
-            entity.Property(e => e.Date).HasColumnType("date");
             entity.Property(e => e.Description).HasMaxLength(250);
             entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
             entity.Property(e => e.EnvironmentId).HasColumnName("EnvironmentID");
@@ -748,25 +734,25 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.OrderNumber).HasMaxLength(40);
             entity.Property(e => e.OrderStatusId).HasColumnName("OrderStatusID");
             entity.Property(e => e.OrderTypeId)
-                .HasDefaultValueSql("((1))")
+                .HasDefaultValue((short)1)
                 .HasColumnName("OrderTypeID");
             entity.Property(e => e.OurCompanyId).HasColumnName("OurCompanyID");
             entity.Property(e => e.PartnerId).HasColumnName("PartnerID");
             entity.Property(e => e.PartnerUserId).HasColumnName("PartnerUserID");
             entity.Property(e => e.PaymentTerminalId).HasColumnName("PaymentTerminalID");
             entity.Property(e => e.PosStatusId)
-                .HasDefaultValueSql("((0))")
+                .HasDefaultValue((short)0)
                 .HasColumnName("PosStatusID");
             entity.Property(e => e.PosTerminalId).HasColumnName("PosTerminalID");
             entity.Property(e => e.PriceCategoryId).HasColumnName("PriceCategoryID");
-            entity.Property(e => e.PrintCount).HasDefaultValueSql("((0))");
+            entity.Property(e => e.PrintCount).HasDefaultValue(0);
             entity.Property(e => e.ReasonId)
                 .HasComment("iptal veya iade durumlarında durum kodu seçmek için")
                 .HasColumnName("ReasonID");
             entity.Property(e => e.ReceiptNumber).HasMaxLength(10);
             entity.Property(e => e.RecordDate).HasColumnType("datetime");
             entity.Property(e => e.SaleChannelD).HasComment("1 location on app, 2 office, 3 diğer");
-            entity.Property(e => e.SendPaymentTerminal).HasDefaultValueSql("(CONVERT([bit],(0)))");
+            entity.Property(e => e.SendPaymentTerminal).HasDefaultValue(false);
             entity.Property(e => e.SyncDate).HasColumnType("datetime");
             entity.Property(e => e.TourGroupId).HasColumnName("TourGroupID");
             entity.Property(e => e.Uid)
@@ -774,6 +760,24 @@ public partial class ApplicationDbContext : DbContext
                 .HasColumnName("UID");
             entity.Property(e => e.UpdateDate).HasColumnType("datetime");
             entity.Property(e => e.UpdateEmployeeId).HasColumnName("UpdateEmployeeID");
+        });
+
+        modelBuilder.Entity<OrderBasket>(entity =>
+        {
+            entity.ToTable("OrderBasket");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Currency).HasMaxLength(4);
+            entity.Property(e => e.Date).HasColumnType("datetime");
+            entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
+            entity.Property(e => e.LocationId).HasColumnName("LocationID");
+            entity.Property(e => e.OrderId).HasColumnName("OrderID");
+            entity.Property(e => e.PriceCategoryId).HasColumnName("PriceCategoryID");
+            entity.Property(e => e.PriceId).HasColumnName("PriceID");
+            entity.Property(e => e.ProductId).HasColumnName("ProductID");
+            entity.Property(e => e.PromotionId).HasColumnName("PromotionID");
+            entity.Property(e => e.RecordDate).HasColumnType("datetime");
+            entity.Property(e => e.RecordEmployeeId).HasColumnName("RecordEmployeeID");
         });
 
         modelBuilder.Entity<OrderPosPayment>(entity =>
@@ -788,7 +792,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.AuthorizationCode).HasMaxLength(20);
             entity.Property(e => e.BatchNumber).HasMaxLength(20);
             entity.Property(e => e.DocumentNumber).HasMaxLength(40);
-            entity.Property(e => e.FromPosTerminal).HasDefaultValueSql("(CONVERT([bit],(1)))");
+            entity.Property(e => e.FromPosTerminal).HasDefaultValue(true);
             entity.Property(e => e.Id)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("ID");
@@ -833,9 +837,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Amount).HasComputedColumnSql("(([Quantity]*(([Price]-[Discount])+[ExtraPrice]))/((1)+[TaxRate]/(100)))", false);
             entity.Property(e => e.Currency).HasMaxLength(4);
             entity.Property(e => e.Date).HasColumnType("datetime");
-            entity.Property(e => e.DateKey)
-                .HasComputedColumnSql("(CONVERT([date],[Date]))", false)
-                .HasColumnType("date");
+            entity.Property(e => e.DateKey).HasComputedColumnSql("(CONVERT([date],[Date]))", false);
             entity.Property(e => e.DeviceId)
                 .HasMaxLength(50)
                 .HasColumnName("DeviceID");
@@ -843,18 +845,18 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.LocationId).HasColumnName("LocationID");
             entity.Property(e => e.OrderId).HasColumnName("OrderID");
             entity.Property(e => e.PaymethodId).HasColumnName("PaymethodID");
-            entity.Property(e => e.PrePaid).HasDefaultValueSql("((0))");
+            entity.Property(e => e.PrePaid).HasDefaultValue(0.0);
             entity.Property(e => e.PriceCategoryId).HasColumnName("PriceCategoryID");
             entity.Property(e => e.PriceId).HasColumnName("PriceID");
             entity.Property(e => e.ProductId).HasColumnName("ProductID");
             entity.Property(e => e.PromotionId).HasColumnName("PromotionID");
             entity.Property(e => e.QrreaderId).HasColumnName("QRReaderID");
-            entity.Property(e => e.Quantity).HasDefaultValueSql("((1))");
+            entity.Property(e => e.Quantity).HasDefaultValue(1);
             entity.Property(e => e.RecordDate).HasColumnType("datetime");
             entity.Property(e => e.RecordEmployeeId).HasColumnName("RecordEmployeeID");
             entity.Property(e => e.RowStatusId).HasColumnName("RowStatusID");
             entity.Property(e => e.SyncDate).HasColumnType("datetime");
-            entity.Property(e => e.TaxRate).HasDefaultValueSql("((8))");
+            entity.Property(e => e.TaxRate).HasDefaultValue(8.0);
             entity.Property(e => e.TicketNumber).HasMaxLength(50);
             entity.Property(e => e.TicketTripId).HasColumnName("TicketTripID");
             entity.Property(e => e.TicketTypeId).HasColumnName("TicketTypeID");
@@ -936,9 +938,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.CountryId).HasColumnName("CountryID");
             entity.Property(e => e.Currency).HasMaxLength(20);
             entity.Property(e => e.Description).HasMaxLength(500);
-            entity.Property(e => e.LocalDate)
-                .HasComputedColumnSql("(CONVERT([date],dateadd(hour,[Timezone],getutcdate())))", false)
-                .HasColumnType("date");
+            entity.Property(e => e.LocalDate).HasComputedColumnSql("(CONVERT([date],dateadd(hour,[Timezone],getutcdate())))", false);
             entity.Property(e => e.LocalDateTime)
                 .HasComputedColumnSql("(dateadd(hour,[Timezone],getutcdate()))", false)
                 .HasColumnType("datetime");
@@ -1059,6 +1059,9 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.PriceCategoryName).HasMaxLength(50);
             entity.Property(e => e.ProductId).HasColumnName("ProductID");
             entity.Property(e => e.ProductName).HasMaxLength(150);
+            entity.Property(e => e.UpdateDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
         });
 
         modelBuilder.Entity<Qrreader>(entity =>
@@ -1177,7 +1180,6 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.RecordEmployeeId).HasColumnName("RecordEmployeeID");
             entity.Property(e => e.TicketNumber).HasMaxLength(50);
             entity.Property(e => e.TripCancel).HasColumnType("datetime");
-            entity.Property(e => e.TripDate).HasColumnType("date");
             entity.Property(e => e.TripDuration)
                 .HasPrecision(0)
                 .HasComputedColumnSql("(CONVERT([time](0),[TripEnd]-[TripStart]))", false);
@@ -1227,7 +1229,6 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.SaleOrderRowId).HasColumnName("SaleOrderRowID");
             entity.Property(e => e.TicketNumber).HasMaxLength(50);
             entity.Property(e => e.TripCancel).HasColumnType("datetime");
-            entity.Property(e => e.TripDate).HasColumnType("date");
             entity.Property(e => e.TripDuration).HasPrecision(0);
             entity.Property(e => e.TripEnd).HasColumnType("datetime");
             entity.Property(e => e.TripId).HasColumnName("TripID");
@@ -1243,7 +1244,6 @@ public partial class ApplicationDbContext : DbContext
                 .HasNoKey()
                 .ToView("VActions");
 
-            entity.Property(e => e.ActionDate).HasColumnType("date");
             entity.Property(e => e.ActionTypeId).HasColumnName("ActionTypeID");
             entity.Property(e => e.Currency).HasMaxLength(4);
             entity.Property(e => e.Id).HasColumnName("ID");
@@ -1265,7 +1265,6 @@ public partial class ApplicationDbContext : DbContext
                 .HasNoKey()
                 .ToView("VBankActions");
 
-            entity.Property(e => e.ActionDate).HasColumnType("date");
             entity.Property(e => e.BankActionTypeId).HasColumnName("BankActionTypeID");
             entity.Property(e => e.BankId).HasColumnName("BankID");
             entity.Property(e => e.BankName).HasMaxLength(80);
@@ -1286,7 +1285,6 @@ public partial class ApplicationDbContext : DbContext
                 .HasNoKey()
                 .ToView("VCashActions");
 
-            entity.Property(e => e.ActionDate).HasColumnType("date");
             entity.Property(e => e.CashActionTypeId).HasColumnName("CashActionTypeID");
             entity.Property(e => e.CashId).HasColumnName("CashID");
             entity.Property(e => e.CashName).HasMaxLength(50);
@@ -1352,7 +1350,6 @@ public partial class ApplicationDbContext : DbContext
                 .HasNoKey()
                 .ToView("VOrder");
 
-            entity.Property(e => e.Date).HasColumnType("date");
             entity.Property(e => e.EmployeeFullName).HasMaxLength(150);
             entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
             entity.Property(e => e.Id).HasColumnName("ID");
@@ -1375,7 +1372,6 @@ public partial class ApplicationDbContext : DbContext
 
             entity.Property(e => e.Amount).HasColumnType("decimal(8, 2)");
             entity.Property(e => e.Date).HasColumnType("datetime");
-            entity.Property(e => e.DateKey).HasColumnType("date");
             entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.LocationId).HasColumnName("LocationID");
@@ -1399,7 +1395,6 @@ public partial class ApplicationDbContext : DbContext
                 .HasNoKey()
                 .ToView("VOrderRowSummary");
 
-            entity.Property(e => e.DateKey).HasColumnType("date");
             entity.Property(e => e.LocationId).HasColumnName("LocationID");
             entity.Property(e => e.MethodName).HasMaxLength(50);
             entity.Property(e => e.Price).HasColumnType("decimal(8, 2)");
@@ -1425,7 +1420,6 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.RecordEmployeeId).HasColumnName("RecordEmployeeID");
             entity.Property(e => e.TicketNumber).HasMaxLength(50);
             entity.Property(e => e.TripCancel).HasColumnType("datetime");
-            entity.Property(e => e.TripDate).HasColumnType("date");
             entity.Property(e => e.TripDuration).HasPrecision(0);
             entity.Property(e => e.TripEnd).HasColumnType("datetime");
             entity.Property(e => e.TripStart).HasColumnType("datetime");

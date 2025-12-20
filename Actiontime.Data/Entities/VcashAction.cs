@@ -13,7 +13,7 @@ public partial class VcashAction
 
     public int? CashActionTypeId { get; set; }
 
-    public DateTime? ActionDate { get; set; }
+    public DateOnly? ActionDate { get; set; }
 
     public int? OrderId { get; set; }
 

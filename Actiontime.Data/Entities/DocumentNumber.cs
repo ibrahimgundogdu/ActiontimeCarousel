@@ -13,5 +13,5 @@ public partial class DocumentNumber
 
     public long? Counter { get; set; }
 
-    public DateTime? Date { get; set; }
+    public DateOnly? Date { get; set; }
 }

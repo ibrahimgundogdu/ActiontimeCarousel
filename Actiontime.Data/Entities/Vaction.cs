@@ -15,7 +15,7 @@ public partial class Vaction
 
     public int? ActionTypeId { get; set; }
 
-    public DateTime? ActionDate { get; set; }
+    public DateOnly? ActionDate { get; set; }
 
     public int? ProcessId { get; set; }
 

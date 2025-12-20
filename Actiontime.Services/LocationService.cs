@@ -83,14 +83,14 @@ namespace Actiontime.Services
         {
             var location = _db.OurLocations.FirstOrDefault();
 
-            return _db.LocationSchedules.FirstOrDefault(x => x.ScheduleDate == date && x.LocationId == location.Id);
+            return _db.LocationSchedules.FirstOrDefault(x => x.ScheduleDate == DateOnly.FromDateTime(date) && x.LocationId == location.Id);
         }
 
         public List<LocationSchedule>? GetLocationSchedules(DateTime date)
         {
             var location = _db.OurLocations.FirstOrDefault();
 
-            var schedule = _db.LocationSchedules.FirstOrDefault(x => x.ScheduleDate == date && x.LocationId == location.Id);
+            var schedule = _db.LocationSchedules.FirstOrDefault(x => x.ScheduleDate == DateOnly.FromDateTime(date) && x.LocationId == location.Id);
 
             return _db.LocationSchedules.Where(x => x.ScheduleWeek == schedule.ScheduleWeek && x.LocationId == location.Id).ToList();
         }
@@ -157,7 +157,7 @@ namespace Actiontime.Services
             string result = string.Empty;
 
             var dateKey = DateTime.Now;
-            var date = dateKey.Date;
+            var date = DateOnly.FromDateTime(dateKey.Date);
             var location = _db.OurLocations.FirstOrDefault();
 
             dateKey = location.LocalDateTime ?? dateKey;
@@ -375,7 +375,7 @@ namespace Actiontime.Services
             }
 
             inspectionModel.Id = inspection.Id;
-            inspectionModel.InspectionDate = inspection.InspectionDate;
+            inspectionModel.InspectionDate = location.LocalDateTime.Value; //inspection.InspectionDate;
             inspectionModel.LocationName = location.LocationName;
             inspectionModel.Inspector = employee.FullName;
             inspectionModel.StartDate = inspection.DateBegin;
@@ -537,7 +537,7 @@ namespace Actiontime.Services
 
             model.Id = inspection.Id;
             model.PartId = partId;
-            model.InspectionDate = inspection.InspectionDate;
+            model.InspectionDate = location.LocalDateTime.Value; //inspection.InspectionDate;
             model.LocationName = location.LocationName;
             model.Inspector = employee.FullName;
             model.StartDate = inspection.DateBegin;

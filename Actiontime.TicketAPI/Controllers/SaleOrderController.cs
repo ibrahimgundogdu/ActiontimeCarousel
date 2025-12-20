@@ -93,6 +93,13 @@ namespace Actiontime.TicketAPI.Controllers
         }
 
         [HttpGet()]
+        public List<OrderBasket>? GetOrderBasket(int id)
+        {
+            return _orderService.GetOrderBasket(id);
+        }
+
+
+        [HttpGet()]
         public bool? CancelOrder(int id, int employeeId)
         {
             return _orderService.CancelOrder(id, employeeId);

@@ -13,11 +13,11 @@ public partial class LocationShift
 
     public int? EmployeeIdfinish { get; set; }
 
-    public DateTime ShiftDate { get; set; }
+    public DateOnly ShiftDate { get; set; }
 
-    public TimeSpan? ShiftStart { get; set; }
+    public TimeOnly? ShiftStart { get; set; }
 
-    public TimeSpan? ShiftFinish { get; set; }
+    public TimeOnly? ShiftFinish { get; set; }
 
     public DateTime? ShiftDateStart { get; set; }
 
@@ -51,7 +51,7 @@ public partial class LocationShift
 
     public int? CloseEnvironmentId { get; set; }
 
-    public TimeSpan? ShiftDuration { get; set; }
+    public TimeOnly? ShiftDuration { get; set; }
 
     public Guid? Uid { get; set; }
 }

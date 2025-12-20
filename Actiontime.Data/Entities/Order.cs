@@ -13,7 +13,7 @@ public partial class Order
 
     public short OrderTypeId { get; set; }
 
-    public DateTime Date { get; set; }
+    public DateOnly Date { get; set; }
 
     public short OurCompanyId { get; set; }
 

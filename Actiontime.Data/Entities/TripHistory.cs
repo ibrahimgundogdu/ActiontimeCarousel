@@ -21,7 +21,7 @@ public partial class TripHistory
 
     public int? PartId { get; set; }
 
-    public DateTime? TripDate { get; set; }
+    public DateOnly? TripDate { get; set; }
 
     public DateTime? TripStart { get; set; }
 
@@ -31,7 +31,7 @@ public partial class TripHistory
 
     public int? UnitDuration { get; set; }
 
-    public TimeSpan? TripDuration { get; set; }
+    public TimeOnly? TripDuration { get; set; }
 
     public int? TripDurationSecond { get; set; }
 

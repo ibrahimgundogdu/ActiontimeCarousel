@@ -9,9 +9,9 @@ public partial class LocationParameter
 
     public int LocationId { get; set; }
 
-    public DateTime? DateStart { get; set; }
+    public DateOnly? DateStart { get; set; }
 
-    public DateTime? DateFinish { get; set; }
+    public DateOnly? DateFinish { get; set; }
 
     public int TypeId { get; set; }
 

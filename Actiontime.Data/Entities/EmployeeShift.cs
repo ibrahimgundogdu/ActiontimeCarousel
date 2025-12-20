@@ -11,7 +11,7 @@ public partial class EmployeeShift
 
     public int LocationId { get; set; }
 
-    public DateTime ShiftDate { get; set; }
+    public DateOnly ShiftDate { get; set; }
 
     public DateTime ShiftStart { get; set; }
 
@@ -19,7 +19,7 @@ public partial class EmployeeShift
 
     public string? Duration { get; set; }
 
-    public TimeSpan? ShiftDuration { get; set; }
+    public TimeOnly? ShiftDuration { get; set; }
 
     public int? DurationMinute { get; set; }
 

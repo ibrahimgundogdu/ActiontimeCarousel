@@ -19,11 +19,11 @@ public partial class EmployeeSchedule
 
     public DateTime? ShiftEnd { get; set; }
 
-    public DateTime? ScheduleDate { get; set; }
+    public DateOnly? ScheduleDate { get; set; }
 
     public int? DurationMinute { get; set; }
 
-    public TimeSpan? ShiftDuration { get; set; }
+    public TimeOnly? ShiftDuration { get; set; }
 
     public double? UnitPriceMultiplier { get; set; }
 

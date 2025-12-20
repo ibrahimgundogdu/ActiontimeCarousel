@@ -11,7 +11,7 @@ public partial class EmployeeBreak
 
     public int LocationId { get; set; }
 
-    public DateTime BreakDate { get; set; }
+    public DateOnly BreakDate { get; set; }
 
     public DateTime BreakStart { get; set; }
 
@@ -19,7 +19,7 @@ public partial class EmployeeBreak
 
     public string? Duration { get; set; }
 
-    public TimeSpan? BreakDuration { get; set; }
+    public TimeOnly? BreakDuration { get; set; }
 
     public int? DurationMinute { get; set; }
 

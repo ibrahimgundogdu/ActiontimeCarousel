@@ -9,7 +9,7 @@ public partial class VorderRowSummary
 
     public int? LocationId { get; set; }
 
-    public DateTime? DateKey { get; set; }
+    public DateOnly? DateKey { get; set; }
 
     public int? Quantity { get; set; }
 

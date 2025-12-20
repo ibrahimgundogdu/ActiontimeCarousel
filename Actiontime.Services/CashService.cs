@@ -39,6 +39,8 @@ namespace Actiontime.Services
         {
             var result = new AppResult() { Success = false, Message = string.Empty };
 
+            DateOnly docDate = DateOnly.FromDateTime(DocDate);
+
             var actionType = _db.CashActionTypes.FirstOrDefault(x => x.Id == DocType);
 
             if (actionType != null)
@@ -53,7 +55,7 @@ namespace Actiontime.Services
                     PayMethodId = 1, // cash
                     Amount = Amount,
                     Currency = location?.Currency,
-                    DocumentDate = DocDate,
+                    DocumentDate = docDate,
                     Description = Description,
                     PhotoFile = FileName,
                     RecordDate = location.LocalDateTime,
@@ -69,7 +71,7 @@ namespace Actiontime.Services
                     CashId = cash?.Id,
                     CashActionTypeId = actionType?.Id,
                     LocationId = location?.Id,
-                    ActionDate = DocDate,
+                    ActionDate = docDate,
                     ProcessId = document.Id,
                     Collection = 0,
                     Payment = Amount,
@@ -117,7 +119,7 @@ namespace Actiontime.Services
             DayResultModel model = new DayResultModel();
 
             var location = _db.OurLocations.FirstOrDefault();
-            DateTime date = location?.LocalDate ?? DateTime.Now.Date;
+            DateOnly date = location?.LocalDate ?? DateOnly.FromDateTime(DateTime.Now.Date);
 
             var cash = _db.Cashes.FirstOrDefault(x => x.CashTypeId == 1 && x.IsMaster == true && x.LocationId == location.Id);
 
@@ -304,7 +306,8 @@ namespace Actiontime.Services
             List<PosActionModel> model = new List<PosActionModel>();
 
             var location = _db.OurLocations.FirstOrDefault();
-            DateTime date = location?.LocalDate ?? DateTime.Now.Date;
+
+            DateOnly date = location?.LocalDate ?? DateOnly.FromDateTime(DateTime.Now.Date);
 
             var actions = _db.Vactions.Where(x => x.ActionDate == date && x.LocationId == location.Id).OrderByDescending(x=> x.RecordDate).ToList();
 

@@ -25,7 +25,7 @@ public partial class TicketTrip
 
     public string? PartNumber { get; set; }
 
-    public DateTime? TripDate { get; set; }
+    public DateOnly? TripDate { get; set; }
 
     public DateTime? TripStart { get; set; }
 
@@ -33,7 +33,7 @@ public partial class TicketTrip
 
     public DateTime? TripEnd { get; set; }
 
-    public TimeSpan? TripDuration { get; set; }
+    public TimeOnly? TripDuration { get; set; }
 
     public string? CustomerName { get; set; }
 

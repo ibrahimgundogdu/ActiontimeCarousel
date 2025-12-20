@@ -22,7 +22,7 @@ namespace Actiontime.WebApp.Controllers
 		public IActionResult Index()
 		{
 			SetupControlModel model = new SetupControlModel();
-			var currentDate = DateTime.Now.Date;
+			var currentDate = DateOnly.FromDateTime( DateTime.Now);
 
 			model.Location = _dbContext.OurLocations.FirstOrDefault();
 			if (model.Location != null)

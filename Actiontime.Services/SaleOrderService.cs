@@ -401,6 +401,11 @@ namespace Actiontime.Services
             return _db.VorderRows.Where(x => x.OrderId == orderId).ToList();
         }
 
+        public List<OrderBasket>? GetOrderBasket(int orderId)
+        {
+            return _db.OrderBaskets.Where(x => x.OrderId == orderId).ToList();
+        }
+
         public VOrderInfo? GetOrder(int orderId)
         {
             VOrderInfo vOrderInfo = new VOrderInfo();
@@ -822,9 +827,7 @@ namespace Actiontime.Services
                     ParameterName = "@EmployeeID",
                     SqlDbType = System.Data.SqlDbType.Int,
                     Value = employeeId
-
                 };
-
 
                 var sqlorder = "EXEC AddOrderAction @OrderID, @EmployeeID";
                 _db.Database.ExecuteSqlRaw(sqlorder, parameterOrderId, parameterEmployeeID);
@@ -943,7 +946,7 @@ namespace Actiontime.Services
                         cashrefund.CashId = cash.Id;
                         cashrefund.LocationId = cash.LocationId;
                         cashrefund.CashActionTypeId = 28;
-                        cashrefund.ActionDate = processDateTime;
+                        cashrefund.ActionDate = DateOnly.FromDateTime(processDateTime);
                         cashrefund.OrderId = order.Id;
                         cashrefund.ProcessId = refund.Id;
                         cashrefund.Collection = 0;
@@ -974,7 +977,7 @@ namespace Actiontime.Services
                         bankrefund.BankId = bank.Id;
                         bankrefund.LocationId = order.LocationId;
                         bankrefund.BankActionTypeId = 3;
-                        bankrefund.ActionDate = DateTime.Now;
+                        bankrefund.ActionDate = DateOnly.FromDateTime(DateTime.Now);
                         bankrefund.OrderId = order.Id;
                         bankrefund.ProcessId = refund.Id;
                         bankrefund.Collection = 0;

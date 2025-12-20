@@ -17,6 +17,8 @@ public partial class LocationPartTrip
 
     public int PartSort { get; set; }
 
+    public DateOnly? TripDate { get; set; }
+
     public DateTime TripStart { get; set; }
 
     public DateTime? TripEnd { get; set; }

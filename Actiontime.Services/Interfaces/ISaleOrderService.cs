@@ -18,6 +18,7 @@ namespace Actiontime.Services.Interfaces
         void AddPrintLog(int orderId);
         List<Vorder> GetOrders();
         List<VorderRow>? GetOrderRows(int orderId);
+        List<OrderBasket>? GetOrderBasket(int id);
         VOrderInfo? GetOrder(int orderId);
         OrderRefund GetOrderRefund(int orderId);
         AppResult OrderRefundCheck(int orderId);

@@ -13,7 +13,7 @@ public partial class Inspection
 
     public int InspectorId { get; set; }
 
-    public DateTime InspectionDate { get; set; }
+    public DateOnly InspectionDate { get; set; }
 
     public DateTime? DateBegin { get; set; }
 

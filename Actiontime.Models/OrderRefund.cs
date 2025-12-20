@@ -17,7 +17,7 @@ namespace Actiontime.Models
 
         public string OrderNumber { get; set; } = null!;
 
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
 
         public double TotalAmount { get; set; }
 

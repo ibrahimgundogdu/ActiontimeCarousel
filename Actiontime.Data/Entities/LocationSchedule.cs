@@ -17,11 +17,11 @@ public partial class LocationSchedule
 
     public DateTime? ScheduleEnd { get; set; }
 
-    public DateTime? ScheduleDate { get; set; }
+    public DateOnly? ScheduleDate { get; set; }
 
     public int? DurationMinute { get; set; }
 
-    public TimeSpan? ScheduleDuration { get; set; }
+    public TimeOnly? ScheduleDuration { get; set; }
 
     public double UnitPriceMultiplier { get; set; }
 
