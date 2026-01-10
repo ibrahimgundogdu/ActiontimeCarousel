@@ -7,6 +7,7 @@ using Actiontime.Models.SerializeModels;
 using Actiontime.Services.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +22,14 @@ namespace Actiontime.Services
         private ApplicationDbContext _db;
         private ApplicationCloudDbContext _cdb;
         private ICloudService _cloudService;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-        public CashService(ApplicationDbContext db, ApplicationCloudDbContext cdb, ICloudService cloudService)
+        public CashService(ApplicationDbContext db, ApplicationCloudDbContext cdb, ICloudService cloudService, IServiceScopeFactory scopeFactory)
         {
             _db = db;
             _cdb = cdb;
             _cloudService = cloudService;
+            _scopeFactory = scopeFactory;
         }
 
         public List<CashDocumentType> CashDocumentList()
@@ -97,7 +100,21 @@ namespace Actiontime.Services
                 _db.SyncProcesses.Add(process);
                 _db.SaveChanges(true);
 
-                Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
+                //Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
+
+                Task.Run(() =>
+                {
+                    using var scope = _scopeFactory.CreateScope();
+                    var scopedCloud = scope.ServiceProvider.GetRequiredService<ICloudService>();
+                    // re-load the SyncProcess from the worker scope to avoid using an entity tracked by the request scope
+                    var workerDb = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                    var persistedProcess = workerDb.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
+                    if (persistedProcess != null)
+                    {
+                        scopedCloud.AddCloudProcess(persistedProcess);
+                    }
+                });
+
 
                 result.Success = true;
                 result.Message = "OK";
@@ -166,7 +183,20 @@ namespace Actiontime.Services
                     _db.SyncProcesses.Add(process);
                     _db.SaveChanges();
 
-                    Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
+                    //Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
+                    Task.Run(() =>
+                    {
+                        using var scope = _scopeFactory.CreateScope();
+                        var scopedCloud = scope.ServiceProvider.GetRequiredService<ICloudService>();
+                        // re-load the SyncProcess from the worker scope to avoid using an entity tracked by the request scope
+                        var workerDb = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                        var persistedProcess = workerDb.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
+                        if (persistedProcess != null)
+                        {
+                            scopedCloud.AddCloudProcess(persistedProcess);
+                        }
+                    });
+
                 }
                 else
                 {
@@ -358,7 +388,20 @@ namespace Actiontime.Services
                 _db.SyncProcesses.Add(process);
                 _db.SaveChanges(true);
 
-                Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
+                //Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
+
+                Task.Run(() =>
+                {
+                    using var scope = _scopeFactory.CreateScope();
+                    var scopedCloud = scope.ServiceProvider.GetRequiredService<ICloudService>();
+                    // re-load the SyncProcess from the worker scope to avoid using an entity tracked by the request scope
+                    var workerDb = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                    var persistedProcess = workerDb.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
+                    if (persistedProcess != null)
+                    {
+                        scopedCloud.AddCloudProcess(persistedProcess);
+                    }
+                });
 
 
 

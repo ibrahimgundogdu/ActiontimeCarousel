@@ -7,6 +7,7 @@ using Actiontime.Models.ResultModel;
 using Actiontime.Models.SerializeModels;
 using Actiontime.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -24,14 +25,14 @@ namespace Actiontime.Services
         private readonly ApplicationDbContext _db;
         private readonly ApplicationCloudDbContext _cdb;
         private readonly ISyncService _syncservice;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-
-        public QRReaderService(ApplicationDbContext db, ApplicationCloudDbContext cdb, ISyncService syncervice)
+        public QRReaderService(ApplicationDbContext db, ApplicationCloudDbContext cdb, ISyncService syncervice, IServiceScopeFactory scopeFactory)
         {
             _db = db;
             _cdb = cdb;
             _syncservice = syncervice;
-
+            _scopeFactory = scopeFactory;
         }
 
         public async Task<ReaderResult> AddReader(string message)
@@ -464,10 +465,20 @@ namespace Actiontime.Services
                                             _db.SaveChanges();
 
                                             // create new contexts for SyncService to avoid using disposed contexts
+                                            //_ = Task.Run(() =>
+                                            //{
+                                            //    _syncservice.AddQuee("OrderRow", 2, orderRow.Id, orderRow.Uid);
+
+                                            //});
+
                                             _ = Task.Run(() =>
                                             {
-                                                _syncservice.AddQuee("OrderRow", 2, orderRow.Id, orderRow.Uid);
+                                                using var scope = _scopeFactory.CreateScope();
+                                                var scopedSync = scope.ServiceProvider.GetRequiredService<ISyncService>();
+                                                // pass primitive values (avoid passing tracked EF entities)
+                                                scopedSync.AddQuee("OrderRow", 2, orderRow.Id, orderRow.Uid);
                                             });
+
                                         }
 
                                         result.Success = 1;

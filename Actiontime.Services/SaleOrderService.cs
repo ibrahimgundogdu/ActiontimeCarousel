@@ -9,6 +9,7 @@ using Actiontime.Services.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -33,13 +34,15 @@ namespace Actiontime.Services
         private readonly ICloudService _cloudService;
         private ApplicationDbContext _db;
         private ApplicationCloudDbContext _cdb;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-        public SaleOrderService(ApplicationDbContext db, ApplicationCloudDbContext cdb, ICloudService cloudService)
+        public SaleOrderService(ApplicationDbContext db, ApplicationCloudDbContext cdb, ICloudService cloudService, IServiceScopeFactory scopeFactory)
         {
 
             _db = db;
             _cdb = cdb;
             _cloudService = cloudService;
+            _scopeFactory = scopeFactory;
         }
 
         public bool AddBasket(Basket? item)
@@ -132,6 +135,7 @@ namespace Actiontime.Services
 
                             //bu tokene ait basketi ekle
                             List<Basket> basketItems = new List<Basket>();
+                            int employeeID = 6070;
 
                             foreach (var item in items)
                             {
@@ -161,6 +165,8 @@ namespace Actiontime.Services
                                     AppBasketId = item.id,
                                     Token = _token
                                 });
+
+                                employeeID = item.recordEmployeeId ?? 6070;
                             }
 
                             _db.Baskets.AddRange(basketItems);
@@ -243,9 +249,25 @@ namespace Actiontime.Services
                                         order.SyncDate = DateTime.Now;
                                         _db.SaveChanges();
 
+                                        CheckOrderAction(order.Id, employeeID);
+                                        CheckLocationPosTicketSale(order.Id);
 
 
-                                        Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
+
+                                        // create a new scope for background work to avoid using a disposed scoped provider
+                                        Task.Run(() =>
+                                        {
+                                            using var scope = _scopeFactory.CreateScope();
+                                            var scopedCloud = scope.ServiceProvider.GetRequiredService<ICloudService>();
+                                            // re-load the SyncProcess from the worker scope to avoid using an entity tracked by the request scope
+                                            var workerDb = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                                            var persistedProcess = workerDb.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
+                                            if (persistedProcess != null)
+                                            {
+                                                scopedCloud.AddCloudProcess(persistedProcess);
+                                            }
+                                        });
+
 
 
                                         result.orderNumber = order.OrderNumber;
@@ -254,6 +276,8 @@ namespace Actiontime.Services
                                         result.uid = order.Uid.ToString();
                                         result.id = order.Id;
                                         result.printCount = order.PrintCount ?? 0;
+
+
 
                                     }
                                 }
@@ -267,6 +291,8 @@ namespace Actiontime.Services
                                 result.uid = order.Uid.ToString();
                                 result.id = order.Id;
                                 result.printCount = order.PrintCount ?? 0;
+
+                                CheckOrderAction(order.Id, employeeID);
                             }
 
                         }
@@ -1010,7 +1036,20 @@ namespace Actiontime.Services
                     order.SyncDate = processDateTime;
                     _db.SaveChanges();
 
-                    Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
+                    //Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
+
+                    Task.Run(() =>
+                    {
+                        using var scope = _scopeFactory.CreateScope();
+                        var scopedCloud = scope.ServiceProvider.GetRequiredService<ICloudService>();
+                        var workerDb = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                        var persistedProcess = workerDb.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
+                        if (persistedProcess != null)
+                        {
+                            scopedCloud.AddCloudProcess(persistedProcess);
+                        }
+                    });
+
                 }
             }
 

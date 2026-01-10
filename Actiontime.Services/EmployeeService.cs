@@ -8,6 +8,7 @@ using Actiontime.Models.SerializeModels;
 using Actiontime.Services.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,12 +29,14 @@ namespace Actiontime.Services
         private readonly ICloudService _cloudService;
         private readonly ApplicationDbContext _db;
         private readonly ApplicationCloudDbContext _cdb;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-        public EmployeeService(ApplicationDbContext db, ApplicationCloudDbContext cdb, ICloudService cloudService)
+        public EmployeeService(ApplicationDbContext db, ApplicationCloudDbContext cdb, ICloudService cloudService, IServiceScopeFactory scopeFactory)
 		{
             _db = db;
             _cdb = cdb;
             _cloudService = cloudService;
+			_scopeFactory = scopeFactory;
         }
 
         public Employee? CheckEmployeeLogin(string Username, string Password)
@@ -424,9 +427,24 @@ namespace Actiontime.Services
 								_db.SaveChanges(true);
 
 								
-								Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
+								//Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
 
-								WebSocketResult wsresult = new WebSocketResult()
+                                Task.Run(() =>
+                                {
+                                    using var scope = _scopeFactory.CreateScope();
+                                    var scopedCloud = scope.ServiceProvider.GetRequiredService<ICloudService>();
+                                    // re-load the SyncProcess from the worker scope to avoid using an entity tracked by the request scope
+                                    var workerDb = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                                    var persistedProcess = workerDb.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
+                                    if (persistedProcess != null)
+                                    {
+                                        scopedCloud.AddCloudProcess(persistedProcess);
+                                    }
+                                });
+
+
+
+                                WebSocketResult wsresult = new WebSocketResult()
 								{
 									ConfirmNumber = Guid.NewGuid().ToString(),
 									LocationId = location.Id,
@@ -436,9 +454,19 @@ namespace Actiontime.Services
 									Message = $"{employeeFullName} Çalışanının {location.LocationName} Lokasyonunda Mesaisi Başladı."
 								};
 
-								Task task2 = Task.Run(() => webSocketService.SendWebSocketMessage(wsresult));
+								//Task task2 = Task.Run(() => webSocketService.SendWebSocketMessage(wsresult));
 
-							}
+
+                                Task.Run(() =>
+                                {
+                                    using var scope = _scopeFactory.CreateScope();
+                                    var wsService = scope.ServiceProvider.GetRequiredService<IWebSocketService>();
+                                    wsService.SendWebSocketMessage(wsresult);
+                                });
+
+
+
+                            }
 							else
 							{
 								if (empShift.Duration == null && empShift.ShiftEnd == null)
@@ -458,10 +486,24 @@ namespace Actiontime.Services
 									_db.SyncProcesses.Add(process);
 									_db.SaveChanges(true);
 
-									Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
+									//Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
 
-									
-									WebSocketResult wsresult = new WebSocketResult()
+                                    Task.Run(() =>
+                                    {
+                                        using var scope = _scopeFactory.CreateScope();
+                                        var scopedCloud = scope.ServiceProvider.GetRequiredService<ICloudService>();
+                                        // re-load the SyncProcess from the worker scope to avoid using an entity tracked by the request scope
+                                        var workerDb = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                                        var persistedProcess = workerDb.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
+                                        if (persistedProcess != null)
+                                        {
+                                            scopedCloud.AddCloudProcess(persistedProcess);
+                                        }
+                                    });
+
+
+
+                                    WebSocketResult wsresult = new WebSocketResult()
 									{
 										ConfirmNumber = Guid.NewGuid().ToString(),
 										LocationId = location.Id,
@@ -471,10 +513,18 @@ namespace Actiontime.Services
 										Message = $"{employeeFullName} Çalışanının {location.LocationName} Lokasyonunda Mesaisi Bitti."
 									};
 
-									Task task2 = Task.Run(() => webSocketService.SendWebSocketMessage(wsresult));
+                                    //Task task2 = Task.Run(() => webSocketService.SendWebSocketMessage(wsresult));
 
 
-									var empBreak = _db.EmployeeBreaks.Where(x => x.EmployeeId == employeeId && x.BreakDate == date && x.LocationId == location.Id).ToList().OrderByDescending(x => x.BreakStart).FirstOrDefault();
+                                    Task.Run(() =>
+                                    {
+                                        using var scope = _scopeFactory.CreateScope();
+                                        var wsService = scope.ServiceProvider.GetRequiredService<IWebSocketService>();
+                                        wsService.SendWebSocketMessage(wsresult);
+                                    });
+
+
+                                    var empBreak = _db.EmployeeBreaks.Where(x => x.EmployeeId == employeeId && x.BreakDate == date && x.LocationId == location.Id).ToList().OrderByDescending(x => x.BreakStart).FirstOrDefault();
 
 									if (empBreak != null && empBreak.DurationMinute == null)
 									{
@@ -494,9 +544,22 @@ namespace Actiontime.Services
 										_db.SyncProcesses.Add(processb);
 										_db.SaveChanges(true);
 
-										Task taskb = Task.Run(() => _cloudService.AddCloudProcess(processb));
+										//Task taskb = Task.Run(() => _cloudService.AddCloudProcess(processb));
+                                        Task.Run(() =>
+                                        {
+                                            using var scope = _scopeFactory.CreateScope();
+                                            var scopedCloud = scope.ServiceProvider.GetRequiredService<ICloudService>();
+                                            // re-load the SyncProcess from the worker scope to avoid using an entity tracked by the request scope
+                                            var workerDb = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                                            var persistedProcess = workerDb.SyncProcesses.FirstOrDefault(x => x.Id == processb.Id);
+                                            if (persistedProcess != null)
+                                            {
+                                                scopedCloud.AddCloudProcess(persistedProcess);
+                                            }
+                                        });
 
-										WebSocketResult wsresultb = new WebSocketResult()
+
+                                        WebSocketResult wsresultb = new WebSocketResult()
 										{
 											ConfirmNumber = Guid.NewGuid().ToString(),
 											LocationId = location.Id,
@@ -506,9 +569,16 @@ namespace Actiontime.Services
 											Message = $"{employeeFullName} Çalışanının {location.LocationName} Lokasyonunda Molası Bitti."
 										};
 
-										Task task2b = Task.Run(() => webSocketService.SendWebSocketMessage(wsresultb));
+										//Task task2b = Task.Run(() => webSocketService.SendWebSocketMessage(wsresultb));
 
-									}
+                                        Task.Run(() =>
+                                        {
+                                            using var scope = _scopeFactory.CreateScope();
+                                            var wsService = scope.ServiceProvider.GetRequiredService<IWebSocketService>();
+                                            wsService.SendWebSocketMessage(wsresultb);
+                                        });
+
+                                    }
 
 									result = "Employee Shift & Employee Break Finished";
 								}
@@ -597,9 +667,23 @@ namespace Actiontime.Services
 										_db.SyncProcesses.Add(process);
 										_db.SaveChanges(true);
 
-										Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
+										//Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
+                                        Task.Run(() =>
+                                        {
+                                            using var scope = _scopeFactory.CreateScope();
+                                            var scopedCloud = scope.ServiceProvider.GetRequiredService<ICloudService>();
+                                            // re-load the SyncProcess from the worker scope to avoid using an entity tracked by the request scope
+                                            var workerDb = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                                            var persistedProcess = workerDb.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
+                                            if (persistedProcess != null)
+                                            {
+                                                scopedCloud.AddCloudProcess(persistedProcess);
+                                            }
+                                        });
 
-										WebSocketResult wsresultb = new WebSocketResult()
+
+
+                                        WebSocketResult wsresultb = new WebSocketResult()
 										{
 											ConfirmNumber = Guid.NewGuid().ToString(),
 											LocationId = location.Id,
@@ -609,10 +693,17 @@ namespace Actiontime.Services
 											Message = $"{employeeFullName} Çalışanının {location.LocationName} Lokasyonunda Molası Bitti."
 										};
 
-										Task task2b = Task.Run(() => webSocketService.SendWebSocketMessage(wsresultb));
+										//Task task2b = Task.Run(() => webSocketService.SendWebSocketMessage(wsresultb));
+
+                                        Task.Run(() =>
+                                        {
+                                            using var scope = _scopeFactory.CreateScope();
+                                            var wsService = scope.ServiceProvider.GetRequiredService<IWebSocketService>();
+                                            wsService.SendWebSocketMessage(wsresultb);
+                                        });
 
 
-									}
+                                    }
 									else if (empBreak == null || empBreak.DurationMinute != null)
 									{
 										empBreak = new EmployeeBreak()
@@ -643,9 +734,22 @@ namespace Actiontime.Services
 										_db.SyncProcesses.Add(process);
 										_db.SaveChanges(true);
 
-										Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
+										//Task task = Task.Run(() => _cloudService.AddCloudProcess(process));
+                                        Task.Run(() =>
+                                        {
+                                            using var scope = _scopeFactory.CreateScope();
+                                            var scopedCloud = scope.ServiceProvider.GetRequiredService<ICloudService>();
+                                            // re-load the SyncProcess from the worker scope to avoid using an entity tracked by the request scope
+                                            var workerDb = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                                            var persistedProcess = workerDb.SyncProcesses.FirstOrDefault(x => x.Id == process.Id);
+                                            if (persistedProcess != null)
+                                            {
+                                                scopedCloud.AddCloudProcess(persistedProcess);
+                                            }
+                                        });
 
-										WebSocketResult wsresultb = new WebSocketResult()
+
+                                        WebSocketResult wsresultb = new WebSocketResult()
 										{
 											ConfirmNumber = Guid.NewGuid().ToString(),
 											LocationId = location.Id,
@@ -655,9 +759,16 @@ namespace Actiontime.Services
 											Message = $"{employeeFullName} Çalışanının {location.LocationName} Lokasyonunda Molası Başladı."
 										};
 
-										Task task2b = Task.Run(() => webSocketService.SendWebSocketMessage(wsresultb));
+										//Task task2b = Task.Run(() => webSocketService.SendWebSocketMessage(wsresultb));
 
-									}
+                                        Task.Run(() =>
+                                        {
+                                            using var scope = _scopeFactory.CreateScope();
+                                            var wsService = scope.ServiceProvider.GetRequiredService<IWebSocketService>();
+                                            wsService.SendWebSocketMessage(wsresultb);
+                                        });
+
+                                    }
 
 								}
 								else

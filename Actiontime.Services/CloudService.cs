@@ -15,14 +15,12 @@ namespace Actiontime.Services
     {
         private readonly ApplicationDbContext _db;
         private readonly ApplicationCloudDbContext _cdb;
-        private readonly IServiceProvider _sp;
 
 
-        public CloudService(ApplicationDbContext db, ApplicationCloudDbContext cdb, IServiceProvider sp)
+        public CloudService(ApplicationDbContext db, ApplicationCloudDbContext cdb)
         {
             _db = db;
             _cdb = cdb;
-            _sp = sp;
         }
 
         public void AddCloudProcess(SyncProcess process)
@@ -31,13 +29,6 @@ namespace Actiontime.Services
             if (process.Entity == "Order" && process.Process == 1)
             {
                 var localOrder = _db.Orders.FirstOrDefault(x => x.Id == process.EntityId);
-
-                if (localOrder != null)
-                {
-                    // ISaleOrderService artık constructor ile gelmiyor; gerektiğinde resolve et
-                    var orderService = _sp.GetService<ISaleOrderService>();
-                    orderService?.CheckOrderAction(localOrder.Id, localOrder.EmployeeId ?? 6070);
-                }
 
                 var localOrderRows = _db.OrderRows.Where(x => x.OrderId == process.EntityId).ToList();
                 var localPosPayment = _db.OrderPosPayments.FirstOrDefault(x => x.OrderId == process.EntityId);
@@ -157,11 +148,6 @@ namespace Actiontime.Services
                             _db.SyncProcesses.Remove(syncOrder);
                             _db.SaveChanges();
                         }
-
-                        // cari hareket işlenir CheckLocationPosTicketSale
-
-                        var orderSvc = _sp.GetService<ISaleOrderService>();
-                        orderSvc?.CheckLocationPosTicketSale(ticketSale.Id);
 
 
                     }
