@@ -43,5 +43,6 @@ namespace Actiontime.Models.SerializeModels
 
         public int? TicketCount { get; set; }
         public List<VorderRow>? OrderRows { get; set; }
+        public List<VorderItem>? OrderItems { get; set; }
     }
 }

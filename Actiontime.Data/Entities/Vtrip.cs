@@ -5,7 +5,7 @@ namespace Actiontime.Data.Entities;
 
 public partial class Vtrip
 {
-    public long Id { get; set; }
+    public int Id { get; set; }
 
     public long? ConfirmId { get; set; }
 

@@ -431,6 +431,8 @@ namespace Actiontime.Services
             vOrderInfo.PaymentAmount = _order.PaymentAmount;
 
             vOrderInfo.OrderRows = _db.VorderRows.Where(x => x.OrderId == orderId).ToList();
+            vOrderInfo.OrderItems = _db.VorderItems.Where(x => x.OrderId == orderId).ToList();
+
 
             return vOrderInfo;
         }

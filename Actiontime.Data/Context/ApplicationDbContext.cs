@@ -120,6 +120,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Trip> Trips { get; set; }
 
+    public virtual DbSet<TripCompleted> TripCompleteds { get; set; }
+
     public virtual DbSet<TripConfirm> TripConfirms { get; set; }
 
     public virtual DbSet<TripHistory> TripHistories { get; set; }
@@ -135,6 +137,8 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<VinspectionRow> VinspectionRows { get; set; }
 
     public virtual DbSet<Vorder> Vorders { get; set; }
+
+    public virtual DbSet<VorderItem> VorderItems { get; set; }
 
     public virtual DbSet<VorderRow> VorderRows { get; set; }
 
@@ -1166,9 +1170,33 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Trip>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK_TicketTrip");
+            entity.HasKey(e => e.Id).HasName("PK_TripHistory");
 
             entity.ToTable("Trip");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.ConfirmId).HasColumnName("ConfirmID");
+            entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
+            entity.Property(e => e.LocationId).HasColumnName("LocationID");
+            entity.Property(e => e.PartId).HasColumnName("PartID");
+            entity.Property(e => e.ReaderSerialNumber).HasMaxLength(50);
+            entity.Property(e => e.RecordDate).HasColumnType("datetime");
+            entity.Property(e => e.RecordEmployeeId).HasColumnName("RecordEmployeeID");
+            entity.Property(e => e.TicketNumber).HasMaxLength(50);
+            entity.Property(e => e.TripCancel).HasColumnType("datetime");
+            entity.Property(e => e.TripDuration).HasPrecision(0);
+            entity.Property(e => e.TripEnd).HasColumnType("datetime");
+            entity.Property(e => e.TripStart).HasColumnType("datetime");
+            entity.Property(e => e.Uid).HasColumnName("UID");
+            entity.Property(e => e.UpdateDate).HasColumnType("datetime");
+            entity.Property(e => e.UpdateEmployeeId).HasColumnName("UpdateEmployeeID");
+        });
+
+        modelBuilder.Entity<TripCompleted>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_TicketTrip");
+
+            entity.ToTable("TripCompleted");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.ConfirmId).HasColumnName("ConfirmID");
@@ -1212,30 +1240,12 @@ public partial class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<TripHistory>(entity =>
         {
+            entity.HasKey(e => e.Id).HasName("PK__TripHist__3214EC07FAC926D9");
+
             entity.ToTable("TripHistory");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.ConfirmId).HasColumnName("ConfirmID");
-            entity.Property(e => e.ConfirmTime).HasColumnType("datetime");
-            entity.Property(e => e.CreateDate).HasColumnType("datetime");
-            entity.Property(e => e.CreaterId).HasColumnName("CreaterID");
-            entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
-            entity.Property(e => e.LocationId).HasColumnName("LocationID");
-            entity.Property(e => e.PartId).HasColumnName("PartID");
-            entity.Property(e => e.ReaderSerialNumber).HasMaxLength(50);
-            entity.Property(e => e.RecordDate).HasColumnType("datetime");
-            entity.Property(e => e.RecordEmployeeId).HasColumnName("RecordEmployeeID");
-            entity.Property(e => e.SaleOrderId).HasColumnName("SaleOrderID");
-            entity.Property(e => e.SaleOrderRowId).HasColumnName("SaleOrderRowID");
-            entity.Property(e => e.TicketNumber).HasMaxLength(50);
-            entity.Property(e => e.TripCancel).HasColumnType("datetime");
-            entity.Property(e => e.TripDuration).HasPrecision(0);
-            entity.Property(e => e.TripEnd).HasColumnType("datetime");
-            entity.Property(e => e.TripId).HasColumnName("TripID");
-            entity.Property(e => e.TripStart).HasColumnType("datetime");
-            entity.Property(e => e.Uid).HasColumnName("UID");
-            entity.Property(e => e.UpdateDate).HasColumnType("datetime");
-            entity.Property(e => e.UpdateEmployeeId).HasColumnName("UpdateEmployeeID");
+            entity.Property(e => e.ReaderSerialNumber).HasMaxLength(100);
+            entity.Property(e => e.TicketNumber).HasMaxLength(100);
         });
 
         modelBuilder.Entity<Vaction>(entity =>
@@ -1362,6 +1372,28 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.SaleStatusName).HasMaxLength(20);
             entity.Property(e => e.Sign).HasMaxLength(1);
             entity.Property(e => e.Uid).HasColumnName("UID");
+        });
+
+        modelBuilder.Entity<VorderItem>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("VOrderItems");
+
+            entity.Property(e => e.Currency).HasMaxLength(4);
+            entity.Property(e => e.Date).HasColumnType("datetime");
+            entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("ID");
+            entity.Property(e => e.LocationId).HasColumnName("LocationID");
+            entity.Property(e => e.OrderId).HasColumnName("OrderID");
+            entity.Property(e => e.PriceCategoryId).HasColumnName("PriceCategoryID");
+            entity.Property(e => e.PriceId).HasColumnName("PriceID");
+            entity.Property(e => e.ProductId).HasColumnName("ProductID");
+            entity.Property(e => e.PromotionId).HasColumnName("PromotionID");
+            entity.Property(e => e.RecordDate).HasColumnType("datetime");
+            entity.Property(e => e.RecordEmployeeId).HasColumnName("RecordEmployeeID");
         });
 
         modelBuilder.Entity<VorderRow>(entity =>

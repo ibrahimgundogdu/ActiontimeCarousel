@@ -7,7 +7,7 @@ public partial class VtripConfirm
 {
     public long? ConfirmId { get; set; }
 
-    public long TripId { get; set; }
+    public int TripId { get; set; }
 
     public Guid? ConfirmNumber { get; set; }
 
