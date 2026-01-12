@@ -328,16 +328,18 @@ namespace Actiontime.Services
                     {
                         var ourcompany = _db.OurCompanies.FirstOrDefault(x => x.Id == order.OurCompanyId);
                         var orderRows = _db.OrderRows.Where(x => x.OrderId == orderId).ToList();
+                        var orderItems = _db.OrderBaskets.Where(x => x.OrderId == orderId).ToList();
                         var payments = _db.OrderPosPayments.Where(x => x.OrderId == orderId).ToList();
 
 
 
-                        var subtotal = orderRows.Sum(x => x.Amount) ?? 0;
-                        var total = orderRows.Sum(x => x.Total) ?? 0;
-                        var discount = orderRows.Sum(x => x.Discount) ?? 0;
+                        var subtotal = orderItems.Sum(x => x.Price);
+                        var total = orderItems.Sum(x => x.Total);
+                        var discount = orderItems.Sum(x => x.Discount) ?? 0;
                         var charge = payments.Sum(x => x.PaymentAmount);
 
                         List<SaleRow> rows = new List<SaleRow>();
+                        List<SaleItem> items = new List<SaleItem>();
                         List<Ticket> tickets = new List<Ticket>();
 
                         receipt.FooterMessage = "Thank you for visiting";
@@ -363,8 +365,8 @@ namespace Actiontime.Services
                         {
                             rows.Add(new SaleRow()
                             {
-                                ItemName = location.LocationTypeName + " " + $"{item.Duration}M",
-                                Price = "$" + (item.Quantity * item.Price).ToString("N2")
+                                ItemName = location.LocationTypeName + " " + $"X{item.Duration}",
+                                Price = $"{item.Quantity}/{item.Unit}"
                             });
                         }
                         receipt.Rows = rows;
@@ -374,12 +376,25 @@ namespace Actiontime.Services
                             tickets.Add(new Ticket()
                             {
                                 TicketNumber = $"{item.Id}-{item.LocationId}-{item.TicketNumber}",
-                                TicketName = $"{item.Unit} Min"
+                                TicketName = $"{item.Quantity}/{item.Unit}"
 
                             });
                         }
-
                         receipt.Tickets = tickets;
+
+                        foreach (var item in orderItems)
+                        {
+                            items.Add(new SaleItem()
+                            {
+                                ItemName = location.LocationTypeName ?? "Carousel",
+                                Quantity = item.Unit.ToString() ?? string.Empty,
+                                Price = "$" + (item.Quantity * item.Price).ToString("N2")
+
+                            });
+                        }
+                        receipt.Items = items;
+
+
                     }
 
 
@@ -394,6 +409,97 @@ namespace Actiontime.Services
 
             return receipt;
         }
+
+        public TicketCheck GetTicket(string qrcode)
+        {
+
+            TicketCheck ticket = new TicketCheck();
+
+            ticket.TicketNumber = qrcode;
+
+            if (!string.IsNullOrEmpty(qrcode))
+            {
+                var parts = qrcode.Split('-');
+
+                if (parts.Length < 3)
+                {
+                    throw new ArgumentException("QR formatı geçersiz");
+                }
+
+                int first = int.Parse(parts[0]);   // 85
+                int second = int.Parse(parts[1]);  // 280
+
+                string remaining = string.Join("-", parts.Skip(2));
+
+                ticket.QrCode = remaining;
+
+                try
+                {
+                    var location = _db.OurLocations.FirstOrDefault();
+                    var orderRow = _db.OrderRows.FirstOrDefault(x => x.Id == first && x.LocationId == second && x.TicketNumber == remaining);
+                    var confirm = _db.TripConfirms.FirstOrDefault(x => x.SaleOrderRowId == orderRow.Id && x.SaleOrderId == orderRow.OrderId);
+                    var trip = _db.Trips.FirstOrDefault(x => x.ConfirmId == confirm.Id);
+
+                    if (orderRow != null)
+                    {
+
+                        if(orderRow.RowStatusId == 2) // sold but not used
+                        {
+                            ticket.Status = TicketStatus.pending;
+                        }
+                        else if (orderRow.RowStatusId == 3) // sold
+                        {
+                           
+
+                            if (confirm != null)
+                            {
+                                
+                                if (trip != null && trip.TripDurationSecond != null && trip.TripDurationSecond > 30)
+                                {
+                                    ticket.Status = TicketStatus.used;
+                                }
+                                else
+                                {
+                                    ticket.Status = TicketStatus.inUse;
+                                }
+                            }
+                            else
+                            {
+                                ticket.Status = TicketStatus.pending;
+                            }
+                        }
+                        else
+                        {
+                            ticket.Status = TicketStatus.invalid;
+                        }
+
+                        ticket.Id = orderRow.Id.ToString();
+                        ticket.PurchaseDate = orderRow.RecordDate?.ToString("M-dd-yyyy") ?? DateTime.Now.ToString("M-dd-yyyy");
+                        ticket.LocationId = location.Id.ToString();
+                        ticket.LocationName = location.LocationName;
+
+
+
+
+
+                    }
+                    else  {
+                        ticket.Status = TicketStatus.invalid;
+                    }
+
+
+
+
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+
+            return ticket;
+        }
+
 
         public void AddPrintLog(int orderId)
         {
@@ -710,7 +816,7 @@ namespace Actiontime.Services
 
                 if (confirm != null)
                 {
-                    var trip = _db.Trips.FirstOrDefault(x=> x.ConfirmId == confirm.Id);
+                    var trip = _db.Trips.FirstOrDefault(x => x.ConfirmId == confirm.Id);
 
                     if (trip != null && trip.TripDurationSecond != null && trip.TripDurationSecond <= 30)
                     {
@@ -766,14 +872,14 @@ namespace Actiontime.Services
                 {
                     result.Message = "Confirm not found";
                 }
-               
+
             }
             else
             {
                 result.Message = "Ticket not found";
             }
 
-           
+
 
             return result;
         }

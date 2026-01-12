@@ -28,6 +28,7 @@ namespace Actiontime.Models.SerializeModels
         public string PrintCount { get; set; }
 
         public List<SaleRow> Rows { get; set; }
+        public List<SaleItem> Items { get; set; }
         public List<Ticket> Tickets { get; set; }
 
     }
@@ -41,6 +42,13 @@ namespace Actiontime.Models.SerializeModels
     public class SaleRow
     {
         public string ItemName { get; set; }
+        public string Price { get; set; }
+    }
+
+    public class SaleItem
+    {
+        public string ItemName { get; set; }
+        public string Quantity { get; set; }
         public string Price { get; set; }
     }
 }

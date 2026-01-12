@@ -51,6 +51,12 @@ namespace Actiontime.TicketAPI.Controllers
         }
 
         [HttpGet()]
+        public TicketReceipt GetTicket(string qrcode)
+        {
+            return _orderService.GetTicket(qrcode);
+        }
+
+        [HttpGet()]
         public void AddPrintLog(string orderId)
         {
             int _orderId = 0;
