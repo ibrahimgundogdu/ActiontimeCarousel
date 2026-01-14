@@ -437,8 +437,14 @@ namespace Actiontime.Services
                 {
                     var location = _db.OurLocations.FirstOrDefault();
                     var orderRow = _db.OrderRows.FirstOrDefault(x => x.Id == first && x.LocationId == second && x.TicketNumber == remaining);
-                    var confirm = _db.TripConfirms.FirstOrDefault(x => x.SaleOrderRowId == orderRow.Id && x.SaleOrderId == orderRow.OrderId);
-                    var trip = _db.Trips.FirstOrDefault(x => x.ConfirmId == confirm.Id);
+                    var confirm = _db.TripConfirms.FirstOrDefault(x => x.SaleOrderRowId == orderRow.Id && x.SaleOrderId == orderRow.OrderId && x.TicketNumber == qrcode);
+                    Trip? trip = null;
+                    if (confirm != null)
+                        trip = _db.Trips.FirstOrDefault(x => x.ConfirmId == confirm.Id);
+                    TripRound? tripRound = null;
+                    if (confirm != null)
+                        tripRound = _db.TripRounds.FirstOrDefault(x => x.Id == confirm.TripRoundId);
+
 
                     if (orderRow != null)
                     {
@@ -446,6 +452,19 @@ namespace Actiontime.Services
                         if(orderRow.RowStatusId == 2) // sold but not used
                         {
                             ticket.Status = TicketStatus.pending;
+
+
+
+
+
+
+
+
+
+
+
+
+
                         }
                         else if (orderRow.RowStatusId == 3) // sold
                         {

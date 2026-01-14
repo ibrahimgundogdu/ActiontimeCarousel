@@ -1,5 +1,6 @@
 ﻿using Actiontime.Models;
 using Actiontime.Services.Interfaces;
+using Microsoft.Extensions.Caching.Memory;
 using MQTTnet;
 using MQTTnet.Formatter;
 using MQTTnet.Protocol;
@@ -21,6 +22,8 @@ namespace Actiontime.TicketAPI
         private MqttClientOptions _mqttClientOptions = default!;
         private readonly SemaphoreSlim _connectLock = new(1, 1);
         private readonly string _clientId;
+
+        private readonly MemoryCache _msgCache = new MemoryCache(new MemoryCacheOptions());
 
         // İstersen config’e taşı
         private readonly string[] _topics = new[]
@@ -77,7 +80,13 @@ namespace Actiontime.TicketAPI
 
         private async Task OnConnected(MqttClientConnectedEventArgs args)
         {
-            _logger.LogInformation("MQTT connected.");
+
+            _logger.LogInformation("MQTT connected. Session Present: {SessionPresent}", args.ConnectResult.IsSessionPresent);
+
+            if (args.ConnectResult.IsSessionPresent)
+            {
+                return;
+            }
 
             // Eğer broker persistent session destekliyorsa subscribe gerekmeyebilir;
             // yine de ilk bağlantıda subscribe etmek zararlı değil.
@@ -209,12 +218,32 @@ namespace Actiontime.TicketAPI
                 var msg = args?.ApplicationMessage;
                 if (msg is null) return;
 
+                var payload = msg.Payload.Length == 0 ? "" : Encoding.UTF8.GetString(msg.Payload.ToArray());
+
+                // Basit bir hash veya payload'un kendisini anahtar yapalım
+                // 10ms farkla gelen aynı mesajı yakalar
+                string messageKey = $"{msg.Topic}_{payload}";
+
+                if (_msgCache.TryGetValue(messageKey, out _))
+                {
+                    _logger.LogWarning("Mükerrer mesaj engellendi: {Topic}", msg.Topic);
+                    return;
+                }
+
+                // Mesajı 1 saniye boyunca "işlendi" olarak işaretle
+                _msgCache.Set(messageKey, true, TimeSpan.FromSeconds(1));
+
+
                 var topic = msg.Topic ?? string.Empty;
 
                 // Use Payload property instead of PayloadSegment (PayloadSegment has no getter)
-                var payload = msg.Payload.IsEmpty || msg.Payload.Length == 0
-                    ? string.Empty
-                    : Encoding.UTF8.GetString(msg.Payload.ToArray());
+               
+
+
+
+
+
+
 
                 _logger.LogInformation("MQTT RX Topic: {Topic} Payload: {Payload}", topic, payload);
 

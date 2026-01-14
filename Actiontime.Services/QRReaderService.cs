@@ -6,11 +6,13 @@ using Actiontime.Models;
 using Actiontime.Models.ResultModel;
 using Actiontime.Models.SerializeModels;
 using Actiontime.Services.Interfaces;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net.Http.Json;
 using System.Reflection.PortableExecutable;
@@ -122,6 +124,20 @@ namespace Actiontime.Services
 
                     var ticketNumber = qr.QRCode.Substring(qrParts[0].Length + 1 + qrParts[1].Length + 1);
 
+                    var outputParam = new SqlParameter
+                    {
+                        ParameterName = "@TripRoundId",
+                        SqlDbType = SqlDbType.BigInt,
+                        Direction = ParameterDirection.Output
+                    };
+
+                    await _db.Database.ExecuteSqlRawAsync(
+                        "EXEC GetTripRound @TripRoundId OUTPUT",
+                        outputParam
+                    );
+
+                    var roundId = (long)outputParam.Value;
+
                     var orderRow = _db.OrderRows.FirstOrDefault(x => x.TicketNumber == ticketNumber && x.RowStatusId == 2 && x.Id == orderRowId && x.LocationId == locationId);
                     var qrReader = _db.Qrreaders.FirstOrDefault(x => x.SerialNumber == qr.SerialNumber);
                     var confirm = _db.TripConfirms.FirstOrDefault(x => x.TicketNumber == qr.QRCode);
@@ -138,6 +154,7 @@ namespace Actiontime.Services
                                     confirm = new();
 
                                     confirm.ConfirmNumber = Guid.NewGuid();
+                                    confirm.TripRoundId = roundId;
                                     confirm.SaleOrderId = orderRow.OrderId;
                                     confirm.SaleOrderRowId = orderRow.Id;
                                     confirm.LocationId = qrReader.LocationId;
@@ -151,6 +168,14 @@ namespace Actiontime.Services
 
                                     _db.TripConfirms.Add(confirm);
                                     _db.SaveChanges();
+
+                                    result.Success = 1;
+                                    result.ConfirmNumber = confirm.ConfirmNumber.ToString();
+                                    result.Message = "Confirmed";
+                                    result.Title = "OK";
+                                    result.LEDTemplate = 1;
+
+                                    return result;
                                 }
                                 else
                                 {
@@ -162,33 +187,45 @@ namespace Actiontime.Services
                                         {
                                             result.ConfirmNumber = confirm.ConfirmNumber.ToString();
                                             result.Success = 0;
-                                            result.Message = $"Used Before";
+                                            result.Message = $"UsedBefore";
                                             result.Title = "Warning";
                                             result.LEDTemplate = 4;
 
                                             return result;
                                         }
+                                        else
+                                        {
+                                            result.ConfirmNumber = confirm.ConfirmNumber.ToString();
+                                            result.Success = 0;
+                                            result.Message = $"In Use";
+                                            result.Title = "Info";
+                                            result.LEDTemplate = 2;
+                                            return result;
+                                        }
                                     }
                                     else
                                     {
-                                        confirm.ReaderSerialNumber = qrReader.SerialNumber;
-                                        _db.SaveChanges();
+                                        //confirm.ReaderSerialNumber = qrReader.SerialNumber;
+                                        //_db.SaveChanges();
+
+                                        result.Success = 0;
+                                        result.ConfirmNumber = confirm.ConfirmNumber.ToString();
+                                        result.Message = "DoubleRead";
+                                        result.Title = "Warning";
+                                        result.LEDTemplate = 4;
+
+                                        return result;
+
                                     }
                                 }
 
-                                result.Success = 1;
-                                result.ConfirmNumber = confirm.ConfirmNumber.ToString();
-                                result.Message = "Confirmed";
-                                result.Title = "OK";
-                                result.LEDTemplate = 1;
-
-                                return result;
+                               
                             }
                             else
                             {
                                 result.Success = 0;
                                 result.ConfirmNumber = string.Empty;
-                                result.Message = "No Available";
+                                result.Message = "NoAvailable";
                                 result.Title = "Warning";
                                 result.LEDTemplate = 4;
 

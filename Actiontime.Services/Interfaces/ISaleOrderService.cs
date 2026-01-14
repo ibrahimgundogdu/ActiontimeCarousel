@@ -29,6 +29,9 @@ namespace Actiontime.Services.Interfaces
         void CheckOrderAction(int orderId, int employeeId);
         void CheckLocationPosTicketSale(long orderId);
         AppResult AddOrderRefund(int OrderId, int employeeId, int refundTypeId, string Description);
+        TicketCheck GetTicket(string qrcode);
+
+
 
     }
 }

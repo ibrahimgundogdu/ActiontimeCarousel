@@ -51,7 +51,7 @@ namespace Actiontime.TicketAPI.Controllers
         }
 
         [HttpGet()]
-        public TicketReceipt GetTicket(string qrcode)
+        public TicketCheck GetTicket(string qrcode)
         {
             return _orderService.GetTicket(qrcode);
         }

@@ -120,11 +120,11 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Trip> Trips { get; set; }
 
-    public virtual DbSet<TripCompleted> TripCompleteds { get; set; }
-
     public virtual DbSet<TripConfirm> TripConfirms { get; set; }
 
     public virtual DbSet<TripHistory> TripHistories { get; set; }
+
+    public virtual DbSet<TripRound> TripRounds { get; set; }
 
     public virtual DbSet<Vaction> Vactions { get; set; }
 
@@ -148,7 +148,6 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<VtripConfirm> VtripConfirms { get; set; }
 
-    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("Turkish_CI_AS");
@@ -1192,33 +1191,6 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.UpdateEmployeeId).HasColumnName("UpdateEmployeeID");
         });
 
-        modelBuilder.Entity<TripCompleted>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK_TicketTrip");
-
-            entity.ToTable("TripCompleted");
-
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.ConfirmId).HasColumnName("ConfirmID");
-            entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
-            entity.Property(e => e.LocationId).HasColumnName("LocationID");
-            entity.Property(e => e.PartId).HasColumnName("PartID");
-            entity.Property(e => e.ReaderSerialNumber).HasMaxLength(50);
-            entity.Property(e => e.RecordDate).HasColumnType("datetime");
-            entity.Property(e => e.RecordEmployeeId).HasColumnName("RecordEmployeeID");
-            entity.Property(e => e.TicketNumber).HasMaxLength(50);
-            entity.Property(e => e.TripCancel).HasColumnType("datetime");
-            entity.Property(e => e.TripDuration)
-                .HasPrecision(0)
-                .HasComputedColumnSql("(CONVERT([time](0),[TripEnd]-[TripStart]))", false);
-            entity.Property(e => e.TripDurationSecond).HasComputedColumnSql("(datediff(second,[TripStart],[TripEnd]))", false);
-            entity.Property(e => e.TripEnd).HasColumnType("datetime");
-            entity.Property(e => e.TripStart).HasColumnType("datetime");
-            entity.Property(e => e.Uid).HasColumnName("UID");
-            entity.Property(e => e.UpdateDate).HasColumnType("datetime");
-            entity.Property(e => e.UpdateEmployeeId).HasColumnName("UpdateEmployeeID");
-        });
-
         modelBuilder.Entity<TripConfirm>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_TicketTripConfirm");
@@ -1236,6 +1208,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.SaleOrderId).HasColumnName("SaleOrderID");
             entity.Property(e => e.SaleOrderRowId).HasColumnName("SaleOrderRowID");
             entity.Property(e => e.TicketNumber).HasMaxLength(50);
+            entity.Property(e => e.TripRoundId).HasColumnName("TripRoundID");
         });
 
         modelBuilder.Entity<TripHistory>(entity =>
@@ -1246,6 +1219,33 @@ public partial class ApplicationDbContext : DbContext
 
             entity.Property(e => e.ReaderSerialNumber).HasMaxLength(100);
             entity.Property(e => e.TicketNumber).HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<TripRound>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_TicketTrip");
+
+            entity.ToTable("TripRound");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.LocationId).HasColumnName("LocationID");
+            entity.Property(e => e.RecordDate)
+                .HasPrecision(0)
+                .HasDefaultValueSql("(sysdatetimeoffset())");
+            entity.Property(e => e.RoundCancel).HasColumnType("datetime");
+            entity.Property(e => e.RoundDate).HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.RoundEnd).HasColumnType("datetime");
+            entity.Property(e => e.RoundNumber)
+                .HasMaxLength(40)
+                .HasDefaultValue("");
+            entity.Property(e => e.RoundStart).HasColumnType("datetime");
+            entity.Property(e => e.TripDuration)
+                .HasPrecision(0)
+                .HasComputedColumnSql("(CONVERT([time](0),[RoundEnd]-[RoundStart]))", false);
+            entity.Property(e => e.TripDurationSecond).HasComputedColumnSql("(datediff(second,[RoundStart],[RoundEnd]))", false);
+            entity.Property(e => e.Uid)
+                .HasDefaultValueSql("(newid())")
+                .HasColumnName("UID");
         });
 
         modelBuilder.Entity<Vaction>(entity =>

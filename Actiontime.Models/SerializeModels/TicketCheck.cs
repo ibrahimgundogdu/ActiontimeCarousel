@@ -16,6 +16,12 @@ namespace Actiontime.Models.SerializeModels
         public string TicketNumber { get; set; } = default!;
         public string CustomerName { get; set; } = "Guest";
         public string PurchaseDate { get; set; } = default!;
+        public Guid? ConfirmUid { get; set; }
+        public Guid? RoundUid { get; set; }
+        public Guid? TripUid { get; set; }
+        public string RoundNumber { get; set; } = default!;
+        public DateTime? RoundStart { get; set; }
+        public DateTime? RoundEnd { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public TicketStatus Status { get; set; } = TicketStatus.pending;

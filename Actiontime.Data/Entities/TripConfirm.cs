@@ -13,6 +13,8 @@ public partial class TripConfirm
 
     public long? SaleOrderRowId { get; set; }
 
+    public long? TripRoundId { get; set; }
+
     public int? EmployeeId { get; set; }
 
     public int? LocationId { get; set; }
