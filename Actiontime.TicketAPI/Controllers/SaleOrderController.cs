@@ -56,6 +56,62 @@ namespace Actiontime.TicketAPI.Controllers
             return _orderService.GetTicket(qrcode);
         }
 
+
+        //Ticket operations
+        [HttpGet()]
+        public bool ConfirmTicket(string qrcode)
+        {
+            return false; //return _orderService.GetTicket(qrcode);
+        }
+
+        [HttpGet()]
+        public bool BackTicket(string qrcode)
+        {
+            return false; //return _orderService.GetTicket(qrcode);
+        }
+
+
+
+        //Round operations
+        [HttpGet()]
+        public bool StartRound(string uid)
+        {
+            return _orderService.StartRound(uid);
+        }
+
+
+        [HttpGet()]
+        public bool CancelRound(string uid)
+        {
+            return _orderService.CancelRound(uid);
+        }
+
+
+        [HttpGet()]
+        public bool FinishRound(string uid)
+        {
+            _orderService.FinishRound(uid);
+        }
+
+
+
+        //Round Info
+        [HttpGet()]
+        public RoundDetail GetRoundDetail(string uid)
+        {
+            return _orderService.GetRoundDetail(uid);
+        }
+
+        [HttpGet()]
+        public List<TripRound>? GetRoundList(DateOnly date)
+        {
+            return _orderService.GetRoundList(date);
+        }
+
+
+
+
+
         [HttpGet()]
         public void AddPrintLog(string orderId)
         {

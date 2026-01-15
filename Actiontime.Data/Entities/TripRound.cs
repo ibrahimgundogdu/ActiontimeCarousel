@@ -15,11 +15,11 @@ public partial class TripRound
 
     public DateOnly RoundDate { get; set; }
 
-    public DateTime? RoundStart { get; set; }
+    public DateTimeOffset? RoundStart { get; set; }
 
-    public DateTime? RoundCancel { get; set; }
+    public DateTimeOffset? RoundCancel { get; set; }
 
-    public DateTime? RoundEnd { get; set; }
+    public DateTimeOffset? RoundEnd { get; set; }
 
     public TimeOnly? TripDuration { get; set; }
 

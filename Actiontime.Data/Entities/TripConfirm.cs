@@ -9,23 +9,23 @@ public partial class TripConfirm
 
     public Guid? ConfirmNumber { get; set; }
 
-    public long? SaleOrderId { get; set; }
+    public long SaleOrderId { get; set; }
 
-    public long? SaleOrderRowId { get; set; }
+    public long SaleOrderRowId { get; set; }
 
-    public long? TripRoundId { get; set; }
+    public long TripRoundId { get; set; }
 
     public int? EmployeeId { get; set; }
 
-    public int? LocationId { get; set; }
+    public int LocationId { get; set; }
 
-    public int? LocationPartId { get; set; }
+    public int LocationPartId { get; set; }
 
-    public string? ReaderSerialNumber { get; set; }
+    public string ReaderSerialNumber { get; set; } = null!;
 
     public DateTime? ConfirmTime { get; set; }
 
-    public string? TicketNumber { get; set; }
+    public string TicketNumber { get; set; } = null!;
 
     public int? UnitDuration { get; set; }
 

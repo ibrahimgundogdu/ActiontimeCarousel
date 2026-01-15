@@ -414,110 +414,202 @@ namespace Actiontime.Services
         {
 
             TicketCheck ticket = new TicketCheck();
+            ticket.QrCode = qrcode;
+            ticket.Status = TicketStatus.pending;
 
-            ticket.TicketNumber = qrcode;
+            var location = _db.OurLocations.FirstOrDefault();
 
-            if (!string.IsNullOrEmpty(qrcode))
+            if (location != null)
             {
-                var parts = qrcode.Split('-');
 
-                if (parts.Length < 3)
+                ticket.LocationId = location.Id.ToString();
+                ticket.LocationName = location.LocationName;
+
+                if (!string.IsNullOrEmpty(qrcode))
                 {
-                    throw new ArgumentException("QR formatı geçersiz");
-                }
 
-                int first = int.Parse(parts[0]);   // 85
-                int second = int.Parse(parts[1]);  // 280
+                    var parts = qrcode.Split('-');
 
-                string remaining = string.Join("-", parts.Skip(2));
+                    if (parts.Length < 3)
+                    {
+                        throw new ArgumentException("QR formatı geçersiz");
+                    }
 
-                ticket.QrCode = remaining;
+                    int first = int.Parse(parts[0]);   // 85
+                    int second = int.Parse(parts[1]);  // 280
 
-                try
-                {
-                    var location = _db.OurLocations.FirstOrDefault();
+                    string remaining = string.Join("-", parts.Skip(2));
+
+                    ticket.TicketNumber = remaining;
+
                     var orderRow = _db.OrderRows.FirstOrDefault(x => x.Id == first && x.LocationId == second && x.TicketNumber == remaining);
-                    var confirm = _db.TripConfirms.FirstOrDefault(x => x.SaleOrderRowId == orderRow.Id && x.SaleOrderId == orderRow.OrderId && x.TicketNumber == qrcode);
-                    Trip? trip = null;
-                    if (confirm != null)
-                        trip = _db.Trips.FirstOrDefault(x => x.ConfirmId == confirm.Id);
-                    TripRound? tripRound = null;
-                    if (confirm != null)
-                        tripRound = _db.TripRounds.FirstOrDefault(x => x.Id == confirm.TripRoundId);
-
 
                     if (orderRow != null)
                     {
 
-                        if(orderRow.RowStatusId == 2) // sold but not used
+                        ticket.Id = orderRow.Id;
+                        ticket.CustomerName = "Guest";
+                        ticket.PurchaseDate = orderRow.Date;
+
+                        var confirm = _db.TripConfirms.FirstOrDefault(x => x.SaleOrderRowId == orderRow.Id && x.SaleOrderId == orderRow.OrderId && x.TicketNumber == qrcode);
+
+                        if (confirm != null)
                         {
-                            ticket.Status = TicketStatus.pending;
+                            ticket.ConfirmNumber = confirm.ConfirmNumber;
+                            ticket.ConfirmTime = confirm.ConfirmTime;
+                            ticket.Status = TicketStatus.inside;
 
+                            TripRound? tripRound = _db.TripRounds.FirstOrDefault(x => x.Id == confirm.TripRoundId);
 
-
-
-
-
-
-
-
-
-
-
-
-                        }
-                        else if (orderRow.RowStatusId == 3) // sold
-                        {
-                           
-
-                            if (confirm != null)
+                            if (tripRound != null)
                             {
-                                
-                                if (trip != null && trip.TripDurationSecond != null && trip.TripDurationSecond > 30)
+
+                                ticket.RoundUid = tripRound.Uid;
+                                ticket.RoundDate = tripRound.RoundDate;
+                                ticket.RoundStart = tripRound.RoundStart;
+                                ticket.RoundEnd = tripRound.RoundEnd;
+                                ticket.RoundNumber = tripRound.RoundNumber;
+
+                                if (tripRound.RoundStart != null && tripRound.RoundEnd != null)
                                 {
                                     ticket.Status = TicketStatus.used;
                                 }
-                                else
+                                else if (tripRound.RoundStart != null && tripRound.RoundEnd == null)
                                 {
                                     ticket.Status = TicketStatus.inUse;
                                 }
+
                             }
-                            else
-                            {
-                                ticket.Status = TicketStatus.pending;
-                            }
+
                         }
-                        else
-                        {
-                            ticket.Status = TicketStatus.invalid;
-                        }
-
-                        ticket.Id = orderRow.Id.ToString();
-                        ticket.PurchaseDate = orderRow.RecordDate?.ToString("M-dd-yyyy") ?? DateTime.Now.ToString("M-dd-yyyy");
-                        ticket.LocationId = location.Id.ToString();
-                        ticket.LocationName = location.LocationName;
-
-
-
-
 
                     }
-                    else  {
+                    else
+                    {
                         ticket.Status = TicketStatus.invalid;
                     }
 
-
-
-
                 }
-                catch (Exception ex)
+                else
                 {
-
+                    ticket.Status = TicketStatus.invalid;
                 }
+
+            }
+            else
+            {
+                ticket.Status = TicketStatus.invalid;
             }
 
             return ticket;
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public bool StartRound(string uid)
+        {
+            bool isSuccess = false;
+
+            var round = _db.TripRounds.FirstOrDefault(x => x.Uid.ToString() == uid);
+
+            if (round != null)
+            {
+                round.RoundStart = DateTimeOffset.Now;
+                _db.SaveChanges();
+                isSuccess = true;
+            }
+
+            return isSuccess;
+        }
+
+        public bool CancelRound(string uid)
+        {
+            bool isSuccess = false;
+
+            var round = _db.TripRounds.FirstOrDefault(x => x.Uid.ToString() == uid);
+
+            if (round != null)
+            {
+                round.RoundCancel = DateTimeOffset.Now;
+                round.RoundEnd = DateTimeOffset.Now;
+                _db.SaveChanges();
+
+                var confirmList = _db.TripConfirms.Where(x => x.TripRoundId == round.Id).ToList();
+                _db.TripConfirms.RemoveRange(confirmList);
+                _db.SaveChanges();
+
+                isSuccess = true;
+            }
+
+            return isSuccess;
+        }
+
+        public bool FinishRound(string uid)
+        {
+            bool isSuccess = false;
+
+            var round = _db.TripRounds.FirstOrDefault(x => x.Uid.ToString() == uid);
+
+            if (round != null)
+            {
+                round.RoundEnd = DateTimeOffset.Now;
+                _db.SaveChanges();
+
+                var confirmList = _db.TripConfirms.Where(x => x.TripRoundId == round.Id).ToList();
+                _db.TripConfirms.RemoveRange(confirmList);
+                _db.SaveChanges();
+
+                isSuccess = true;
+            }
+
+            return isSuccess;
+        }
+
+        public RoundDetail GetRoundDetail(string uid)
+        {
+
+            RoundDetail detail = new RoundDetail();
+
+            detail.Round = _db.TripRounds.FirstOrDefault(x => x.Uid.ToString() == uid);
+            if (detail.Round != null)
+            {
+                detail.ConfirmList = _db.TripConfirms.Where(x => x.TripRoundId == detail.Round.Id).ToList();
+            }
+
+            return detail;
+        }
+
+        public List<TripRound>? GetRoundList(DateOnly date)
+        {
+
+            return _db.TripRounds.Where(x => x.RoundDate == date).ToList();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         public void AddPrintLog(int orderId)

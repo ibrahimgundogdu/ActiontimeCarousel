@@ -11,6 +11,7 @@ namespace Actiontime.Models
     public enum TicketStatus
     {
         pending,
+        inside,
         inUse,
         used,
         invalid

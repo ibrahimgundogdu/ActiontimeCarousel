@@ -30,8 +30,10 @@ namespace Actiontime.Services.Interfaces
         void CheckLocationPosTicketSale(long orderId);
         AppResult AddOrderRefund(int OrderId, int employeeId, int refundTypeId, string Description);
         TicketCheck GetTicket(string qrcode);
-
-
-
+        List<TripRound>? GetRoundList(DateOnly date);
+        RoundDetail GetRoundDetail(string uid);
+        bool StartRound(string uid);
+        bool CancelRound(string uid);
+        bool FinishRound(string uid);
     }
 }
