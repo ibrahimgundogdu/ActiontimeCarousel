@@ -148,7 +148,7 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<VtripConfirm> VtripConfirms { get; set; }
 
-   
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("Turkish_CI_AS");

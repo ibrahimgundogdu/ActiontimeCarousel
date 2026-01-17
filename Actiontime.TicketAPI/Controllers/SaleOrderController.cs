@@ -57,19 +57,25 @@ namespace Actiontime.TicketAPI.Controllers
         }
 
 
+
+
+
+
+
+
+
         //Ticket operations
         [HttpGet()]
-        public bool ConfirmTicket(string qrcode)
+        public bool AddTicketToConfirm(string qrcode)
         {
-            return false; //return _orderService.GetTicket(qrcode);
+            return  _orderService.AddTicketToConfirm(qrcode);
         }
 
         [HttpGet()]
-        public bool BackTicket(string qrcode)
+        public bool RemoveTicketFromConfirm(string qrcode)
         {
-            return false; //return _orderService.GetTicket(qrcode);
+            return _orderService.RemoveTicketFromConfirm(qrcode);
         }
-
 
 
         //Round operations
@@ -90,7 +96,7 @@ namespace Actiontime.TicketAPI.Controllers
         [HttpGet()]
         public bool FinishRound(string uid)
         {
-            _orderService.FinishRound(uid);
+            return _orderService.FinishRound(uid);
         }
 
 
@@ -107,6 +113,12 @@ namespace Actiontime.TicketAPI.Controllers
         {
             return _orderService.GetRoundList(date);
         }
+
+
+
+
+
+
 
 
 

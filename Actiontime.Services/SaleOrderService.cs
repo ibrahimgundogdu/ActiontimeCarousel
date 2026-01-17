@@ -6,6 +6,7 @@ using Actiontime.Models;
 using Actiontime.Models.ResultModel;
 using Actiontime.Models.SerializeModels;
 using Actiontime.Services.Interfaces;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -509,10 +510,133 @@ namespace Actiontime.Services
 
 
 
+        public bool AddTicketToConfirm(string qrcode)
+        {
+            bool isSuccess = false;
+
+            if (qrcode != null)
+            {
+                var parts = qrcode.Split('-');
+
+                if (parts.Length < 3)
+                {
+                    throw new ArgumentException("QR formatı geçersiz");
+                }
+
+                int first = int.Parse(parts[0]);   // 85
+                int second = int.Parse(parts[1]);  // 280
+
+                string remaining = string.Join("-", parts.Skip(2));
 
 
+                var orderRow = _db.OrderRows.FirstOrDefault(x => x.TicketNumber == remaining && x.Id == first && x.LocationId == second && x.RowStatusId == 2);
+
+                if (orderRow != null)
+                {
+
+                    var parameter = new SqlParameter
+                    {
+                        ParameterName = "@TripRoundId",
+                        SqlDbType = System.Data.SqlDbType.BigInt,
+                        Direction = System.Data.ParameterDirection.Output,
+                    };
+
+                    _db.Database.ExecuteSqlRaw("EXEC GetTripRound @TripRoundId OUTPUT", parameter);
+
+                    if (parameter.Value != DBNull.Value)
+                    {
+                        var tripRoundId = Convert.ToInt64(parameter.Value);
+
+                        var round = _db.TripRounds.FirstOrDefault(x => x.Id == tripRoundId && x.RoundEnd == null);
+
+                        if (round != null)
+                        {
+
+                            var qrReader = _db.Qrreaders.FirstOrDefault(x => x.LocationId == orderRow.LocationId && x.IsActive == true);
+                            var ourLocation = _db.OurLocations.FirstOrDefault();
+
+                            TripConfirm tripConfirm = new TripConfirm();
+
+                            tripConfirm.ConfirmNumber = Guid.NewGuid();
+                            tripConfirm.SaleOrderId = orderRow.OrderId;
+                            tripConfirm.SaleOrderRowId = orderRow.Id;
+                            tripConfirm.TripRoundId = round.Id;
+                            tripConfirm.EmployeeId = orderRow.RecordEmployeeId;
+                            tripConfirm.LocationId = ourLocation?.Id ?? 0;
+                            tripConfirm.LocationPartId = qrReader?.LocationPartId ?? orderRow?.LocationId ?? 0;
+                            tripConfirm.ReaderSerialNumber = qrReader?.SerialNumber ?? "Unknown";
+                            tripConfirm.ConfirmTime = DateTime.Now;
+                            tripConfirm.TicketNumber = qrcode;
+                            tripConfirm.UnitDuration = orderRow.Duration;
+                            tripConfirm.RecordDate = DateTime.Now;
+                            tripConfirm.IsApproved = true;
+
+                            _db.TripConfirms.Add(tripConfirm);
+                            _db.SaveChanges();
+
+                            isSuccess = true;
+                        }
+                        else
+                        {
+
+                        }
+                    }
+
+                }
+
+            }
 
 
+            return isSuccess;
+        }
+
+
+        public bool RemoveTicketFromConfirm(string qrcode)
+        {
+            bool isSuccess = false;
+
+            if (qrcode != null)
+            {
+                var parts = qrcode.Split('-');
+
+                if (parts.Length < 3)
+                {
+                    throw new ArgumentException("QR formatı geçersiz");
+                }
+
+                int first = int.Parse(parts[0]);   // 85
+                int second = int.Parse(parts[1]);  // 280
+
+                string remaining = string.Join("-", parts.Skip(2));
+
+
+                var orderRow = _db.OrderRows.FirstOrDefault(x => x.TicketNumber == remaining && x.Id == first && x.LocationId == second && x.RowStatusId == 2);
+
+                if (orderRow != null)
+                {
+                    try
+                    {
+                        var tripConfirm = _db.TripConfirms.FirstOrDefault(x => x.SaleOrderRowId == orderRow.Id && x.SaleOrderId == orderRow.OrderId && x.TicketNumber == qrcode);
+
+                        _db.TripConfirms.Remove(tripConfirm);
+                        _db.SaveChanges();
+
+                        isSuccess = true;
+
+                    }
+                    catch (Exception)
+                    {
+
+                       
+                    }
+
+                }
+
+            }
+
+
+            return isSuccess;
+        }
 
 
 
@@ -565,14 +689,23 @@ namespace Actiontime.Services
 
             if (round != null)
             {
-                round.RoundEnd = DateTimeOffset.Now;
-                _db.SaveChanges();
+                try
+                {
+                    var parameter = new SqlParameter
+                    {
+                        ParameterName = "@TripRoundId",
+                        SqlDbType = System.Data.SqlDbType.BigInt,
+                        Value = round.Id
+                    };
 
-                var confirmList = _db.TripConfirms.Where(x => x.TripRoundId == round.Id).ToList();
-                _db.TripConfirms.RemoveRange(confirmList);
-                _db.SaveChanges();
+                    _db.Database.ExecuteSqlRaw("EXEC FinishTripRound @TripRoundId", parameter);
 
-                isSuccess = true;
+                    isSuccess = true;
+                }
+                catch (Exception)
+                {
+                    isSuccess = false;
+                }
             }
 
             return isSuccess;

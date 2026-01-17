@@ -157,8 +157,8 @@ namespace Actiontime.Services
                                     confirm.TripRoundId = roundId;
                                     confirm.SaleOrderId = orderRow.OrderId;
                                     confirm.SaleOrderRowId = orderRow.Id;
-                                    confirm.LocationId = qrReader.LocationId;
-                                    confirm.LocationPartId = qrReader.LocationPartId;
+                                    confirm.LocationId = qrReader?.LocationId ?? location?.Id ?? 0;
+                                    confirm.LocationPartId = qrReader?.LocationPartId ?? 1;
                                     confirm.ConfirmTime = location?.LocalDateTime ?? DateTime.Now;
                                     confirm.TicketNumber = qr.QRCode;
                                     confirm.UnitDuration = orderRow.Duration * 60;

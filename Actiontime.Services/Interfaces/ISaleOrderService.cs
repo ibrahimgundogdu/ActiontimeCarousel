@@ -35,5 +35,7 @@ namespace Actiontime.Services.Interfaces
         bool StartRound(string uid);
         bool CancelRound(string uid);
         bool FinishRound(string uid);
+        bool AddTicketToConfirm(string qrcode);
+        bool RemoveTicketFromConfirm(string qrcode);
     }
 }

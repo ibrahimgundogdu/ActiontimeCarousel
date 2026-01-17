@@ -21,8 +21,8 @@ namespace Actiontime.Models.SerializeModels
         public Guid? RoundUid { get; set; }
         public DateOnly? RoundDate { get; set; } = default!;
         public string RoundNumber { get; set; } = default!;
-        public DateTime? RoundStart { get; set; }
-        public DateTime? RoundEnd { get; set; }
+        public DateTimeOffset? RoundStart { get; set; }
+        public DateTimeOffset? RoundEnd { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public TicketStatus Status { get; set; } = TicketStatus.pending;
