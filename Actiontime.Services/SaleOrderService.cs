@@ -411,6 +411,16 @@ namespace Actiontime.Services
             return receipt;
         }
 
+
+
+
+
+
+
+
+
+
+
         public TicketCheck GetTicket(string qrcode)
         {
 
@@ -504,10 +514,6 @@ namespace Actiontime.Services
 
             return ticket;
         }
-
-
-
-
 
 
         public bool AddTicketToConfirm(string qrcode)
@@ -627,7 +633,7 @@ namespace Actiontime.Services
                     catch (Exception)
                     {
 
-                       
+
                     }
 
                 }
@@ -637,10 +643,6 @@ namespace Actiontime.Services
 
             return isSuccess;
         }
-
-
-
-
 
 
         public bool StartRound(string uid)
@@ -725,10 +727,69 @@ namespace Actiontime.Services
             return detail;
         }
 
-        public List<TripRound>? GetRoundList(DateOnly date)
+
+        public bool AddRound()
         {
 
-            return _db.TripRounds.Where(x => x.RoundDate == date).ToList();
+            bool isSuccess = false;
+
+            try
+            {
+                var parameter = new SqlParameter
+                {
+                    ParameterName = "@TripRoundId",
+                    SqlDbType = System.Data.SqlDbType.BigInt,
+                    Direction = System.Data.ParameterDirection.Output,
+                };
+
+                _db.Database.ExecuteSqlRaw("EXEC GetTripRound @TripRoundId OUTPUT", parameter);
+
+                if (parameter.Value != DBNull.Value)
+                {
+                    isSuccess = true;
+                }
+                else
+                {
+                    isSuccess = false;
+                }
+            }
+            catch (Exception)
+            {
+                isSuccess = false;
+            }
+
+            return isSuccess;
+        }
+
+
+        public List<TripRoundDto>? GetRoundList(DateOnly date)
+        {
+
+            var tripRounds = _db.TripRounds.Where(x => x.RoundDate == date).ToList();
+
+
+            List<TripRoundDto> roundDtos = new List<TripRoundDto>();
+
+            foreach (var round in tripRounds)
+            {
+                TripRoundDto dto = new TripRoundDto();
+                dto.Id = round.Id;
+                dto.RoundNumber = round.RoundNumber;
+                dto.RoundNumberInt = round.RoundNumberInt;
+                dto.RoundDate = round.RoundDate.ToString("MM/dd/yyyy");
+                dto.RoundStart = round.RoundStart?.ToString("MM/dd/yyyy HH:mm:ss", new System.Globalization.CultureInfo("en-US"));
+                dto.RoundCancel = round.RoundCancel?.ToString("MM/dd/yyyy HH:mm:ss", new System.Globalization.CultureInfo("en-US"));
+                dto.RoundEnd = round.RoundEnd?.ToString("MM/dd/yyyy HH:mm:ss", new System.Globalization.CultureInfo("en-US"));
+                dto.TripDuration = round.TripDuration.HasValue ? round.TripDuration.Value.ToString("HH\\:mm\\:ss") : null;
+                dto.RecordDate = round.RecordDate.ToString("M-dd-yyyy HH:mm:ss", new System.Globalization.CultureInfo("en-US"));
+                dto.Uid = round.Uid.ToString();
+                roundDtos.Add(dto);
+            }
+
+
+            return roundDtos;
+
+
         }
 
 

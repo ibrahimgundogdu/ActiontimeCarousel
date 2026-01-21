@@ -148,7 +148,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<VtripConfirm> VtripConfirms { get; set; }
 
-    
+    public virtual DbSet<VtripRound> VtripRounds { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("Turkish_CI_AS");
@@ -1489,6 +1490,24 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.TripEnd).HasColumnType("datetime");
             entity.Property(e => e.TripId).HasColumnName("TripID");
             entity.Property(e => e.TripStart).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<VtripRound>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("VTripRound");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.LocationId).HasColumnName("LocationID");
+            entity.Property(e => e.LocationName).HasMaxLength(50);
+            entity.Property(e => e.RecordDate).HasPrecision(0);
+            entity.Property(e => e.RoundCancel).HasPrecision(0);
+            entity.Property(e => e.RoundEnd).HasPrecision(0);
+            entity.Property(e => e.RoundNumber).HasMaxLength(40);
+            entity.Property(e => e.RoundStart).HasPrecision(0);
+            entity.Property(e => e.TripDuration).HasPrecision(0);
+            entity.Property(e => e.Uid).HasColumnName("UID");
         });
 
         OnModelCreatingPartial(modelBuilder);

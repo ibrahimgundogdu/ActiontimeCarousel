@@ -50,13 +50,17 @@ namespace Actiontime.TicketAPI.Controllers
             return _orderService.GetReceipt(orderId);
         }
 
+
+
+
+
+
+
         [HttpGet()]
         public TicketCheck GetTicket(string qrcode)
         {
             return _orderService.GetTicket(qrcode);
         }
-
-
 
 
 
@@ -100,6 +104,12 @@ namespace Actiontime.TicketAPI.Controllers
         }
 
 
+        //Round Info
+        [HttpGet()]
+        public bool AddRound()
+        {
+            return _orderService.AddRound();
+        }
 
         //Round Info
         [HttpGet()]
@@ -109,7 +119,7 @@ namespace Actiontime.TicketAPI.Controllers
         }
 
         [HttpGet()]
-        public List<TripRound>? GetRoundList(DateOnly date)
+        public List<TripRoundDto>? GetRoundList(DateOnly date)
         {
             return _orderService.GetRoundList(date);
         }
