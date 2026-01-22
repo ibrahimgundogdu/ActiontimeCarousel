@@ -570,7 +570,7 @@ namespace Actiontime.Services
                             tripConfirm.EmployeeId = orderRow.RecordEmployeeId;
                             tripConfirm.LocationId = ourLocation?.Id ?? 0;
                             tripConfirm.LocationPartId = qrReader?.LocationPartId ?? orderRow?.LocationId ?? 0;
-                            tripConfirm.ReaderSerialNumber = qrReader?.SerialNumber ?? "Unknown";
+                            tripConfirm.ReaderSerialNumber = "PosApp";
                             tripConfirm.ConfirmTime = DateTime.Now;
                             tripConfirm.TicketNumber = qrcode;
                             tripConfirm.UnitDuration = orderRow.Duration;
@@ -718,10 +718,51 @@ namespace Actiontime.Services
 
             RoundDetail detail = new RoundDetail();
 
-            detail.Round = _db.TripRounds.FirstOrDefault(x => x.Uid.ToString() == uid);
-            if (detail.Round != null)
+
+
+            var round = _db.TripRounds.FirstOrDefault(x => x.Uid.ToString() == uid);
+
+
+            if (round != null)
             {
-                detail.ConfirmList = _db.TripConfirms.Where(x => x.TripRoundId == detail.Round.Id).ToList();
+
+                TripRoundDto dto = new TripRoundDto();
+                dto.Id = round.Id;
+                dto.RoundNumber = round.RoundNumber;
+                dto.RoundNumberInt = round.RoundNumberInt;
+                dto.RoundDate = round.RoundDate.ToString("MM/dd/yyyy");
+                dto.RoundStart = round.RoundStart?.ToString("MM/dd/yyyy HH:mm:ss", new System.Globalization.CultureInfo("en-US"));
+                dto.RoundCancel = round.RoundCancel?.ToString("MM/dd/yyyy HH:mm:ss", new System.Globalization.CultureInfo("en-US"));
+                dto.RoundEnd = round.RoundEnd?.ToString("MM/dd/yyyy HH:mm:ss", new System.Globalization.CultureInfo("en-US"));
+                dto.TripDuration = round.TripDuration.HasValue ? round.TripDuration.Value.ToString("HH\\:mm\\:ss") : null;
+                dto.RecordDate = round.RecordDate.ToString("M-dd-yyyy HH:mm:ss", new System.Globalization.CultureInfo("en-US"));
+                dto.Uid = round.Uid.ToString();
+
+
+                
+
+                var confirmList = _db.TripConfirms.Where(x => x.TripRoundId == round.Id).ToList();
+                dto.Count = confirmList.Count;
+
+                List<TripConfirmDto> confirmDtos = new List<TripConfirmDto>();
+
+                foreach (var confirm in confirmList)
+                {
+                    TripConfirmDto cdto = new TripConfirmDto();
+                    cdto.Id = confirm.Id;
+                    cdto.ConfirmNumber = confirm.ConfirmNumber?.ToString();
+                    cdto.SaleOrderId = confirm.SaleOrderId;
+                    cdto.SaleOrderRowId = confirm.SaleOrderRowId;
+                    cdto.TripRoundId = confirm.TripRoundId;
+                    cdto.ReaderSerialNumber = confirm.ReaderSerialNumber;
+                    cdto.ConfirmTime = confirm.ConfirmTime?.ToString("MM/dd/yyyy HH:mm:ss", new System.Globalization.CultureInfo("en-US"));
+                    cdto.TicketNumber = confirm.TicketNumber;
+                    confirmDtos.Add(cdto);
+                }
+
+                detail.Round = dto;
+                detail.ConfirmList = confirmDtos;
+
             }
 
             return detail;
@@ -772,6 +813,10 @@ namespace Actiontime.Services
 
             foreach (var round in tripRounds)
             {
+
+                int confirmCount = _db.TripConfirms.Where(x => x.TripRoundId == round.Id).Count();
+
+
                 TripRoundDto dto = new TripRoundDto();
                 dto.Id = round.Id;
                 dto.RoundNumber = round.RoundNumber;
@@ -783,6 +828,7 @@ namespace Actiontime.Services
                 dto.TripDuration = round.TripDuration.HasValue ? round.TripDuration.Value.ToString("HH\\:mm\\:ss") : null;
                 dto.RecordDate = round.RecordDate.ToString("M-dd-yyyy HH:mm:ss", new System.Globalization.CultureInfo("en-US"));
                 dto.Uid = round.Uid.ToString();
+                dto.Count = confirmCount;
                 roundDtos.Add(dto);
             }
 

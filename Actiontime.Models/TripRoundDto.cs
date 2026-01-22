@@ -28,6 +28,7 @@ namespace Actiontime.Models
         public string RecordDate { get; set; }
 
         public string Uid { get; set; }
+        public int Count { get; set; } = 0;
 
 
     }

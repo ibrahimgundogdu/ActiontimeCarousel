@@ -9,7 +9,7 @@ namespace Actiontime.Models.SerializeModels
 {
     public class RoundDetail
     {
-        public TripRound? Round { get; set; }
-        public List<TripConfirm>? ConfirmList { get; set; }
+        public TripRoundDto? Round { get; set; }
+        public List<TripConfirmDto>? ConfirmList { get; set; }
     }
 }
